@@ -92,6 +92,10 @@ def get_user_data(user):
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
+        "account_type": getattr(user, "account_type", "self_signup"),
+        "subscription_status": getattr(user, "subscription_status", "free"),
+        "has_full_access": getattr(user, "has_full_access", False),
+        "evaluations_remaining": getattr(user, "evaluations_remaining", 0),
         **profile_data,
     }
 
@@ -142,8 +146,8 @@ def ielts_logout(request):
     """Logout by clearing auth cookies."""
     response = Response({"success": True, "message": "Logged out successfully"})
     # Delete cookies with same settings used when setting them
-    response.delete_cookie(ACCESS_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE)
-    response.delete_cookie(REFRESH_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE)
+    response.delete_cookie(ACCESS_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE, secure=COOKIE_SECURE)
+    response.delete_cookie(REFRESH_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE, secure=COOKIE_SECURE)
     return response
 
 
