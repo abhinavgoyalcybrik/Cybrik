@@ -265,51 +265,84 @@ export default function Dashboard() {
         {/* Right Column: Getting Started */}
         <div className="w-full lg:w-96 space-y-6">
 
-          {/* Profile Goals Card */}
-          {user?.target_score && (
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-500 mb-4">Your Goals</h3>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#6FB63A] to-emerald-500 rounded-2xl flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">{user.target_score}</span>
+          {/* Profile Goals Card - Always Visible */}
+          <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+            <h3 className="text-sm font-semibold text-slate-500 mb-4">Your Goals</h3>
+
+            {user?.target_score ? (
+              // Show Goals if Set
+              <>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#6FB63A] to-emerald-500 rounded-2xl flex items-center justify-center">
+                    <span className="text-2xl font-bold text-white">{user.target_score}</span>
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-slate-900">Target Band Score</p>
+                    <p className="text-sm text-slate-500">
+                      {user.test_type === 'academic' ? 'Academic' : user.test_type === 'general' ? 'General Training' : 'IELTS'}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-lg font-semibold text-slate-900">Target Band Score</p>
-                  <p className="text-sm text-slate-500">
-                    {user.test_type === 'academic' ? 'Academic' : user.test_type === 'general' ? 'General Training' : 'IELTS'}
-                  </p>
+                {user.exam_date && user.exam_date !== 'unknown' ? (
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-1">
+                      <p className="text-xs text-slate-500">Exam Date</p>
+                      <a href="/account/profile" className="text-xs text-blue-600 hover:text-blue-700 font-medium">Edit</a>
+                    </div>
+                    <p className="text-lg font-semibold text-slate-900">
+                      {new Date(user.exam_date).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </p>
+                    {(() => {
+                      const examDate = new Date(user.exam_date);
+                      const today = new Date();
+                      const diffTime = examDate.getTime() - today.getTime();
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      if (diffDays > 0) {
+                        return (
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            <p className="text-sm text-emerald-600 font-medium">
+                              {diffDays} days to go!
+                            </p>
+                          </div>
+                        );
+                      } else if (diffDays === 0) {
+                        return <p className="text-sm text-orange-600 font-medium mt-1">Today!</p>;
+                      }
+                      return null;
+                    })()}
+                  </div>
+                ) : (
+                  <div className="bg-slate-50 rounded-xl p-4 text-center">
+                    <p className="text-sm text-slate-500 mb-2">When is your exam?</p>
+                    <a href="/account/profile" className="text-sm font-medium text-blue-600 hover:text-blue-700">Set Exam Date →</a>
+                  </div>
+                )}
+              </>
+            ) : (
+              // Empty State - Set Goal
+              <div className="text-center py-4">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl">🎯</span>
                 </div>
+                <p className="text-slate-900 font-medium mb-1">No Goal Set</p>
+                <p className="text-sm text-slate-500 mb-4">Set your target score to track progress</p>
+                <a
+                  href="/account/profile"
+                  className="inline-flex items-center justify-center px-4 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors w-full"
+                >
+                  Set Target Score
+                </a>
               </div>
-              {user.exam_date && user.exam_date !== 'unknown' && (
-                <div className="bg-slate-50 rounded-xl p-4">
-                  <p className="text-xs text-slate-500 mb-1">Exam Date</p>
-                  <p className="text-lg font-semibold text-slate-900">
-                    {new Date(user.exam_date).toLocaleDateString('en-US', { 
-                      month: 'long', 
-                      day: 'numeric', 
-                      year: 'numeric' 
-                    })}
-                  </p>
-                  {(() => {
-                    const examDate = new Date(user.exam_date);
-                    const today = new Date();
-                    const diffTime = examDate.getTime() - today.getTime();
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if (diffDays > 0) {
-                      return (
-                        <p className="text-sm text-emerald-600 font-medium mt-1">
-                          {diffDays} days to go!
-                        </p>
-                      );
-                    } else if (diffDays === 0) {
-                      return <p className="text-sm text-orange-600 font-medium mt-1">Today!</p>;
-                    }
-                    return null;
-                  })()}
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
 
           <DashboardGettingStarted />
 
