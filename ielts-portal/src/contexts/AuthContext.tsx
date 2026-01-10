@@ -14,6 +14,14 @@ interface User {
     subscription_status?: 'free' | 'premium' | 'crm_full';
     has_full_access?: boolean;
     evaluations_remaining?: number;
+    // IELTS Profile fields (from onboarding)
+    onboarding_completed?: boolean;
+    purpose?: string;
+    test_type?: string;
+    attempt_type?: string;
+    target_score?: number;
+    exam_date?: string;
+    referral_source?: string;
 }
 
 interface AuthContextType {
