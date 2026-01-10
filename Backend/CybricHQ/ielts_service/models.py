@@ -159,3 +159,59 @@ class UserAnswer(models.Model):
     marks_awarded = models.PositiveIntegerField(default=0)
     
     feedback = models.TextField(blank=True, help_text="AI or Tutor feedback")
+
+
+class IELTSUserProfile(models.Model):
+    """
+    User profile for IELTS students.
+    Stores onboarding answers and user preferences.
+    """
+    PURPOSE_CHOICES = [
+        ('study_abroad', 'Study abroad'),
+        ('immigration', 'Immigration'),
+        ('work_abroad', 'Work abroad'),
+        ('local_university', 'Study at local university'),
+        ('other', 'Other'),
+        ('teacher', 'IELTS teacher'),
+    ]
+    
+    TEST_TYPE_CHOICES = [
+        ('general', 'General Training'),
+        ('academic', 'Academic'),
+    ]
+    
+    ATTEMPT_TYPE_CHOICES = [
+        ('first', 'First time'),
+        ('writing', 'Writing retake'),
+        ('speaking', 'Speaking retake'),
+        ('listening', 'Listening retake'),
+        ('reading', 'Reading retake'),
+        ('full', 'Full test retake'),
+    ]
+    
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='ielts_profile'
+    )
+    
+    # Onboarding data
+    purpose = models.CharField(max_length=50, choices=PURPOSE_CHOICES, blank=True)
+    test_type = models.CharField(max_length=20, choices=TEST_TYPE_CHOICES, blank=True)
+    attempt_type = models.CharField(max_length=20, choices=ATTEMPT_TYPE_CHOICES, blank=True)
+    target_score = models.DecimalField(max_digits=2, decimal_places=1, null=True, blank=True)
+    exam_date = models.CharField(max_length=20, blank=True, help_text="Date string YYYY-MM-DD or 'unknown'")
+    referral_source = models.CharField(max_length=50, blank=True)
+    
+    onboarding_completed = models.BooleanField(default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "IELTS User Profile"
+        verbose_name_plural = "IELTS User Profiles"
+    
+    def __str__(self):
+        return f"{self.user.email} - IELTS Profile"
+

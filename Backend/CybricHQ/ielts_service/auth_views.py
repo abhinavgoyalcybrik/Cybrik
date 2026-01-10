@@ -57,13 +57,33 @@ def set_auth_cookies(response, user):
 
 
 def get_user_data(user):
-    """Get user data for frontend."""
-    # Check if user has IELTS profile with onboarding status
-    onboarding_completed = False
-    if hasattr(user, 'profile'):
-        onboarding_completed = getattr(user.profile, 'onboarding_completed', False)
-    elif hasattr(user, 'ielts_profile'):
-        onboarding_completed = getattr(user.ielts_profile, 'onboarding_completed', False)
+    """Get user data for frontend including IELTS profile."""
+    from .models import IELTSUserProfile
+    
+    # Get or check for IELTS profile
+    profile_data = {
+        "onboarding_completed": False,
+        "purpose": None,
+        "test_type": None,
+        "attempt_type": None,
+        "target_score": None,
+        "exam_date": None,
+        "referral_source": None,
+    }
+    
+    try:
+        profile = IELTSUserProfile.objects.get(user=user)
+        profile_data = {
+            "onboarding_completed": profile.onboarding_completed,
+            "purpose": profile.purpose or None,
+            "test_type": profile.test_type or None,
+            "attempt_type": profile.attempt_type or None,
+            "target_score": float(profile.target_score) if profile.target_score else None,
+            "exam_date": profile.exam_date or None,
+            "referral_source": profile.referral_source or None,
+        }
+    except IELTSUserProfile.DoesNotExist:
+        pass
     
     return {
         "id": user.id,
@@ -71,7 +91,7 @@ def get_user_data(user):
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "onboarding_completed": onboarding_completed,
+        **profile_data,
     }
 
 
@@ -293,10 +313,11 @@ def ielts_register(request):
 @permission_classes([AllowAny])
 def ielts_onboarding(request):
     """
-    Save user onboarding data.
+    Save user onboarding data to IELTSUserProfile.
     """
-    # Get user from cookie
     from rest_framework_simplejwt.tokens import AccessToken
+    from .models import IELTSUserProfile
+    from decimal import Decimal
     
     token = request.COOKIES.get(ACCESS_COOKIE_NAME)
     
@@ -308,16 +329,35 @@ def ielts_onboarding(request):
         user_id = access.get("user_id")
         user = User.objects.get(pk=user_id)
         
-        # Get onboarding data
-        target_score = request.data.get("target_score")
-        test_date = request.data.get("test_date")
-        study_hours = request.data.get("study_hours_per_week")
+        # Get onboarding data from request
+        purpose = request.data.get("purpose", "")
+        test_type = request.data.get("testType", "")  # Frontend sends camelCase
+        attempt_type = request.data.get("attemptType", "")
+        target_score = request.data.get("targetScore")
+        exam_date = request.data.get("examDate", "")
+        referral_source = request.data.get("referralSource", "")
         
-        # Save to user profile (create if doesn't exist)
-        # For now, just mark onboarding as complete
-        if hasattr(user, 'profile'):
-            user.profile.onboarding_completed = True
-            user.profile.save()
+        # Convert target score to Decimal if provided
+        target_score_decimal = None
+        if target_score is not None:
+            try:
+                target_score_decimal = Decimal(str(target_score))
+            except:
+                pass
+        
+        # Create or update IELTS profile
+        profile, created = IELTSUserProfile.objects.get_or_create(user=user)
+        
+        profile.purpose = purpose
+        profile.test_type = test_type
+        profile.attempt_type = attempt_type
+        profile.target_score = target_score_decimal
+        profile.exam_date = exam_date
+        profile.referral_source = referral_source
+        profile.onboarding_completed = True
+        profile.save()
+        
+        logger.info(f"IELTS onboarding completed for user {user.email}")
         
         return Response({
             "success": True,
@@ -325,5 +365,6 @@ def ielts_onboarding(request):
         })
         
     except Exception as e:
-        logger.error(f"Onboarding error: {e}")
+        logger.exception(f"Onboarding error: {e}")
         return Response({"error": "Failed to save onboarding data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
