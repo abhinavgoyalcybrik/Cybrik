@@ -141,8 +141,9 @@ def ielts_login(request):
 def ielts_logout(request):
     """Logout by clearing auth cookies."""
     response = Response({"success": True, "message": "Logged out successfully"})
-    response.delete_cookie(ACCESS_COOKIE_NAME)
-    response.delete_cookie(REFRESH_COOKIE_NAME)
+    # Delete cookies with same settings used when setting them
+    response.delete_cookie(ACCESS_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE)
+    response.delete_cookie(REFRESH_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE)
     return response
 
 

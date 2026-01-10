@@ -33,12 +33,13 @@ export default function ProfilePage() {
                 const res = await fetch('/api/ielts/auth/me/', { credentials: 'include' });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.user?.profile) {
+                    // Profile fields are directly in user object (flat structure)
+                    if (data.user) {
                         setFormData({
-                            target_score: data.user.profile.target_score?.toString() || '',
-                            exam_date: data.user.profile.exam_date || '',
-                            test_type: data.user.profile.test_type || 'academic',
-                            purpose: data.user.profile.purpose || 'study_abroad',
+                            target_score: data.user.target_score?.toString() || '',
+                            exam_date: data.user.exam_date || '',
+                            test_type: data.user.test_type || 'academic',
+                            purpose: data.user.purpose || 'study_abroad',
                         });
                     }
                 }
@@ -56,10 +57,16 @@ export default function ProfilePage() {
         setSuccess('');
 
         try {
+            // Send with camelCase field names (backend expects camelCase)
             const res = await fetch('/api/ielts/auth/onboarding/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    targetScore: parseFloat(formData.target_score) || null,
+                    examDate: formData.exam_date,
+                    testType: formData.test_type,
+                    purpose: formData.purpose,
+                }),
                 credentials: 'include',
             });
 
@@ -108,8 +115,8 @@ export default function ProfilePage() {
                                 {user?.account_type === 'crm' ? 'CRM Student' : 'Standard Account'}
                             </span>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${user?.subscription_status === 'premium' || user?.subscription_status === 'crm_full'
-                                    ? 'bg-amber-100 text-amber-700'
-                                    : 'bg-slate-100 text-slate-700'
+                                ? 'bg-amber-100 text-amber-700'
+                                : 'bg-slate-100 text-slate-700'
                                 }`}>
                                 {user?.subscription_status?.replace('_', ' ').toUpperCase()} Plan
                             </span>
