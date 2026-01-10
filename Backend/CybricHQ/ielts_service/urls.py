@@ -1,9 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-
-# Import auth views from crm_app
-from crm_app import auth_views
+from . import auth_views
 
 # Public/Student routes
 router = DefaultRouter()
@@ -18,11 +16,13 @@ admin_router.register(r'question-groups', views.AdminQuestionGroupViewSet, basen
 admin_router.register(r'questions', views.AdminQuestionViewSet, basename='admin-question')
 
 urlpatterns = [
-    # Auth endpoints (reuse CRM auth)
-    path('auth/login/', auth_views.login_view, name='ielts-login'),
-    path('auth/logout/', auth_views.logout_view, name='ielts-logout'),
-    path('auth/refresh/', auth_views.refresh_view, name='ielts-refresh'),
-    path('auth/me/', auth_views.me_view, name='ielts-me'),
+    # IELTS Auth endpoints
+    path('auth/login/', auth_views.ielts_login, name='ielts-login'),
+    path('auth/logout/', auth_views.ielts_logout, name='ielts-logout'),
+    path('auth/me/', auth_views.ielts_me, name='ielts-me'),
+    path('auth/google/', auth_views.ielts_google_auth, name='ielts-google-auth'),
+    path('auth/register/', auth_views.ielts_register, name='ielts-register'),
+    path('auth/onboarding/', auth_views.ielts_onboarding, name='ielts-onboarding'),
     
     # Main IELTS routes
     path('', include(router.urls)),
