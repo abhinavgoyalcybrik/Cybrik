@@ -1,0 +1,219 @@
+{
+  "test_id": "11LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Enquiry about joining Youth Council",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Currently staying in a ____ during the week" },
+        { "q": 2, "type": "text", "question": "Postal address: 17 ____ Street, Stamford, Lincs" },
+        { "q": 3, "type": "text", "question": "Postcode" },
+        { "q": 4, "type": "text", "question": "Occupation: student and part-time job as a ____" },
+        { "q": 5, "type": "text", "question": "Studying ____ (major subject) and history (minor subject)" },
+        { "q": 6, "type": "text", "question": "Hobbies: does a lot of ____" },
+        { "q": 7, "type": "text", "question": "and is interested in the ____" },
+        { "q": 8, "type": "text", "question": "On Youth Council, wants to work with young people who are ____" },
+        { "q": 9, "type": "text", "question": "Will come to talk to the Elections Officer next Monday at ____ pm" },
+        { "q": 10, "type": "text", "question": "Mobile number" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Plan Labelling",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "Which TWO changes have been made so far during the refurbishment of the theatre?",
+          "options": [
+            "A Some rooms now have a different use.",
+            "B A different type of seating has been installed.",
+            "C An elevator has been installed.",
+            "D The outside of the building has been repaired.",
+            "E Extra seats have been added."
+          ]
+        },
+        {
+          "q": "13-14",
+          "type": "mcq_multi",
+          "question": "Which TWO facilities does the theatre currently offer to the public?",
+          "options": [
+            "A rooms for hire",
+            "B backstage tours",
+            "C hire of costumes",
+            "D a bookshop",
+            "E a cafe"
+          ]
+        },
+        {
+          "q": "15-16",
+          "type": "mcq_multi",
+          "question": "Which TWO workshops does the theatre currently offer?",
+          "options": [
+            "A sound",
+            "B acting",
+            "C making puppets",
+            "D make-up",
+            "E lighting"
+          ]
+        },
+        { "q": 17, "type": "map", "question": "Box office", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 18, "type": "map", "question": "Theatre manager’s office", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 19, "type": "map", "question": "Lighting box", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 20, "type": "map", "question": "Artistic director’s office", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple)",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What do the students agree should be included in their aims?",
+          "options": [
+            "A factors affecting where organisms live",
+            "B the need to preserve endangered species",
+            "C techniques for classifying different organisms"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "What equipment did they forget to take on the Field Trip?",
+          "options": ["A string", "B a compass", "C a ruler"]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "In Helen’s procedure section, Colin suggests a change in",
+          "options": [
+            "A the order in which information is given",
+            "B the way the information is divided up",
+            "C the amount of information provided"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "What do they say about the method they used to measure wave speed?",
+          "options": [
+            "A It provided accurate results.",
+            "B It was simple to carry out.",
+            "C It required special equipment."
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What mistake did Helen make when first drawing the map?",
+          "options": [
+            "A She chose the wrong scale.",
+            "B She stood in the wrong place.",
+            "C She did it at the wrong time."
+          ]
+        },
+        {
+          "q": 26,
+          "type": "mcq",
+          "question": "What do they decide to do next with their map?",
+          "options": [
+            "A scan it onto a computer",
+            "B check it using photographs",
+            "C add information from the internet"
+          ]
+        },
+        {
+          "q": "27-28",
+          "type": "mcq_multi",
+          "question": "Which TWO problems affecting organisms in the splash zone are mentioned?",
+          "options": [
+            "A lack of water",
+            "B strong winds",
+            "C lack of food",
+            "D high temperatures",
+            "E large waves"
+          ]
+        },
+        {
+          "q": "29-30",
+          "type": "mcq_multi",
+          "question": "Which TWO reasons for possible error will they include in their report?",
+          "options": [
+            "A inaccurate records of the habitat of organisms",
+            "B influence on behaviour of organisms by observer",
+            "C incorrect identification of some organisms",
+            "D making generalisations from a small sample",
+            "E missing some organisms when counting"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Designing a Public Building: The Taylor Concert Hall",
+      "questions": [
+        { "q": 31, "type": "text", "question": "physical and ____ context" },
+        { "q": 32, "type": "text", "question": "On the site of a disused ____" },
+        { "q": 33, "type": "text", "question": "Beside a ____" },
+        { "q": 34, "type": "text", "question": "It’s approached by a ____ for pedestrians" },
+        { "q": 35, "type": "text", "question": "The building is the shape of a ____" },
+        { "q": 36, "type": "text", "question": "One exterior wall acts as a large ____" },
+        { "q": 37, "type": "text", "question": "the floor is built on huge pads made of ____" },
+        { "q": 38, "type": "text", "question": "the walls are made of local wood and are ____ in shape" },
+        { "q": 39, "type": "text", "question": "ceiling panels and ____ on walls allow adjustment of acoustics" },
+        { "q": 40, "type": "text", "question": "Some critics say the ____ style of the building is inappropriate" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["hostel"],
+    "2": ["East"],
+    "3": ["PE9 1QZ"],
+    "4": ["waiter"],
+    "5": ["politics"],
+    "6": ["cycling"],
+    "7": ["environment"],
+    "8": ["disabled"],
+    "9": ["4"],
+    "10": ["0788 3671"],
+
+    "11": ["A", "D"],
+    "12": ["A", "D"],
+    "13": ["A", "E"],
+    "14": ["A", "E"],
+    "15": ["B", "D"],
+    "16": ["B", "D"],
+    "17": ["E"],
+    "18": ["C"],
+    "19": ["F"],
+    "20": ["D"],
+
+    "21": ["A"],
+    "22": ["C"],
+    "23": ["A"],
+    "24": ["B"],
+    "25": ["B"],
+    "26": ["A"],
+    "27": ["A", "E"],
+    "28": ["A", "E"],
+    "29": ["C", "D"],
+    "30": ["C", "D"],
+
+    "31": ["social"],
+    "32": ["factory"],
+    "33": ["river"],
+    "34": ["bridge"],
+    "35": ["ship"],
+    "36": ["sculpture"],
+    "37": ["rubber"],
+    "38": ["curved"],
+    "39": ["panels"],
+    "40": ["modernist"]
+  }
+}

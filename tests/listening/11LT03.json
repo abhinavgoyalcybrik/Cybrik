@@ -1,0 +1,220 @@
+{
+  "test_id": "11LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "MCQ + Sentence Completion",
+      "instructions": "Questions 1–6: Choose the correct letter A, B or C. Questions 7–10: Write ONE WORD ONLY.",
+      "title": "Free activities in the Burnham area / Paxton Nature Reserve",
+      "questions": [
+        {
+          "q": 1,
+          "type": "mcq",
+          "question": "The ‘Family Welcome’ event in the art gallery begins at",
+          "options": ["A 10 am", "B 10.30 am", "C 2 pm"]
+        },
+        {
+          "q": 2,
+          "type": "mcq",
+          "question": "The film that is now shown in the ‘Family Welcome’ event is about",
+          "options": ["A sculpture", "B painting", "C ceramics"]
+        },
+        {
+          "q": 3,
+          "type": "mcq",
+          "question": "When do most of the free concerts take place?",
+          "options": ["A in the morning", "B at lunchtime", "C in the evening"]
+        },
+        {
+          "q": 4,
+          "type": "mcq",
+          "question": "Where will the 4 pm concert of Latin American music take place?",
+          "options": ["A in a museum", "B in a theatre", "C in a library"]
+        },
+        {
+          "q": 5,
+          "type": "mcq",
+          "question": "The boat race begins at",
+          "options": ["A Summer Pool", "B Charlesworth Bridge", "C Oxford Marina"]
+        },
+        {
+          "q": 6,
+          "type": "mcq",
+          "question": "One of the boat race teams",
+          "options": [
+            "A won a regional competition earlier this year",
+            "B has represented the region in a national competition",
+            "C has won several regional competitions"
+          ]
+        },
+        { "q": 7, "type": "text", "question": "Paxton is a good place for seeing rare ____ all year round." },
+        { "q": 8, "type": "text", "question": "This is a particularly good time for seeing certain unusual ____." },
+        { "q": 9, "type": "text", "question": "Visitors will be able to learn about ____ and then collect some." },
+        { "q": 10, "type": "text", "question": "Part of the ____ has been made suitable for swimming." }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Choose FIVE answers from the box.",
+      "title": "Changes in Barford over the last 50 years",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "In Shona’s opinion, why do fewer people use buses in Barford these days?",
+          "options": [
+            "A The buses are old and uncomfortable.",
+            "B Fares have gone up too much.",
+            "C There are not so many bus routes."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What change in the road network is known to have benefited the town most?",
+          "options": [
+            "A the construction of a bypass",
+            "B the development of cycle paths",
+            "C the banning of cars from certain streets"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "What is the problem affecting shopping in the town centre?",
+          "options": [
+            "A lack of parking spaces",
+            "B lack of major retailers",
+            "C lack of restaurants and cafes"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What does Shona say about medical facilities in Barford?",
+          "options": [
+            "A There is no hospital.",
+            "B New medical practices are planned.",
+            "C The number of dentists is too low."
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "The largest number of people are employed in",
+          "options": ["A manufacturing", "B services", "C education"]
+        },
+        { "q": 16, "type": "match", "question": "railway station car park", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 17, "type": "match", "question": "cinema", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 18, "type": "match", "question": "indoor market", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 19, "type": "match", "question": "library", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 20, "type": "match", "question": "nature reserve", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Table Completion + Matching",
+      "instructions": "Questions 21–26: Write ONE WORD ONLY. Questions 27–30: Choose the correct letter A–D.",
+      "title": "Drawing project / Report writing",
+      "questions": [
+        { "q": 21, "type": "text", "question": "A ____ surrounded by trees" },
+        { "q": 22, "type": "text", "question": "Adding him and ____" },
+        { "q": 23, "type": "text", "question": "People who are ____ outside the forest" },
+        { "q": 24, "type": "text", "question": "Add Malcolm sitting on a tree trunk and ____" },
+        { "q": 25, "type": "text", "question": "Ice-skaters on ____ covered with ice" },
+        { "q": 26, "type": "text", "question": "Add a ____ for each person" },
+
+        {
+          "q": 27,
+          "type": "match",
+          "question": "how they planned the project",
+          "options": ["A Helen only", "B Jeremy only", "C both Helen and Jeremy", "D neither Helen nor Jeremy"]
+        },
+        {
+          "q": 28,
+          "type": "match",
+          "question": "how they had ideas for their stories",
+          "options": ["A","B","C","D"]
+        },
+        {
+          "q": 29,
+          "type": "match",
+          "question": "an interpretation of their stories",
+          "options": ["A","B","C","D"]
+        },
+        {
+          "q": 30,
+          "type": "match",
+          "question": "comments on the illustrations",
+          "options": ["A","B","C","D"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Ethnography in business",
+      "questions": [
+        { "q": 31, "type": "text", "question": "to investigate customer needs and ____" },
+        { "q": 32, "type": "text", "question": "could not easily see the ____ in measuring cups" },
+        { "q": 33, "type": "text", "question": "check the ____ used" },
+        { "q": 34, "type": "text", "question": "develop ____ to improve communication" },
+        { "q": 35, "type": "text", "question": "access information about ____ in different parts of the hospital" },
+        { "q": 36, "type": "text", "question": "recorded information about their ____ while travelling" },
+        { "q": 37, "type": "text", "question": "criteria such as age, ____ or product used" },
+        { "q": 38, "type": "text", "question": "must feel ____ about taking part in the research" },
+        { "q": 39, "type": "text", "question": "usually direct ____ of the participants" },
+        { "q": 40, "type": "text", "question": "time is needed for the ____ of the data" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["B"],
+    "2": ["B"],
+    "3": ["C"],
+    "4": ["B"],
+    "5": ["B"],
+    "6": ["B"],
+    "7": ["plants"],
+    "8": ["birds"],
+    "9": ["insects"],
+    "10": ["river"],
+
+    "11": ["C"],
+    "12": ["A"],
+    "13": ["A"],
+    "14": ["A"],
+    "15": ["B"],
+    "16": ["A"],
+    "17": ["F"],
+    "18": ["C"],
+    "19": ["B"],
+    "20": ["G"],
+
+    "21": ["lake"],
+    "22": ["trees"],
+    "23": ["camping"],
+    "24": ["dog"],
+    "25": ["pond"],
+    "26": ["scarf"],
+
+    "27": ["C"],
+    "28": ["D"],
+    "29": ["B"],
+    "30": ["A"],
+
+    "31": ["behaviour"],
+    "32": ["levels"],
+    "33": ["phones"],
+    "34": ["software"],
+    "35": ["patients"],
+    "36": ["journeys"],
+    "37": ["gender"],
+    "38": ["comfortable"],
+    "39": ["observation"],
+    "40": ["analysis"]
+  }
+}

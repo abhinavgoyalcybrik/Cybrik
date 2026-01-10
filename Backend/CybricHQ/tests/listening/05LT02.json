@@ -1,0 +1,178 @@
+{
+  "test_id": "05LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "Library Information",
+      "questions": [
+        { "q": 1, "type": "text", "question": "For registration, must take two ____" },
+        { "q": 2, "type": "text", "question": "Second form of ID (example)" },
+        { "q": 3, "type": "text", "question": "Cost to join per year (£)" },
+        { "q": 4, "type": "text", "question": "Number of items allowed (members of public)" },
+        { "q": 5, "type": "text", "question": "Fines start at (£)" },
+        { "q": 6, "type": "text", "question": "Computers can be booked up to ____ hours in advance" },
+        { "q": 7, "type": "text", "question": "Library holds most national papers, all ____ and magazines" },
+        { "q": 8, "type": "text", "question": "Need ____ to use photocopier" },
+        { "q": 9, "type": "text", "question": "Creative Writing class tutor" },
+        { "q": 10, "type": "text", "question": "Creative Writing class held on ____ evenings" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Multiple Choice + Short Answer",
+      "title": "Bicycles for the World",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "In 1993 Dan Pearman went to Ecuador",
+          "options": [
+            "A as a tourist guide",
+            "B as part of his studies",
+            "C as a voluntary worker"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Dan's neighbour was successful in business because he",
+          "options": [
+            "A employed carpenters from the area",
+            "B was the most skilled craftsman in the town",
+            "C found it easy to reach customers"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Dan says the charity relies on",
+          "options": [
+            "A getting enough bicycles to send regularly",
+            "B finding new areas which need the bicycles",
+            "C charging for the bicycles it sends abroad"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What does Dan say about the town of Rivas?",
+          "options": [
+            "A It has received the greatest number of bikes",
+            "B It has almost as many bikes as Amsterdam",
+            "C Its economy has been totally transformed"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "What problem did the charity face in August 2000?",
+          "options": [
+            "A It couldn't meet its overheads",
+            "B It had to delay sending the bikes",
+            "C It was criticised in the British media"
+          ]
+        },
+        { "q": 16, "type": "text", "question": "How much money did the charity receive when it won an award?" },
+        { "q": 17, "type": "text", "question": "What is the charity currently hoping to buy?" },
+        {
+          "q": "18-20",
+          "type": "mcq_multi",
+          "question": "Which THREE things can the general public do to help the charity Pedal Power?",
+          "options": [
+            "A organise a bicycle collection",
+            "B repair the donated bikes",
+            "C donate their unwanted tools",
+            "D do voluntary work in its office",
+            "E hold an event to raise money",
+            "F identify areas that need bikes",
+            "G write to the government"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Table Completion",
+      "title": "Student Life – Video Project",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Cristina enjoyed going to a British ____" },
+        { "q": 22, "type": "text", "question": "Ibrahim has asked some students to ____ with him" },
+        { "q": 23, "type": "text", "question": "Cristina learned ____ vocabulary" },
+        { "q": 24, "type": "text", "question": "British students use a large amount of ____" },
+        { "q": 25, "type": "text", "question": "Learning about ____" },
+        { "q": 26, "type": "text", "question": "Sometimes persuading people who have different ____" },
+        { "q": 27, "type": "text", "question": "The importance of ____" },
+        { "q": 28, "type": "text", "question": "Decide when to ____ each stage" },
+        { "q": 29, "type": "text", "question": "Make more effort to ____ with the camera" },
+        { "q": 30, "type": "text", "question": "Don’t make the film too ____" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "title": "Antarctica",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "questions": [
+        { "q": 31, "type": "text", "question": "More than ____ times as big as the UK" },
+        { "q": 32, "type": "text", "question": "Most of the area is classified as ____" },
+        { "q": 33, "type": "text", "question": "____ is integrated with technical support" },
+        { "q": 34, "type": "text", "question": "Stations contain accommodation, work areas, a kitchen, a ____" },
+        { "q": 35, "type": "text", "question": "Supplies were brought by sledge from a ____" },
+        { "q": 36, "type": "text", "question": "Stations built on ____ with adjustable legs" },
+        { "q": 37, "type": "text", "question": "Average daily requirement (kilocalories)" },
+        { "q": 38, "type": "text", "question": "Effects on sea levels and ____" },
+        { "q": 39, "type": "text", "question": "Bubbles in ice used to measure ____" },
+        { "q": 40, "type": "text", "question": "Many openings for ____ people" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["passport photos", "passport photographs"],
+    "2": ["bank statement"],
+    "3": ["125"],
+    "4": ["8"],
+    "5": ["1.50"],
+    "6": ["48"],
+    "7": ["local papers", "local newspapers"],
+    "8": ["a card", "card"],
+    "9": ["Grantingham"],
+    "10": ["Friday"],
+
+    "11": ["C"],
+    "12": ["C"],
+    "13": ["A"],
+    "14": ["C"],
+    "15": ["A"],
+    "16": ["75000", "£75,000"],
+    "17": ["computers"],
+    "18": ["A"],
+    "19": ["C"],
+    "20": ["E"],
+
+    "21": ["home", "student's home"],
+    "22": ["have dinner", "go to dinner", "come to dinner"],
+    "23": ["technical"],
+    "24": ["slang"],
+    "25": ["cooperating", "cooperation"],
+    "26": ["views"],
+    "27": ["editing"],
+    "28": ["complete"],
+    "29": ["experiment"],
+    "30": ["long"],
+
+    "31": ["58"],
+    "32": ["desert"],
+    "33": ["science"],
+    "34": ["hospital", "small hospital"],
+    "35": ["ship"],
+    "36": ["platforms"],
+    "37": ["3500", "3,500"],
+    "38": ["currents", "ocean currents"],
+    "39": ["pollution"],
+    "40": ["young"]
+  }
+}

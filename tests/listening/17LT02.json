@@ -1,0 +1,200 @@
+{
+  "test_id": "17LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion + Table Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Opportunities for voluntary work in Southoe village / Village social events",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Help with ____ books (times to be arranged)" },
+        { "q": 2, "type": "text", "question": "Help needed to keep ____ of books up to date" },
+        { "q": 3, "type": "text", "question": "Library is in the ____ Room in the village hall" },
+        { "q": 4, "type": "text", "question": "Help by providing ____" },
+        { "q": 5, "type": "text", "question": "Help with hobbies such as ____" },
+        { "q": 6, "type": "text", "question": "Taking Mrs Carroll to ____" },
+        { "q": 7, "type": "text", "question": "Work in the ____ at Mr Selsbury's house" },
+
+        { "q": 8, "type": "text", "question": "Village social event on 19 Oct: ____" },
+        { "q": 9, "type": "text", "question": "At the dance on 18 Nov, checking ____" },
+        { "q": 10, "type": "text", "question": "For New Year's Eve party, designing the ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Choose SIX letters A–H.",
+      "title": "Oniton Hall",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Many past owners made changes to",
+          "options": [
+            "A the gardens.",
+            "B the house.",
+            "C the farm."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Sir Edward Downes built Oniton Hall because he wanted",
+          "options": [
+            "A a place for discussing politics.",
+            "B a place to display his wealth.",
+            "C a place for artists and writers."
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Visitors can learn about the work of servants in the past from",
+          "options": [
+            "A audio guides.",
+            "B photographs.",
+            "C people in costume."
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What is new for children at Oniton Hall?",
+          "options": [
+            "A clothes for dressing up",
+            "B mini tractors",
+            "C the adventure playground"
+          ]
+        },
+
+        { "q": 15, "type": "match", "question": "dairy", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 16, "type": "match", "question": "large barn", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 17, "type": "match", "question": "small barn", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 18, "type": "match", "question": "stables", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 19, "type": "match", "question": "shed", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 20, "type": "match", "question": "parkland", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + Matching + MCQ",
+      "instructions": "Questions 21–22: Choose TWO letters A–E. Questions 23–27: Choose FIVE letters A–G. Questions 28–30: Choose the correct letter A, B or C.",
+      "title": "Reviews of Romeo and Juliet",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO things do the students agree they need to include in their reviews of Romeo and Juliet?",
+          "options": [
+            "A analysis of the text",
+            "B a summary of the plot",
+            "C a description of the theatre",
+            "D a personal reaction",
+            "E a reference to particular scenes"
+          ]
+        },
+
+        { "q": 23, "type": "match", "question": "the set", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 24, "type": "match", "question": "the lighting", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 25, "type": "match", "question": "the costume design", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 26, "type": "match", "question": "the music", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 27, "type": "match", "question": "the actors' delivery", "options": ["A","B","C","D","E","F","G"] },
+
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "The students think the story of Romeo and Juliet is still relevant for young people today because",
+          "options": [
+            "A it illustrates how easily conflict can start.",
+            "B it deals with problems that families experience.",
+            "C it teaches them about relationships."
+          ]
+        },
+        {
+          "q": 29,
+          "type": "mcq",
+          "question": "The students found watching Romeo and Juliet in another language",
+          "options": [
+            "A frustrating.",
+            "B demanding.",
+            "C moving."
+          ]
+        },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "Why do the students think Shakespeare's plays have such international appeal?",
+          "options": [
+            "A The stories are exciting.",
+            "B There are recognisable characters.",
+            "C They can be interpreted in many ways."
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "The impact of digital technology on the Icelandic language",
+      "questions": [
+        { "q": 31, "type": "text", "question": "has approximately ____ speakers" },
+        { "q": 32, "type": "text", "question": "has a ____ that is still growing" },
+        { "q": 33, "type": "text", "question": "has its own words for computer-based concepts, such as web browser and ____" },
+        { "q": 34, "type": "text", "question": "are big users of digital technology, such as ____" },
+        { "q": 35, "type": "text", "question": "are becoming ____ very quickly" },
+        { "q": 36, "type": "text", "question": "are having discussions using only English while they are in the ____ at school" },
+        { "q": 37, "type": "text", "question": "are better able to identify the content of a ____ in English than Icelandic" },
+        { "q": 38, "type": "text", "question": "because of how complicated its ____ is" },
+        { "q": 39, "type": "text", "question": "young Icelanders may lose their ____ as Icelanders" },
+        { "q": 40, "type": "text", "question": "children not being ____ in either Icelandic or English" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["collecting"],
+    "2": ["records"],
+    "3": ["West"],
+    "4": ["transport"],
+    "5": ["art"],
+    "6": ["hospital"],
+    "7": ["garden"],
+    "8": ["quiz"],
+    "9": ["tickets"],
+    "10": ["poster"],
+
+    "11": ["B"],
+    "12": ["C"],
+    "13": ["C"],
+    "14": ["B"],
+    "15": ["D"],
+    "16": ["C"],
+    "17": ["G"],
+    "18": ["A"],
+    "19": ["E"],
+    "20": ["F"],
+
+    "21": ["D","E"],
+    "22": ["D","E"],
+    "23": ["D"],
+    "24": ["C"],
+    "25": ["A"],
+    "26": ["E"],
+    "27": ["F"],
+    "28": ["B"],
+    "29": ["C"],
+    "30": ["C"],
+
+    "31": ["321,000"],
+    "32": ["vocabulary"],
+    "33": ["podcast"],
+    "34": ["smartphones"],
+    "35": ["bilingual"],
+    "36": ["playground"],
+    "37": ["picture"],
+    "38": ["grammar"],
+    "39": ["identity"],
+    "40": ["fluent"]
+  }
+}

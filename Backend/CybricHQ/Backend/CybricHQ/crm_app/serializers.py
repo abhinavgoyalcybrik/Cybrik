@@ -1,0 +1,821 @@
+# crm_app/serializers.py
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError, transaction
+from rest_framework import serializers
+import logging
+
+from .models import (
+    Applicant,
+    CallRecord,
+    AcademicRecord,
+    Application,
+    ApplicationDocument,
+    University,
+    Transcript,
+    AIResult,
+    OutboundMessage,
+    ConsentRecord,
+    AuditLog,
+    Lead,
+    FollowUp,
+    Document,
+    Role,
+    UserProfile,
+    Notification,
+    AdIntegration,
+    AdCampaign,
+)
+
+User = get_user_model()
+logger = logging.getLogger(__name__)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    role_name = serializers.SerializerMethodField()
+    role_id = serializers.SerializerMethodField()
+    permissions = serializers.SerializerMethodField()
+    sidebar_config = serializers.SerializerMethodField()
+    dashboard_config = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id", "username", "email", "first_name", "last_name", 
+            "is_staff", "is_superuser", "date_joined",
+            "role_name", "role_id", "permissions", "sidebar_config", "dashboard_config"
+        ]
+        read_only_fields = ("id", "date_joined")
+
+    def _get_profile(self, obj):
+        """
+        Get user profile, ensuring we check PUBLIC schema if not found in current.
+        This handles the case where User and UserProfile are in PUBLIC but request 
+        runs in a tenant schema context.
+        """
+        try:
+            # Try the standard accessor first
+            return obj.profile
+        except UserProfile.DoesNotExist:
+            # Fallback: Query PUBLIC schema directly
+            try:
+                from django.db import connection
+                with connection.cursor() as cursor:
+                    cursor.execute("SET search_path TO public")
+                profile = UserProfile.objects.get(user=obj)
+                return profile
+            except Exception:
+                return None
+
+    def get_role_name(self, obj):
+        profile = self._get_profile(obj)
+        if profile and profile.role:
+            return profile.role.name
+        return None
+
+    def get_role_id(self, obj):
+        profile = self._get_profile(obj)
+        if profile and profile.role:
+            return profile.role.id
+        return None
+
+    def get_permissions(self, obj):
+        profile = self._get_profile(obj)
+        if profile and profile.role:
+            return profile.role.permissions
+        return {}
+
+    def get_sidebar_config(self, obj):
+        # 1. Start with Role config
+        config = {}
+        profile = self._get_profile(obj)
+        if profile and profile.role:
+            config = profile.role.sidebar_config or {}
+
+        # 2. Merge User Preference (overrides role)
+        try:
+            # Avoid circular import
+            from .models import UserDashboardPreference
+            pref = UserDashboardPreference.objects.get(user=obj)
+            if pref.layout_config and isinstance(pref.layout_config, dict):
+                user_sidebar = pref.layout_config.get("sidebar_config", {})
+                if user_sidebar:
+                    config = {**config, **user_sidebar}
+        except UserDashboardPreference.DoesNotExist:
+            pass
+            
+        return config
+
+    def get_dashboard_config(self, obj):
+        profile = self._get_profile(obj)
+        if profile and profile.role:
+            return profile.role.dashboard_config
+        return {}
+
+
+class KPIOverviewSerializer(serializers.Serializer):
+    leads_assigned = serializers.IntegerField()
+    followups_due = serializers.IntegerField()
+    pipeline_counts = serializers.DictField(child=serializers.IntegerField())
+    conversion_rate = serializers.FloatField()
+    total_applications = serializers.IntegerField()
+    country_distribution = serializers.ListField(child=serializers.DictField())
+
+
+class ApplicantSerializer(serializers.ModelSerializer):
+    academic_records = serializers.SerializerMethodField(read_only=True)
+    documents = serializers.SerializerMethodField(read_only=True)
+    highest_qualification = serializers.CharField(required=False, allow_blank=True, write_only=True)
+    qualification_marks = serializers.CharField(required=False, allow_blank=True, write_only=True)
+    english_test_scores = serializers.CharField(required=False, allow_blank=True, write_only=True)
+    leadId = serializers.IntegerField(required=False, write_only=True)
+
+    class Meta:
+        model = Applicant
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "dob",
+            "passport_number",
+            "lead",
+            "stage",
+            "address",
+            "preferred_country",
+            "created_at",
+            "updated_at",
+            "academic_records",
+            "documents",
+            "highest_qualification",
+            "qualification_marks",
+            "english_test_scores",
+            "leadId",
+            "metadata",
+        ]
+        read_only_fields = ("created_at", "updated_at")
+
+    def create(self, validated_data):
+        highest_qualification = validated_data.pop('highest_qualification', None)
+        qualification_marks = validated_data.pop('qualification_marks', None)
+        english_test_scores = validated_data.pop('english_test_scores', None)
+        lead_id = validated_data.pop('leadId', None)
+        
+        if lead_id and not validated_data.get('lead'):
+            from .models import Lead
+            try:
+                validated_data['lead'] = Lead.objects.get(id=lead_id)
+            except Lead.DoesNotExist:
+                pass
+        
+        metadata = validated_data.get('metadata') or {}
+        if highest_qualification:
+            metadata['highest_qualification'] = highest_qualification
+        if qualification_marks:
+            metadata['qualification_marks'] = qualification_marks
+        if english_test_scores:
+            metadata['english_test_scores'] = english_test_scores
+        validated_data['metadata'] = metadata
+        
+        return super().create(validated_data)
+
+    def get_documents(self, obj):
+        qs = getattr(obj, "documents", None)
+        if not qs:
+            return []
+        return DocumentSerializer(qs.all(), many=True, context=self.context).data
+
+    def get_academic_records(self, obj):
+        """
+        Safely return related academic records. Handles both explicit related_name
+        and default '<model>_set' patterns.
+        """
+        qs = getattr(obj, "academic_records", None)
+        if qs is None:
+            qs = getattr(obj, "academicrecord_set", None)
+        if not qs:
+            return []
+        # Local import to avoid circular import at module import time
+        from .serializers import AcademicRecordSerializer  # type: ignore
+
+        try:
+            return AcademicRecordSerializer(qs.all(), many=True, context=self.context).data
+        except Exception:
+            # Defensive fallback: return empty list on schema mismatch
+            logger.exception("Error serializing academic records for Applicant %s", getattr(obj, "id", None))
+            return []
+
+
+class AcademicRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AcademicRecord
+        fields = [
+            "id",
+            "applicant",
+            "institution",
+            "degree",
+            "start_year",
+            "end_year",
+            "year_of_completion",
+            "grade",
+            "score",
+            "created_at",
+        ]
+        read_only_fields = ("created_at",)
+        extra_kwargs = {"applicant": {"write_only": True}}
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = [
+            "id",
+            "applicant",
+            "document_type",
+            "file",
+            "status",
+            "notes",
+            "created_at",
+        ]
+        read_only_fields = ("created_at",)
+        extra_kwargs = {"applicant": {"write_only": True}}
+
+
+# ============================================================================
+# UNIVERSITY SERIALIZER
+# ============================================================================
+
+class UniversitySerializer(serializers.ModelSerializer):
+    applications_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = University
+        fields = [
+            "id", "name", "short_name", "country", "city", "state_province",
+            "website", "logo_url", "ranking", "application_deadline_info",
+            "tuition_range", "acceptance_rate", "is_active",
+            "applications_count", "created_at", "updated_at",
+        ]
+        read_only_fields = ("id", "created_at", "updated_at", "applications_count")
+    
+    def get_applications_count(self, obj):
+        return obj.applications.count()
+
+
+# ============================================================================
+# APPLICATION DOCUMENT SERIALIZER
+# ============================================================================
+
+class ApplicationDocumentSerializer(serializers.ModelSerializer):
+    document_type_display = serializers.CharField(source='get_document_type_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    verified_by_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ApplicationDocument
+        fields = [
+            "id", "application", "document_type", "document_type_display",
+            "name", "file_url", "file_name", "file_size",
+            "status", "status_display", "is_required",
+            "verified_by", "verified_by_name", "verified_at", "rejection_reason",
+            "expiry_date", "notes", "uploaded_at", "created_at", "updated_at",
+        ]
+        read_only_fields = ("id", "created_at", "updated_at")
+    
+    def get_verified_by_name(self, obj):
+        if obj.verified_by:
+            return f"{obj.verified_by.first_name} {obj.verified_by.last_name}".strip() or obj.verified_by.username
+        return None
+
+
+# ============================================================================
+# APPLICATION SERIALIZER (Extended for Visa Workflow)
+# ============================================================================
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    applicant = ApplicantSerializer(read_only=True)
+    applicant_id = serializers.PrimaryKeyRelatedField(
+        source="applicant", queryset=Applicant.objects.all(), write_only=True, required=False
+    )
+    university = UniversitySerializer(read_only=True)
+    university_id = serializers.PrimaryKeyRelatedField(
+        source="university", queryset=University.objects.all(), write_only=True, required=False
+    )
+    documents = ApplicationDocumentSerializer(many=True, read_only=True)
+    assigned_to_name = serializers.SerializerMethodField()
+    stage_display = serializers.CharField(source='get_stage_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    priority_display = serializers.CharField(source='get_priority_display', read_only=True)
+    program_type_display = serializers.CharField(source='get_program_type_display', read_only=True)
+    offer_type_display = serializers.CharField(source='get_offer_type_display', read_only=True)
+    visa_type_display = serializers.CharField(source='get_visa_type_display', read_only=True)
+    intake_display = serializers.CharField(source='get_intake_display', read_only=True)
+
+    class Meta:
+        model = Application
+        fields = [
+            "id", "applicant", "applicant_id", "university", "university_id",
+            # Program details
+            "program", "program_type", "program_type_display", "intake", "intake_display",
+            # Status & Stage
+            "status", "status_display", "stage", "stage_display", "priority", "priority_display",
+            # Offer details
+            "offer_type", "offer_type_display", "offer_letter_url", "offer_received_date",
+            "offer_deadline", "conditions",
+            # Fee details
+            "tuition_fee", "fee_currency", "deposit_amount", "deposit_paid", "deposit_paid_date", "full_fee_paid",
+            # I-20/CAS
+            "i20_cas_number", "i20_cas_url", "i20_cas_received_date", "sevis_id",
+            # Visa
+            "visa_type", "visa_type_display", "visa_application_date", "visa_interview_date",
+            "visa_interview_location", "visa_decision_date", "visa_approved", "visa_expiry_date", "visa_rejection_reason",
+            # Travel
+            "planned_departure_date", "flight_booked", "accommodation_arranged",
+            # Assignment
+            "assigned_to", "assigned_to_name",
+            # Dates
+            "submission_date", "decision_date", "decision_outcome", "enrollment_date",
+            # External
+            "external_reference_id", "university_application_id",
+            # History & notes
+            "stage_history", "notes", "metadata", "documents",
+            # Timestamps
+            "created_at", "updated_at",
+        ]
+        read_only_fields = ("id", "created_at", "updated_at", "stage_history", "documents")
+    
+    def get_assigned_to_name(self, obj):
+        if obj.assigned_to:
+            return f"{obj.assigned_to.first_name} {obj.assigned_to.last_name}".strip() or obj.assigned_to.username
+        return None
+
+
+class ApplicationListSerializer(serializers.ModelSerializer):
+    """Lighter serializer for list views."""
+    applicant_name = serializers.SerializerMethodField()
+    applicant_email = serializers.SerializerMethodField()
+    university_name = serializers.SerializerMethodField()
+    stage_display = serializers.CharField(source='get_stage_display', read_only=True)
+    priority_display = serializers.CharField(source='get_priority_display', read_only=True)
+    assigned_to_name = serializers.SerializerMethodField()
+    documents_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Application
+        fields = [
+            "id", "applicant_name", "applicant_email", "university_name",
+            "program", "intake", "stage", "stage_display", "priority", "priority_display",
+            "visa_interview_date", "assigned_to", "assigned_to_name",
+            "documents_count", "created_at", "updated_at",
+        ]
+    
+    def get_applicant_name(self, obj):
+        if obj.applicant:
+            return f"{obj.applicant.first_name} {obj.applicant.last_name}".strip()
+        return "Unknown"
+    
+    def get_applicant_email(self, obj):
+        return obj.applicant.email if obj.applicant else None
+    
+    def get_university_name(self, obj):
+        return obj.university.name if obj.university else None
+    
+    def get_assigned_to_name(self, obj):
+        if obj.assigned_to:
+            return f"{obj.assigned_to.first_name} {obj.assigned_to.last_name}".strip() or obj.assigned_to.username
+        return None
+    
+    def get_documents_count(self, obj):
+        return obj.documents.count()
+
+
+class TranscriptSerializer(serializers.ModelSerializer):
+    application = serializers.PrimaryKeyRelatedField(read_only=True)
+    call = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Transcript
+        fields = [
+            "id",
+            "call",
+            "application",
+            "transcript_text",
+            "asr_provider",
+            "metadata",
+            "created_at",
+        ]
+        read_only_fields = ("id", "created_at")
+
+
+class AIResultSerializer(serializers.ModelSerializer):
+    application = serializers.PrimaryKeyRelatedField(read_only=True)
+    call_id = serializers.PrimaryKeyRelatedField(source='call', read_only=True)
+    transcript = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AIResult
+        fields = [
+            "id",
+            "application",
+            "call_id",
+            "payload",
+            "extractor_version",
+            "confidence",
+            "created_at",
+            "transcript",
+        ]
+        read_only_fields = ("id", "created_at")
+
+    def get_transcript(self, obj):
+        if obj.call:
+            # Return the first transcript text if available
+            transcript = obj.call.transcripts.first()
+            if transcript:
+                return transcript.transcript_text
+        return None
+
+
+class OutboundMessageSerializer(serializers.ModelSerializer):
+    application = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = OutboundMessage
+        fields = [
+            "id",
+            "application",
+            "channel",
+            "body",
+            "status",
+            "provider_id",
+            "created_at",
+        ]
+        read_only_fields = ("id", "created_at")
+
+
+class ConsentRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConsentRecord
+        fields = [
+            "id",
+            "applicant",
+            "consent_text",
+            "consent_given",
+            "consented_at",
+            "recorded_by",
+        ]
+        read_only_fields = ("id",)
+
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    ip = serializers.CharField(allow_null=True, required=False)
+    
+    class Meta:
+        model = AuditLog
+        fields = ["id", "actor", "action", "target_type", "target_id", "applicant", "data", "ip", "notes", "created_at"]
+        read_only_fields = ("id", "created_at")
+
+
+class StartVoiceCallSerializer(serializers.Serializer):
+    """
+    Serializer used by APIs that initiate a voice call.
+    Accepts phone_number and optional caller_id, agent_id and metadata (dict or JSON string).
+    """
+    phone_number = serializers.CharField(required=False, allow_blank=True)
+    caller_id = serializers.CharField(required=False, allow_blank=True)
+    agent_id = serializers.CharField(required=False, allow_blank=True)
+    metadata = serializers.JSONField(required=False)
+
+    def validate(self, data):
+        # Ensure phone number is provided either here or upstream
+        phone = data.get("phone_number")
+        if not phone:
+            # we allow missing here because views may supply phone from model; leave validation to view
+            return data
+        # simple normalize: strip spaces
+        data["phone_number"] = phone.strip()
+        return data
+
+
+class LeadReceiveSerializer(serializers.Serializer):
+    """
+    Lightweight serializer for inbound lead webhooks.
+    If a Lead model exists in crm_app.models, create & return it; otherwise return validated_data.
+    """
+    external_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    name = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    email = serializers.EmailField(required=False, allow_blank=True, allow_null=True)
+    phone = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    source = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    message = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    raw_payload = serializers.JSONField(required=False, allow_null=True)
+
+    def create(self, validated_data):
+        """
+        Try to persist to Lead model if available and fields match.
+        If Lead model isn't present or create fails due to unique constraint, return existing lead or validated_data.
+        This implementation is defensive:
+         - only passes allowed fields to Lead.objects.create()
+         - uses get_or_create when external_id provided to avoid UNIQUE race
+         - uses transaction.atomic + IntegrityError handling
+         - logs unexpected exceptions for easier debugging
+        """
+        try:
+            from .models import Lead
+        except Exception:
+            logger.debug("Lead model not available; returning validated_data")
+            return validated_data
+
+        # Determine which fields exist on the Lead model to avoid unexpected kwargs
+        lead_field_names = {f.name for f in Lead._meta.get_fields() if getattr(f, "editable", True)}
+        lead_fields = {}
+        # Prefer a specific set of inbound keys; any unexpected fields can be shoved into raw_payload
+        inbound_keys = ("external_id", "name", "email", "phone", "source", "message", "raw_payload")
+        raw_extra = {}
+
+        for k in inbound_keys:
+            if k in validated_data:
+                if k in lead_field_names:
+                    lead_fields[k] = validated_data[k]
+                else:
+                    raw_extra[k] = validated_data[k]
+
+        # If there are extra keys not in Lead fields, merge them into raw_payload (if model supports it)
+        if raw_extra:
+            if "raw_payload" in lead_field_names:
+                lead_fields.setdefault("raw_payload", {})  # ensure a dict
+                # merge existing raw_payload if provided
+                if isinstance(lead_fields.get("raw_payload"), dict):
+                    lead_fields["raw_payload"].update(raw_extra)
+                else:
+                    lead_fields["raw_payload"] = {**(lead_fields.get("raw_payload") or {}), **raw_extra}
+
+        try:
+            with transaction.atomic():
+                # If external_id present, prefer get_or_create to avoid unique constraint errors
+                if lead_fields.get("external_id"):
+                    obj, created = Lead.objects.get_or_create(
+                        external_id=lead_fields["external_id"], defaults=lead_fields
+                    )
+                    return obj
+
+                # Attempt to create a new Lead with allowed fields
+                lead = Lead.objects.create(**lead_fields)
+                return lead
+        except IntegrityError as ie:
+            # Unique constraint raced or another process created it — try to fetch existing
+            logger.warning("IntegrityError while creating Lead: %s", ie)
+            try:
+                if lead_fields.get("external_id"):
+                    existing = Lead.objects.filter(external_id=lead_fields["external_id"]).first()
+                    if existing:
+                        return existing
+            except Exception:
+                logger.exception("Error while retrieving existing Lead after IntegrityError")
+            # fallback: return validated_data so the caller can process
+            return validated_data
+        except Exception as e:
+            # any other failure: log and return validated_data
+            logger.exception("Unexpected error while creating Lead: %s", e)
+            return validated_data
+
+
+class CallRecordSerializer(serializers.ModelSerializer):
+    transcripts = TranscriptSerializer(many=True, read_only=True)
+    applicant = ApplicantSerializer(read_only=True)
+    application = serializers.SerializerMethodField()
+    conversation_id = serializers.SerializerMethodField()
+    phone_number = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CallRecord
+        fields = ['id', 'applicant', 'lead', 'application', 'provider', 'external_call_id', 'recording_url', 'conversation_id', 'phone_number', 'metadata', 'qualified_data', 'cost', 'currency', 'created_at', 'status', 'direction', 'duration_seconds', 'transcripts']
+
+    def get_conversation_id(self, obj):
+        # Try to get conversation_id from metadata first (ElevenLabs)
+        if obj.metadata and isinstance(obj.metadata, dict):
+            conv_id = obj.metadata.get('conversation_id')
+            if conv_id:
+                return conv_id
+        # Fallback to external_call_id if it looks like a conversation ID (not starting with CA)
+        if obj.external_call_id and not obj.external_call_id.startswith('CA'):
+            return obj.external_call_id
+        return None
+
+    def get_application(self, obj):
+        if obj.application:
+            return {
+                'id': obj.application.id,
+                'program': obj.application.program,
+                'status': obj.application.status
+            }
+        return None
+
+    def get_phone_number(self, obj):
+        # Try to get phone number from metadata - check multiple possible fields
+        if obj.metadata and isinstance(obj.metadata, dict):
+            # Direct top-level fields
+            phone = (
+                obj.metadata.get('phone_number') or 
+                obj.metadata.get('phone') or 
+                obj.metadata.get('customer_phone') or
+                obj.metadata.get('to') or 
+                obj.metadata.get('from')
+            )
+            if phone:
+                return phone
+            
+            # Check nested metadata field
+            inner_meta = obj.metadata.get('metadata', {})
+            if isinstance(inner_meta, dict):
+                phone = (
+                    inner_meta.get('phone') or 
+                    inner_meta.get('phone_number') or
+                    inner_meta.get('to') or 
+                    inner_meta.get('from')
+                )
+                if phone:
+                    return phone
+        
+        # Fallback to applicant phone
+        if obj.applicant and obj.applicant.phone:
+            return obj.applicant.phone
+        return None
+
+
+class FollowUpSerializer(serializers.ModelSerializer):
+    application = serializers.PrimaryKeyRelatedField(queryset=Application.objects.all(), required=False, allow_null=True)
+    lead = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
+    assigned_to = serializers.PrimaryKeyRelatedField(read_only=True)
+    applicant_name = serializers.SerializerMethodField()
+    call_record = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = FollowUp
+        fields = [
+            "id",
+            "application",
+            "lead",
+            "applicant_name",
+            "assigned_to",
+            "due_at",
+            "channel",
+            "status",
+            "completed",
+            "notes",
+            "call_record",
+            "metadata",
+            "created_at",
+        ]
+        read_only_fields = ("id", "created_at", "call_record")
+
+    def get_applicant_name(self, obj):
+        if obj.lead:
+            return f"{obj.lead.first_name} {obj.lead.last_name}".strip()
+        return None
+
+
+class ScheduleAICallSerializer(serializers.Serializer):
+    """Serializer for scheduling AI calls."""
+    applicant_id = serializers.IntegerField(required=True, help_text="ID of the applicant to call")
+    scheduled_time = serializers.DateTimeField(required=True, help_text="When to make the call (ISO format)")
+    notes = serializers.CharField(required=False, allow_blank=True, help_text="Notes/context for the AI")
+    call_context = serializers.DictField(required=False, help_text="Additional context to pass to AI agent")
+
+
+
+
+
+class LeadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lead
+        fields = [
+            'id', 
+            'external_id', 
+            'name', 
+            'email', 
+            'phone', 
+            'source', 
+            'message', 
+            'raw_payload', 
+            'status', 
+            'forward_response', 
+            'received_at', 
+            'forwarded_at',
+            'city',
+            'country',
+            'preferred_language',
+            'interested_service',
+            'consent_given',
+            'visit_type',
+            'assigned_to',
+            # New qualification fields for ElevenLabs
+            'highest_qualification',
+            'qualification_marks',
+            'english_test_scores'
+        ]
+        read_only_fields = ('id', 'received_at', 'forwarded_at')
+        extra_kwargs = {
+            'external_id': {'required': False, 'allow_blank': True}
+        }
+
+    def create(self, validated_data):
+        if not validated_data.get('external_id'):
+            import uuid
+            validated_data['external_id'] = f"lead_{uuid.uuid4().hex[:12]}"
+        return super().create(validated_data)
+
+
+# RBAC Serializers
+class RoleSerializer(serializers.ModelSerializer):
+    user_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Role
+        fields = [
+            'id', 'name', 'description', 'permissions', 
+            'sidebar_config', 'dashboard_config', 'is_system_role',
+            'created_at', 'updated_at', 'user_count'
+        ]
+        read_only_fields = ('id', 'created_at', 'updated_at', 'user_count')
+
+    def get_user_count(self, obj):
+        return obj.users.count()
+
+    def validate_name(self, value):
+        if self.instance and self.instance.is_system_role and self.instance.name != value:
+            raise serializers.ValidationError("Cannot rename system roles")
+        return value
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
+    role_name = serializers.CharField(source='role.name', read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'user', 'username', 'email', 'role', 'role_name', 'created_at', 'updated_at']
+        read_only_fields = ('id', 'created_at', 'updated_at')
+
+
+class UserRoleAssignmentSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    role_id = serializers.IntegerField(allow_null=True, required=False)
+
+    def validate_user_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("User does not exist")
+        return value
+
+    def validate_role_id(self, value):
+        if value and not Role.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Role does not exist")
+        return value
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ["id", "recipient", "title", "message", "link", "is_read", "created_at"]
+        read_only_fields = ("id", "created_at")
+
+
+# ====== Ad Integrations Serializers ======
+
+class AdIntegrationSerializer(serializers.ModelSerializer):
+    platform_display = serializers.CharField(source='get_platform_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    campaigns_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AdIntegration
+        fields = [
+            'id', 'user', 'platform', 'platform_display', 'account_id', 'account_name',
+            'access_token', 'refresh_token', 'status', 'status_display',
+            'last_synced_at', 'metadata', 'campaigns_count', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ('id', 'user', 'created_at', 'updated_at', 'last_synced_at')
+        extra_kwargs = {
+            'access_token': {'write_only': True},
+            'refresh_token': {'write_only': True},
+        }
+
+    def get_campaigns_count(self, obj):
+        return obj.campaigns.count()
+
+
+class AdCampaignSerializer(serializers.ModelSerializer):
+    platform = serializers.CharField(source='integration.platform', read_only=True)
+    platform_display = serializers.CharField(source='integration.get_platform_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = AdCampaign
+        fields = [
+            'id', 'integration', 'platform', 'platform_display',
+            'external_campaign_id', 'name', 'status', 'status_display', 'objective',
+            'daily_budget', 'lifetime_budget', 'total_spend', 'currency',
+            'impressions', 'clicks', 'conversions', 'ctr', 'cpc', 'cpm', 'cost_per_conversion',
+            'start_date', 'end_date', 'last_synced_at', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ('id', 'created_at', 'updated_at', 'last_synced_at')

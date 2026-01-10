@@ -1,0 +1,1843 @@
+{
+  "tests": [
+    {
+      "id": 1,
+      "title": "Reading Practice Test 1 (01RT01 (3))",
+      "passages": [
+        {
+          "passage_id": "P1",
+          "title": "A spark, a flint: How fire leapt to life",
+          "text": "The control of fire was the first and perhaps greatest of humanity\u2019s steps towards a life-enhancing technology.\n To early man, fire was a divine gift randomly delivered in the form of lightning, forest fire or burning lava. Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots.\n How and where man learnt how to produce flame at will is unknown. It was probably a secondary invention, accidentally made during tool-making operations with wood or stone. Studies of primitive societies suggest that the earliest method of making fire was through friction. European peasants would insert a wooden drill in a round hole and rotate it briskly between their palms This process could be speeded up by wrapping a cord around the drill and pulling on each end.\n The Ancient Greeks used lenses or concave mirrors to concentrate the sun\u2019s rays and burning glasses were also used by Mexican Aztecs and the Chinese\n Percussion methods of firelighting date back to Paleolithic times, when some Stone Age tool-makers discovered that chipping flints produced sparks. The technique became more efficient after the discovery of iron, about 5000 years ago In Arctic North America, the Eskimos produced a slow-burning spark by striking quartz against iron pyrites, a compound that contains sulphur. The Chinese lit their fires by striking porcelain with bamboo. In Europe, the combination of steel, flint and tinder remained the main method of firelighting until the mid 19th century.\n Fire-lighting was revolutionised by the discovery of phosphorus, isolated in 1669 by a German alchemist trying to transmute silver into gold. Impressed by the element\u2019s combustibility, several 17th century chemists used it to manufacture fire-lighting devices, but the results were dangerously inflammable. With phosphorus costing the equivalent of several hundred pounds per ounce, the first matches were expensive.\n The quest for a practical match really began after 1781 when a group of French chemists came up with the Phosphoric Candle or Ethereal Match, a sealed glass tube containing a twist of paper tipped with phosphorus. When the tube was broken, air rushed in, causing the phosphorus to self-combust. An even more hazardous device, popular in America, was the Instantaneous Light Box \u2014 a bottle filled with sulphuric acid into which splints treated with chemicals were dipped.\n The first matches resembling those used today were made in 1827 by John Walker, an English pharmacist who borrowed the formula from a military rocket-maker called Congreve. Costing a shilling a box, Congreves were splints coated with sulphur and tipped with potassium chlorate. To light them, the user drew them quickly through folded glass paper.\n Walker never patented his invention, and three years later it was copied by a Samuel Jones, who marketed his product as Lucifers. About the same time, a French chemistry student called Charles Sauria produced the first \u201cstrike-anywhere\u201d match by substituting white phosphorus for the potassium chlorate in the Walker formula. However, since white phosphorus is a deadly poison, from 1845 match-makers exposed to its fumes succumbed to necrosis, a disease that eats away jaw-bones. It wasn\u2019t until 1906 that the substance was eventually banned.\n That was 62 years after a Swedish chemist called Pasch had discovered non-toxic red or amorphous phosphorus, a development exploited commercially by Pasch\u2019s compatriot J E Lundstrom in 1885. Lundstrom\u2019s safety matches were safe because the red phosphorus was non-toxic; it was painted on to the striking surface instead of the match tip, which contained potassium chlorate with a relatively high ignition temperature of 182 degrees centigrade.\n America lagged behind Europe in match technology and safety standards. It wasn\u2019t until 1900 that the Diamond Match Company bought a French patent for safety matches \u2014 but the formula did not work properly in the different climatic conditions prevailing in America and it was another 11 years before scientists finally adapted the French patent for the US.\n The Americans, however, can claim several \u201cfirsts\u201d in match technology and marketing. In 1892 the Diamond Match Company pioneered book matches. The innovation didn\u2019t catch on until after 1896, when a brewery had the novel idea of advertising its product in match books. Today book matches are the most widely used type in the US, with 90 percent handed out free by hotels, restaurants and others.\n Other American innovations include an antiafterglow solution to prevent the match from smouldering after it has been blown out; and the waterproof match, which lights after eight hours in water.",
+          "groups": [
+            {
+              "group_id": "P1-G1",
+              "type": "SUMMARY_COMPLETION",
+              "instructions": "Questions 1-8\n\nComplete the summary below. Choose your answers from the box at the bottom of the page and write them in boxes 1-8 on your answer sheet.\n\nNB There are more words than spaces so you will not use them all You may use any of the words more than once.",
+              "constraints": {
+                "from_options": true
+              },
+              "container": {
+                "kind": "richtext",
+                "rich": [
+                  {
+                    "t": "text",
+                    "v": "EARLY FIRE-LIGHTING METHODS\n\nPrimitive societies saw fire as a heavenly gift. They tried to "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q1"
+                  },
+                  {
+                    "t": "text",
+                    "v": " burning logs or charcoal "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q2"
+                  },
+                  {
+                    "t": "text",
+                    "v": " that they could create fire themselves. It is suspected that the first man-made flames were produced by "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q3"
+                  },
+                  {
+                    "t": "text",
+                    "v": ".\n\nThe very first fire-lighting methods involved the creation of "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q4"
+                  },
+                  {
+                    "t": "text",
+                    "v": " by, for example, rapidly "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q5"
+                  },
+                  {
+                    "t": "text",
+                    "v": " a wooden stick in a round hole. The use of "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q6"
+                  },
+                  {
+                    "t": "text",
+                    "v": " or persistent chipping was also widespread in Europe and among other peoples such as the Chinese and "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q7"
+                  },
+                  {
+                    "t": "text",
+                    "v": " . European practice of this method continued until the 1850s "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P1-G1-Q8"
+                  },
+                  {
+                    "t": "text",
+                    "v": " the discovery of phosphorus some years earlier."
+                  }
+                ]
+              },
+              "options": [
+                {
+                  "key": "Mexicans",
+                  "text": "Mexicans"
+                },
+                {
+                  "key": "random",
+                  "text": "random"
+                },
+                {
+                  "key": "rotating",
+                  "text": "rotating"
+                },
+                {
+                  "key": "despite",
+                  "text": "despite"
+                },
+                {
+                  "key": "preserve",
+                  "text": "preserve"
+                },
+                {
+                  "key": "realising",
+                  "text": "realising"
+                },
+                {
+                  "key": "sunlight",
+                  "text": "sunlight"
+                },
+                {
+                  "key": "lacking",
+                  "text": "lacking"
+                },
+                {
+                  "key": "heavenly",
+                  "text": "heavenly"
+                },
+                {
+                  "key": "percussion",
+                  "text": "percussion"
+                },
+                {
+                  "key": "chance",
+                  "text": "chance"
+                },
+                {
+                  "key": "friction",
+                  "text": "friction"
+                },
+                {
+                  "key": "unaware",
+                  "text": "unaware"
+                },
+                {
+                  "key": "without",
+                  "text": "without"
+                },
+                {
+                  "key": "make",
+                  "text": "make"
+                },
+                {
+                  "key": "heating",
+                  "text": "heating"
+                },
+                {
+                  "key": "Eskimos",
+                  "text": "Eskimos"
+                },
+                {
+                  "key": "surprised",
+                  "text": "surprised"
+                },
+                {
+                  "key": "until",
+                  "text": "until"
+                },
+                {
+                  "key": "smoke",
+                  "text": "smoke"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P1-G1-Q1",
+                  "number": 1,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "preserve",
+                    "start_index": 218,
+                    "end_index": 224
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q2",
+                  "number": 2,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "unaware",
+                    "start_index": 158,
+                    "end_index": 164
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q3",
+                  "number": 3,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "chance",
+                    "start_index": 339,
+                    "end_index": 351
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q4",
+                  "number": 4,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "friction",
+                    "start_index": 454,
+                    "end_index": 462
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q5",
+                  "number": 5,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "rotating",
+                    "start_index": 507,
+                    "end_index": 513
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q6",
+                  "number": 6,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "percussion",
+                    "start_index": 688,
+                    "end_index": 698
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q7",
+                  "number": 7,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "Eskimos",
+                    "start_index": 878,
+                    "end_index": 885
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q8",
+                  "number": 8,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "despite",
+                    "start_index": 1058,
+                    "end_index": 1063
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P1-G2",
+              "type": "MATCHING_FEATURES",
+              "instructions": "Questions 9-15\n\nLook at the following notes that have been made about the matches described in Reading Passage 1. Decide which type of match (A-H) corresponds with each description and write your answers in boxes 9-15 on your answer sheet.\n\nNB There are more matches than descriptions so you will not use them all. You may use any match more than once.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "the Ethereal Match"
+                },
+                {
+                  "key": "B",
+                  "text": "the Instantaneous Lightbox"
+                },
+                {
+                  "key": "C",
+                  "text": "Congreves"
+                },
+                {
+                  "key": "D",
+                  "text": "Lucifers"
+                },
+                {
+                  "key": "E",
+                  "text": "the first strike-anywhere match"
+                },
+                {
+                  "key": "F",
+                  "text": "Lundstrom\u2019s safety match"
+                },
+                {
+                  "key": "G",
+                  "text": "book matches"
+                },
+                {
+                  "key": "H",
+                  "text": "waterproof matches"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P1-G2-Q9",
+                  "number": 9,
+                  "prompt": "made using a less poisonous type of phosphorus",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "F"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q10",
+                  "number": 10,
+                  "prompt": "identical to a previous type of match",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q11",
+                  "number": 11,
+                  "prompt": "caused a deadly illness",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "E"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q12",
+                  "number": 12,
+                  "prompt": "first to look like modern matches",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q13",
+                  "number": 13,
+                  "prompt": "first matches used for advertising",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "G"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q14",
+                  "number": 14,
+                  "prompt": "relied on an airtight glass container",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "A"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q15",
+                  "number": 15,
+                  "prompt": "made by someone who did not invent the formula",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "passage_id": "P2",
+          "title": "Zoo conservation programmes",
+          "text": "One of London Zoo\u2019s recent advertisements caused me some irritation, so patently did it distort reality. Headlined \u201cWithout zoos you might as well tell these animals to get stuffed\u201d, it was bordered with illustrations of several endangered species and went on to extol the myth that without zoos like London Zoo these animals \u201cwill almost certainly disappear forever\u201d. With the zoo world\u2019s rather mediocre record on conservation, one might be forgiven for being slightly sceptical about such an advertisement.\n Zoos were originally created as places of entertainment, and their suggested involvement with conservation didn\u2019t seriously arise until about 30 years ago, when the Zoological Society of London held the first formal international meeting on the subject. Eight years later, a series of world conferences took place, entitled \u201cThe Breeding of Endangered Species\u201d, and from this point onwards conservation became the zoo community\u2019s buzzword. This commitment has now been clearly defined in The World Zoo Conservation Strategy (WZCS, September 1993), which although an important and welcome document does seem to be based on an unrealistic optimism about the nature of the zoo industry.\n The WZCS estimates that there are about 10,000 zoos in the world, of which around 1,000 represent a core of quality collections capable of participating in co-ordinated conservation programmes. This is probably the document\u2019s first failing, as I believe that 10,000 is a serious underestimate of the total number of places masquerading as zoological establishments. Of course it is difficult to get accurate data but, to put the issue into perspective, I have found that, in a year of working in Eastern Europe, I discover fresh zoos on almost a weekly basis.\n The second flaw in the reasoning of the WZCS document is the naive faith it places in its 1,000 core zoos. One would assume that the calibre of these institutions would have been carefully examined, but it appears that the criterion for inclusion on this select list might merely be that the zoo is a member of a zoo federation or association. This might be a good starting point, working on the premise that members must meet certain standards, but again the facts don\u2019t support the theory. The greatly respected American Association of Zoological Parks and Aquariums (AAZPA) has had extremely dubious members, and in the UK the Federation of Zoological Gardens of Great Britain and Ireland has occasionally had members that have been roundly censured in the national press. These include Robin Hill Adventure Park on the Isle of Wight, which many considered the most notorious collection of animals in the country. This establishment, which for years was protected by the Isle\u2019s local council (which viewed it as a tourist amenity), was finally closed down following a damning report by a veterinary inspector appointed under the terms of the Zoo Licensing Act 1981. As it was always a collection of dubious repute, one is obliged to reflect upon the standards that the Zoo Federation sets when granting membership. The situation is even worse in developing countries where little money is available for redevelopment and it is hard to see a way of incorporating collections into the overall scheme of the WZCS.\n Even assuming that the WZCS\u2019s 1,000 core zoos are all of a high standard complete with scientific staff and research facilities, trained and dedicated keepers, accommodation that permits normal or natural behaviour, and a policy of co-operating fully with one another what might be the potential for conservation? Colin Tudge, author of Last Animals at the Zoo (Oxford University Press, 1992), argues that \u201cif the world\u2019s zoos worked together in co-operative breeding programmes, then even without further expansion they could save around 2,000 species of endangered land vertebrates\u2019. This seems an extremely optimistic proposition from a man who must be aware of the failings and weaknesses of the zoo industry the man who, when a member of the council of London Zoo, had to persuade the zoo to devote more of its activities to conservation. Moreover, where are the facts to support such optimism?\n Today approximately 16 species might be said to have been \u201csaved\u201d by captive breeding programmes, although a number of these can hardly be looked upon as resounding successes. Beyond that, about a further 20 species are being seriously considered for zoo conservation programmes. Given that the international conference at London Zoo was held 30 years ago, this is pretty slow progress, and a long way off Tudge\u2019s target of 2,000.",
+          "groups": [
+            {
+              "group_id": "P2-G1",
+              "type": "YES_NO_NOT_GIVEN",
+              "instructions": "Questions 16-22\n\nDo the following statements agree with the views of the writer in Reading Passage 2? In boxes 16-22 write\n\nYES if the statement agrees with the writer\nNO if the statement contradicts the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+              "items": [
+                {
+                  "item_id": "P2-G1-Q16",
+                  "number": 16,
+                  "prompt": "London Zoo\u2019s advertisements are dishonest.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q17",
+                  "number": 17,
+                  "prompt": "Zoos made an insignificant contribution to conservation up until 30 years ago.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q18",
+                  "number": 18,
+                  "prompt": "The WZCS document is not known in Eastern Europe.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NOT GIVEN"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q19",
+                  "number": 19,
+                  "prompt": "Zoos in the WZCS select list were carefully inspected.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NO"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q20",
+                  "number": 20,
+                  "prompt": "No-one knew how the animals were being treated at Robin Hill Adventure Park.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NO"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q21",
+                  "number": 21,
+                  "prompt": "Colin Tudge was dissatisfied with the treatment of animals at London Zoo.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NOT GIVEN"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q22",
+                  "number": 22,
+                  "prompt": "The number of successful zoo conservation programmes is unsatisfactory.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P2-G2",
+              "type": "MULTIPLE_CHOICE",
+              "instructions": "Questions 23-25\n\nChoose the appropriate letters A-D and write them in boxes 23-25 on your answer sheet.",
+              "items": [
+                {
+                  "item_id": "P2-G2-Q23",
+                  "number": 23,
+                  "prompt": "What were the objectives of the WZCS document?",
+                  "options": [
+                    {
+                      "key": "A",
+                      "text": "to improve the calibre of zoos world-wide"
+                    },
+                    {
+                      "key": "B",
+                      "text": "to identify zoos suitable for conservation practice"
+                    },
+                    {
+                      "key": "C",
+                      "text": "to provide funds for zoos in underdeveloped countries"
+                    },
+                    {
+                      "key": "D",
+                      "text": "to list the endangered species of the world"
+                    }
+                  ],
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "B"
+                  }
+                },
+                {
+                  "item_id": "P2-G2-Q24",
+                  "number": 24,
+                  "prompt": "Why does the writer refer to Robin Hill Adventure Park?",
+                  "options": [
+                    {
+                      "key": "A",
+                      "text": "to support the Isle of Wight local council"
+                    },
+                    {
+                      "key": "B",
+                      "text": "to criticise the AAZPA"
+                    },
+                    {
+                      "key": "C",
+                      "text": "to illustrate a weakness in the WZCS document"
+                    },
+                    {
+                      "key": "D",
+                      "text": "to exemplify the standards in AAZPA zoos"
+                    }
+                  ],
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                },
+                {
+                  "item_id": "P2-G2-Q25",
+                  "number": 25,
+                  "prompt": "What word best describes the writer\u2019s response to Colin Tudges\u2019 prediction on captive breeding programmes?",
+                  "options": [
+                    {
+                      "key": "A",
+                      "text": "disbelieving"
+                    },
+                    {
+                      "key": "B",
+                      "text": "impartial"
+                    },
+                    {
+                      "key": "C",
+                      "text": "prejudiced"
+                    },
+                    {
+                      "key": "D",
+                      "text": "accepting"
+                    }
+                  ],
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "A"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P2-G3",
+              "type": "MULTIPLE_CHOICE",
+              "instructions": "Questions 26-28\n\nThe writer mentions a number of factors which lead him to doubt the value of the WZCS document. Which THREE of the following factors are mentioned? Write your answers (A-F) in boxes 26-28 on your answer sheet.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "the number of unregistered zoos in the world"
+                },
+                {
+                  "key": "B",
+                  "text": "the lack of money in developing countries"
+                },
+                {
+                  "key": "C",
+                  "text": "the actions of the Isle of Wight local council"
+                },
+                {
+                  "key": "D",
+                  "text": "the failure of the WZCS to examine the standards of the \u201ccore zoos\u201d"
+                },
+                {
+                  "key": "E",
+                  "text": "the unrealistic aim of the WZCS in view of the number of species \u201csaved\u201d to date"
+                },
+                {
+                  "key": "F",
+                  "text": "the policies of WZCS zoo managers"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P2-G3-Q26",
+                  "number": 26,
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "A"
+                  }
+                },
+                {
+                  "item_id": "P2-G3-Q27",
+                  "number": 27,
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                },
+                {
+                  "item_id": "P2-G3-Q28",
+                  "number": 28,
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "E"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "passage_id": "P3",
+          "title": "ARCHITECTURE - Reaching for the Sky",
+          "text": "Architecture is the art and science of designing buildings and structures. A building reflects the scientific and technological achievements of the age as well as the ideas and aspirations of the designer and client. The appearance of individual buildings, however, is often controversial.\n The use of an architectural style cannot be said to start or finish on a specific date. Neither is it possible to say exactly what characterises a particular movement. But the origins of what is now generally known as modern architecture can be traced back to the social and technological changes of the 18th and 19th centuries.\n Instead of using timber, stone and traditional building techniques, architects began to explore ways of creating buildings by using the latest technology and materials such as steel, glass and concrete strengthened steel bars, known as reinforced concrete. Technological advances also helped bring about the decline of rural industries and an increase in urban populations as people moved to the towns to work in the new factories. Such rapid and uncontrolled growth helped to turn parts of cities into slums.\n By the 1920s architects throughout Europe were reacting against the conditions created by industrialisation. A new style of architecture emerged to reflect more idealistic notions for the future. It was made possible by new materials and construction techniques and was known as Modernism.\n By the 1930s many buildings emerging from this movement were designed in the International Style. This was largely characterised by the bold use of new materials and simple, geometric forms, often with white walls supported by stilt-like pillars. These were stripped of unnecessary decoration that would detract from their primary purpose \u2014 to be used or lived in.\n Walter Gropius, Charles Jeanneret (better known as Le Corbusier) and Ludwig Mies van der Rohe were among the most influential of the many architects who contributed to the development of Modernism in the first half of the century. But the economic depression of the 1930s and the second world war (1939-45) prevented their ideas from being widely realised until the economic conditions improved and war-torn cities had to be rebuilt. By the 1950s, the International Style had developed into a universal approach to building, which standardised the appearance of new buildings in cities across the world.\n Unfortunately, this Modernist interest in geometric simplicity and function became exploited for profit. The rediscovery of quick-and-easy-to-handle reinforced concrete and an improved ability to prefabricate building sections meant that builders could meet the budgets of commissioning authorities and handle a renewed demand for development quickly and cheaply. But this led to many badly designed buildings, which discredited the original aims of Modernism.\n Influenced by Le Corbusier\u2019s ideas on town planning, every large British city built multi-storey housing estates in the 1960s. Mass-produced, low-cost high-rises seemed to offer a solution to the problem of housing a growing inner-city population. But far from meeting human needs, the new estates often proved to be windswept deserts lacking essential social facilities and services. Many of these buildings were poorly designed and constructed and have since been demolished.\n By the 1970s, a new respect for the place of buildings within the existing townscape arose. Preserving historic buildings or keeping only their facades (or fronts) grew common. Architects also began to make more use of building styles and materials that were traditional to the area. The architectural style usually referred to as High Tech was also emerging. It celebrated scientific and engineering achievements by openly parading the sophisticated techniques used in construction. Such buildings are commonly made of metal and glass; examples are Stansted airport and the Lloyd\u2019s building in London.\n Disillusionment at the failure of many of the poor imations of Modernist architecture led to interest in various styles and ideas from the past and present. By the 1980s the coexistence of different styles of architecture in the same building became known as Post Modern. Other architects looked back to the classical tradition. The trend in architecture now favours smaller scale building design that reflects a growing public awareness of environmental issues such as energy efficiency. Like the Modernists, people today recognise that a well designed environment improves the quality of life but is not necessarily achieved by adopting one well defined style of architecture.\n Twentieth century architecture will mainly be remembered for its tall buildings. They have been made possible by the development of light steel frames and safe passenger lifts. They originated in the US over a century ago to help meet the demand for more economical use of land. As construction techniques improved, the skyscraper became a reality.",
+          "groups": [
+            {
+              "group_id": "P3-G1",
+              "type": "TABLE_COMPLETION",
+              "instructions": "Questions 29-35\n\nComplete the table below using information from Reading Passage 3. Write NO MORE THAN THREE WORDS for each answer. Write your answers in boxes 29-35 on your answer sheet.",
+              "container": {
+                "kind": "table",
+                "cols": [
+                  "PERIOD",
+                  "STYLE OF BUILDING",
+                  "MATERIALS",
+                  "CHARACTERISTICS"
+                ],
+                "rows": [
+                  {
+                    "r": 0,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "Before 18th century"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "traditional"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q29"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": ""
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 1,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1920s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "introduction of "
+                          },
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q30"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "steel, glass and concrete"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "exploration of latest technology"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 2,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1930s - 1950s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q31"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": ""
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "geometric forms"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 3,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1960s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "decline of Modernism"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "pre-fabricated sections"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q32"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 4,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1970s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "end of Modernist era"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "traditional materials"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q33"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 5,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1970s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "beginning of "
+                          },
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q34"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "metal and glass"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "sophisticated techniques paraded"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 6,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "1980s"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "Post-Modernism"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 2,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": ""
+                          }
+                        ]
+                      },
+                      {
+                        "c": 3,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P3-G1-Q35"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "item_id": "P3-G1-Q29",
+                  "number": 29,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "timber and stone"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q30",
+                  "number": 30,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "Modernism"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q31",
+                  "number": 31,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "International style"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q32",
+                  "number": 32,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "badly designed buildings"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q33",
+                  "number": 33,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "preservation"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q34",
+                  "number": 34,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "High-Tech"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q35",
+                  "number": 35,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "co-existence of styles"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P3-G2",
+              "type": "MATCHING_FEATURES",
+              "instructions": "Questions 36-40\n\nMatch each Cause (36-40) in List A, with its Effect (A-H) in List B. Write your answers (A-H) in boxes 36-40 on your answer sheet.\n\nNB There are more effects in List B than you will need.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The quality of life is improved."
+                },
+                {
+                  "key": "B",
+                  "text": "Architecture reflects the age."
+                },
+                {
+                  "key": "C",
+                  "text": "A number of these have been knocked down."
+                },
+                {
+                  "key": "D",
+                  "text": "Light steel frames and lifts are developed."
+                },
+                {
+                  "key": "E",
+                  "text": "Historical buildings are preserved."
+                },
+                {
+                  "key": "F",
+                  "text": "All decoration is removed."
+                },
+                {
+                  "key": "G",
+                  "text": "Parts of cities become slums."
+                },
+                {
+                  "key": "H",
+                  "text": "Modernist ideas cannot be put into practice until the second half of the 20th century."
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P3-G2-Q36",
+                  "number": 36,
+                  "prompt": "A rapid movement of people from rural areas to cities is triggered by technological advance.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "G"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q37",
+                  "number": 37,
+                  "prompt": "Buildings become simple and functional.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "F"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q38",
+                  "number": 38,
+                  "prompt": "An economic depression and the second world war hit Europe.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "H"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q39",
+                  "number": 39,
+                  "prompt": "Multi-storey housing estates are built according to contemporary ideas on town planning.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q40",
+                  "number": 40,
+                  "prompt": "Less land must be used for building.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Reading Practice Test 2 (01RT02 (2))",
+      "passages": [
+        {
+          "passage_id": "P1",
+          "title": "Right and left-handedness in humans",
+          "text": "Why do humans, virtually alone among all animal species, display a distinct left or right-handedness? Not even our closest relatives among the apes possess such decided lateral asymmetry, as psychologists call it. Yet about 90 per cent of every human population that has ever lived appears to have been right-handed.  Professor Bryan Turner at Deakin University has studied the research literature on left-handedness and found that handedness goes with sidedness.  So nine out of ten people are right-handed and eight are right-footed. He noted that this distinctive asymmetry in the human population is itself systematic.  \"Humans think in categories:  black and white, up and down, left and right. It's a system of signs that enables us to categorise phenomena that are essentially ambiguous.\"\n\nResearch has shown that there is a genetic or inherited element to handedness. But while left-handedness tends to run in families, neither left nor right handers will automatically produce off-spring with the same handedness; in fact about 6 per cent of children with two right-handed parents will be left-handed. However, among two left-handed parents, perhaps 40 per cent of the children will also be left-handed. With one right and one left-handed parent, 15 to 20 per cent of the offspring will be left-handed. Even among identical twins who have exactly the same genes, one in six pairs will differ in their handedness.\n\nWhat then makes people left-handed if it is not simply genetic? Other factors must be at work and researchers have turned to the brain for clues. In the 1860s the French surgeon and anthropologist, Dr Paul Broca, made the remarkable finding that patients who had lost their powers of speech as a result of a stroke (a blood clot in the brain) had paralysis of the right half of their body. He noted that since the left hemisphere of the brain controls the right half of the body, and vice versa, the brain damage must have been in the brain's left hemisphere.  Psychologists now believe that among right-handed people, probably 95 per cent have their language centre in the left hemisphere, while 5 per cent have right-sided language.  Left-handers, however, do not show the reverse pattern but instead a majority also have their language in the left hemisphere.  Some 30 per cent have right hemisphere language.\n\nDr Brinkman, a brain researcher at the Australian National University in Canberra, has suggested that evolution of speech went with right-handed preference. According to Brinkman, as the brain evolved, one side became specialised for fine control of movement (necessary for producing speech) and along with this evolution came right-hand preference. According to Brinkman, most left-handers have left hemisphere dominance but also some capacity in the right hemisphere. She has observed that if a left-handed person is brain-damaged in the left hemisphere, the recovery of speech is quite often better and this is explained by the fact that left-handers have a more bilateral speech function.\n\nIn her studies of macaque monkeys, Brinkman has noticed that primates (monkeys) seem to learn a hand preference from their mother in the first year of life but this could be one hand or the other. In humans, however, the specialisation in function of the two hemispheres results in anatomical differences:  areas that are involved with the production of speech are usually larger on the left side than on the right. Since monkeys have not acquired the art of speech, one would not expect to see such a variation but Brinkman claims to have discovered a trend in monkeys towards the asymmetry that is evident in the human brain.\n\nTwo American researchers, Geschwind and Galaburda, studied the brains of human embryos and discovered that the left-right asymmetry exists before birth. But as the brain develops, a number of things can affect it. Every brain is initially female in its organisation and it only becomes a male brain when the male foetus begins to secrete hormones.  Geschwind and Galaburda knew that different parts of the brain mature at different rates; the right hemisphere develops first, then the left.  Moreover, a girl's brain develops somewhat faster than that of a boy. So, if something happens to the brain's development during pregnancy, it is more likely to be affected in a male and the hemisphere more likely to be involved is the left.  The brain may become less lateralised and this in turn could result in left-handedness and the development of certain superior skills that have their origins in the left hemisphere such as logic, rationality and abstraction.  It should be no surprise then that among mathematicians and architects, left-handers tend to be more common and there are more left-handed males than females.\n\nThe results of this research may be some consolation to left-handers who have for centuries lived in a world designed to suit right-handed people. However, what is alarming, according to Mr.  Charles Moore, a writer and journalist, is the way the word \"right\" reinforces its own virtue.  Subliminally he says, language tells people to think that anything on the right can be trusted while anything on the left is dangerous or even sinister. We speak of left-handed compliments and according to Moore, \"it is no coincidence that left-handed children, forced to use their right hand, often develop a stammer as they are robbed of their freedom of speech\". However, as more research is undertaken on the causes of left-handedness, attitudes towards left-handed people are gradually changing for the better.  Indeed when the champion tennis player Ivan Lendl was asked what the single thing was that he would choose in order to improve his game, he said he would like to become a left-hander.",
+          "groups": [
+            {
+              "group_id": "P1-G1",
+              "type": "MATCHING_FEATURES",
+              "instructions": "Use the information in the text to match the people (listed A-E) with the opinions (listed 1-7) below.  Write the appropriate letter (A-E) in boxes 1-7 on your answer sheet.  Some people match more than one opinion.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Dr Broca"
+                },
+                {
+                  "key": "B",
+                  "text": "Dr Brinkman"
+                },
+                {
+                  "key": "C",
+                  "text": "Geschwind and Galaburda"
+                },
+                {
+                  "key": "D",
+                  "text": "Charles Moore"
+                },
+                {
+                  "key": "E",
+                  "text": "Professor Turner"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P1-G1-Q1",
+                  "number": 1,
+                  "prompt": "Human beings started to show a preference for right-handedness when they first developed language.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "B"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q2",
+                  "number": 2,
+                  "prompt": "Society is prejudiced against left-handed people.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q3",
+                  "number": 3,
+                  "prompt": "Boys are more likely to be left-handed.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q4",
+                  "number": 4,
+                  "prompt": "After a stroke, left-handed people recover their speech more quickly than right-handed people.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "B"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q5",
+                  "number": 5,
+                  "prompt": "People who suffer strokes on the left side of the brain usually lose their power of speech.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "A"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q6",
+                  "number": 6,
+                  "prompt": "The two sides of the brain develop different functions before birth.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "C"
+                  }
+                },
+                {
+                  "item_id": "P1-G1-Q7",
+                  "number": 7,
+                  "prompt": "Asymmetry is a common feature of the human body.",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "E"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P1-G2",
+              "type": "TABLE_COMPLETION",
+              "instructions": "Using the information in the passage, complete the table below. Write your answers in boxes 8-10 on your answer sheet.",
+              "container": {
+                "kind": "table",
+                "cols": [
+                  "",
+                  "Percentage of children left-handed"
+                ],
+                "rows": [
+                  {
+                    "r": 0,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "One parent left-handed\nOne parent right-handed"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P1-G2-Q8"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 1,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "Both parents left-handed"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P1-G2-Q9"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "r": 2,
+                    "cells": [
+                      {
+                        "c": 0,
+                        "rich": [
+                          {
+                            "t": "text",
+                            "v": "Both parents right-handed"
+                          }
+                        ]
+                      },
+                      {
+                        "c": 1,
+                        "rich": [
+                          {
+                            "t": "slot",
+                            "slot_id": "P1-G2-Q10"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "item_id": "P1-G2-Q8",
+                  "number": 8,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "15-20%"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q9",
+                  "number": 9,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "40%"
+                  }
+                },
+                {
+                  "item_id": "P1-G2-Q10",
+                  "number": 10,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "6%"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P1-G3",
+              "type": "MULTIPLE_CHOICE",
+              "instructions": "Choose the appropriate letters A-D and write them in boxes 11 and 12 on your answer sheet.",
+              "items": [
+                {
+                  "item_id": "P1-G3-Q11",
+                  "number": 11,
+                  "prompt": "A study of monkeys has shown that",
+                  "options": [
+                    {
+                      "key": "A",
+                      "text": "monkeys are not usually right-handed."
+                    },
+                    {
+                      "key": "B",
+                      "text": "monkeys display a capacity for speech."
+                    },
+                    {
+                      "key": "C",
+                      "text": "monkey brains are smaller than human brains."
+                    },
+                    {
+                      "key": "D",
+                      "text": "monkey brains are asymmetric."
+                    }
+                  ],
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                },
+                {
+                  "item_id": "P1-G3-Q12",
+                  "number": 12,
+                  "prompt": "According to the writer, left-handed people",
+                  "options": [
+                    {
+                      "key": "A",
+                      "text": "will often develop a stammer."
+                    },
+                    {
+                      "key": "B",
+                      "text": "have undergone hardship for years."
+                    },
+                    {
+                      "key": "C",
+                      "text": "are untrustworthy."
+                    },
+                    {
+                      "key": "D",
+                      "text": "are good tennis players."
+                    }
+                  ],
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "B"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "passage_id": "P2",
+          "title": "MIGRATORY BEEKEEPING",
+          "text": "Taking Wing\n\nTo eke out a full-time living from their honeybees, about half the nation's 2,000 commercial beekeepers pull up stakes each spring, migrating north to find more flowers for their bees. Besides turning floral nectar into honey, these hardworking insects also pollinate crops for farmers -for a fee.  As autumn approaches, the beekeepers pack up their hives and go south, scrambling for pollination contracts in hot spots like California's fertile Central Valley.\n\nOf the 2,000 commercial beekeepers in the United States about half migrate This pays off in two ways Moving north in the summer and south in the winter lets bees work a longer blooming season, making more honey \u2014 and money \u2014 for their keepers. Second, beekeepers can carry their hives to farmers who need bees to pollinate their crops. Every spring a migratory beekeeper in California may move up to 160 million bees to flowering fields in Minnesota and every winter his family may haul the hives back to California, where farmers will rent the bees to pollinate almond and cherry trees.\n\nMigratory beekeeping is nothing new. The ancient Egyptians moved clay hives, probably on rafts, down the Nile to follow the bloom and nectar flow as it moved toward Cairo. In the 1880s North American beekeepers experimented with the same idea, moving bees on barges along the Mississippi and on waterways in Florida, but their lighter, wooden hives kept falling into the water. Other keepers tried the railroad and horse-drawn wagons, but that didn't prove practical.  Not until the 1920s when cars and trucks became affordable and roads improved, did migratory beekeeping begin to catch on.\n\nFor the Californian beekeeper, the pollination season begins in February.  At this time, the beehives are in particular demand by farmers who have almond groves; they need two hives an acre. For the three-week long bloom, beekeepers can hire out their hives for $32 each.  It's a bonanza for the bees too. Most people consider almond honey too bitter to eat so the bees get to keep it for themselves.\n\nBy early March it is time to move the bees.  It can take up to seven nights to pack the 4,000 or so hives that a beekeeper may own.  These are not moved in the middle of the day because too many of the bees would end up homeless. But at night, the hives are stacked onto wooden pallets, back-to-back in sets of four, and lifted onto a truck. It is not necessary to wear gloves or a beekeeper's veil because the hives are not being opened and the bees should remain relatively quiet.  Just in case some are still lively, bees can be pacified with a few puffs of smoke blown into each hive's narrow entrance.\n\nIn their new location, the beekeeper will pay the farmer to allow his bees to feed in such places as orange groves.  The honey produced here is fragrant and sweet and can be sold by the beekeepers.  To encourage the bees to produce as much honey as possible during this period, the beekeepers open the hives and stack extra boxes called supers on top.  These temporary hive extensions contain frames of empty comb for the bees to fill with honey. In the brood chamber below, the bees will stash honey to eat later. To prevent the queen from crawling up to the top and laying eggs, a screen can be inserted between the brood chamber and the supers.\n\nThree weeks later the honey can be gathered.  Foul smelling chemicals are often used to irritate the bees and drive them down into the hive's bottom boxes, leaving the honey-filled supers more or less bee free. These can then be pulled off the hive.  They are heavy with honey and may weigh up to 90 pounds each. The supers are taken to a warehouse.  In the extracting room, the frames are lifted out and lowered into an \"uncapper\" where rotating blades shave away the wax that covers each cell. The uncapped frames are put in a carousel that sits on the bottom of a large stainless steel drum. The carousel is filled to capacity with 72 frames.  A switch is flipped and the frames begin to whirl at 300 revolutions per minute; centrifugal force throws the honey out of the combs.  Finally the honey is poured into barrels for shipment.\n\nAfter this, approximately a quarter of the hives weakened by disease, mites, or an ageing or dead queen, will have to be replaced. To create new colonies, a healthy double hive, teeming with bees, can be separated into two boxes. One half will hold the queen and a young, already mated queen can be put in the other half, to make two hives from one.  By the time the flowers bloom, the new queens will be laying eggs, filling each hive with young worker bees.  The beekeeper's family will then migrate with them to their summer location.",
+          "groups": [
+            {
+              "group_id": "P2-G1",
+              "type": "FLOW_CHART_COMPLETION",
+              "instructions": "The flow chart below outlines the movements of the migratory beekeeper as described in Reading Passage 2. Complete the flow chart.  Choose your answers from the box at the bottom of the page and write your answers in boxes 13-19 on your answer sheet.",
+              "container": {
+                "kind": "richtext",
+                "rich": [
+                  {
+                    "t": "text",
+                    "v": "BEEKEEPER MOVEMENTS\n\nIn February, Californian farmers hire bees to help pollinate almond trees.\n\nIn March, beekeepers "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q13"
+                  },
+                  {
+                    "t": "text",
+                    "v": " for migration at night when the hives are "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q14"
+                  },
+                  {
+                    "t": "text",
+                    "v": " and the bees are generally tranquil.  A little "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q15"
+                  },
+                  {
+                    "t": "text",
+                    "v": " can ensure that this is the case.\n\nThey transport their hives to orange groves where farmers "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q16"
+                  },
+                  {
+                    "t": "text",
+                    "v": " beekeepers for placing them on their land. Here the bees make honey.\n\nAfter three weeks, the supers can be taken to a warehouse where "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q17"
+                  },
+                  {
+                    "t": "text",
+                    "v": " are used to remove the wax and extract the honey from the "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q18"
+                  },
+                  {
+                    "t": "text",
+                    "v": ".\n\nAfter the honey collection, the old hives are rejected.  Good double hives are "
+                  },
+                  {
+                    "t": "slot",
+                    "slot_id": "P2-G1-Q19"
+                  },
+                  {
+                    "t": "text",
+                    "v": " and re-queened and the beekeeper transports them to their summer base."
+                  }
+                ]
+              },
+              "options": [
+                {
+                  "key": "smoke",
+                  "text": "smoke"
+                },
+                {
+                  "key": "chemicals",
+                  "text": "chemicals"
+                },
+                {
+                  "key": "pay",
+                  "text": "pay"
+                },
+                {
+                  "key": "barrels",
+                  "text": "barrels"
+                },
+                {
+                  "key": "protection",
+                  "text": "protection"
+                },
+                {
+                  "key": "charge",
+                  "text": "charge"
+                },
+                {
+                  "key": "set off",
+                  "text": "set off"
+                },
+                {
+                  "key": "light",
+                  "text": "light"
+                },
+                {
+                  "key": "split",
+                  "text": "split"
+                },
+                {
+                  "key": "pollinate",
+                  "text": "pollinate"
+                },
+                {
+                  "key": "machines",
+                  "text": "machines"
+                },
+                {
+                  "key": "supers",
+                  "text": "supers"
+                },
+                {
+                  "key": "combs",
+                  "text": "combs"
+                },
+                {
+                  "key": "screen",
+                  "text": "screen"
+                },
+                {
+                  "key": "prepare",
+                  "text": "prepare"
+                },
+                {
+                  "key": "full",
+                  "text": "full"
+                },
+                {
+                  "key": "empty",
+                  "text": "empty"
+                },
+                {
+                  "key": "queens",
+                  "text": "queens"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P2-G1-Q13",
+                  "number": 13,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "prepare"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q14",
+                  "number": 14,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "full"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q15",
+                  "number": 15,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "smoke"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q16",
+                  "number": 16,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "charge"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q17",
+                  "number": 17,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "machines"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q18",
+                  "number": 18,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "combs"
+                  }
+                },
+                {
+                  "item_id": "P2-G1-Q19",
+                  "number": 19,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "split"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P2-G2",
+              "type": "DIAGRAM_LABELLING",
+              "instructions": "Label the diagram below.  Choose ONE OR TWO WORDS from the Reading Passage for each answer.  Write your answers in boxes 20-23 on your answer sheet.",
+              "items": [
+                {
+                  "item_id": "P2-G2-Q20",
+                  "number": 20,
+                  "prompt": "A BEEHIVE",
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "(hexagonal) cells"
+                  }
+                },
+                {
+                  "item_id": "P2-G2-Q21",
+                  "number": 21,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "frames (of comb)"
+                  }
+                },
+                {
+                  "item_id": "P2-G2-Q22",
+                  "number": 22,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "screen"
+                  }
+                },
+                {
+                  "item_id": "P2-G2-Q23",
+                  "number": 23,
+                  "answer": {
+                    "type": "TEXT",
+                    "value": "brood chamber"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P2-G3",
+              "type": "YES_NO_NOT_GIVEN",
+              "instructions": "Do the following statements agree with the information given in Reading Passage 2?  In boxes 24-27 write.\n\nYES if the statement agrees with the information given\nNO if the statement contradicts the information given\nNOT GIVEN if there is no information about this",
+              "items": [
+                {
+                  "item_id": "P2-G3-Q24",
+                  "number": 24,
+                  "prompt": "The Egyptians keep bees on the banks of the Nile.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NOT GIVEN"
+                  }
+                },
+                {
+                  "item_id": "P2-G3-Q25",
+                  "number": 25,
+                  "prompt": "First attempts at migratory beekeeping in America were unsuccessful.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P2-G3-Q26",
+                  "number": 26,
+                  "prompt": "Bees keep honey for themselves in the bottom of the hive.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P2-G3-Q27",
+                  "number": 27,
+                  "prompt": "The honey is spun to make it liquid.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NO"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "passage_id": "P3",
+          "title": "TOURISM",
+          "text": "A Tourism, holidaymaking and travel are these days more significant social phenomena than most commentators have considered. On the face of it there could not be a more trivial subject for a book.  And indeed since social scientists have had considerable difficulty explaining weightier topics such as work or politics it might be thought that they would have great difficulties in accounting for more trivial phenomena such as holidaymaking. However there are interesting parallels with the study of deviance. This involves the investigation of bizarre and idiosyncratic social practices which happen to be defined as deviant in some societies but not necessarily in others. The assumption is that the investigation of deviance can reveal interesting and significant aspects of normal societies. It could be said that a similar analysis can be applied to tourism.\n\nB Tourism is a leisure activity which presupposes its opposite namely regulated and organised work. It is one manifestation of how work and leisure are organised as separate and regulated spheres of social practice in modern societies. Indeed acting as a tourist is one of the defining characteristics of being 'modern' and the popular concept of tourism is that it is organised within particular places and occurs for regularised periods of time. Tourist relationships arise from a movement of people to and their stay in various destinations. This necessarily involves some movement that is the journey and a period of stay in a new place or places. The journey and the stay are by definition outside the normal places of residence and work and are of a short term and temporary nature and there is a clear intention to return \"home\" within a relatively short period of time.\n\nC A substantial proportion of the population of modern societies engages in such tourist practices new socialised forms of provision have developed in order to cope with the mass character of the gazes of tourists as opposed to the individual character of travel. Places are chosen to be visited and be gazed upon because there is an anticipation especially through daydreaming and fantasy of intense pleasures, either on a different scale or involving different senses from those customarily encountered.  Such anticipation is constructed and sustained through a variety of non-tourist practices such as films TV literature, magazines records and videos which construct and reinforce this daydreaming.\n\nD Tourists tend to visit features of landscape and townscape which separate them off from everyday experience.  Such aspects are viewed because they are taken to be in some sense out of the ordinary.  The viewing of these tourist sights often involves different forms of social patterning with a much greater sensitivity to visual elements of landscape or townscape than is normally found in everyday life. People linger over these sights in a way that they would not normally do in their home environment and the vision is objectified or captured through photographs postcards films and so on which enable the memory to be endlessly reproduced and recaptured.\n\nE One of the earliest dissertations on the subject of tourism is Boorstin's analysis of the pseudo event (1964) where he argues that contemporary Americans cannot experience 'reality' directly but thrive on \"pseudo events\".  Isolated from the host environment and the local people the mass tourist travels in guided groups and finds pleasure in inauthentic contrived attractions gullibly enjoying the pseudo events and disregarding the real world outside.  Over time the images generated of different tourist sights come to constitute a closed self-perpetuating system of illusions which provide the tourist with the basis for selecting and evaluating potential places to visit.  Such visits are made says Boorstin, within the \"environmental bubble\" of the familiar American style hotel which insulates the tourist from the strangeness of the host environment.\n\nF To service the burgeoning tourist industry, an array of professionals has developed who attempt to reproduce ever-new objects for the tourist to look at.  These objects or places are located in a complex and changing hierarchy.  This depends upon the interplay between, on the one hand, competition between interests involved in the provision of such objects and, on the other hand changing class, gender, and generational distinctions of taste within the potential population of visitors. It has been said that to be a tourist is one of the characteristics of the \"modern\" experience. Not to go away is like not possessing a car or a nice house. Travel is a marker of status in modern societies and is also thought to be necessary for good health. The role of the professional, therefore, is to cater for the needs and tastes of the tourists in accordance with their class and overall expectations.",
+          "groups": [
+            {
+              "group_id": "P3-G1",
+              "type": "PARAGRAPH_HEADINGS",
+              "instructions": "Reading Passage 3 has 6 paragraphs (A-F). Choose the most suitable heading for each paragraph from the list of headings below. Write the appropriate numbers (i-ix) in boxes 28-32 on your answer sheet.  Paragraph D has been done for you as an example.\n\nNB There are more headings than paragraphs so you will not use all of them.  You may use any heading more than once.",
+              "options": [
+                {
+                  "key": "i",
+                  "text": "The politics of tourism"
+                },
+                {
+                  "key": "ii",
+                  "text": "The cost of tourism"
+                },
+                {
+                  "key": "iii",
+                  "text": "Justifying the study of tourism"
+                },
+                {
+                  "key": "iv",
+                  "text": "Tourism contrasted with travel"
+                },
+                {
+                  "key": "v",
+                  "text": "The essence of modern tourism"
+                },
+                {
+                  "key": "vi",
+                  "text": "Tourism versus leisure"
+                },
+                {
+                  "key": "vii",
+                  "text": "The artificiality of modern tourism"
+                },
+                {
+                  "key": "viii",
+                  "text": "The role of modern tour guides"
+                },
+                {
+                  "key": "ix",
+                  "text": "Creating an alternative to the everyday experience"
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P3-G1-Q28",
+                  "number": 28,
+                  "prompt": "Paragraph A",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "iii"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q29",
+                  "number": 29,
+                  "prompt": "Paragraph B",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "v"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q30",
+                  "number": 30,
+                  "prompt": "Paragraph C",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "iv"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q31",
+                  "number": 31,
+                  "prompt": "Paragraph E",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "vii"
+                  }
+                },
+                {
+                  "item_id": "P3-G1-Q32",
+                  "number": 32,
+                  "prompt": "Paragraph F",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "viii"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P3-G2",
+              "type": "YES_NO_NOT_GIVEN",
+              "instructions": "Do the following statements agree with the views of the writer in Reading Passage 3? In boxes 33-37 write\n\nYES if the statement agrees with the writer\nNO if the statement contradicts the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+              "items": [
+                {
+                  "item_id": "P3-G2-Q33",
+                  "number": 33,
+                  "prompt": "Tourism is a trivial subject.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NO"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q34",
+                  "number": 34,
+                  "prompt": "An analysis of deviance can act as a model for the analysis of tourism.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q35",
+                  "number": 35,
+                  "prompt": "Tourists usually choose to travel overseas.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NOT GIVEN"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q36",
+                  "number": 36,
+                  "prompt": "Tourists focus more on places they visit than those at home.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "YES"
+                  }
+                },
+                {
+                  "item_id": "P3-G2-Q37",
+                  "number": 37,
+                  "prompt": "Tour operators try to cheat tourists.",
+                  "answer": {
+                    "type": "ENUM",
+                    "value": "NOT GIVEN"
+                  }
+                }
+              ]
+            },
+            {
+              "group_id": "P3-G3",
+              "type": "MATCHING_SENTENCE_ENDINGS",
+              "instructions": "Choose one phrase (A-H) from the list of phrases to complete each key point below. Write the appropriate letters (A-H) in boxes 38-41 on your answer sheet.\n\nThe information in the completed sentences should be an accurate summary of points made by the writer.\n\nNB There are more phrases A-H than sentences so you will not use them all.  You may use any phrase more than once.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "local people and their environment."
+                },
+                {
+                  "key": "B",
+                  "text": "the expectations of tourists."
+                },
+                {
+                  "key": "C",
+                  "text": "the phenomena of holidaymaking."
+                },
+                {
+                  "key": "D",
+                  "text": "the distinction we make between work and leisure."
+                },
+                {
+                  "key": "E",
+                  "text": "the individual character of travel."
+                },
+                {
+                  "key": "F",
+                  "text": "places seen in everyday life."
+                },
+                {
+                  "key": "G",
+                  "text": "photographs which recapture our holidays."
+                },
+                {
+                  "key": "H",
+                  "text": "sights designed specially for tourists."
+                }
+              ],
+              "items": [
+                {
+                  "item_id": "P3-G3-Q38",
+                  "number": 38,
+                  "prompt": "Our concept of tourism arises from .. .",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "D"
+                  }
+                },
+                {
+                  "item_id": "P3-G3-Q39",
+                  "number": 39,
+                  "prompt": "The media can be used to enhance .. .",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "B"
+                  }
+                },
+                {
+                  "item_id": "P3-G3-Q40",
+                  "number": 40,
+                  "prompt": "People view tourist landscapes in a different way from ...",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "F"
+                  }
+                },
+                {
+                  "item_id": "P3-G3-Q41",
+                  "number": 41,
+                  "prompt": "Group tours encourage participants to look at ...",
+                  "answer": {
+                    "type": "OPTION",
+                    "value": "H"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

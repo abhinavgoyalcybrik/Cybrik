@@ -1,0 +1,190 @@
+{
+  "test_id": "12LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Cycle tour leader: Applicant enquiry",
+      "questions": [
+        { "q": 1, "type": "text", "question": "wants a ____ job" },
+        { "q": 2, "type": "text", "question": "will soon start work as a ____" },
+        { "q": 3, "type": "text", "question": "has led cycle trips in ____" },
+        { "q": 4, "type": "text", "question": "is currently doing voluntary work with members of a ____ club" },
+        { "q": 5, "type": "text", "question": "available for five months from the 1st of ____" },
+        { "q": 6, "type": "text", "question": "can't eat ____" },
+        { "q": 7, "type": "text", "question": "address: 27 ____ Place, Dumfries" },
+        { "q": 8, "type": "text", "question": "postcode: ____" },
+        { "q": 9, "type": "text", "question": "interview at 2.30 pm on ____" },
+        { "q": 10, "type": "text", "question": "will plan a short ____ about being a tour guide" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–I.",
+      "title": "Visiting the Sheepmarket area / Art and History in the Sheepmarket",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Which is the most rapidly-growing group of residents in the Sheepmarket area?",
+          "options": [
+            "A young professional people",
+            "B students from the university",
+            "C employees in the local market"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "The speaker recommends the side streets in the Sheepmarket for their",
+          "options": [
+            "A international restaurants",
+            "B historical buildings",
+            "C arts and crafts"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Clothes designed by entrants for the Young Fashion competition must",
+          "options": [
+            "A be modelled by the designers themselves",
+            "B be inspired by aspects of contemporary culture",
+            "C be made from locally produced materials"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "Car parking is free in some car parks if you",
+          "options": [
+            "A stay for less than an hour",
+            "B buy something in the shops",
+            "C park in the evenings or at weekends"
+          ]
+        },
+        { "q": 15, "type": "map", "question": "The Reynolds House", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 16, "type": "map", "question": "The Thumb", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 17, "type": "map", "question": "The Museum", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 18, "type": "map", "question": "The Contemporary Art Gallery", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 19, "type": "map", "question": "The Warner Gallery", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 20, "type": "map", "question": "Nucleus", "options": ["A","B","C","D","E","F","G","H","I"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Table Completion + Matching",
+      "instructions": "Questions 21–24: Write ONE WORD ONLY. Questions 25–30: Choose the correct letter A–G.",
+      "title": "Presentation on film adaptations of Shakespeare’s plays",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Introduce Giannetti’s book containing a ____ of adaptations" },
+        { "q": 22, "type": "text", "question": "Ask class to suggest the ____ adaptations" },
+        { "q": 23, "type": "text", "question": "Prepare some ____" },
+        { "q": 24, "type": "text", "question": "Discuss relationship between adaptations and ____ at the time of making the film" },
+
+        {
+          "q": 25,
+          "type": "match",
+          "question": "Ran",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 26,
+          "type": "match",
+          "question": "Much Ado About Nothing",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 27,
+          "type": "match",
+          "question": "Romeo & Juliet",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 28,
+          "type": "match",
+          "question": "Hamlet",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 29,
+          "type": "match",
+          "question": "Prospero’s Books",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 30,
+          "type": "match",
+          "question": "Looking for Richard",
+          "options": ["A","B","C","D","E","F","G"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Noise in Cities",
+      "questions": [
+        { "q": 31, "type": "text", "question": "made people realise that the noise is a ____ issue" },
+        { "q": 32, "type": "text", "question": "increase in amount of ____" },
+        { "q": 33, "type": "text", "question": "____ of schoolchildren" },
+        { "q": 34, "type": "text", "question": "sound of a ____" },
+        { "q": 35, "type": "text", "question": "methods from ____ sciences" },
+        { "q": 36, "type": "text", "question": "people want cities which are ____" },
+        { "q": 37, "type": "text", "question": "architects and town planners receive little training in ____" },
+        { "q": 38, "type": "text", "question": "learn from psychology about effects of sound on ____" },
+        { "q": 39, "type": "text", "question": "help us understand the ____ of sound" },
+        { "q": 40, "type": "text", "question": "current disadvantage: they are ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["temporary"],
+    "2": ["doctor"],
+    "3": ["Africa"],
+    "4": ["youth"],
+    "5": ["May"],
+    "6": ["cheese"],
+    "7": ["Arbuthnot"],
+    "8": ["DG7 4PH"],
+    "9": ["Tuesday"],
+    "10": ["talk"],
+
+    "11": ["A"],
+    "12": ["C"],
+    "13": ["B"],
+    "14": ["B"],
+    "15": ["E"],
+    "16": ["B"],
+    "17": ["I"],
+    "18": ["D"],
+    "19": ["C"],
+    "20": ["A"],
+
+    "21": ["classification"],
+    "22": ["worst"],
+    "23": ["slides"],
+    "24": ["issues"],
+    "25": ["E"],
+    "26": ["A"],
+    "27": ["E"],
+    "28": ["C"],
+    "29": ["G"],
+    "30": ["B"],
+
+    "31": ["political"],
+    "32": ["stress"],
+    "33": ["performance"],
+    "34": ["fountain"],
+    "35": ["social"],
+    "36": ["lively"],
+    "37": ["acoustics"],
+    "38": ["development"],
+    "39": ["culture"],
+    "40": ["silent"]
+  }
+}

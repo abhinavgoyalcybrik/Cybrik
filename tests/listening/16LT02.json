@@ -1,0 +1,232 @@
+{
+  "test_id": "16LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Copying photos to digital format",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Photos must not be in a ____ or an album." },
+        { "q": 2, "type": "text", "question": "The cost for 360 photos is ____ £ (including one disk)." },
+        { "q": 3, "type": "text", "question": "Before the completed order is sent, ____ is required." },
+        { "q": 4, "type": "text", "question": "Photos can be placed in a folder, e.g. with the name ____." },
+        { "q": 5, "type": "text", "question": "The ____ and contrast can be improved if necessary." },
+        { "q": 6, "type": "text", "question": "Photos which are very fragile will be scanned by ____." },
+        { "q": 7, "type": "text", "question": "It may be possible to remove an object from a photo, or change the ____." },
+        { "q": 8, "type": "text", "question": "A photo which is not correctly in ____ cannot be fixed." },
+        { "q": 9, "type": "text", "question": "Orders are completed within ____." },
+        { "q": 10, "type": "text", "question": "Send the photos in a box (not ____)." }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching + MCQ (Multiple)",
+      "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–18: Choose THREE letters A–D. Questions 19–20: Choose TWO letters A–E.",
+      "title": "School changes",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Dartfield House school used to be",
+          "options": [
+            "A a tourist information centre.",
+            "B a private home.",
+            "C a local council building."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What is planned with regard to the lower school?",
+          "options": [
+            "A All buildings on the main site will be improved.",
+            "B The lower school site will be used for new homes.",
+            "C Additional school buildings will be constructed on the lower school site."
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "The catering has been changed because of",
+          "options": [
+            "A long queuing times.",
+            "B changes to the school timetable.",
+            "C dissatisfaction with the menus."
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "Parents are asked to",
+          "options": [
+            "A help their children to decide in advance which serving point to use.",
+            "B make sure their children have enough money for food.",
+            "C advise their children on healthy food to eat."
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "What does the speaker say about the existing canteen?",
+          "options": [
+            "A Food will still be served there.",
+            "B Only staff will have access to it.",
+            "C Pupils can take their food into it."
+          ]
+        },
+
+        {
+          "q": 16,
+          "type": "match",
+          "question": "World Adventures",
+          "options": ["A","B","C","D"]
+        },
+        {
+          "q": 17,
+          "type": "match",
+          "question": "Street Life",
+          "options": ["A","B","C","D"]
+        },
+        {
+          "q": 18,
+          "type": "match",
+          "question": "Speedy Italian",
+          "options": ["A","B","C","D"]
+        },
+
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "Which TWO optional after-school lessons are new?",
+          "options": [
+            "A swimming",
+            "B piano",
+            "C acting",
+            "D cycling",
+            "E theatre sound and lighting"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Flow-chart Completion",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write ONE WORD ONLY.",
+      "title": "Assignment on sleep and dreams",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Luke read that one reason why we often forget dreams is that",
+          "options": [
+            "A our memories cannot cope with too much information.",
+            "B we might otherwise be confused about what is real.",
+            "C we do not think they are important."
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "What do Luke and Susie agree about dreams predicting the future?",
+          "options": [
+            "A It may just be due to chance.",
+            "B It only happens with certain types of event.",
+            "C It happens more often than some people think."
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Susie says that a study on pre-school children having a short nap in the day",
+          "options": [
+            "A had controversial results.",
+            "B used faulty research methodology.",
+            "C failed to reach any clear conclusions."
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "In their last assignment, both students had problems with",
+          "options": [
+            "A statistical analysis.",
+            "B making an action plan.",
+            "C self-assessment."
+          ]
+        },
+
+        { "q": 25, "type": "text", "question": "Twelve students from the ____ department." },
+        { "q": 26, "type": "text", "question": "Answers on ____." },
+        { "q": 27, "type": "text", "question": "Check ethical guidelines for working with ____." },
+        { "q": 28, "type": "text", "question": "Ensure that risk is assessed and ____ is kept to a minimum." },
+        { "q": 29, "type": "text", "question": "Calculate the correlation and make a ____." },
+        { "q": 30, "type": "text", "question": "____ the research." }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Health benefits of dance",
+      "questions": [
+        { "q": 31, "type": "text", "question": "An experiment on university students suggested that dance increases ____." },
+        { "q": 32, "type": "text", "question": "For those with mental illness, dance could be used as a form of ____." },
+        { "q": 33, "type": "text", "question": "accessible for people with low levels of ____." },
+        { "q": 34, "type": "text", "question": "better ____ reduces the risk of accidents." },
+        { "q": 35, "type": "text", "question": "improves ____ function by making it work faster." },
+        { "q": 36, "type": "text", "question": "gives people more ____ to take exercise." },
+        { "q": 37, "type": "text", "question": "can lessen the feeling of ____." },
+        { "q": 38, "type": "text", "question": "doing Zumba for 40 minutes uses up as many ____ as other quite intense forms of exercise." },
+        { "q": 39, "type": "text", "question": "women suffering from ____ benefited from doing Zumba." },
+        { "q": 40, "type": "text", "question": "Zumba became a ____ for the participants." }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["frame"],
+    "2": ["195"],
+    "3": ["payment"],
+    "4": ["Grandparents"],
+    "5": ["colour","color"],
+    "6": ["hand"],
+    "7": ["background"],
+    "8": ["focus"],
+    "9": ["ten","10 days"],
+    "10": ["plastic"],
+
+    "11": ["C"],
+    "12": ["B"],
+    "13": ["A"],
+    "14": ["A"],
+    "15": ["C"],
+    "16": ["D"],
+    "17": ["A"],
+    "18": ["B"],
+    "19": ["B","C"],
+    "20": ["B","C"],
+
+    "21": ["B"],
+    "22": ["A"],
+    "23": ["C"],
+    "24": ["C"],
+    "25": ["history"],
+    "26": ["paper"],
+    "27": ["humans","people"],
+    "28": ["stress"],
+    "29": ["graph"],
+    "30": ["evaluate"],
+
+    "31": ["creativity"],
+    "32": ["therapy"],
+    "33": ["fitness"],
+    "34": ["balance"],
+    "35": ["brain"],
+    "36": ["motivation"],
+    "37": ["isolation"],
+    "38": ["calories"],
+    "39": ["obesity"],
+    "40": ["habit"]
+  }
+}

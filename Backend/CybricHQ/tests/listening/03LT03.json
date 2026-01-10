@@ -1,0 +1,163 @@
+{
+  "test_id": "03LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "Christmas Dinner",
+      "questions": [
+        { "q": 1, "type": "text", "question": "First choice of venue" },
+        { "q": 2, "type": "text", "question": "Second choice of venue" },
+        { "q": 3, "type": "text", "question": "Third choice of venue" },
+        { "q": 4, "type": "text", "question": "Telephone number for third choice venue" },
+        { "q": 5, "type": "text", "question": "Restaurant must have a ____ section" },
+        { "q": 6, "type": "text", "question": "Main course choice (vegetarian option)" },
+        { "q": 7, "type": "text", "question": "Amount of deposit required (£)" },
+        { "q": 8, "type": "text", "question": "What must be done with the menu in advance" },
+        { "q": 9, "type": "text", "question": "Date by which confirmation must be given" },
+        { "q": 10, "type": "text", "question": "Where the notice will be placed" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Table Completion + Map Labelling",
+      "instructions": "Write NO MORE THAN THREE WORDS OR A NUMBER.",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Cost of membership (£)" },
+        { "q": 12, "type": "text", "question": "Length of membership" },
+        { "q": 13, "type": "text", "question": "Where to register for membership" },
+        { "q": 14, "type": "text", "question": "Item always required to book or use facilities" },
+        { "q": 15, "type": "text", "question": "Action required to use facilities (verb)" },
+        { "q": 16, "type": "text", "question": "Days when centre opens 9 am – 10 pm" },
+
+        { "q": 17, "type": "map", "question": "Building labelled 17" },
+        { "q": 18, "type": "map", "question": "Building labelled 18" },
+        { "q": 19, "type": "map", "question": "Building labelled 19" },
+        { "q": 20, "type": "map", "question": "Building labelled 20" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Form Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "Young Electronic Engineer Competition",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Name of second designer" },
+        { "q": 22, "type": "text", "question": "Age of designers" },
+        { "q": 23, "type": "text", "question": "Name of design" },
+        {
+          "q": 24,
+          "type": "text",
+          "question": "Dimensions of equipment (width, length, depth in cm)"
+        },
+        { "q": 25, "type": "text", "question": "Special feature 1" },
+        { "q": 26, "type": "text", "question": "Special feature 2" },
+        { "q": 27, "type": "text", "question": "Special feature 3 (price)" },
+        { "q": 28, "type": "text", "question": "Cost of electrics ($)" },
+        { "q": 29, "type": "text", "question": "Help needed to make ____ pieces" },
+        { "q": 30, "type": "text", "question": "Date equipment will be sent by" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Table Completion + Multiple Choice",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Kangaroo meat compared to" },
+        { "q": 32, "type": "text", "question": "Problem with kangaroo meat" },
+        { "q": 33, "type": "text", "question": "Ostrich meat compared to" },
+
+        { "q": 34, "type": "text", "question": "Ostrich feathers used for" },
+        { "q": 35, "type": "text", "question": "Use of ostrich hide" },
+        { "q": 36, "type": "text", "question": "Ostrich product used for biltong" },
+
+        {
+          "q": 37,
+          "type": "mcq",
+          "question": "Ostrich meat",
+          "options": [
+            "A has more protein than beef",
+            "B tastes nearly as good as beef",
+            "C is very filling"
+          ]
+        },
+        {
+          "q": 38,
+          "type": "mcq",
+          "question": "One problem with ostrich farming in Britain is",
+          "options": [
+            "A the climate",
+            "B the cost of transporting birds",
+            "C the price of ostrich eggs"
+          ]
+        },
+        {
+          "q": 39,
+          "type": "mcq",
+          "question": "Ostrich chicks reared on farms",
+          "options": [
+            "A must be kept in incubators until mature",
+            "B are very independent",
+            "C need looking after carefully"
+          ]
+        },
+        {
+          "q": 40,
+          "type": "mcq",
+          "question": "Ostrich farms are profitable because",
+          "options": [
+            "A little initial outlay is required",
+            "B farmed birds are very productive",
+            "C there is a good market for the meat"
+          ]
+        }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Rajdoot"],
+    "2": ["Park View", "Park View Hotel"],
+    "3": ["London Arms"],
+    "4": ["208657"],
+    "5": ["no smoking", "non-smoking"],
+    "6": ["lentil curry"],
+    "7": ["50", "£50", "fifty pounds"],
+    "8": ["choose the menu", "decide on the menu", "select the menu"],
+    "9": ["4 November"],
+    "10": ["Newsletter", "the Newsletter"],
+
+    "11": ["9.50", "£9.50"],
+    "12": ["year", "annum"],
+    "13": ["reception"],
+    "14": ["card"],
+    "15": ["book"],
+    "16": ["weekdays"],
+    "17": ["Reception"],
+    "18": ["Dance Studio"],
+    "19": ["Squash Courts"],
+    "20": ["Fitness Room"],
+
+    "21": ["Anne Rea"],
+    "22": ["16"],
+    "23": ["Blind Puzzle", "Blind Jigsaw Puzzle"],
+    "24": ["20 50 2.5", "20cm 50cm 2.5cm"],
+    "25": ["safe for children"],
+    "26": ["educational"],
+    "27": ["cheap", "good price", "inexpensive"],
+    "28": ["9.50", "$9.50"],
+    "29": ["plastic pieces"],
+    "30": ["1 July"],
+
+    "31": ["rabbit"],
+    "32": ["tough"],
+    "33": ["beef"],
+    "34": ["ladies' fans", "feather fans"],
+    "35": ["leather"],
+    "36": ["meat"],
+    "37": ["A"],
+    "38": ["C"],
+    "39": ["C"],
+    "40": ["B"]
+  }
+}

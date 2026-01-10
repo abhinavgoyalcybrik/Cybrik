@@ -1,0 +1,182 @@
+{
+  "test_id": "16LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Children's Engineering Workshops",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Create a cover for an ____ without breaking it." },
+        { "q": 2, "type": "text", "question": "Take part in a competition to build the tallest ____" },
+        { "q": 3, "type": "text", "question": "Make a ____ powered by a balloon." },
+        { "q": 4, "type": "text", "question": "Build model cars, trucks and ____ and learn how to program them so they can move." },
+        { "q": 5, "type": "text", "question": "Take part in a competition to build the longest ____ using card and wood." },
+        { "q": 6, "type": "text", "question": "Create a short ____ with special software." },
+        { "q": 7, "type": "text", "question": "Build, ____ and program a humanoid robot." },
+        { "q": 8, "type": "text", "question": "Held on ____ from 10 am to 11 am." },
+        { "q": 9, "type": "text", "question": "Building 10A, ____ Industrial Estate, Grasford." },
+        { "q": 10, "type": "text", "question": "Plenty of ____ is available." }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–J.",
+      "title": "Stevenson's",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Stevenson's was founded in",
+          "options": [
+            "A 1923.",
+            "B 1924.",
+            "C 1926."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Originally, Stevenson's manufactured goods for",
+          "options": [
+            "A the healthcare industry.",
+            "B the automotive industry.",
+            "C the machine tools industry."
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "What does the speaker say about the company premises?",
+          "options": [
+            "A The company has recently moved.",
+            "B The company has no plans to move.",
+            "C The company is going to move shortly."
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "The programme for the work experience group includes",
+          "options": [
+            "A time to do research.",
+            "B meetings with a teacher.",
+            "C talks by staff."
+          ]
+        },
+
+        { "q": 15, "type": "map", "question": "coffee room", "options": ["A","B","C","D","E","F","G","H","I","J"] },
+        { "q": 16, "type": "map", "question": "warehouse", "options": ["A","B","C","D","E","F","G","H","I","J"] },
+        { "q": 17, "type": "map", "question": "staff canteen", "options": ["A","B","C","D","E","F","G","H","I","J"] },
+        { "q": 18, "type": "map", "question": "meeting room", "options": ["A","B","C","D","E","F","G","H","I","J"] },
+        { "q": 19, "type": "map", "question": "human resources", "options": ["A","B","C","D","E","F","G","H","I","J"] },
+        { "q": 20, "type": "map", "question": "boardroom", "options": ["A","B","C","D","E","F","G","H","I","J"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + Matching",
+      "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–H.",
+      "title": "Art projects",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO parts of the introductory stage to their art projects do Jess and Tom agree were useful?",
+          "options": [
+            "A the Bird Park visit",
+            "B the workshop sessions",
+            "C the Natural History Museum visit",
+            "D the projects done in previous years",
+            "E the handouts with research sources"
+          ]
+        },
+        {
+          "q": "23-24",
+          "type": "mcq_multi",
+          "question": "In which TWO ways do both Jess and Tom decide to change their proposals?",
+          "options": [
+            "A by giving a rationale for their action plans",
+            "B by being less specific about the outcome",
+            "C by adding a video diary presentation",
+            "D by providing a timeline and a mind map",
+            "E by making their notes more evaluative"
+          ]
+        },
+
+        { "q": 25, "type": "match", "question": "Falcon (Landseer)", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 26, "type": "match", "question": "Fish hawk (Audubon)", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 27, "type": "match", "question": "Kingfisher (van Gogh)", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 28, "type": "match", "question": "Portrait of William Wells", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 29, "type": "match", "question": "Vairumati (Gauguin)", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 30, "type": "match", "question": "Portrait of Giovanni de Medici", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Stoicism",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Stoicism is still relevant today because of its ____ appeal." },
+        { "q": 32, "type": "text", "question": "The Stoics' ideas are surprisingly well known, despite not being intended for ____." },
+        { "q": 33, "type": "text", "question": "the ____ people make in response can be controlled." },
+        { "q": 34, "type": "text", "question": "experiences which others would consider as ____." },
+        { "q": 35, "type": "text", "question": "George Washington organised a ____ about Cato to motivate his men." },
+        { "q": 36, "type": "text", "question": "Adam Smith's ideas on ____ were influenced by Stoicism." },
+        { "q": 37, "type": "text", "question": "the treatment for ____ is based on ideas from Stoicism." },
+        { "q": 38, "type": "text", "question": "people learn to base their thinking on ____." },
+        { "q": 39, "type": "text", "question": "identifying obstacles as ____." },
+        { "q": 40, "type": "text", "question": "It requires a lot of ____." }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["egg"],
+    "2": ["tower"],
+    "3": ["car"],
+    "4": ["animals"],
+    "5": ["bridge"],
+    "6": ["movie","film"],
+    "7": ["decorate"],
+    "8": ["Wednesdays"],
+    "9": ["Fradstone"],
+    "10": ["parking"],
+
+    "11": ["C"],
+    "12": ["A"],
+    "13": ["B"],
+    "14": ["C"],
+    "15": ["H"],
+    "16": ["C"],
+    "17": ["G"],
+    "18": ["B"],
+    "19": ["I"],
+    "20": ["A"],
+
+    "21": ["C","E"],
+    "22": ["C","E"],
+    "23": ["B","E"],
+    "24": ["B","E"],
+
+    "25": ["D"],
+    "26": ["C"],
+    "27": ["A"],
+    "28": ["H"],
+    "29": ["F"],
+    "30": ["G"],
+
+    "31": ["practical"],
+    "32": ["publication"],
+    "33": ["choices"],
+    "34": ["negative"],
+    "35": ["play"],
+    "36": ["capitalism"],
+    "37": ["depression"],
+    "38": ["logic"],
+    "39": ["opportunity"],
+    "40": ["practice","practise"]
+  }
+}

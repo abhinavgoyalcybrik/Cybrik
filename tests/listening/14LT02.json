@@ -1,0 +1,204 @@
+{
+  "test_id": "14LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "TOTAL HEALTH CLINIC – PATIENT DETAILS",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Contact phone" },
+        { "q": 2, "type": "text", "question": "Date of birth" },
+        { "q": 3, "type": "text", "question": "Occupation: works as a ____" },
+        { "q": 4, "type": "text", "question": "Insurance company" },
+        { "q": 5, "type": "text", "question": "Type of problem: pain in her left ____" },
+        { "q": 6, "type": "text", "question": "When it began: ____ ago" },
+        { "q": 7, "type": "text", "question": "Sports played: belongs to a ____ club" },
+        { "q": 8, "type": "text", "question": "goes ____ regularly" },
+        { "q": 9, "type": "text", "question": "Medical history: injured her ____ last year" },
+        { "q": 10, "type": "text", "question": "no regular medication apart from ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Write the correct letter A–H.",
+      "title": "Visit to Branley Castle",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Before Queen Elizabeth I visited the castle in 1576,",
+          "options": [
+            "A repairs were carried out to the guest rooms",
+            "B a new building was constructed for her",
+            "C a fire damaged part of the main hall"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "In 1982, the castle was sold to",
+          "options": [
+            "A the government",
+            "B the Fenys family",
+            "C an entertainment company"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "In some of the rooms, visitors can",
+          "options": [
+            "A speak to experts on the history of the castle",
+            "B interact with actors dressed as famous characters",
+            "C see models of historical figures moving and talking"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "In the castle park, visitors can",
+          "options": [
+            "A see an 800-year-old tree",
+            "B go to an art exhibition",
+            "C visit a small zoo"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "At the end of the visit, the group will have",
+          "options": [
+            "A afternoon tea in the conservatory",
+            "B the chance to meet the castle’s owners",
+            "C a photograph together on the Great Staircase"
+          ]
+        },
+        { "q": 16, "type": "map", "question": "Starting point for walking the walls", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 17, "type": "map", "question": "Bow and arrow display", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 18, "type": "map", "question": "Hunting birds display", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 19, "type": "map", "question": "Traditional dancing", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 20, "type": "map", "question": "Shop", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Choose SIX letters A–H.",
+      "title": "Woolly mammoths on St Paul’s Island",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "How will Rosie and Martin introduce their presentation?",
+          "options": [
+            "A with a drawing of woolly mammoths in their natural habitat",
+            "B with a timeline showing when woolly mammoths lived",
+            "C with a video clip about woolly mammoths"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "What was surprising about the mammoth tooth found by Russell Graham?",
+          "options": [
+            "A It was still embedded in the mammoth’s jawbone",
+            "B It was from an unknown species of mammoth",
+            "C It was not as old as mammoth remains from elsewhere"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "The students will use an animated diagram to demonstrate how the mammoths",
+          "options": [
+            "A became isolated on the island",
+            "B spread from the island to other areas",
+            "C coexisted with other animals on the island"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "According to Martin, what is unusual about the date of the mammoths’ extinction on the island?",
+          "options": [
+            "A how exact it is",
+            "B how early it is",
+            "C how it was established"
+          ]
+        },
+        { "q": 25, "type": "match", "question": "Introduction", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 26, "type": "match", "question": "Discovery of the mammoth tooth", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 27, "type": "match", "question": "Initial questions asked by the researchers", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 28, "type": "match", "question": "Further research carried out on the island", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 29, "type": "match", "question": "Findings and possible explanations", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 30, "type": "match", "question": "Relevance to the present day", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The history of weather forecasting",
+      "questions": [
+        { "q": 31, "type": "text", "question": "many cultures invented ____ and other ceremonies" },
+        { "q": 32, "type": "text", "question": "people needed to observe and interpret the sky to ensure their ____" },
+        { "q": 33, "type": "text", "question": "Babylonians started forecasting using weather phenomena such as ____" },
+        { "q": 34, "type": "text", "question": "Chinese calendar made up of a number of ____ connected with the weather" },
+        { "q": 35, "type": "text", "question": "Aristotle described haloes and ____" },
+        { "q": 36, "type": "text", "question": "significance of the colour of the ____" },
+        { "q": 37, "type": "text", "question": "scientists recognised value of ____" },
+        { "q": 38, "type": "text", "question": "Galileo invented the ____" },
+        { "q": 39, "type": "text", "question": "Franklin identified the movement of ____" },
+        { "q": 40, "type": "text", "question": "data could be sent by ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["219 442 9785"],
+    "2": ["10th October"],
+    "3": ["manager"],
+    "4": ["Cawley"],
+    "5": ["knee"],
+    "6": ["3 weeks"],
+    "7": ["tennis"],
+    "8": ["running"],
+    "9": ["shoulder"],
+    "10": ["vitamins"],
+
+    "11": ["B"],
+    "12": ["C"],
+    "13": ["C"],
+    "14": ["A"],
+    "15": ["B"],
+    "16": ["H"],
+    "17": ["D"],
+    "18": ["F"],
+    "19": ["A"],
+    "20": ["E"],
+
+    "21": ["B"],
+    "22": ["C"],
+    "23": ["A"],
+    "24": ["A"],
+    "25": ["E"],
+    "26": ["F"],
+    "27": ["A"],
+    "28": ["H"],
+    "29": ["G"],
+    "30": ["C"],
+
+    "31": ["dances"],
+    "32": ["survival"],
+    "33": ["clouds"],
+    "34": ["festivals"],
+    "35": ["snow"],
+    "36": ["sky"],
+    "37": ["instruments"],
+    "38": ["thermometer"],
+    "39": ["storms"],
+    "40": ["telegraph"]
+  }
+}

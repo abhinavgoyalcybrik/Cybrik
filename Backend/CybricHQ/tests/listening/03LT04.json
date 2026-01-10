@@ -1,0 +1,138 @@
+{
+  "test_id": "03LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Map Labelling + Note Completion",
+      "instructions": "Label the map. Choose your answers from the box. Write the appropriate letters A–E. Questions 6–10: Write NO MORE THAN THREE WORDS OR A NUMBER.",
+      "questions": [
+        { "q": 1, "type": "map", "question": "Location of State Bank", "options": ["A", "B", "C", "D", "E"] },
+        { "q": 2, "type": "map", "question": "Location of St George’s Hospital", "options": ["A", "B", "C", "D", "E"] },
+        { "q": 3, "type": "map", "question": "Location of Garage", "options": ["A", "B", "C", "D", "E"] },
+        { "q": 4, "type": "map", "question": "Location of Library", "options": ["A", "B", "C", "D", "E"] },
+        { "q": 5, "type": "map", "question": "Location of University", "options": ["A", "B", "C", "D", "E"] },
+
+        { "q": 6, "type": "text", "question": "Gift for Susan" },
+        { "q": 7, "type": "text", "question": "Gift for baby" },
+        { "q": 8, "type": "text", "question": "Where will they buy Susan’s gift?" },
+        { "q": 9, "type": "text", "question": "Where will they buy the baby’s gift?" },
+        { "q": 10, "type": "text", "question": "Approximate price of the baby’s gift ($)" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Table Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS for each answer.",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Vacuum flask: contains no ____" },
+        { "q": 12, "type": "text", "question": "Vacuum flask keeps warm for ____" },
+        { "q": 13, "type": "text", "question": "Vacuum flask disadvantage: leaves a ____" },
+        { "q": 14, "type": "text", "question": "Whistle key holder advantage: ____" },
+        { "q": 15, "type": "text", "question": "Whistle key holder doesn’t work through ____" },
+        { "q": 16, "type": "mcq", "question": "Recommendation for Whistle Key Holder", "options": ["A", "B", "C"] },
+        { "q": 17, "type": "text", "question": "Army flashlight useful for ____" },
+        { "q": 18, "type": "text", "question": "Army flashlight works ____" },
+        { "q": 19, "type": "text", "question": "Army flashlight disadvantage: has ____" },
+        { "q": 20, "type": "text", "question": "Decoy camera advantage: ____" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Notes",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Amina’s project is about a local",
+          "options": ["A school", "B hospital", "C factory"]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Dr Bryson particularly liked",
+          "options": ["A the introduction", "B the first chapter", "C the middle section"]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Amina was surprised because she",
+          "options": ["A thought it was bad", "B wrote it quickly", "C found it difficult to do"]
+        },
+        { "q": 24, "type": "text", "question": "Suggestion for information on housing" },
+        { "q": 25, "type": "text", "question": "Suggestion for interview data" },
+        { "q": 26, "type": "text", "question": "Suggestion for chronology" },
+        { "q": 27, "type": "text", "question": "Book by Kate Oakwell" },
+        { "q": 28, "type": "text", "question": "Who should Amina show her work to?" },
+        { "q": 29, "type": "text", "question": "What should Amina do next before printing?" },
+        { "q": 30, "type": "text", "question": "Date by which the work must be printed" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Short Answer + MCQ + Table Completion",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Between what times is the road traffic lightest?" },
+        { "q": 32, "type": "text", "question": "Who will notice the noise most?" },
+        { "q": 33, "type": "text", "question": "Which day has the least traffic?" },
+        { "q": 34, "type": "text", "question": "Extra cost of modifying houses ($)" },
+        {
+          "q": 35,
+          "type": "mcq",
+          "question": "The noise levels at the site can reach",
+          "options": ["A 45 decibels", "B 55 decibels", "C 67 decibels", "D 70 decibels"]
+        },
+        { "q": 36, "type": "match", "question": "Double thickness plaster board fitted in", "options": ["W", "D", "C"] },
+        { "q": 37, "type": "match", "question": "Mechanical ventilation fitted in", "options": ["W", "D", "C"] },
+        { "q": 38, "type": "match", "question": "Air conditioning fitted in", "options": ["W", "D", "C"] },
+        { "q": 39, "type": "mcq", "question": "Correct construction for acoustic double glazing", "options": ["A", "B", "C", "D"] },
+        { "q": 40, "type": "mcq", "question": "Best layout for the houses", "options": ["A", "B", "C", "D"] }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["A"],
+    "2": ["B"],
+    "3": ["C"],
+    "4": ["D"],
+    "5": ["E"],
+    "6": ["box of chocolates", "chocolates"],
+    "7": ["soft toy", "teddy bear", "bear"],
+    "8": ["market", "markets"],
+    "9": ["market", "markets"],
+    "10": ["35", "$35"],
+
+    "11": ["glass"],
+    "12": ["18 hours", "eighteen hours"],
+    "13": ["strange taste"],
+    "14": ["small size"],
+    "15": ["metal"],
+    "16": ["A"],
+    "17": ["outdoor activities", "outside activities"],
+    "18": ["underwater"],
+    "19": ["weak light"],
+    "20": ["flashing light"],
+
+    "21": ["B"],
+    "22": ["C"],
+    "23": ["C"],
+    "24": ["remove completely"],
+    "25": ["rewrite"],
+    "26": ["remove completely"],
+    "27": ["Sight and Sound"],
+    "28": ["Support Tutor"],
+    "29": ["proof reading", "proof read"],
+    "30": ["10 July"],
+
+    "31": ["7.30pm to 5.30am"],
+    "32": ["housewives"],
+    "33": ["Sunday", "Sundays"],
+    "34": ["25000", "$25,000"],
+    "35": ["C"],
+    "36": ["C"],
+    "37": ["W"],
+    "38": ["C"],
+    "39": ["D"],
+    "40": ["C"]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "test_id": "11LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "HIRING A PUBLIC ROOM",
+      "questions": [
+        { "q": 1, "type": "text", "question": "the Main Hall – seats ____" },
+        { "q": 2, "type": "text", "question": "the ____ Room – seats 100" },
+        { "q": 3, "type": "text", "question": "£250 deposit (____ payment is required)" },
+        { "q": 4, "type": "text", "question": "Cost includes use of tables and chairs and also ____" },
+        { "q": 5, "type": "text", "question": "Will need a ____ licence" },
+        { "q": 6, "type": "text", "question": "Need to contact caretaker to arrange ____" },
+        { "q": 7, "type": "text", "question": "The band should use the ____ door at the back" },
+        { "q": 8, "type": "text", "question": "Need to know the ____ for the cleaning cupboard" },
+        { "q": 9, "type": "text", "question": "The ____ must be washed and rubbish placed in black bags" },
+        { "q": 10, "type": "text", "question": "All ____ must be taken down" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Note Completion + Map Labelling",
+      "instructions": "Questions 11–14: Write ONE WORD for each answer. Questions 15–20: Write the correct letter A–I.",
+      "title": "FIDDY WORKING HERITAGE FARM",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Visitors should take care not to harm any ____" },
+        { "q": 12, "type": "text", "question": "not touch any ____" },
+        { "q": 13, "type": "text", "question": "wear ____" },
+        { "q": 14, "type": "text", "question": "not bring ____ into the farm, with certain exceptions" },
+
+        { "q": 15, "type": "map", "question": "Scarecrow", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 16, "type": "map", "question": "Maze", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 17, "type": "map", "question": "Café", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 18, "type": "map", "question": "Black Barn", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 19, "type": "map", "question": "Covered picnic area", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 20, "type": "map", "question": "Fiddy House", "options": ["A","B","C","D","E","F","G","H","I"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ",
+      "instructions": "Choose the correct letter A, B or C.",
+      "title": "Study on Gender in Physics",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "The students in Akira Miyake’s study were all majoring in",
+          "options": [
+            "A physics",
+            "B psychology or physics",
+            "C science, technology, engineering or mathematics"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "The aim of Miyake’s study was to investigate",
+          "options": [
+            "A what kind of women choose to study physics",
+            "B a way of improving women’s performance in physics",
+            "C whether fewer women than men study physics at college"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "The female physics students were wrong to believe that",
+          "options": [
+            "A the teachers marked them unfairly",
+            "B the male students expected them to do badly",
+            "C their test results were lower than male students’"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Miyake’s team asked the students to write about",
+          "options": [
+            "A what they enjoyed about studying physics",
+            "B the successful experiences of other people",
+            "C something that was important to them personally"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What was the aim of the writing exercise done by the subjects?",
+          "options": [
+            "A to reduce stress",
+            "B to strengthen verbal ability",
+            "C to encourage logical thinking"
+          ]
+        },
+        {
+          "q": 26,
+          "type": "mcq",
+          "question": "What surprised the researchers about the study?",
+          "options": [
+            "A how few students managed to get A grades",
+            "B the positive impact it had on physics results for women",
+            "C the difference between male and female performance"
+          ]
+        },
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "Greg and Lisa think Miyake’s results could have been affected by",
+          "options": [
+            "A the length of the writing task",
+            "B the number of students who took part",
+            "C the information the students were given"
+          ]
+        },
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "Greg and Lisa decide that in their own project, they will compare the effects of",
+          "options": [
+            "A two different writing tasks",
+            "B a writing task with an oral task",
+            "C two different oral tasks"
+          ]
+        },
+        {
+          "q": 29,
+          "type": "mcq",
+          "question": "The main finding of Smolinsky’s research was that class teamwork activities",
+          "options": [
+            "A were most effective when done by all-women groups",
+            "B had no effect on the performance of men or women",
+            "C improved the results of men more than of women"
+          ]
+        },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "What will Lisa and Greg do next?",
+          "options": [
+            "A talk to a professor",
+            "B observe a science class",
+            "C look at the science timetable"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Ocean Biodiversity",
+      "questions": [
+        { "q": 31, "type": "text", "question": "important for locating targets for ____" },
+        { "q": 32, "type": "text", "question": "were not always rich in ____" },
+        { "q": 33, "type": "text", "question": "had higher temperatures at the ____" },
+        { "q": 34, "type": "text", "question": "had sufficient ____ in the water" },
+        { "q": 35, "type": "text", "question": "looked for hotspots for marine ____" },
+        { "q": 36, "type": "text", "question": "found new ocean species living under the ____" },
+        { "q": 37, "type": "text", "question": "rate of ____" },
+        { "q": 38, "type": "text", "question": "make a distribution ____ for each one" },
+        { "q": 39, "type": "text", "question": "establish ____ corridors" },
+        { "q": 40, "type": "text", "question": "catch fish only for the purpose of ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["200"],
+    "2": ["Chariton"],
+    "3": ["full"],
+    "4": ["cutlery"],
+    "5": ["alcohol"],
+    "6": ["cleaning"],
+    "7": ["stage"],
+    "8": ["code"],
+    "9": ["glasses"],
+    "10": ["posters"],
+
+    "11": ["animals"],
+    "12": ["tools"],
+    "13": ["boots"],
+    "14": ["dogs"],
+    "15": ["A"],
+    "16": ["F"],
+    "17": ["C"],
+    "18": ["B"],
+    "19": ["G"],
+    "20": ["H"],
+
+    "21": ["C"],
+    "22": ["B"],
+    "23": ["C"],
+    "24": ["C"],
+    "25": ["A"],
+    "26": ["B"],
+    "27": ["C"],
+    "28": ["A"],
+    "29": ["C"],
+    "30": ["A"],
+
+    "31": ["conservation"],
+    "32": ["nutrients"],
+    "33": ["surface"],
+    "34": ["oxygen"],
+    "35": ["diversity"],
+    "36": ["seabed"],
+    "37": ["decline"],
+    "38": ["map"],
+    "39": ["migration"],
+    "40": ["research"]
+  }
+}

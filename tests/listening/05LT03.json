@@ -1,0 +1,175 @@
+{
+  "test_id": "05LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "Mintons Car Mart – Customer Enquiry",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Engine size" },
+        { "q": 2, "type": "text", "question": "Type of gears" },
+        { "q": 3, "type": "text", "question": "Preferred colour" },
+        { "q": 4, "type": "text", "question": "Customer wishes to arrange (finance)" },
+        { "q": 5, "type": "text", "question": "Surname" },
+        { "q": 6, "type": "text", "question": "Title" },
+        { "q": 7, "type": "text", "question": "Town" },
+        { "q": 8, "type": "text", "question": "Contact number (for messages only)" },
+        { "q": 9, "type": "text", "question": "Current car model name" },
+        { "q": 10, "type": "text", "question": "Condition of current car" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Multiple Choice + Note Completion",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "What TWO advantages does Rexford University have?",
+          "options": [
+            "A higher than average exam results",
+            "B good transport links with central London",
+            "C near London Airport",
+            "D special government funding",
+            "E good links with local industry"
+          ]
+        },
+        { "q": 13, "type": "text", "question": "Delays in sending ____" },
+        { "q": 14, "type": "text", "question": "Student from the same ____" },
+        { "q": 15, "type": "text", "question": "English ____ and food" },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "International students at UK universities will be",
+          "options": [
+            "A offered accommodation with local families",
+            "B given special help by lecturers",
+            "C expected to work independently"
+          ]
+        },
+        {
+          "q": 17,
+          "type": "mcq",
+          "question": "University accommodation on campus",
+          "options": [
+            "A mostly for undergraduates",
+            "B none for postgraduates with families",
+            "C limited places for new postgraduates"
+          ]
+        },
+        {
+          "q": 18,
+          "type": "mcq",
+          "question": "Students wishing to live off-campus should apply",
+          "options": [
+            "A several months in advance",
+            "B two or three weeks in advance",
+            "C at the beginning of term"
+          ]
+        },
+        {
+          "q": 19,
+          "type": "mcq",
+          "question": "The university accommodation officer will",
+          "options": [
+            "A send a list of agents",
+            "B contact agencies for students",
+            "C ensure suitable accommodation"
+          ]
+        },
+        {
+          "q": 20,
+          "type": "mcq",
+          "question": "Advice regarding English",
+          "options": [
+            "A tell lecturers about problems",
+            "B have private lessons on arrival",
+            "C practise spoken English before arrival"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Form Completion",
+      "title": "Course Feedback Form",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Course start date" },
+        { "q": 22, "type": "text", "question": "Course end date" },
+        { "q": 23, "type": "text", "question": "Course organisation (good point)" },
+        { "q": 24, "type": "text", "question": "Useful to have ____ at beginning of course" },
+        { "q": 25, "type": "text", "question": "Too much work in the ____ of the course" },
+        { "q": 26, "type": "text", "question": "Course delivery (good point)" },
+        { "q": 27, "type": "text", "question": "Sessions that went on too long" },
+        { "q": 28, "type": "text", "question": "Materials and equipment (good point)" },
+        { "q": 29, "type": "text", "question": "Too much ____" },
+        { "q": 30, "type": "text", "question": "Other comments" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Sentence + Table Completion",
+      "title": "Household Waste Recycling",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Carbon dioxide emissions reduction target (%)" },
+        { "q": 32, "type": "text", "question": "Emissions reduced from landfill sites and ____" },
+        { "q": 33, "type": "text", "question": "Lack of ____ sites" },
+        { "q": 34, "type": "text", "question": "Glass used for ____ cannot be recycled" },
+        { "q": 35, "type": "text", "question": "Tons of glass recycled each year" },
+
+        { "q": 36, "type": "text", "question": "CLF Aggregates product" },
+        { "q": 37, "type": "text", "question": "Papersave product" },
+        { "q": 38, "type": "text", "question": "Pacrite product" },
+        { "q": 39, "type": "text", "question": "Waterford product" },
+        { "q": 40, "type": "text", "question": "Johnson & Jones product" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["1.4 litres", "1.4 liters"],
+    "2": ["automatic"],
+    "3": ["light", "sky"],
+    "4": ["credit"],
+    "5": ["Harries"],
+    "6": ["Dr", "Doctor"],
+    "7": ["Alton"],
+    "8": ["messages"],
+    "9": ["Lion"],
+    "10": ["reasonable"],
+
+    "11": ["C"],
+    "12": ["E"],
+    "13": ["references"],
+    "14": ["country"],
+    "15": ["weather"],
+    "16": ["C"],
+    "17": ["C"],
+    "18": ["A"],
+    "19": ["B"],
+    "20": ["C"],
+
+    "21": ["5th May"],
+    "22": ["16th July", "Friday 16th July"],
+    "23": ["clear"],
+    "24": ["outline", "course outline"],
+    "25": ["second half", "2nd half"],
+    "26": ["teaching", "teachers"],
+    "27": ["discussion", "group discussion"],
+    "28": ["handouts"],
+    "29": ["written work"],
+    "30": ["student support", "support for students"],
+
+    "31": ["12.5%"],
+    "32": ["incineration plants"],
+    "33": ["drop-off"],
+    "34": ["cooking"],
+    "35": ["500,000"],
+    "36": ["roads"],
+    "37": ["soil conditioner"],
+    "38": ["containers"],
+    "39": ["pencils"],
+    "40": ["business cards"]
+  }
+}

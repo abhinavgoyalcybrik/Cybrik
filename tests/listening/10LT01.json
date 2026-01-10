@@ -1,0 +1,179 @@
+{
+  "test_id": "10LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion + Table Completion",
+      "instructions": "Questions 1–6: Write ONE WORD for each answer. Questions 7–10: Write ONE WORD AND/OR A NUMBER.",
+      "title": "SELF-DRIVE TOURS IN THE USA",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Address: 24 ____ Road" },
+        { "q": 2, "type": "text", "question": "Heard about company from" },
+        { "q": 3, "type": "text", "question": "Los Angeles: customer wants to visit some ____ parks with her children" },
+        { "q": 4, "type": "text", "question": "Yosemite Park: customer wants to stay in a lodge, not a ____" },
+        { "q": 5, "type": "text", "question": "Customer wants to see the ____ on the way to Cambria" },
+        { "q": 6, "type": "text", "question": "At San Diego, wants to spend time on the ____" },
+
+        { "q": 7, "type": "text", "question": "Trip One: Total distance (km)" },
+        { "q": 8, "type": "text", "question": "Trip One: Includes one ____" },
+        { "q": 9, "type": "text", "question": "Trip Two: Price per person (£)" },
+        { "q": 10, "type": "text", "question": "Trip Two: Includes ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ (Multiple) + Note Completion",
+      "instructions": "Questions 11–12: Choose TWO letters A–E. Questions 13–20: Write NO MORE THAN TWO WORDS.",
+      "title": "Joining the leisure club",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "Which TWO facilities at the leisure club have recently been improved?",
+          "options": [
+            "A the gym",
+            "B the tracks",
+            "C the indoor pool",
+            "D the outdoor pool",
+            "E the sports training for children"
+          ]
+        },
+        { "q": 13, "type": "text", "question": "New members should describe any ____" },
+        { "q": 14, "type": "text", "question": "The ____ will be explained to you before you use the equipment" },
+        { "q": 15, "type": "text", "question": "You will be given a six-week ____" },
+        { "q": 16, "type": "text", "question": "There is a compulsory £90 ____ fee for members" },
+        { "q": 17, "type": "text", "question": "Gold members are given ____ to all the LP clubs" },
+        { "q": 18, "type": "text", "question": "Premier members are given priority during ____ hours" },
+        { "q": 19, "type": "text", "question": "Premier members can bring some ____ every month" },
+        { "q": 20, "type": "text", "question": "Members should always take their ____ with them" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Note Completion",
+      "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Write ONE WORD ONLY.",
+      "title": "Global Design Competition",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Students entering the design competition have to",
+          "options": [
+            "A produce an energy-efficient design",
+            "B adapt an existing energy-saving appliance",
+            "C develop a new use for current technology"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "John chose a dishwasher because he wanted to make dishwashers",
+          "options": [
+            "A more appealing",
+            "B more common",
+            "C more economical"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "The stone in John’s ‘Rockpool’ design is used",
+          "options": [
+            "A for decoration",
+            "B to switch it on",
+            "C to stop water escaping"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "In the holding chamber, the carbon dioxide",
+          "options": [
+            "A changes back to a gas",
+            "B dries the dishes",
+            "C is allowed to cool"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "At the end of the cleaning process, the carbon dioxide",
+          "options": [
+            "A is released into the air",
+            "B is disposed of with the waste",
+            "C is collected ready to be re-used"
+          ]
+        },
+        { "q": 26, "type": "text", "question": "John needs help preparing for his ____" },
+        { "q": 27, "type": "text", "question": "The professor advises John to make a ____ of his design" },
+        { "q": 28, "type": "text", "question": "John’s main problem is getting good quality ____" },
+        { "q": 29, "type": "text", "question": "The professor suggests John apply for a ____" },
+        { "q": 30, "type": "text", "question": "The professor will check the ____ information in John’s written report" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "THE SPIRIT BEAR",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Its colour comes from an uncommon ____" },
+        { "q": 32, "type": "text", "question": "Local people believe that it has unusual ____" },
+        { "q": 33, "type": "text", "question": "They protect the bear from ____" },
+        { "q": 34, "type": "text", "question": "Tree roots stop ____ along salmon streams" },
+        { "q": 35, "type": "text", "question": "It is currently found on a small number of ____" },
+        { "q": 36, "type": "text", "question": "Habitat loss due to construction of ____ by logging companies" },
+        { "q": 37, "type": "text", "question": "Unrestricted ____ is affecting the salmon supply" },
+        { "q": 38, "type": "text", "question": "Low rate of ____" },
+        { "q": 39, "type": "text", "question": "Logging companies must improve their ____ of logging" },
+        { "q": 40, "type": "text", "question": "Maintenance and ____ of the spirit bears’ territory is needed" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Ardleigh"],
+    "2": ["newspaper"],
+    "3": ["theme"],
+    "4": ["tent"],
+    "5": ["castle"],
+    "6": ["beach/beaches"],
+    "7": ["2020"],
+    "8": ["flight"],
+    "9": ["429"],
+    "10": ["dinner"],
+
+    "11": ["A", "C"],
+    "12": ["A", "C"],
+    "13": ["health problems"],
+    "14": ["safety rules"],
+    "15": ["plan"],
+    "16": ["joining"],
+    "17": ["free entry"],
+    "18": ["peak"],
+    "19": ["guests"],
+    "20": ["photo card / photo cards"],
+
+    "21": ["C"],
+    "22": ["A"],
+    "23": ["B"],
+    "24": ["A"],
+    "25": ["C"],
+    "26": ["presentation"],
+    "27": ["model"],
+    "28": ["material/materials"],
+    "29": ["grant"],
+    "30": ["technical"],
+
+    "31": ["gene"],
+    "32": ["power/powers"],
+    "33": ["strangers"],
+    "34": ["erosion"],
+    "35": ["islands"],
+    "36": ["roads"],
+    "37": ["fishing"],
+    "38": ["reproduction"],
+    "39": ["method/methods"],
+    "40": ["expansion"]
+  }
+}

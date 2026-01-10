@@ -1,0 +1,159 @@
+{
+  "test_id": "05LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion + Multiple Choice",
+      "instructions": "Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
+      "title": "Dreamtime Travel Agency – Tour Information",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Type of transportation" },
+        { "q": 2, "type": "text", "question": "Maximum group size" },
+        { "q": 3, "type": "text", "question": "Next tour date" },
+        { "q": 4, "type": "text", "question": "Hotel name" },
+
+        {
+          "q": "5-6",
+          "type": "mcq_multi",
+          "question": "Which TWO things are included in the price of the tour?",
+          "options": [
+            "A fishing trip",
+            "B guided bushwalk",
+            "C reptile park entry",
+            "D table tennis",
+            "E tennis"
+          ]
+        },
+
+        { "q": 7, "type": "text", "question": "The tour costs ($)" },
+        { "q": 8, "type": "text", "question": "Bookings must be made no later than ____ days in advance" },
+        { "q": 9, "type": "text", "question": "Deposit required" },
+        { "q": 10, "type": "text", "question": "Customer reference number" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Table Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS.",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Baby Safe cot – good point" },
+        { "q": 12, "type": "text", "question": "Baby Safe cot – problem" },
+        { "q": 13, "type": "text", "question": "Baby Safe cot – problem detail" },
+        { "q": 14, "type": "text", "question": "Baby Safe cot – verdict" },
+
+        { "q": 15, "type": "text", "question": "Choice Cots – good point" },
+        { "q": 16, "type": "text", "question": "Choice Cots – problem" },
+        { "q": 17, "type": "text", "question": "Choice Cots – verdict" },
+
+        { "q": 18, "type": "text", "question": "Mother’s Choice cot – problem" },
+        { "q": 19, "type": "text", "question": "Mother’s Choice cot – verdict" },
+
+        { "q": 20, "type": "text", "question": "Edges of cot should not be ____" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Summary Completion",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Andrew has worked at the hospital for",
+          "options": ["A two years", "B three years", "C five years"]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "During the course Andrew’s employers will pay",
+          "options": ["A his fees", "B his living costs", "C his salary"]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "The part-time course lasts for",
+          "options": ["A one whole year", "B 18 months", "C two years"]
+        },
+        {
+          "q": "24-25",
+          "type": "mcq_multi",
+          "question": "Which TWO types of coursework are required each month?",
+          "options": [
+            "A a case study",
+            "B an essay",
+            "C a survey",
+            "D a short report",
+            "E a study diary"
+          ]
+        },
+        { "q": 26, "type": "text", "question": "Students study ____ during each module" },
+        { "q": 27, "type": "text", "question": "A module takes ____" },
+        { "q": 28, "type": "text", "question": "The work is very ____" },
+        { "q": 29, "type": "text", "question": "To get a Diploma students must study ____" },
+        { "q": 30, "type": "text", "question": "Then work on ____ in depth" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Sentence + Summary Completion",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Men are supposed to understand ____" },
+        { "q": 32, "type": "text", "question": "Women are more prepared to ____" },
+        { "q": 33, "type": "text", "question": "Women tend to save for ____ and a house" },
+        { "q": 34, "type": "text", "question": "Men tend to save for ____ and for retirement" },
+        { "q": 35, "type": "text", "question": "Women who are left alone may have to pay for ____" },
+
+        { "q": 36, "type": "text", "question": "Women think about their financial future when a ____ occurs" },
+        { "q": 37, "type": "text", "question": "Women should start thinking about pensions in their ____" },
+        { "q": 38, "type": "text", "question": "Women lack ____ in dealing with financial affairs" },
+        { "q": 39, "type": "text", "question": "Classes in ____ can help women" },
+        { "q": 40, "type": "text", "question": "Savings should be put into ____ investments" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["by minibus", "a minibus"],
+    "2": ["15", "15 people"],
+    "3": ["April 18th", "18 April"],
+    "4": ["Pallisades"],
+    "5": ["B"],
+    "6": ["D"],
+    "7": ["280"],
+    "8": ["14"],
+    "9": ["20%"],
+    "10": ["39745T"],
+
+    "11": ["move around", "move about"],
+    "12": ["brakes"],
+    "13": ["fingers"],
+    "14": ["satisfactory"],
+    "15": ["put together"],
+    "16": ["too wide"],
+    "17": ["dangerous"],
+    "18": ["wheels"],
+    "19": ["best", "best buy", "safe"],
+    "20": ["sharp"],
+
+    "21": ["B"],
+    "22": ["A"],
+    "23": ["C"],
+    "24": ["B"],
+    "25": ["D"],
+    "26": ["full-time"],
+    "27": ["a term", "one term"],
+    "28": ["intensive"],
+    "29": ["two modules", "two terms"],
+    "30": ["a topic", "one topic"],
+
+    "31": ["politics"],
+    "32": ["learn"],
+    "33": ["children's education", "their children's education"],
+    "34": ["a car"],
+    "35": ["nursing care"],
+    "36": ["crisis"],
+    "37": ["early twenties"],
+    "38": ["confidence"],
+    "39": ["money management"],
+    "40": ["low-risk"]
+  }
+}

@@ -1,0 +1,259 @@
+{
+  "test_id": "10LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Transport Survey",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Name: Luisa ____" },
+        { "q": 2, "type": "text", "question": "Address: ____ White Stone Rd" },
+        { "q": 3, "type": "text", "question": "Postcode: ____" },
+        { "q": 4, "type": "text", "question": "Occupation: ____" },
+        { "q": 5, "type": "text", "question": "Reason for visit to town: to go to the ____" },
+        { "q": 6, "type": "text", "question": "Suggestions for improvement: better ____" },
+        { "q": 7, "type": "text", "question": "Suggestions for improvement: more frequent ____" },
+        { "q": 8, "type": "text", "question": "Having ____ parking places for bicycles" },
+        { "q": 9, "type": "text", "question": "Being able to use a ____ at work" },
+        { "q": 10, "type": "text", "question": "Opportunity to have cycling ____ on busy roads" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "The idea for the two new developments in the city came from",
+          "options": [
+            "A local people",
+            "B the City Council",
+            "C the SWRDC"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What is unusual about Brackenside pool?",
+          "options": [
+            "A its architectural style",
+            "B its heating system",
+            "C its method of water treatment"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Local newspapers have raised worries about",
+          "options": [
+            "A the late opening date",
+            "B the cost of the project",
+            "C the size of the facilities"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What decision has not yet been made about the pool?",
+          "options": [
+            "A whose statue will be at the door",
+            "B the exact opening times",
+            "C who will open it"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "match",
+          "question": "Asia",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        },
+        {
+          "q": 16,
+          "type": "match",
+          "question": "Antarctica",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        },
+        {
+          "q": 17,
+          "type": "match",
+          "question": "South America",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        },
+        {
+          "q": 18,
+          "type": "match",
+          "question": "North America",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        },
+        {
+          "q": 19,
+          "type": "match",
+          "question": "Europe",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        },
+        {
+          "q": 20,
+          "type": "match",
+          "question": "Africa",
+          "options": ["A","B","C","D","E","F","G","H","I"]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + MCQ",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO hobbies was Thor Heyerdahl very interested in as a youth?",
+          "options": [
+            "A camping",
+            "B climbing",
+            "C collecting",
+            "D hunting",
+            "E reading"
+          ]
+        },
+        {
+          "q": "23-24",
+          "type": "mcq_multi",
+          "question": "Which TWO reasons do the speakers say explain why Heyerdahl went to live on an island?",
+          "options": [
+            "A to examine ancient carvings",
+            "B to experience an isolated place",
+            "C to formulate a new theory",
+            "D to learn survival skills",
+            "E to study the impact of an extreme environment"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "Academics thought Polynesian migration from the east was impossible due to",
+          "options": [
+            "A the fact that Eastern countries were far away",
+            "B the lack of materials for boat building",
+            "C the direction of the winds and currents"
+          ]
+        },
+        {
+          "q": 26,
+          "type": "mcq",
+          "question": "The main reason for Heyerdahl’s raft journey was",
+          "options": [
+            "A to overcome a research setback",
+            "B to demonstrate a personal quality",
+            "C to test a new theory"
+          ]
+        },
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "What was most important to Heyerdahl about his raft journey?",
+          "options": [
+            "A being the first person to do it",
+            "B the speed of crossing the Pacific",
+            "C the use of authentic construction methods"
+          ]
+        },
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "Why did Heyerdahl go to Easter Island?",
+          "options": [
+            "A to build a stone statue",
+            "B to sail a reed boat",
+            "C to learn the local language"
+          ]
+        },
+        {
+          "q": 29,
+          "type": "mcq",
+          "question": "Heyerdahl’s greatest influence was on",
+          "options": [
+            "A theories about Polynesian origins",
+            "B the development of archaeological methodology",
+            "C establishing archaeology as an academic subject"
+          ]
+        },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "Which criticism is made of William Oliver’s textbook?",
+          "options": [
+            "A its style is out of date",
+            "B its content is over-simplified",
+            "C its methodology is flawed"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "THE FUTURE OF MANAGEMENT",
+      "questions": [
+        { "q": 31, "type": "text", "question": "greater ____ among companies" },
+        { "q": 32, "type": "text", "question": "increase in power of large ____ companies" },
+        { "q": 33, "type": "text", "question": "rising ____ in certain countries" },
+        { "q": 34, "type": "text", "question": "more discussion with ____ before making business decisions" },
+        { "q": 35, "type": "text", "question": "environmental concerns which may lead to more ____" },
+        { "q": 36, "type": "text", "question": "teams formed to work on a particular ____" },
+        { "q": 37, "type": "text", "question": "offer hours that are ____" },
+        { "q": 38, "type": "text", "question": "managers to provide good ____" },
+        { "q": 39, "type": "text", "question": "changes influenced by ____ taking senior roles" },
+        { "q": 40, "type": "text", "question": "more and more ____ workers" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Hardie"],
+    "2": ["19"],
+    "3": ["GT8 2LC"],
+    "4": ["hairdresser"],
+    "5": ["dentist", "dentist's"],
+    "6": ["lighting"],
+    "7": ["trains"],
+    "8": ["safe"],
+    "9": ["shower"],
+    "10": ["training"],
+
+    "11": ["A"],
+    "12": ["C"],
+    "13": ["C"],
+    "14": ["A"],
+    "15": ["E"],
+    "16": ["F"],
+    "17": ["D"],
+    "18": ["H"],
+    "19": ["A"],
+    "20": ["B"],
+
+    "21": ["B", "C"],
+    "22": ["B", "C"],
+    "23": ["B", "E"],
+    "24": ["B", "E"],
+    "25": ["C"],
+    "26": ["C"],
+    "27": ["C"],
+    "28": ["A"],
+    "29": ["B"],
+    "30": ["A"],
+
+    "31": ["competition"],
+    "32": ["global"],
+    "33": ["demand"],
+    "34": ["customers"],
+    "35": ["regulation"],
+    "36": ["project"],
+    "37": ["flexible"],
+    "38": ["leadership"],
+    "39": ["women"],
+    "40": ["self-employed"]
+  }
+}

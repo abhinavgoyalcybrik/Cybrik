@@ -1,0 +1,184 @@
+{
+  "test_id": "03LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Table Completion + Map Labelling",
+      "instructions": "Write NO MORE THAN THREE WORDS OR A NUMBER.",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Place for meeting the Principal and staff" },
+        { "q": 2, "type": "text", "question": "Speaker at 10.15" },
+        { "q": 3, "type": "text", "question": "Speaker at 10.45" },
+        { "q": 4, "type": "text", "question": "Time students go to Classroom 5" },
+        { "q": 5, "type": "text", "question": "Type of test in Classroom 5" },
+
+        { "q": 6, "type": "map", "question": "Room labelled 6" },
+        { "q": 7, "type": "map", "question": "Room labelled 7" },
+        { "q": 8, "type": "map", "question": "Room labelled 8" },
+        { "q": 9, "type": "map", "question": "Room labelled 9" },
+        { "q": 10, "type": "map", "question": "Room labelled 10" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Table Completion + Note Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS.",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Financial help example (fees)" },
+        { "q": 12, "type": "text", "question": "Type of help related to childcare and nurseries" },
+        { "q": 13, "type": "text", "question": "Academic help related to essays" },
+        { "q": 14, "type": "text", "question": "Type of help related to social life" },
+        { "q": 15, "type": "text", "question": "Social help example (activities)" },
+
+        { "q": 16, "type": "text", "question": "Name of Helpline officer" },
+        { "q": 17, "type": "text", "question": "Telephone number of Helpline office" },
+        { "q": 18, "type": "text", "question": "Office opening times (weekdays and Saturday)" },
+        { "q": 19, "type": "text", "question": "May need to make an ____" },
+        { "q": 20, "type": "text", "question": "If busy, name of list students go on" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Note Completion",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "At the start of the tutorial, the tutor emphasises the importance of",
+          "options": [
+            "A interviews",
+            "B staff selection",
+            "C question techniques"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "A person who doesn’t ‘fit in’ is someone who",
+          "options": [
+            "A is over-qualified",
+            "B lacks experience",
+            "C disagrees with the group"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "An important part of teamwork is trust in",
+          "options": [
+            "A colleagues’ ability",
+            "B employer’s directions",
+            "C company training"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Finding out personal information is",
+          "options": [
+            "A a skill needing practice",
+            "B avoided by interviewers",
+            "C already part of interviews"
+          ]
+        },
+
+        { "q": 25, "type": "text", "question": "Personality questionnaires completed during ____" },
+        { "q": 26, "type": "text", "question": "Used in the past by the ____" },
+        { "q": 27, "type": "text", "question": "And by the ____" },
+        { "q": 28, "type": "text", "question": "Nowadays used by ____ of large employers" },
+        { "q": 29, "type": "text", "question": "Questionnaires written by ____" },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "What is the tutor trying to do?",
+          "options": [
+            "A describe one selection technique",
+            "B criticise interviews",
+            "C illustrate how questionnaires are used"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Diagram + Note Completion + Matching",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Age group of pupils" },
+        { "q": 32, "type": "text", "question": "Length of teaching practice (weeks)" },
+        { "q": 33, "type": "text", "question": "Action done to the cut in the circle" },
+        { "q": 34, "type": "text", "question": "Where flaps are stuck" },
+        { "q": 35, "type": "text", "question": "Designs drawn ____" },
+        { "q": 36, "type": "text", "question": "Type of model made (dimensions)" },
+        { "q": 37, "type": "text", "question": "Colours used (must list all)" },
+
+        {
+          "q": 38,
+          "type": "match",
+          "question": "Hat made by Theresa",
+          "options": ["A", "B", "C", "D", "E"]
+        },
+        {
+          "q": 39,
+          "type": "match",
+          "question": "Hat made by Muriel",
+          "options": ["A", "B", "C", "D", "E"]
+        },
+        {
+          "q": 40,
+          "type": "match",
+          "question": "Hat made by Fabrice",
+          "options": ["A", "B", "C", "D", "E"]
+        }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Main Hall"],
+    "2": ["Director of Studies", "DOS"],
+    "3": ["Student Adviser", "Student Advisor"],
+    "4": ["11 o'clock", "11.00"],
+    "5": ["placement test", "English test"],
+
+    "6": ["L"],
+    "7": ["MH"],
+    "8": ["CL"],
+    "9": ["SR"],
+    "10": ["SCR"],
+
+    "11": ["overseas students fees", "tuition fees"],
+    "12": ["domestic area"],
+    "13": ["essay deadlines"],
+    "14": ["social life"],
+    "15": ["outings", "trips"],
+
+    "16": ["Kouachi"],
+    "17": ["3269940"],
+    "18": ["10 to 4", "10am to 4pm"],
+    "19": ["appointment"],
+    "20": ["waiting list"],
+
+    "21": ["B"],
+    "22": ["C"],
+    "23": ["A"],
+    "24": ["C"],
+    "25": ["selection procedure"],
+    "26": ["ancient Chinese"],
+    "27": ["military", "army"],
+    "28": ["two thirds", "almost two thirds"],
+    "29": ["experts"],
+    "30": ["A"],
+
+    "31": ["secondary"],
+    "32": ["14"],
+    "33": ["overlap", "overlapping"],
+    "34": ["underside", "underneath", "bottom"],
+    "35": ["on paper", "two dimensions"],
+    "36": ["three-dimensional", "3D"],
+    "37": ["white grey brown"],
+
+    "38": ["C"],
+    "39": ["D"],
+    "40": ["A"]
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "test_id": "13LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Moving to Banford City",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Average rent: £ ____ a month" },
+        { "q": 2, "type": "text", "question": "Linda travels to work by ____" },
+        { "q": 3, "type": "text", "question": "Limited ____ in city centre" },
+        { "q": 4, "type": "text", "question": "Trains to London every ____ minutes" },
+        { "q": 5, "type": "text", "question": "Poor train service at ____" },
+        { "q": 6, "type": "text", "question": "New ____ opened recently" },
+        { "q": 7, "type": "text", "question": "____ has excellent reputation" },
+        { "q": 8, "type": "text", "question": "Good ____ on Bridge Street" },
+        { "q": 9, "type": "text", "question": "Meet Linda on ____ after 5.30 pm" },
+        { "q": 10, "type": "text", "question": "In the ____ opposite the station" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Matching + Multiple Choice",
+      "instructions": "Questions 11–16: Choose SIX answers from the box. Questions 17–20: Choose TWO letters A–E.",
+      "title": "Keeping fit",
+      "questions": [
+        { "q": 11, "type": "match", "question": "using a gym", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 12, "type": "match", "question": "running", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 13, "type": "match", "question": "swimming", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 14, "type": "match", "question": "cycling", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 15, "type": "match", "question": "doing yoga", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 16, "type": "match", "question": "training with a personal trainer", "options": ["A","B","C","D","E","F","G"] },
+
+        {
+          "q": "17-18",
+          "type": "mcq_multi",
+          "question": "For which TWO reasons does the speaker say people give up going to the gym?",
+          "options": [
+            "A lack of time",
+            "B loss of confidence",
+            "C too much effort required",
+            "D high costs",
+            "E feeling less successful than others"
+          ]
+        },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "Which TWO pieces of advice does the speaker give for setting goals?",
+          "options": [
+            "A write goals down",
+            "B have achievable aims",
+            "C set a time limit",
+            "D give yourself rewards",
+            "E challenge yourself"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Choose SIX letters A–H.",
+      "title": "Project on using natural dyes to colour fabrics",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What first inspired Jim to choose this project?",
+          "options": [
+            "A textiles displayed in an exhibition",
+            "B a book about a botanic garden",
+            "C carpets he saw on holiday"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Jim eventually decided to do a practical investigation which involved",
+          "options": [
+            "A using a range of dyes with different fibres",
+            "B applying different dyes to one type of fibre",
+            "C testing one dye and a range of fibres"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "When doing his experiments, Jim was surprised by",
+          "options": [
+            "A how much natural material was needed to make the dye",
+            "B the fact that dyes were widely available on the internet",
+            "C the time that he had to leave the fabric in the dye"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "What problem did Jim have with using tartrazine as a fabric dye?",
+          "options": [
+            "A It caused a slight allergic reaction",
+            "B It was not a permanent dye on cotton",
+            "C It was ineffective when used on nylon"
+          ]
+        },
+
+        { "q": 25, "type": "match", "question": "turmeric", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 26, "type": "match", "question": "beetroot", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 27, "type": "match", "question": "Tyrian purple", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 28, "type": "match", "question": "logwood", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 29, "type": "match", "question": "cochineal", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 30, "type": "match", "question": "metal oxide", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The sleepy lizard (tiliqua rugosa)",
+      "questions": [
+        { "q": 31, "type": "text", "question": "They are brown, but recognisable by their blue ____" },
+        { "q": 32, "type": "text", "question": "Their diet consists mainly of ____" },
+        { "q": 33, "type": "text", "question": "Their main predators are large birds and ____" },
+        { "q": 34, "type": "text", "question": "One study found that lizards can use the ____ to help them navigate" },
+        { "q": 35, "type": "text", "question": "Observations show that these lizards keep the same ____ for several years" },
+        { "q": 36, "type": "text", "question": "but little ____ between parents and children" },
+        { "q": 37, "type": "text", "question": "to provide ____ for female lizards" },
+        { "q": 38, "type": "text", "question": "GPS systems attached to the ____ of the lizards" },
+        { "q": 39, "type": "text", "question": "even the number of ____ taken" },
+        { "q": 40, "type": "text", "question": "reduce chances of ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["850"],
+    "2": ["bike", "bicycle"],
+    "3": ["parking"],
+    "4": ["30", "thirty"],
+    "5": ["weekends"],
+    "6": ["cinema"],
+    "7": ["hospital"],
+    "8": ["dentist"],
+    "9": ["Thursday"],
+    "10": ["café", "cafe"],
+
+    "11": ["F"],
+    "12": ["D"],
+    "13": ["A"],
+    "14": ["B"],
+    "15": ["C"],
+    "16": ["G"],
+    "17": ["B"],
+    "18": ["C"],
+    "19": ["B"],
+    "20": ["D"],
+
+    "21": ["C"],
+    "22": ["A"],
+    "23": ["A"],
+    "24": ["B"],
+    "25": ["C"],
+    "26": ["F"],
+    "27": ["H"],
+    "28": ["D"],
+    "29": ["A"],
+    "30": ["E"],
+
+    "31": ["tongue", "tongues"],
+    "32": ["plants"],
+    "33": ["snakes"],
+    "34": ["sky"],
+    "35": ["partner", "partners"],
+    "36": ["contact"],
+    "37": ["protection"],
+    "38": ["tail", "tails"],
+    "39": ["steps"],
+    "40": ["injury", "injuries"]
+  }
+}

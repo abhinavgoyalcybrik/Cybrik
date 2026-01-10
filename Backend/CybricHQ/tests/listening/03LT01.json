@@ -1,0 +1,189 @@
+{
+  "test_id": "03LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Complete the notes below.",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Main areas dealt with by Flagstone Properties" },
+        { "q": 2, "type": "text", "question": "Price range per month (£)" },
+        { "q": 3, "type": "text", "question": "Factor affecting price: whether there is a ____" },
+        { "q": 4, "type": "text", "question": "Rent for house on West Park Road (£)" },
+        { "q": 5, "type": "text", "question": "Bill included in West Park Road rent" },
+        { "q": 6, "type": "text", "question": "Bill included in Tithe Road rent" },
+        { "q": 7, "type": "text", "question": "Day for viewing the houses" },
+        { "q": 8, "type": "text", "question": "Reference required from employer" },
+        { "q": 9, "type": "text", "question": "Notice period before moving in" },
+        { "q": 10, "type": "text", "question": "Deposit required" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Short Answer + Table Completion",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Who is Mrs Sutton worried about?" },
+        { "q": 12, "type": "text", "question": "Name for a group of family doctors working together" },
+        { "q": 13, "type": "text", "question": "Number of doctors at Dean End Health Centre" },
+        { "q": 14, "type": "text", "question": "Number of doctors at South Hay Health Centre" },
+        { "q": 15, "type": "text", "question": "Appointment system at South Hay is ____" },
+        { "q": 16, "type": "text", "question": "Dr Jones is good with ____ patients" },
+        { "q": 17, "type": "text", "question": "Dr Williams helps people with ____" },
+        { "q": 18, "type": "text", "question": "Doctors start seeing patients from ____ o’clock" },
+        {
+          "q": 19,
+          "type": "mcq_multi",
+          "question": "Which TWO groups of patients receive free medication?",
+          "options": [
+            "A people over 17 years old",
+            "B unemployed people",
+            "C non-UK residents",
+            "D people over 60 years old",
+            "E pregnant women"
+          ]
+        },
+        { "q": 20, "type": "text", "question": "Charge for one item of medication (£)" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Note Completion",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Major subject studied with Economics" },
+        { "q": 22, "type": "text", "question": "Region where Jonathan worked as a volunteer teacher" },
+        { "q": 23, "type": "text", "question": "Years of volunteer teaching" },
+        { "q": 24, "type": "text", "question": "Name of organisation Jonathan worked for" },
+        { "q": 25, "type": "text", "question": "Type of school" },
+        { "q": 26, "type": "text", "question": "Main subject taught to Forms 1–3" },
+        { "q": 27, "type": "text", "question": "Subject taught to Form 5" },
+        { "q": 28, "type": "text", "question": "Problem Jonathan experienced in first year" },
+        { "q": 29, "type": "text", "question": "Why Jonathan chose Geography – reason 1" },
+        { "q": 30, "type": "text", "question": "Why Jonathan chose Geography – reason 2" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Multiple Choice",
+      "questions": [
+        {
+          "q": 31,
+          "type": "mcq",
+          "question": "Which column of the bar chart represents the figures quoted?",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "Main cause of back pain in women",
+          "options": ["A pregnancy", "B osteoporosis", "C lack of exercise"]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "Treatment mainly recommended by the Clinic",
+          "options": ["A pain killers", "B relaxation therapy", "C exercise routines"]
+        },
+        {
+          "q": 34,
+          "type": "mcq",
+          "question": "The back is different because",
+          "options": [
+            "A better at self-repair",
+            "B injury is more painful",
+            "C response to injury causes more damage"
+          ]
+        },
+        {
+          "q": 35,
+          "type": "mcq",
+          "question": "Bed rest is advised",
+          "options": [
+            "A for a maximum of two days",
+            "B for extreme pain only",
+            "C for pain lasting more than two days"
+          ]
+        },
+        {
+          "q": 36,
+          "type": "mcq",
+          "question": "Being overweight",
+          "options": [
+            "A is a major source of back pain",
+            "B worsens existing back pain",
+            "C reduces effectiveness of exercise"
+          ]
+        },
+        {
+          "q": 37,
+          "type": "mcq",
+          "question": "Buy special orthopaedic chairs",
+          "options": ["A Strongly recommended", "B Recommended in certain circumstances", "C Not recommended"]
+        },
+        {
+          "q": 38,
+          "type": "mcq",
+          "question": "Buy shock-absorbing inserts",
+          "options": ["A Strongly recommended", "B Recommended in certain circumstances", "C Not recommended"]
+        },
+        {
+          "q": 39,
+          "type": "mcq",
+          "question": "Wear flat shoes",
+          "options": ["A Strongly recommended", "B Recommended in certain circumstances", "C Not recommended"]
+        },
+        {
+          "q": 40,
+          "type": "mcq",
+          "question": "Buy TENS machine",
+          "options": ["A Strongly recommended", "B Recommended in certain circumstances", "C Not recommended"]
+        }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["city centre", "city center"],
+    "2": ["250 to 500", "£250 to £500"],
+    "3": ["garden"],
+    "4": ["325"],
+    "5": ["water bill", "water"],
+    "6": ["telephone rental", "phone rental"],
+    "7": ["Wednesday afternoon", "Wednesday"],
+    "8": ["employer"],
+    "9": ["two weeks", "2 weeks", "a fortnight", "14 days"],
+    "10": ["one month rent", "1 month rent"],
+
+    "11": ["her daughter", "Anna", "child"],
+    "12": ["practice"],
+    "13": ["6"],
+    "14": ["4"],
+    "15": ["better", "more efficient", "faster"],
+    "16": ["elderly", "old"],
+    "17": ["back problems", "back trouble", "bad backs"],
+    "18": ["9", "9.00", "9 o'clock"],
+    "19": ["B", "E"],
+    "20": ["5"],
+
+    "21": ["Politics"],
+    "22": ["West Africa", "Africa"],
+    "23": ["1990 to 1992"],
+    "24": ["Teach South"],
+    "25": ["rural co-operative"],
+    "26": ["Geography"],
+    "27": ["English"],
+    "28": ["homesick", "missed family", "homesickness"],
+    "29": ["favourite subject", "favorite subject"],
+    "30": ["useful applications"],
+
+    "31": ["A"],
+    "32": ["B"],
+    "33": ["B"],
+    "34": ["C"],
+    "35": ["A"],
+    "36": ["B"],
+    "37": ["B"],
+    "38": ["A"],
+    "39": ["B"],
+    "40": ["C"]
+  }
+}

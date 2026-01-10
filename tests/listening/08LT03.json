@@ -1,0 +1,238 @@
+{
+  "test_id": "08LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form + Table Completion + MCQ (Multiple)",
+      "instructions": "Questions 1–8: Write ONE WORD AND/OR A NUMBER. Questions 9–10: Choose TWO letters A–E.",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Preferred area" },
+        { "q": 2, "type": "text", "question": "Maximum rent (£)" },
+        { "q": 3, "type": "text", "question": "Length of stay" },
+
+        { "q": 4, "type": "text", "question": "Problem at Oakington Avenue" },
+        { "q": 5, "type": "text", "question": "Extra feature at Mead Street house" },
+        { "q": 6, "type": "text", "question": "Garden feature" },
+        { "q": 7, "type": "text", "question": "Distance from bus stop (minutes)" },
+        { "q": 8, "type": "text", "question": "When house is available" },
+
+        {
+          "q": "9-10",
+          "type": "mcq_multi",
+          "question": "Which TWO facilities in the district of Devon Close are open to the public at the moment?",
+          "options": [
+            "A museum",
+            "B concert hall",
+            "C cinema",
+            "D sports centre",
+            "E swimming pool"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Note + Table Completion",
+      "instructions": "Questions 11–16: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 17–20: Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "The National Arts Centre",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Number of exhibition spaces" },
+        { "q": 12, "type": "text", "question": "Gallery 1 entry fee" },
+        { "q": 13, "type": "text", "question": "Where sculptures come from" },
+        { "q": 14, "type": "text", "question": "Programme can be picked up ____" },
+        { "q": 15, "type": "text", "question": "Next week focus on new ____" },
+        { "q": 16, "type": "text", "question": "Radio programme name" },
+
+        { "q": 17, "type": "text", "question": "Venue for The Magic Flute" },
+        { "q": 18, "type": "text", "question": "Ticket price from (£)" },
+        { "q": 19, "type": "text", "question": "Another event (day)" },
+        { "q": 20, "type": "text", "question": "Event type on Saturday" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Decision (A/B/C)",
+      "title": "Latin American Studies",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Paul decided to get work experience in South America because he wanted",
+          "options": [
+            "A to improve his Spanish",
+            "B to learn about local culture",
+            "C to gain academic experience"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Paul’s work placement supervisor",
+          "options": [
+            "A was mainly interested in research",
+            "B focused on practical reports",
+            "C had limited experience"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "What surprised Paul about his placement?",
+          "options": [
+            "A the amount of support",
+            "B the working hours",
+            "C the accommodation"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Paul was pleased because",
+          "options": [
+            "A he earned a good salary",
+            "B all equipment was provided",
+            "C the food was free"
+          ]
+        },
+
+        {
+          "q": 25,
+          "type": "decision",
+          "question": "History of Latin America module",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 26,
+          "type": "decision",
+          "question": "Spanish language module",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 27,
+          "type": "decision",
+          "question": "Politics module",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 28,
+          "type": "decision",
+          "question": "Economics module",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 29,
+          "type": "decision",
+          "question": "Anthropology module",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 30,
+          "type": "decision",
+          "question": "Media studies module",
+          "options": ["A", "B", "C"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Multiple Choice + Note Completion",
+      "instructions": "Questions 31–34: Choose the correct letter A, B or C. Questions 35–40: Write ONE WORD ONLY.",
+      "title": "Trying to Repeat Success",
+      "questions": [
+        {
+          "q": 31,
+          "type": "mcq",
+          "question": "Compared to introducing new business processes, copying existing ones is",
+          "options": [
+            "A less risky",
+            "B equally difficult",
+            "C more expensive"
+          ]
+        },
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "Research shows that attempts to repeat success",
+          "options": [
+            "A usually succeed",
+            "B often fail",
+            "C work best in large companies"
+          ]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "Most companies try to repeat success by",
+          "options": [
+            "A copying processes exactly",
+            "B retraining staff",
+            "C managing existing knowledge"
+          ]
+        },
+        {
+          "q": 34,
+          "type": "mcq",
+          "question": "A template is useful because it provides",
+          "options": [
+            "A innovation",
+            "B flexibility",
+            "C consistency"
+          ]
+        },
+
+        { "q": 35, "type": "text", "question": "First mistake: manager tries to ____" },
+        { "q": 36, "type": "text", "question": "Second mistake: ignores ____" },
+        { "q": 37, "type": "text", "question": "One problem during data collection: subject ____" },
+        { "q": 38, "type": "text", "question": "Another problem: needed ____" },
+        { "q": 39, "type": "text", "question": "Employees’ ____ duplicated" },
+        { "q": 40, "type": "text", "question": "Advantage of templates: built-in ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["central"],
+    "2": ["600"],
+    "3": ["2 year", "2 years"],
+    "4": ["garage"],
+    "5": ["garden"],
+    "6": ["study"],
+    "7": ["5"],
+    "8": ["595"],
+    "9": ["B"],
+    "10": ["E"],
+
+    "11": ["classical music", "classical/music"],
+    "12": ["bookshop", "bookstore"],
+    "13": ["planned"],
+    "14": ["1983", "1980s"],
+    "15": ["City Council"],
+    "16": ["363"],
+    "17": ["the Garden Hall"],
+    "18": ["Three Lives"],
+    "19": ["4.50"],
+    "20": ["Faces of China"],
+
+    "21": ["C"],
+    "22": ["C"],
+    "23": ["A"],
+    "24": ["B"],
+    "25": ["C"],
+    "26": ["A"],
+    "27": ["C"],
+    "28": ["A"],
+    "29": ["B"],
+    "30": ["C"],
+
+    "31": ["B"],
+    "32": ["B"],
+    "33": ["B"],
+    "34": ["A"],
+    "35": ["combination", "system"],
+    "36": ["safety"],
+    "37": ["attitude", "attitudes"],
+    "38": ["control", "controls"],
+    "39": ["factory", "factories"],
+    "40": ["skills"]
+  }
+}

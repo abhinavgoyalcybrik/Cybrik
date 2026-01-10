@@ -1,0 +1,181 @@
+{
+  "test_id": "16LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Holiday rental",
+      "questions": [
+        { "q": 1, "type": "text", "question": "available for week beginning ____ May" },
+        { "q": 2, "type": "text", "question": "cost for the week: £ ____" },
+        { "q": 3, "type": "text", "question": "____ Cottage" },
+        { "q": 4, "type": "text", "question": "building was originally a ____" },
+        { "q": 5, "type": "text", "question": "walk through doors from living room into a ____" },
+        { "q": 6, "type": "text", "question": "several ____ spaces at the front" },
+        { "q": 7, "type": "text", "question": "central heating and stove that burns ____" },
+        { "q": 8, "type": "text", "question": "views of old ____ from living room" },
+        { "q": 9, "type": "text", "question": "view of hilltop ____ from the bedroom" },
+        { "q": 10, "type": "text", "question": "deadline for final payment: end of ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–I.",
+      "title": "Local council report on traffic and highways / Recreation ground after proposed changes",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "A survey found people's main concern about traffic in the area was",
+          "options": [
+            "A cuts to public transport.",
+            "B poor maintenance of roads.",
+            "C changes in the type of traffic."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Which change will shortly be made to the cycle path next to the river?",
+          "options": [
+            "A It will be widened.",
+            "B It will be extended.",
+            "C It will be resurfaced."
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Plans for a pedestrian crossing have been postponed because",
+          "options": [
+            "A the Post Office has moved.",
+            "B the proposed location is unsafe.",
+            "C funding is not available at present."
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "On Station Road, notices have been erected",
+          "options": [
+            "A telling cyclists not to leave their bikes outside the station ticket office.",
+            "B asking motorists to switch off engines when waiting at the level crossing.",
+            "C warning pedestrians to leave enough time when crossing the railway line."
+          ]
+        },
+
+        { "q": 15, "type": "map", "question": "New car park", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 16, "type": "map", "question": "New cricket pitch", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 17, "type": "map", "question": "Children's playground", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 18, "type": "map", "question": "Skateboard ramp", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 19, "type": "map", "question": "Pavilion", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 20, "type": "map", "question": "Notice board", "options": ["A","B","C","D","E","F","G","H","I"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + Matching",
+      "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–G.",
+      "title": "City bike-sharing schemes",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO benefits of city bike-sharing schemes do the students agree are the most important?",
+          "options": [
+            "A reducing noise pollution",
+            "B reducing traffic congestion",
+            "C improving air quality",
+            "D encouraging health and fitness",
+            "E making cycling affordable"
+          ]
+        },
+        {
+          "q": "23-24",
+          "type": "mcq_multi",
+          "question": "Which TWO things do the students think are necessary for successful bike-sharing schemes?",
+          "options": [
+            "A Bikes should have a GPS system.",
+            "B The app should be easy to use.",
+            "C Public awareness should be raised.",
+            "D Only one scheme should be available.",
+            "E There should be a large network of cycle lanes."
+          ]
+        },
+
+        { "q": 25, "type": "match", "question": "Amsterdam", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 26, "type": "match", "question": "Dublin", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 27, "type": "match", "question": "London", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 28, "type": "match", "question": "Buenos Aires", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 29, "type": "match", "question": "New York", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 30, "type": "match", "question": "Sydney", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The extinction of the dodo bird",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Portuguese ships transporting ____ stopped at the island." },
+        { "q": 32, "type": "text", "question": "The Dutch established a ____ on the island." },
+        { "q": 33, "type": "text", "question": "A Dutch painting suggests the dodo was very ____." },
+        { "q": 34, "type": "text", "question": "The only remaining soft tissue is a dried ____." },
+        { "q": 35, "type": "text", "question": "Recent studies suggest the birds were capable of rapid ____." },
+        { "q": 36, "type": "text", "question": "They were able to use their small wings to maintain ____." },
+        { "q": 37, "type": "text", "question": "Their ____ was of average size." },
+        { "q": 38, "type": "text", "question": "Their sense of ____ enabled them to find food." },
+        { "q": 39, "type": "text", "question": "____ also escaped onto the island and ate the birds' eggs." },
+        { "q": 40, "type": "text", "question": "The arrival of farming meant the ____ was destroyed." }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["28th"],
+    "2": ["550"],
+    "3": ["Chervil"],
+    "4": ["garage"],
+    "5": ["garden"],
+    "6": ["parking"],
+    "7": ["wood"],
+    "8": ["bridge"],
+    "9": ["monument"],
+    "10": ["March"],
+
+    "11": ["C"],
+    "12": ["A"],
+    "13": ["B"],
+    "14": ["B"],
+    "15": ["C"],
+    "16": ["F"],
+    "17": ["A"],
+    "18": ["I"],
+    "19": ["E"],
+    "20": ["H"],
+
+    "21": ["B","C"],
+    "22": ["B","C"],
+    "23": ["B","E"],
+    "24": ["B","E"],
+    "25": ["C"],
+    "26": ["F"],
+    "27": ["D"],
+    "28": ["E"],
+    "29": ["B"],
+    "30": ["A"],
+
+    "31": ["spice","spices"],
+    "32": ["colony","settlement"],
+    "33": ["fat"],
+    "34": ["head"],
+    "35": ["movement"],
+    "36": ["balance","balancing"],
+    "37": ["brain"],
+    "38": ["smell"],
+    "39": ["rats"],
+    "40": ["forest"]
+  }
+}

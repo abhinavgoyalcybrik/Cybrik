@@ -1,0 +1,633 @@
+{
+  "metadata": {
+    "totalTests": 48,
+    "generatedAt": "2025-12-08T11:52:04.502Z",
+    "format": "IELTS Writing Test Format"
+  },
+  "tests": [
+    {
+      "test_id": 1,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the results of a survey of adult education. The first chart shows the reasons why adults decide to study. The pie chart shows how people think the costs of adult education should be shared. Write a report for a university lecturer, describing the information shown below.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "There are many different types of music in the world today. Why do we need music? Is the traditional music of a country more important than the International music that is heard everywhere nowadays?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 2,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "process",
+        "question": "The diagram below shows how the Australian Bureau of Meteorology collects up-to-the-minute information on the weather in order to produce reliable forecasts.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Should wealthy nations be required to share their wealth among poorer nations by providing such things as food and education? Or is it the responsibility of the governments of poorer nations to look after their citizens themselves?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 3,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows the amount of money per week spent on fast foods in Britain. The graph shows the trends in consumption of fast foods.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "News editors decide what to broadcast on television and what to print in newspapers. What factors do you think influence these decisions? Do we become used to bad news? Would it be better if more good news was reported?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 4,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "map",
+        "question": "Chorleywood is a village near London whose population has increased steadily since the middle of the nineteenth century. The map below shows the development of the village. Write a report for a university lecturer describing the development of the village.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "The idea of having a single career is becoming an old fashioned one. The new fashion will be to have several careers or ways of earning money and further education will be something that continues throughout life.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 5,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the number of Japanese tourists travelling abroad between 1985 and 1995 and Australia\u2019s share of the Japanese tourist market. Write a report for a university lecturer describing the information shown below.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Popular events like the football World Cup and other international sporting occasions are essential in easing international tensions and releasing patriotic emotions in a safe way. To what extent do you agree or disagree with this opinion? You should use your own ideas, knowledge and experience and support your arguments with examples and relevant evidence.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 6,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows the amount spent on six consumer goods in four European countries. Write a report for a university lecturer describing the information shown below.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "When a country develops its technology, the traditional skills and ways of life die out. It is pointless to try and keep them alive. To what extent do you agree or disagree with this opinion?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 7,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the levels of participation in education and science in developing and industrialised countries in 1980 and 1990. Write a report for a university lecturer describing the information shown below.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In many countries children are engaged in some kind of paid work. Some people regard this as completely wrong, while others consider it as valuable work experience, important for learning and taking responsibility. What are your opinions on this?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 8,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows the unemployment rates in the US and Japan between March 1993 and March 1999. Write a report for a university lecturer describing the information shown below.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Improvements in health, education and trade are essential for the development of poorer nations. However, the governments of richer nations should take more responsibility for helping the poorer nations in such areas. To what extent do you agree or disagree with this opinion?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 9,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows the proportion of the population aged 65 and over between 1940 and 2040 in three different countries. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Universities should accept equal numbers of male and female students in every subject. To what extent do you agree or disagree? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 10,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the main reasons for study among students of different age groups and the amount of support they received from employers. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In some countries young people are encouraged to work or travel for a year between finishing high school and starting university studies. Discuss the advantages and disadvantages for young people who decide to do this.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 11,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "map",
+        "question": "The map below is of the town of Garlsdon. A new supermarket (S) is planned for the town. The map shows two possible sites for the supermarket. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people think that a sense of competition in children should be encouraged. Others believe that children who are taught to co-operate rather than compete become more useful adults. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 12,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The pie chart below shows the main reasons why agricultural land becomes less productive. The table shows how these causes affected three regions of the world during the 1990s. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people think that parents should teach children how to be good members of society. Others, however, believe that school is the place to learn this. Discuss both these views and give your own opinion. Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 13,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The three pie charts below show the changes in annual spending by a particular UK school in 1981, 1991 and 2001. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Nowadays the way many people interact with each other has changed because of technology. In what ways has technology affected the types of relationships people make? Has this become a positive or negative development? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 14,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "process",
+        "question": "The diagrams below show the stages and equipment used in the cement-making process, and how cement is used to produce concrete for building purposes. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Increasing the price of petrol is the best way to solve growing traffic and pollution problems. To what extent do you agree or disagree? What other measures do you think might be effective? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 15,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows the quantities of goods transported in the UK between 1974 and 2002 by four different modes of transport. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In some countries the average weight of people is increasing and their levels of health and fitness are decreasing. What do you think are the causes of these problems and what measures could be taken to solve them?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 16,
+      "difficulty": "easy",
+      "task_1": {
+        "type": "chart",
+        "question": "The first chart below shows how energy is used in an average Australian household. The second chart shows the greenhouse gas emissions which result from this energy use. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "It is important for children to learn the difference between right and wrong at an early age. Punishment is necessary to help them learn this distinction. To what extent do you agree or disagree with this opinion? What sort of punishment should parents and teachers be allowed to use to teach good behaviour to children? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 17,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "table",
+        "question": "The tables below give information about sales of Fairtrade*-labelled coffee and bananas in 1999 and 2004 in five European countries. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people think that all university students should study whatever they like. Others believe that they should only be allowed to study subjects that will be useful in the future, such as those related to science and technology.\n\nDiscuss both these views and give your own opinion.\n\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 18,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show what UK graduate and postgraduate students who did not go into full-time work did after leaving college in 2008.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Countries are becoming more and more similar because people are able to buy the same products anywhere in the world. Do you think this is a positive or negative development? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 19,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "process",
+        "question": "The diagrams below show the life cycle of a species of large fish called the salmon. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Many museums charge for admission while others are free. Do you think the advantages of charging people for admission to museums outweigh the disadvantages? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 20,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the percentage of water used for different purposes in six areas of the world. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Please ensure both tasks are included if you need a full extraction.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 21,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the proportions of British students at one university in England who were able to speak other languages in addition to English, in 2000 and 2010. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people claim that not enough of the waste from homes is recycled. They say that the only way to increase recycling is for governments to make it a legal requirement. To what extent do you think laws are needed to make people recycle more of their waste? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 22,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows average carbon dioxide (CO\u2082) emissions per person in the United Kingdom, Sweden, Italy and Portugal between 1967 and 2007. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people say that the only reason for learning a foreign language is in order to travel to or work in a foreign country. Others say that these are not the only reasons why someone should learn a foreign language. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 23,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "table",
+        "question": "The table below shows the numbers of visitors to Ashdown Museum during the year before and the year after it was refurbished. The charts show the result of surveys asking visitors how satisfied they were with their visit, during the same two periods. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Many governments think that economic progress is their most important goal. Some people, however, think that other types of progress are equally important for a country. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 24,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The bar chart below shows the percentage of Australian men and women in different age groups who did regular physical activity in 2010. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people believe that it is good to share as much information as possible in scientific research, business and the academic world. Others believe that some information is too important or too valuable to be shared freely. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 25,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "map",
+        "question": "The maps below show the centre of a small town called Islip as it is now, and plans for its development. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "At the present time, the population of some countries includes a relatively large number of young adults, compared with the number of older people. Do the advantages of this situation outweigh the disadvantages? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 26,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows how frequently people in the USA ate in fast food restaurants between 2003 and 2013. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In a number of countries, some people think it is necessary to spend large sums of money on constructing new railway lines for very fast trains between cities. Others believe the money should be spent on improving existing public transport. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 27,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "process",
+        "question": "The diagram below shows how geothermal energy is used to produce electricity. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people believe that allowing children to make their own choices on everyday matters (such as food, clothes and entertainment) is likely to result in a society of individuals who only think about their own wishes. Other people believe that it is important for children to make decisions about matters that affect them. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 28,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "map",
+        "question": "The two maps below show road access to a city hospital in 2007 and in 2010.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Living in a country where you have to speak a foreign language can cause serious social problems, as well as practical problems. To what extent do you agree or disagree with this statement? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 29,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people believe that nowadays we have too many choices.\nTo what extent do you agree or disagree with this statement?\nGive reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 30,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The bar chart below shows the top ten countries for the production and consumption of electricity in 2014. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people say History is one of the most important school subjects. Other people think that, in today's world, subjects like Science and Technology are more important than History. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 31,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "map",
+        "question": "The plans below show the layout of a university's sports centre now, and how it will look after redevelopment. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In spite of the advances made in agriculture, many people around the world still go hungry. Why is this the case? What can be done about this problem? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 32,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows the results of a survey about people\u2019s coffee and tea buying and drinking habits in five Australian cities. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In some countries, owning a home rather than renting one is very important for people. Why might this be the case? Do you think this is a positive or negative situation? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 33,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows the number of tourists visiting a particular Caribbean island between 2010 and 2017. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In the future, nobody will buy printed newspapers or books because they will be able to read everything they want online without paying.\n\nTo what extent do you agree or disagree with this statement? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 34,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "process",
+        "question": "The diagram below shows how instant noodles are manufactured. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people say that advertising is extremely successful at persuading us to buy things. Other people think that advertising is so common that we no longer pay attention to it. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 35,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below shows what Anthropology graduates from one university did after finishing their undergraduate degree course. The table shows the salaries of the anthropologists in work after five years.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In some cultures, children are often told that they can achieve anything if they try hard enough. What are the advantages and disadvantages of giving children this message? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 36,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The charts below show the changes in ownership of electrical appliances and amount of time spent doing housework in households in one country between 1920 and 2019.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In some countries, more and more people are becoming interested in finding out about the history of the house or building they live in. What are the reasons for this? How can people research this? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 37,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "process",
+        "question": "The diagram below shows the manufacturing process for making sugar from sugar cane. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In their advertising, businesses nowadays usually emphasise that their products are new in some way. Why is this? Do you think it is a positive or negative development?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 38,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "map",
+        "question": "The plans below show the site of an airport now and how it will look after redevelopment next year. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Many manufactured food and drink products contain high levels of sugar, which causes many health problems. Sugary products should be made more expensive to encourage people to consume less sugar. Do you agree or disagree? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 39,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "process",
+        "question": "The diagram below shows the process for recycling plastic bottles. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "In the future all cars, buses and trucks will be driverless. The only people travelling inside these vehicles will be passengers. Do you think the advantages of driverless vehicles outweigh the disadvantages? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 40,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "map",
+        "question": "The maps below show an industrial area in the town of Norbiton, and planned future development of the site. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "It is important for people to take risks, both in their professional lives and their personal lives. Do you think the advantages of taking risks outweigh the disadvantages? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 41,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The table and charts below give information on the police budget for 2017 and 2018 in one area of Britain. The table shows where the money came from and the charts show how it was distributed. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some children spend hours every day on their smartphones. Why is this the case? Do you think this is a positive or a negative development?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 42,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The chart below gives information about how families in one country spent their weekly income in 1968 and in 2018. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people believe that professionals, such as doctors and engineers, should be required to work in the country where they did their training. Others believe they should be free to work in another country if they wish. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 43,
+      "difficulty": "hard",
+      "task_1": {
+        "type": "chart",
+        "question": "The graph below shows the number of shops that closed and the number of new shops that opened in one country between 2011 and 2018.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Nowadays, a growing number of people with health problems are trying alternative medicines and treatments instead of visiting their usual doctor. Do you think this is a positive or a negative development? Give reasons for your answer and include any relevant examples from your own knowledge or experience.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 44,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "pie_chart",
+        "question": "The charts below show the average percentages in typical meals of three types of nutrients, all of which may be unhealthy if eaten too much. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people believe that it is best to accept a bad situation, such as an unsatisfactory job or shortage of money. Others argue that it is better to try and improve such situations. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 45,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "bar_chart_table",
+        "question": "The chart below shows the value of one country's exports in various categories during 2015 and 2016. The table shows the percentage change in each category of exports in 2016 compared with 2015. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people say that the main environmental problem of our time is the loss of particular species of plants and animals. Others say that there are more important environmental problems. Discuss both these views and give your own opinion.",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 46,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "process_diagram",
+        "question": "The diagram below shows how electricity is generated in a hydroelectric power station. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Some people say that music is a good way of bringing people of different cultures and ages together. To what extent do you agree or disagree with this opinion?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 47,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "map",
+        "question": "The plans below show a public park when it first opened in 1920 and the same park today. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Nowadays many people choose to be self-employed, rather than to work for a company or organisation. Why might this be the case? What could be the disadvantages of being self-employed?",
+        "word_limit": 250
+      }
+    },
+    {
+      "test_id": 48,
+      "difficulty": "medium",
+      "task_1": {
+        "type": "table",
+        "question": "The table below gives information about the underground railway systems in six cities. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+        "word_limit": 150
+      },
+      "task_2": {
+        "question": "Research indicates that the characteristics we are born with have much more influence on our personality and development than any experiences we may have in our life. Which do you consider to be the major influence?",
+        "word_limit": 250
+      }
+    }
+  ]
+}

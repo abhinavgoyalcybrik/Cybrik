@@ -1,0 +1,194 @@
+{
+  "test_id": "14LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Flanders Conference Hotel",
+      "questions": [
+        { "q": 1, "type": "text", "question": "The ____ room for talks (projector and ____ available)" },
+        { "q": 2, "type": "text", "question": "area for coffee and ____ throughout" },
+        { "q": 3, "type": "text", "question": "standard buffet lunch costs $ ____ per head" },
+        { "q": 4, "type": "text", "question": "Rooms will cost $ ____ including breakfast" },
+        { "q": 5, "type": "text", "question": "The hotel also has a spa and rooftop ____" },
+        { "q": 6, "type": "text", "question": "There is a free shuttle service to the ____" },
+        { "q": 7, "type": "text", "question": "Location: Willy Street (quite near the ____)" },
+        { "q": 8, "type": "text", "question": "near to restaurants and many ____" },
+        { "q": 9, "type": "text", "question": "weekend beginning February ____" },
+        { "q": 10, "type": "text", "question": "Total cost of package per person: $ ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–20: Choose the correct letter A–G.",
+      "title": "Volunteering",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "Which TWO activities that volunteers do are mentioned?",
+          "options": [
+            "A decorating",
+            "B cleaning",
+            "C delivering meals",
+            "D shopping",
+            "E childcare"
+          ]
+        },
+        {
+          "q": "13-14",
+          "type": "mcq_multi",
+          "question": "Which TWO ways that volunteers can benefit from volunteering are mentioned?",
+          "options": [
+            "A learning how to be part of a team",
+            "B having a sense of purpose",
+            "C realising how lucky they are",
+            "D improved ability at time management",
+            "E boosting their employment prospects"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "match",
+          "question": "Habib",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 16,
+          "type": "match",
+          "question": "Consuela",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 17,
+          "type": "match",
+          "question": "Minh",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 18,
+          "type": "match",
+          "question": "Tanya",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 19,
+          "type": "match",
+          "question": "Alexei",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 20,
+          "type": "match",
+          "question": "Juba",
+          "options": ["A","B","C","D","E","F","G"]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Note Completion + Matching",
+      "instructions": "Questions 21–26: Write ONE WORD AND/OR A NUMBER. Questions 27–30: Choose FOUR letters A–F.",
+      "title": "Background on school marching band",
+      "questions": [
+        { "q": 21, "type": "text", "question": "It consists of around ____ students" },
+        { "q": 22, "type": "text", "question": "It is due to play in a ____ band competition" },
+        { "q": 23, "type": "text", "question": "It has been invited to play in the town’s ____" },
+        { "q": 24, "type": "text", "question": "They have listened to a talk by a ____" },
+        { "q": 25, "type": "text", "question": "Joe will discuss a ____ with the band" },
+        { "q": 26, "type": "text", "question": "Joe hopes the band will attend a ____ next month" },
+
+        {
+          "q": 27,
+          "type": "match",
+          "question": "flautist",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 28,
+          "type": "match",
+          "question": "trumpeter",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 29,
+          "type": "match",
+          "question": "trombonist",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 30,
+          "type": "match",
+          "question": "percussionist",
+          "options": ["A","B","C","D","E","F"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Concerts in university arts festival",
+      "questions": [
+        { "q": 31, "type": "text", "question": "studied piano and ____ before turning to composition" },
+        { "q": 32, "type": "text", "question": "her music reflects a great deal of ____" },
+        { "q": 33, "type": "text", "question": "her music is very expressive and also ____" },
+        { "q": 34, "type": "text", "question": "festival will include her ____ called The Oresteia" },
+        { "q": 35, "type": "text", "question": "Lim described the sounds in The Oresteia as ____" },
+        { "q": 36, "type": "text", "question": "The Tower of Remoteness is performed by piano and ____" },
+        { "q": 37, "type": "text", "question": "celebrates Australia’s cultural ____" },
+        { "q": 38, "type": "text", "question": "worked in Sydney as a painter and composer before studying music at ____" },
+        { "q": 39, "type": "text", "question": "became well known as composer of music for ____" },
+        { "q": 40, "type": "text", "question": "includes pieces heard at the opening ceremony of the ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Teska"],
+    "2": ["microphone"],
+    "3": ["45"],
+    "4": ["135"],
+    "5": ["pool"],
+    "6": ["airport"],
+    "7": ["club"],
+    "8": ["shops"],
+    "9": ["4th"],
+    "10": ["345"],
+
+    "11": ["B", "C"],
+    "12": ["B", "C"],
+    "13": ["A", "E"],
+    "14": ["A", "E"],
+    "15": ["F"],
+    "16": ["A"],
+    "17": ["E"],
+    "18": ["G"],
+    "19": ["D"],
+    "20": ["B"],
+
+    "21": ["50"],
+    "22": ["regional"],
+    "23": ["carnival"],
+    "24": ["drummer"],
+    "25": ["film"],
+    "26": ["parade"],
+    "27": ["B"],
+    "28": ["E"],
+    "29": ["F"],
+    "30": ["A"],
+
+    "31": ["violin"],
+    "32": ["energy"],
+    "33": ["complex"],
+    "34": ["opera"],
+    "35": ["disturbing"],
+    "36": ["clarinet"],
+    "37": ["diversity"],
+    "38": ["physics"],
+    "39": ["dance"],
+    "40": ["Olympics"]
+  }
+}

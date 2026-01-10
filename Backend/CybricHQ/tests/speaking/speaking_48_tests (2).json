@@ -1,0 +1,2015 @@
+{
+  "metadata": {
+    "totalTests": 48,
+    "generatedAt": "2025-12-08T08:30:58.372Z",
+    "format": "IELTS Speaking Test Format"
+  },
+  "tests": [
+    {
+      "test_id": 1,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "University Clubs and Associations",
+        "questions": [
+          "What types of clubs are available at most universities?",
+          "How can joining a club benefit a student during their university years?",
+          "Are there any costs associated with joining university clubs?",
+          "How often do university clubs typically meet?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe something related to university clubs and associations",
+        "prompts": [
+          "what types of clubs are available",
+          "when the clubs have their meetings",
+          "the benefits of joining these clubs",
+          "any costs associated with these clubs"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "University Clubs and Associations",
+            "questions": [
+              "How can university clubs help international students integrate?",
+              "What challenges might students face in joining a club?",
+              "How can universities encourage more students to participate in clubs?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 2,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Assistance and extensions",
+        "questions": [
+          "Have you ever needed an extension for a project before?",
+          "How do you usually manage your time for assignments?",
+          "Do you think it's fair to ask for more time to complete a task?",
+          "What strategies do you use to find necessary resources for your assignments?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a time when you needed an extension for a project or assignment.",
+        "prompts": [
+          "what it is",
+          "when you experienced it",
+          "why it was important",
+          "how it made you feel"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Balancing academic responsibilities",
+            "questions": [
+              "What are the common challenges students face with deadlines in academic settings?",
+              "How important is time management in achieving academic success?",
+              "Do you think schools and universities should be more flexible with deadlines? Why or why not?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 3,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Public Transport",
+        "questions": [
+          "What kinds of public transport are popular in your country?",
+          "How often do you use public transport?",
+          "What do you think could improve public transport in your area?",
+          "Is public transport expensive in your country?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a public holiday in your country",
+        "prompts": [
+          "the name of the public holiday",
+          "the significance of the holiday",
+          "availability of services on the day (banks/shops/cinemas)",
+          "things for visitors to do",
+          "how you plan to spend the day"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Public Holidays and Culture",
+            "questions": [
+              "How do public holidays in your country influence cultural traditions?",
+              "What are the economic impacts of public holidays?",
+              "In what ways do you think public holidays should be celebrated differently?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 4,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Local Tourist Spots",
+        "questions": [
+          "What are some popular tourist spots in your area?",
+          "Have you ever visited a local tourist spot?",
+          "What do you think attracts tourists to these places?",
+          "What local tourist spots would you recommend to a visitor?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an excursion you are considering joining",
+        "prompts": [
+          "what it is",
+          "when you experienced it",
+          "why it was important",
+          "how it made you feel"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Tourism and Excursions",
+            "questions": [
+              "What are the benefits of organizing excursions for students?",
+              "How do local excursions compare to international travel?",
+              "In what ways can excursions impact local communities?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 5,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Family",
+        "questions": [
+          "Do you have a large family or a small family?",
+          "Can you tell me something about them?",
+          "How much time do you manage to spend with members of your family?",
+          "What sorts of things do you like to do together?",
+          "Did/Do you get on well with your family? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a teacher who has influenced you in your education.",
+        "prompts": [
+          "where you met them",
+          "what subject they taught",
+          "what was special about them",
+          "and explain why this person influenced you so much"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Developments in education",
+            "questions": [
+              "How has education changed in your country in the last 10 years?",
+              "What changes do you foresee in the next 50 years?"
+            ]
+          },
+          {
+            "topic": "A national education system",
+            "questions": [
+              "How do the expectations of today’s school leavers compare with those of the previous generation?",
+              "What role do you think extracurricular activities play in education?"
+            ]
+          },
+          {
+            "topic": "Different styles/methods of teaching and learning",
+            "questions": [
+              "What method of learning works best for you?",
+              "How beneficial do you think it is to group students according to their level of ability?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 6,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Festivals",
+        "questions": [
+          "Tell me about the most important festival in your country.",
+          "What special food and activities are connected with this festival?",
+          "What do you most enjoy about it?",
+          "Do you think festivals are important for a country? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a film or a TV programme which has made a strong impression on you.",
+        "prompts": [
+          "what kind of film or TV programme it was, e.g. comedy",
+          "when you saw the film or TV programme",
+          "what the film or TV programme was about",
+          "and explain why this film or TV programme made such an impression on you"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "People’s cinema-going habits nowadays",
+            "questions": [
+              "Do you think the cinema has increased or decreased in popularity in recent years?",
+              "In your opinion, will this trend continue into the future?"
+            ]
+          },
+          {
+            "topic": "Making a film or TV drama of real/fictional events",
+            "questions": [
+              "What are the advantages and disadvantages of making films of real-life events?",
+              "How important do you think it is for a film-maker to remain true to the original story?"
+            ]
+          },
+          {
+            "topic": "Censorship and the freedom of the film-maker/TV producer",
+            "questions": [
+              "Should films and television be censored or should we be free to choose what we see?",
+              "How do you think censorship laws will change in the next 20 years?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 7,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Visitors",
+        "questions": [
+          "What would you suggest a visitor should see and do in your country?",
+          "Are there any traditional arts or music you would recommend?",
+          "Tell me about the kind of foreign visitors or tourists who go to your country.",
+          "In what ways has tourism changed your country?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a memorable event in your life.",
+        "prompts": [
+          "when the event took place",
+          "where the event took place",
+          "what happened exactly",
+          "explain why this event was memorable for you"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "The role of ceremony in our lives",
+            "questions": [
+              "How important are ceremonies in our lives?",
+              "Do you see the role of private and public ceremonies changing in the future?"
+            ]
+          },
+          {
+            "topic": "Attitudes to marriage in your country",
+            "questions": [
+              "Have attitudes to marriage changed in recent years?",
+              "In what ways do men and women feel differently about marriage, in your opinion?"
+            ]
+          },
+          {
+            "topic": "Events of national/global significance",
+            "questions": [
+              "What sort of national events make headlines in your country?",
+              "Does the media in your country pay more attention to global or national events?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 8,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Daily Routine",
+        "questions": [
+          "What would you like to change in your daily routine?",
+          "Are all your days the same?",
+          "Tell me about your typical weekday and your typical weekend.",
+          "What is the balance of work/study and free time in your normal day?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe something you own which is very important to you.",
+        "prompts": [
+          "where you got it from",
+          "how long you have had it",
+          "what you use it for",
+          "and explain why it is so important to you"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "How values can change",
+            "questions": [
+              "What kind of possessions show status in your country?",
+              "Do you think it was different for your grandparents?"
+            ]
+          },
+          {
+            "topic": "The consumer society",
+            "questions": [
+              "Modern society is often called ‘materialistic’. Why do you think this is?",
+              "Do you think consumerism is a positive or a negative development?"
+            ]
+          },
+          {
+            "topic": "The consumer market",
+            "questions": [
+              "What is the role of advertising?",
+              "How do you think the Internet will affect buying patterns in the future?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 9,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Your country",
+        "questions": [
+          "Which part of your country do most people live in?",
+          "Tell me about the main industries there.",
+          "How easy is it to travel around your country?",
+          "Has your country changed much since you were a child?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a well-known person you like or admire.",
+        "prompts": [
+          "who this person is",
+          "what this person has done",
+          "why this person is well known",
+          "explain why you admire this person"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Famous people in your country",
+            "questions": [
+              "What kind of people become famous people these days?",
+              "Is this different from the kind of achievement that made people famous in the past? In what way?",
+              "How do you think people will become famous in the future?"
+            ]
+          },
+          {
+            "topic": "Being in the public eye",
+            "questions": [
+              "What are the good things about being famous? Are there any disadvantages?",
+              "How does the media in your country treat famous people?",
+              "Why do you think ordinary people are interested in the lives of famous people?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 10,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Colour",
+        "questions": [
+          "What's your favourite colour? [Why?]",
+          "Do you like the same colours now as you did when you were younger? [Why/Why not?]",
+          "What can you learn about a person from the colours they like?",
+          "Do any colours have a special meaning in your culture?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a song or a piece of music you like.",
+        "prompts": [
+          "what the song or music is",
+          "what kind of song or music it is",
+          "where you first heard it",
+          "and explain why you like it"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Music and young people",
+            "questions": [
+              "What kinds of music are popular with young people in your culture?",
+              "What do you think influences a young person's taste in music?",
+              "How has technology affected the kinds of music popular with young people?"
+            ]
+          },
+          {
+            "topic": "Music and society",
+            "questions": [
+              "Tell me about any traditional music in your culture.",
+              "How important is it for a culture to have musical traditions?",
+              "Why do you think countries have national anthems or songs?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 11,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Entertainment",
+        "questions": [
+          "Do you prefer relaxing at home or going out in the evening? [Why?]",
+          "When you go out for an evening, what do you like to do?",
+          "How popular is this with other people in your country?",
+          "Is there any kind of entertainment you do not like? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe one of your friends.",
+        "prompts": [
+          "how you met",
+          "how long you have known each other",
+          "how you spend time together",
+          "and explain why you like this person"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Qualities of Friends",
+            "questions": [
+              "What do you think are the most important qualities for friends to have?",
+              "Which are more important to people, their family or their friends? Why?",
+              "What do you think causes friendships to break up?"
+            ]
+          },
+          {
+            "topic": "Other Relationships",
+            "questions": [
+              "What other types of relationship, apart from friends or family, are important in people's lives today?",
+              "Have relationships with neighbours where you live changed in recent years? How?",
+              "How important do you think it is for a person to spend some time alone? Why/Why not?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 12,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Clothes",
+        "questions": [
+          "How important are clothes and fashion to you? [Why/Why not?]",
+          "What kind of clothes do you dislike? [Why?]",
+          "How different are the clothes you wear now from those you wore 10 years ago?",
+          "What do you think the clothes we wear say about us?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a festival that is important in your country.",
+        "prompts": [
+          "when the festival occurs",
+          "what you did during it",
+          "what you like or dislike about it",
+          "explain why this festival is important"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Purpose of festivals and celebrations",
+            "questions": [
+              "Why do you think festivals are important events in the working year?",
+              "Would you agree that the original significance of festivals is often lost today? Is it good or bad, do you think?",
+              "Do you think that new festivals will be introduced in the future? What kind?"
+            ]
+          },
+          {
+            "topic": "Festivals and the media",
+            "questions": [
+              "What role does the media play in festivals, do you think?",
+              "Do you think it's good or bad to watch festivals on TV? Why?",
+              "How may globalisation affect different festivals around the world?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 13,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Neighbours",
+        "questions": [
+          "How well do you know the people who live next door to you?",
+          "How often do you see them? [Why/Why not?]",
+          "What kinds of problem do people sometimes have with their neighbours?",
+          "How do you think neighbours can help each other?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a time when you were asked to give your opinion in a questionnaire or survey",
+        "prompts": [
+          "what the questionnaire/survey was about",
+          "why you were asked to give your opinions",
+          "what opinions you gave",
+          "and explain how you felt about giving your opinions in this questionnaire/survey"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Asking questions",
+            "questions": [
+              "What kinds of organisation want to find out about people’s opinions?",
+              "Do you think that questionnaires or surveys are good ways of finding out people’s opinions?",
+              "What reasons might people have for not wanting to give their opinions?"
+            ]
+          },
+          {
+            "topic": "Questionnaires in school",
+            "questions": [
+              "Do you think it would be a good idea for schools to ask students their opinions about lessons?",
+              "What would the advantages for schools be if they asked students their opinions?",
+              "Would there be any disadvantages in asking students’ opinions?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 14,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Newspapers and Magazines",
+        "questions": [
+          "Which magazines and newspapers do you read? [Why?]",
+          "What kinds of article are you most interested in? [Why?]",
+          "Have you ever read a newspaper or magazine in a foreign language? [When/Why?]",
+          "Do you think reading a newspaper or magazine in a foreign language is a good way to learn the language? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a restaurant that you enjoyed going to.",
+        "prompts": [
+          "where the restaurant was",
+          "why you chose this restaurant",
+          "what type of food you ate in this restaurant",
+          "explain why you enjoyed eating in this restaurant"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Restaurants",
+            "questions": [
+              "Why do you think people go to restaurants when they want to celebrate something?",
+              "Which are more popular in your country: fast food restaurants or traditional restaurants? Why do you think that is?",
+              "Some people say that food in an expensive restaurant is always better than food in a cheap restaurant – would you agree?"
+            ]
+          },
+          {
+            "topic": "Producing food",
+            "questions": [
+              "Do you think there will be a greater choice of food available in shops in the future, or will there be less choice?",
+              "What effects has modern technology had on the way food is produced?",
+              "How important is it for a country to be able to grow all the food it needs, without importing any from other countries?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 15,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Flowers",
+        "questions": [
+          "Do you like to have flowers in your home? [Why/Why not?]",
+          "Where would you go to buy flowers? [Why?]",
+          "On what occasions would you give someone flowers?",
+          "Are flowers important in your culture? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a meeting you remember going to at work, college or school.",
+        "prompts": [
+          "when and where the meeting was held",
+          "who was at the meeting",
+          "what the people at the meeting talked about",
+          "explain why you remember going to this meeting"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Going to meetings",
+            "questions": [
+              "What are the different types of meeting that people often go to?",
+              "Some people say that no-one likes to go to meetings – what do you think?",
+              "Why can it sometimes be important to go to meetings?"
+            ]
+          },
+          {
+            "topic": "International meetings",
+            "questions": [
+              "Why do you think world leaders often have meetings together?",
+              "What possible difficulties might be involved in organising meetings between world leaders?",
+              "Do you think that meetings between international leaders will become more frequent in the future? Or will there be less need for world leaders to meet?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 16,
+      "difficulty": "easy",
+      "part_1": {
+        "topic": "Television",
+        "questions": [
+          "How often do you watch television? [Why/Why not?]",
+          "Which television channel do you usually watch? [Why?]",
+          "Do you enjoy the advertisements on television? [Why/Why not?]",
+          "Do you think most programs on television are good? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a friend of your family you remember from your childhood.",
+        "prompts": [
+          "who the person was",
+          "how your family knew this person",
+          "how often this person visited your family",
+          "explain why you remember this person"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Friendship",
+            "questions": [
+              "What do you think makes someone a good friend to a whole family?",
+              "Do you think we meet different kinds of friends at different stages of our lives? In what ways are these types of friends different?",
+              "How easy is it to make friends with people from a different age group?"
+            ]
+          },
+          {
+            "topic": "Influence of Friends",
+            "questions": [
+              "Do you think it is possible to be friends with someone if you never meet them in person? Is this real friendship?",
+              "What kind of influence can friends have on our lives?",
+              "How important would you say it is to have friends from different cultures?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 17,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Weekends",
+        "questions": [
+          "How do you usually spend your weekends?",
+          "Which is your favourite part of the weekend?",
+          "Do you think your weekends are long enough?",
+          "How important do you think it is to have free time at the weekends?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe someone you know who does something well.",
+        "prompts": [
+          "who this person is",
+          "how you know this person",
+          "what they do well",
+          "explain why you think this person is so good at doing this"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Skills and abilities",
+            "questions": [
+              "What skills and abilities do people most want to have today? Why?",
+              "Which skills should children learn at school? Are there any skills which they should learn at home? What are they?",
+              "Which skills do you think will be important in the future? Why?"
+            ]
+          },
+          {
+            "topic": "Salaries for skilled people",
+            "questions": [
+              "Which kinds of jobs have the highest salaries in your country? Why is this?",
+              "Are there any other jobs that you think should have high salaries? Why do you think that?",
+              "Some people say it would be better for society if everyone got the same salary. What do you think about that? Why?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 18,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Music",
+        "questions": [
+          "What types of music do you like to listen to? [Why?]",
+          "At what times of day do you like to listen to music? [Why?]",
+          "Did you learn to play a musical instrument when you were a child? [Why/Why not?]",
+          "Do you think all children should learn to play a musical instrument? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a shop near where you live that you sometimes use.",
+        "prompts": [
+          "what sorts of product or service it sells",
+          "what the shop looks like",
+          "where it is located",
+          "and explain why you use this shop."
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Local business",
+            "questions": [
+              "What types of local business are there in your neighbourhood? Are there any restaurants, shops or dentists for example?",
+              "Do you think local businesses are important for a neighbourhood? In what way?",
+              "How do large shopping malls and commercial centres affect small local businesses? Why do you think that is?"
+            ]
+          },
+          {
+            "topic": "People and business",
+            "questions": [
+              "Why do some people want to start their own business?",
+              "Are there any disadvantages to running a business? Which is the most serious?",
+              "What are the most important qualities that a good business person needs? Why is that?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 19,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Travel",
+        "questions": [
+          "Do you enjoy travelling? [Why/Why not?]",
+          "Have you done much travelling? [Why/Why not?]",
+          "Do you think it's better to travel alone or with other people? [Why?]",
+          "Where would you like to travel in the future? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a child that you know.",
+        "prompts": [
+          "who this child is and how often you see him or her",
+          "how old this child is",
+          "what he or she is like",
+          "and explain what you feel about this child"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Relationships between parents and children",
+            "questions": [
+              "How much time do children spend with their parents in your country? Do you think that is enough?",
+              "How important do you think spending time together is for the relationships between parents and children? Why?",
+              "Have relationships between parents and children changed in recent years? Why do you think that is?"
+            ]
+          },
+          {
+            "topic": "Children's free-time activities",
+            "questions": [
+              "What are the most popular free-time activities with children today?",
+              "Do you think the free-time activities children do today are good for their health? Why is that?",
+              "How do you think children's activities will change in the future? Will this be a positive change?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 20,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "School",
+        "questions": [
+          "Did you go to secondary/high school near to where you lived? [Why/Why not?]",
+          "What did you like about your secondary/high school? [Why?]",
+          "Tell me about anything you didn't like at your school.",
+          "How do you think your school could be improved? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe something you don’t have now but would really like to own in the future.",
+        "prompts": [
+          "what this thing is",
+          "how long you have wanted to own it",
+          "where you first saw it",
+          "explain why you would like to own it"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Owning things",
+            "questions": [
+              "What types of things do young people in your country most want to own today? Why is this?",
+              "Why do some people feel they need to own things?",
+              "Do you think that owning lots of things makes people happy? Why?"
+            ]
+          },
+          {
+            "topic": "Salaries for skilled people",
+            "questions": [
+              "Do you think television and films can make people want to get new possessions? Why do they have this effect?",
+              "Are there any benefits to society of people wanting to get new possessions? Why do you think this is?",
+              "Do you think people will consider that having lots of possessions is a sign of success in the future? Why?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 21,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Food and cooking",
+        "questions": [
+          "What sorts of food do you like eating most? [Why?]",
+          "Who normally does the cooking in your home? [Why/Why not?]",
+          "Do you watch cookery programmes on TV? [Why/Why not?]",
+          "In general, do you prefer eating out or eating at home? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a house/apartment that someone you know lives in.",
+        "prompts": [
+          "whose house/apartment this is",
+          "where the house/apartment is",
+          "what it looks like inside",
+          "and explain what you like or dislike about this person's house/apartment."
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Different types of home",
+            "questions": [
+              "What kinds of home are most popular in your country? Why is this?",
+              "What do you think are the advantages of living in a house rather than an apartment?",
+              "Do you think that everyone would like to live in a larger home? Why is that?"
+            ]
+          },
+          {
+            "topic": "Finding a place to live",
+            "questions": [
+              "How easy is it to find a place to live in your country?",
+              "Do you think it’s better to rent or to buy a place to live in? Why?",
+              "Do you agree that there is a right age for young adults to stop living with their parents? Why is that?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 22,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Friends",
+        "questions": [
+          "How often do you go out with friends? [Why/Why not?]",
+          "Tell me about your best friend at school.",
+          "How friendly are you with your neighbours? [Why/Why not?]",
+          "Which is more important to you, friends or family? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a writer you would like to meet.",
+        "prompts": [
+          "who the writer is",
+          "what you know about this writer already",
+          "what you would like to find out about him/her",
+          "explain why you would like to meet this writer"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Reading and children",
+            "questions": [
+              "What kinds of book are most popular with children in your country? Why do you think that is?",
+              "Why do you think some children do not read books very often?",
+              "How do you think children can be encouraged to read more?"
+            ]
+          },
+          {
+            "topic": "Reading for different purposes",
+            "questions": [
+              "Are there any occasions when reading at speed is a useful skill to have? What are they?",
+              "Are there any jobs where people need to read a lot? What are they?",
+              "Do you think that reading novels is more interesting than reading factual books? Why is that?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 23,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Photographs",
+        "questions": [
+          "What type of photos do you like taking? [Why/Why not?]",
+          "What do you do with photos you take? [Why/Why not?]",
+          "When you visit other places, do you take photos or buy postcards? [Why/Why not?]",
+          "Do you like people taking photos of you? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a day when you thought the weather was perfect.",
+        "prompts": [
+          "where you were on this day",
+          "what the weather was like on this day",
+          "what you did during the day",
+          "why you thought the weather was perfect on this day"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Types of weather",
+            "questions": [
+              "What types of weather do people in your country dislike most? Why is that?",
+              "What jobs can be affected by different weather conditions? Why?",
+              "Are there any important festivals in your country that celebrate a season or type of weather?"
+            ]
+          },
+          {
+            "topic": "Weather forecasts",
+            "questions": [
+              "How important do you think it is for everyone to check what the next day's weather will be? Why?",
+              "What is the best way to get accurate information about the weather?",
+              "How easy or difficult is it to predict the weather in your country? Why is that?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 24,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Names",
+        "questions": [
+          "How did your parents choose your name(s)?",
+          "Does your name have any special meaning?",
+          "Is your name common or unusual in your country?",
+          "If you could change your name, would you? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a TV documentary you watched that was particularly interesting.",
+        "prompts": [
+          "what the documentary was about",
+          "why you decided to watch it",
+          "what you learnt during the documentary",
+          "explain why the TV documentary was particularly interesting"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Different types of TV programmes",
+            "questions": [
+              "What are the most popular kinds of TV programmes in your country? Why is this?",
+              "Do you think there are too many game shows on TV nowadays? Why?",
+              "Do you think TV is the main way for people to get the news in your country? What other ways are there?"
+            ]
+          },
+          {
+            "topic": "TV advertising",
+            "questions": [
+              "What types of products are advertised most often on TV?",
+              "Do you think that people pay attention to adverts on TV? Why do you think that is?",
+              "How important are regulations on TV advertising?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 25,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Health",
+        "questions": [
+          "Is it important to you to eat healthy food? [Why?/Why not?]",
+          "If you catch a cold, what do you do to help you feel better? [Why?]",
+          "Do you pay attention to public information about health? [Why?/Why not?]",
+          "What could you do to have a healthier lifestyle?"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an occasion when you had to wait a long time for someone or something to arrive.",
+        "prompts": [
+          "who or what you were waiting for",
+          "how long you had to wait",
+          "why you had to wait a long time",
+          "explain how you felt about waiting a long time"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Arriving early",
+            "questions": [
+              "In what kinds of situations should people always arrive early?",
+              "How important it is to arrive early in your country?",
+              "How can modern technology help people to arrive early?"
+            ]
+          },
+          {
+            "topic": "Being patient",
+            "questions": [
+              "What kinds of jobs require the most patience?",
+              "Is it always better to be patient in work (or studies)?",
+              "Do you agree or disagree that the older people are, the more patient they are?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 26,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Songs and singing",
+        "questions": [
+          "Did you enjoy singing when you were younger? [Why?/Why not?]",
+          "How often do you sing now? [Why?]",
+          "Do you have a favourite song you like listening to? [Why?/Why not?]",
+          "How important is singing in your culture? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a film/movie actor from your country who is very popular.",
+        "prompts": [
+          "who this actor is",
+          "what kinds of films/movies he/she acts in",
+          "what you know about this actor's life",
+          "explain why this actor is so popular"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Watching films/movies",
+            "questions": [
+              "What are the most popular types of films in your country?",
+              "What is the difference between watching a film in the cinema and watching a film at home?",
+              "Do you think cinemas will close in the future?"
+            ]
+          },
+          {
+            "topic": "Theatre",
+            "questions": [
+              "How important is the theatre in your country's history?",
+              "How strong a tradition is it today in your country to go to the theatre?",
+              "Do you think the theatre should be run as a business or as a public service?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 27,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Clothes",
+        "questions": [
+          "Where do you buy most of your clothes? [Why?]",
+          "How often do you buy new clothes for yourself? [Why?]",
+          "How do you decide which clothes to buy? [Why?]",
+          "Have the kinds of clothes you like changed in recent years? [Why?/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an interesting discussion you had about how you spend your money",
+        "prompts": [
+          "who you had the discussion with",
+          "why you discussed this topic",
+          "what the result of the discussion was",
+          "explain why this discussion was interesting for you"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Money and young people",
+            "questions": [
+              "Why do some parents give their children money to spend each week?",
+              "Do you agree that schools should teach children how to manage money?",
+              "Do you think it is a good idea for students to earn money while studying?"
+            ]
+          },
+          {
+            "topic": "Money and society",
+            "questions": [
+              "Do you think it is true that in today's society money cannot buy happiness?",
+              "What disadvantages are there in a society where the gap between rich and poor is very large?",
+              "Do you think richer countries have a responsibility to help poorer countries?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 28,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Art",
+        "questions": [
+          "Did you enjoy doing art lessons when you were a child? [Why?/Why not?]",
+          "Do you ever draw or paint pictures now? [Why?/Why not?]",
+          "When was the last time you went to an art gallery or exhibition? [Why?]",
+          "What kind of pictures do you like having in your home? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a time when you visited a friend or family member at their workplace.",
+        "prompts": [
+          "who you visited",
+          "where this person worked",
+          "why you visited this person’s workplace",
+          "explain how you felt about visiting this person’s workplace"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Different kinds of workplaces",
+            "questions": [
+              "What things make an office comfortable to work in?",
+              "Why do some people prefer to work outdoors?",
+              "Do you agree that the building people work in is more important than the colleagues they work with?"
+            ]
+          },
+          {
+            "topic": "The importance of work",
+            "questions": [
+              "What would life be like if people didn’t have to work?",
+              "Are all jobs of equal importance?",
+              "Why do some people become workaholics?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 29,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Television programmes",
+        "questions": [
+          "Where do you usually watch TV programmes/shows? [Why?/Why not?]",
+          "What’s your favourite TV programme/show? [Why?]",
+          "Are there any programmes/shows you don’t like watching? [Why?/Why not?]",
+          "Do you think you will watch more TV or fewer TV programmes/shows in the future? [Why?/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe someone you know who has started a business.",
+        "prompts": [
+          "who this person is",
+          "what work this person does",
+          "why this person decided to start a business",
+          "explain whether you would like to do the same kind of work as this person"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Choosing work",
+            "questions": [
+              "What kinds of jobs do young people not want to do in your country?",
+              "Who is best at advising young people about choosing a job: teachers or parents?",
+              "Is money always the most important thing when choosing a job?"
+            ]
+          },
+          {
+            "topic": "Work–Life balance",
+            "questions": [
+              "Do you agree that many people nowadays are under pressure to work longer hours and take less holiday?",
+              "What is the impact on society of people having a poor work–life balance?",
+              "Could you recommend some effective strategies for governments and employers to ensure people have a good work–life balance?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 30,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Age",
+        "questions": [
+          "Are you happy to be the age you are now? [Why/Why not?]",
+          "When you were a child, did you think a lot about your future? [Why/Why not?]",
+          "Do you think you have changed as you have got older? [Why/Why not?]",
+          "What will be different about your life in the future? [Why]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a time when you started using a new technological device",
+        "prompts": [
+          "what device you started using",
+          "why you started using this device",
+          "how easy or difficult it was to use",
+          "explain how helpful this device was to you"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Technology and education",
+            "questions": [
+              "What is the best age for children to start computer lessons?",
+              "Do you think that schools should use more technology to help children learn?",
+              "Do you agree or disagree that computers will replace teachers one day?"
+            ]
+          },
+          {
+            "topic": "Technology and society",
+            "questions": [
+              "How much has technology improved how we communicate with each other?",
+              "Do you agree that there are still many more major technological innovations to be made?",
+              "Could you suggest some reasons why some people are deciding to reduce their use of technology?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 31,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Money",
+        "questions": [
+          "When you go shopping, do you prefer to pay for things in cash or by card? [Why?]",
+          "Do you ever save money to buy special things? [Why/Why not?]",
+          "Would you ever take a job which had low pay? [Why/Why not?]",
+          "Would winning a lot of money make a big difference to your life? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an interesting discussion you had as part of your work or studies.",
+        "prompts": [
+          "what the subject of the discussion was",
+          "who you discussed the subject with",
+          "what opinions were expressed",
+          "and explain why you found the discussion interesting."
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Discussing problems with others",
+            "questions": [
+              "Why is it good to discuss problems with other people?",
+              "Do you think that it’s better to talk to friends and not family about problems?",
+              "Is it always a good idea to tell lots of people about a problem?"
+            ]
+          },
+          {
+            "topic": "Communication skills at work",
+            "questions": [
+              "Which communication skills are most important when taking part in meetings with colleagues?",
+              "What are the possible effects of poor written communication skills at work?",
+              "What do you think will be the future impact of technology on communication in the workplace?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 32,
+      "difficulty": "medium",
+      "part_1": {
+        "topic": "Animals",
+        "questions": [
+          "Are there many animals or birds where you live? [Why/Why not?]",
+          "How often do you watch programmes or read articles about wild animals? [Why?]",
+          "Have you ever been to a zoo or a wildlife park? [Why/Why not?]",
+          "Would you like to have a job working with animals? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a website you use that helps you a lot in your work or studies.",
+        "prompts": [
+          "what the website is",
+          "how often you use the website",
+          "what information the website gives you",
+          "and explain how your work or studies would change if this website didn’t exist"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "The internet",
+            "questions": [
+              "Why do some people find the internet addictive?",
+              "What would the world be like without the internet?",
+              "Do you think that the way people use the internet may change in the future?"
+            ]
+          },
+          {
+            "topic": "Social media websites",
+            "questions": [
+              "What are the ways that social media can be used for positive purposes?",
+              "Why do some individuals post highly negative comments about other people on social media?",
+              "Do you think that companies’ main form of advertising will be via social media in the future?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 33,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Future",
+        "questions": [
+          "What job would you like to have ten years from now? [Why?]",
+          "How useful will English be for your future? [Why/Why not?]",
+          "How much travelling do you hope to do in the future? [Why/Why not?]",
+          "How do you think your life will change in the future? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a book that you enjoyed reading because you had to think a lot.",
+        "prompts": [
+          "what this book was",
+          "why you decided to read it",
+          "what reading this book made you think about",
+          "explain why you enjoyed reading this book"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Children and reading",
+            "questions": [
+              "What are the most popular types of children’s books in your country?",
+              "What are the benefits of parents reading books to their children?",
+              "Should parents always let children choose the books they read?"
+            ]
+          },
+          {
+            "topic": "Electronic books",
+            "questions": [
+              "How popular are electronic books in your country?",
+              "What are the advantages of parents reading electronic books (compared to printed books)?",
+              "Will electronic books ever completely replace printed books in the future?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 34,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Social media",
+        "questions": [
+          "Which social media websites do you use?",
+          "How much time do you spend on social media sites? [Why/Why not?]",
+          "What kind of information about yourself have you put on social media? [Why/Why not?]",
+          "Is there anything you don’t like about social media? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe something you liked very much which you bought for your home.",
+        "prompts": [
+          "what you bought",
+          "when and where you bought it",
+          "why you chose this particular thing",
+          "explain why you liked it so much"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Creating a nice home",
+            "questions": [
+              "Why do some people buy lots of things for their home?",
+              "Do you think it is very expensive to make a home look nice?",
+              "Why don’t some people care about how their home looks?"
+            ]
+          },
+          {
+            "topic": "Different types of home",
+            "questions": [
+              "In what ways is living in a flat/apartment better than living in a house?",
+              "Do you think homes will look different in the future?",
+              "Do you agree that the kinds of homes people prefer change as they get older?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 35,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Neighbours",
+        "questions": [
+          "How often do you see your neighbours? [Why/Why not?]",
+          "Do you invite your neighbours to your home? [Why/Why not?]",
+          "Do you think you are a good neighbour? [Why/Why not?]",
+          "Has a neighbour ever helped you? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a very difficult task that you succeeded in doing as part of your work or studies.",
+        "prompts": [
+          "what task you did",
+          "why this task was very difficult",
+          "how you worked on this task",
+          "explain how you felt when you had successfully completed this task"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Difficult jobs",
+            "questions": [
+              "What are the most difficult jobs that people do?",
+              "Why do you think some people choose to do difficult jobs?",
+              "Do you agree or disagree that all jobs are difficult sometimes?"
+            ]
+          },
+          {
+            "topic": "Personal and career success",
+            "questions": [
+              "How important is it for everyone to have a goal in their personal life?",
+              "Is it always necessary to work hard in order to achieve career success?",
+              "Do you think that successful people are always happy people?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 36,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Your neighbourhood",
+        "questions": [
+          "Do you like the neighbourhood you live in? [Why/Why not?]",
+          "What do you do in your neighbourhood in your free time? [Why/Why not?]",
+          "What new things would you like to have in your neighbourhood? [Why/Why not?]",
+          "Would you like to live in another neighbourhood in your town or city? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a website you have bought something from.",
+        "prompts": [
+          "what the website is",
+          "what you bought from this website",
+          "how satisfied you were with what you bought",
+          "explain what you liked and disliked about using this website"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Shopping online",
+            "questions": [
+              "What kinds of things do people in your country often buy from online shops?",
+              "Why has online shopping become so popular in many countries?",
+              "What are some possible disadvantages of buying things from online shops?"
+            ]
+          },
+          {
+            "topic": "Online retail businesses",
+            "questions": [
+              "Do you agree that the prices of all goods should be lower on internet shopping sites than in shops?",
+              "Will large shopping malls continue to be popular, despite the growth of internet shopping?",
+              "Do you think that some businesses (e.g. banks and travel agents) will only operate online in the future?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 37,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Email",
+        "questions": [
+          "What kinds of emails do you receive about your work or studies?",
+          "Do you prefer to email, phone or text your friends? [Why?]",
+          "Do you reply to emails and messages as soon as you receive them? [Why/Why not?]",
+          "Are you happy to receive emails that are advertising things? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a hotel that you know.",
+        "prompts": [
+          "where this hotel is",
+          "what this hotel looks like",
+          "what facilities this hotel has",
+          "explain whether you think this is a nice hotel to stay in"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Staying in hotels",
+            "questions": [
+              "What things are important when people are choosing a hotel?",
+              "Why do some people not like staying in hotels?",
+              "Do you think staying in a luxury hotel is a waste of money?"
+            ]
+          },
+          {
+            "topic": "Working in a hotel",
+            "questions": [
+              "Do you think hotel work is a good career for life?",
+              "How does working in a big hotel compare with working in a small hotel?",
+              "What skills are needed to be a successful hotel manager?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 38,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Languages",
+        "questions": [
+          "How many languages can you speak? [Why/Why not?]",
+          "How useful will English be to you in your future? [Why/Why not?]",
+          "What do you remember about learning languages at school? [Why/Why not?]",
+          "What do you think would be the hardest language for you to learn? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a website that you bought something from.",
+        "prompts": [
+          "what the website is",
+          "what you bought from this website",
+          "how satisfied you were with what you bought",
+          "and explain what you liked or disliked about using this website"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Shopping online",
+            "questions": [
+              "What kinds of things do people in your country often buy from online shops?",
+              "Why do you think online shopping has become so popular nowadays?",
+              "What are some possible disadvantages of buying things from online shops?"
+            ]
+          },
+          {
+            "topic": "The culture of consumerism",
+            "questions": [
+              "Why do many people today keep buying things which they do not need?",
+              "Do you believe the benefits of a consumer society outweigh the disadvantages?",
+              "How possible is it to avoid the culture of consumerism?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 39,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Swimming",
+        "questions": [
+          "Did you learn to swim when you were a child? [Why/Why not?]",
+          "How often do you go swimming now? [Why/Why not?]",
+          "What places are there for swimming where you live? [Why?]",
+          "Do you think it would be more enjoyable to go swimming outdoors or at an indoor pool? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a famous business person that you know about.",
+        "prompts": [
+          "who this person is",
+          "what kind of business this person is involved in",
+          "what you know about this business person",
+          "explain what you think of this business person"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Famous people today",
+            "questions": [
+              "What kinds of people are most famous in your country today?",
+              "Why are there so many stories about famous people in the news?",
+              "Do you agree or disagree that many young people today want to be famous?"
+            ]
+          },
+          {
+            "topic": "Advantages of being famous",
+            "questions": [
+              "Do you think it is easy for famous people to earn a lot of money?",
+              "Why might famous people enjoy having fans?",
+              "In what ways could famous people use their influence to do good things in the world?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 40,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Jewellery",
+        "questions": [
+          "How often do you wear jewellery? [Why/Why not?]",
+          "What type of jewellery do you like best? [Why/Why not?]",
+          "When do people like to give jewellery in your country [Why?]",
+          "Have you ever given jewellery to someone as a gift? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an interesting TV programme you watched about a science topic.",
+        "prompts": [
+          "what science topic this TV programme was about",
+          "when you saw this TV programme",
+          "what you learnt from this TV programme about a science topic",
+          "and explain why you found this TV programme interesting."
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Science and the public",
+            "questions": [
+              "How interested are most people in your country in science?",
+              "Why do you think children today might be better at science than their parents?",
+              "How do you suggest the public can learn more about scientific developments?"
+            ]
+          },
+          {
+            "topic": "Scientific discoveries",
+            "questions": [
+              "What do you think are the most important scientific discoveries in the last 100 years?",
+              "Do you agree or disagree that there are no more major scientific discoveries left to make?",
+              "Who should pay for scientific research — governments or private companies?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 41,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "People you study/work with",
+        "questions": [
+          "Who do you spend most time studying/working with? [Why?]",
+          "What kinds of things do you study/work on with other people? [Why?]",
+          "Are there times when you study/work better by yourself? [Why/Why not?]",
+          "Is it important to like the people you study/work with? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a tourist attraction you enjoyed visiting.",
+        "prompts": [
+          "what this tourist attraction is",
+          "when and why you visited it",
+          "what you did there",
+          "and explain why you enjoyed visiting this tourist attraction."
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Different kinds of tourist attractions",
+            "questions": [
+              "What are the most popular tourist attractions in your country?",
+              "How do the types of tourist attractions that younger people like to visit compare with those that older people like to visit?",
+              "Do you agree that some tourist attractions (e.g. national museums/galleries) should be free to visit?"
+            ]
+          },
+          {
+            "topic": "The importance of international tourism",
+            "questions": [
+              "Why is tourism important to a country?",
+              "What are the benefits to individuals of visiting another country as tourists?",
+              "How necessary is it for tourists to learn the language of the country they're visiting?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 42,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Flowers and plants",
+        "questions": [
+          "Do you have a favourite flower or plant? [Why/Why not?]",
+          "What kinds of flowers and plants grow near where you live? [Why/Why not?]",
+          "Is it important to you to have flowers and plants in your home? [Why/Why not?]",
+          "Have you ever bought flowers for someone else? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a review you read about a product or service.",
+        "prompts": [
+          "where you read the review",
+          "what the product or service was",
+          "what information the review gave about the product or service",
+          "explain what you did as a result of reading this review"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Online reviews",
+            "questions": [
+              "What kinds of things do people write online reviews about in your country?",
+              "Why do some people write online reviews?",
+              "Do you think that online reviews are good for both shoppers and companies?"
+            ]
+          },
+          {
+            "topic": "Customer service",
+            "questions": [
+              "What do you think it might be like to work in a customer service job?",
+              "Do you agree that customers are more likely to complain nowadays?",
+              "How important is it for companies to take all customer complaints seriously?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 43,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Summer",
+        "questions": [
+          "Is summer your favourite time of year? [Why/Why not?]",
+          "What do you do in summer when the weather’s very hot? [Why?]",
+          "Do you go on holiday every summer? [Why/Why not?]",
+          "Did you enjoy the summer holidays when you were at school? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a luxury item you would like to own in the future.",
+        "prompts": [
+          "what item you would like to own",
+          "what this item looks like",
+          "why you would like to own this item",
+          "explain whether you think you will ever own this item"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Expensive items",
+            "questions": [
+              "Which expensive items would many young people (in your country) like to buy?",
+              "How do the expensive items that younger people want to buy differ from those that older people want to buy?",
+              "Do you think that people are more likely to buy expensive items for their friends or for themselves?"
+            ]
+          },
+          {
+            "topic": "Rich people",
+            "questions": [
+              "How difficult is it to become very rich in today’s world?",
+              "Do you agree that money does not necessarily bring happiness?",
+              "In what ways might rich people use their money to help society?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 44,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Fast food",
+        "questions": [
+          "What kinds of fast food have you tried? [Why/Why not?]",
+          "Do you ever use a microwave to cook food quickly? [Why/Why not?]",
+          "How popular are fast food restaurants where you live? [Why/Why not?]",
+          "When would you go to a fast-food restaurant? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe some technology (e.g. an app, phone, software program) that you decided to stop using.",
+        "prompts": [
+          "when and where you got this technology",
+          "why you started using this technology",
+          "why you decided to stop using it",
+          "explain how you feel about the decision you made"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Computer games",
+            "questions": [
+              "What kinds of computer games do people play in your country?",
+              "Why do people enjoy playing computer games?",
+              "Do you think that all computer games should have a minimum age for players?"
+            ]
+          },
+          {
+            "topic": "Technology in the classroom",
+            "questions": [
+              "In what ways can technology in the classroom be helpful?",
+              "Do you agree that students are often better at using technology than their teachers?",
+              "Do you believe that computers will ever replace human teachers?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 45,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "History",
+        "questions": [
+          "What did you study in history lessons when you were at school?",
+          "Did you enjoy studying history at school? [Why/Why not?]",
+          "How often do you watch TV programmes about history now? [Why/Why not?]",
+          "What period in history would you like to learn more about? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe the neighbourhood you lived in when you were a child.",
+        "prompts": [
+          "where in your town/city the neighbourhood was",
+          "what kind of people lived there",
+          "what it was like to live in this neighbourhood",
+          "explain whether you would like to live in this neighbourhood in the future"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Neighbours",
+            "questions": [
+              "What sort of things can neighbours do to help each other?",
+              "How well do people generally know their neighbours in your country?",
+              "How important do you think it is to have good neighbours?"
+            ]
+          },
+          {
+            "topic": "Facilities in cities",
+            "questions": [
+              "Which facilities are most important to people living in cities?",
+              "How does shopping in small local shops differ from shopping in large city centre shops?",
+              "Do you think that children should always go to the school nearest to where they live?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 46,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Reading",
+        "questions": [
+          "Did you have a favourite book when you were a child? [Why/Why not?]",
+          "How much reading do you do for your work/studies? [Why/Why not?]",
+          "What kinds of books do you read for pleasure? [Why/Why not?]",
+          "Do you prefer to read a newspaper or a magazine online, or to buy a copy? [Why?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a big city you would like to visit.",
+        "prompts": [
+          "which big city you would like to visit",
+          "how you would travel there",
+          "what you would do there",
+          "why you would like to visit this big city"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Visiting cities on holiday",
+            "questions": [
+              "What are the most interesting things to do while visiting cities on holiday?",
+              "Why can it be expensive to visit cities on holiday?",
+              "Do you think it is better to visit cities alone or in a group with friends?"
+            ]
+          },
+          {
+            "topic": "The growth of cities",
+            "questions": [
+              "Why have cities increased in size in recent years?",
+              "What are the challenges created by ever-growing cities?",
+              "In what ways do you think cities of the future will be different to cities today?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 47,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Drinks",
+        "questions": [
+          "What do you like to drink with your dinner? [Why?]",
+          "Do you drink a lot of water every day? [Why/Why not?]",
+          "Do you prefer drinking tea or coffee? [Why?]",
+          "If people visit you in your home, what do you usually offer them to drink? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe a monument (e.g., a statue or sculpture) that you like.",
+        "prompts": [
+          "what this monument is",
+          "where this monument is",
+          "what it looks like",
+          "explain why you like this monument"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Public Monuments",
+            "questions": [
+              "What kinds of monuments do tourists in your country enjoy visiting?",
+              "Why do you think there are often statues of famous people in public places?",
+              "Do you agree that old monuments and buildings should always be preserved?"
+            ]
+          },
+          {
+            "topic": "Architecture",
+            "questions": [
+              "Why is architecture such a popular university subject?",
+              "In what ways has the design of homes changed in recent years?",
+              "To what extent does the design of buildings affect people’s moods?"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_id": 48,
+      "difficulty": "hard",
+      "part_1": {
+        "topic": "Maps",
+        "questions": [
+          "Do you think it’s better to use a paper map or a map on your phone? [Why?]",
+          "When was the last time you needed to use a map? [Why/Why not?]",
+          "If you visit a new city, do you always use a map to find your way around? [Why/Why not?]",
+          "In general, do you find it easy to read maps? [Why/Why not?]"
+        ]
+      },
+      "part_2": {
+        "title": "Describe an occasion when you had to do something in a hurry.",
+        "prompts": [
+          "what you had to do",
+          "why you had to do this in a hurry",
+          "how well you did this",
+          "explain how you felt about having to do this in a hurry"
+        ]
+      },
+      "part_3": {
+        "discussion_topics": [
+          {
+            "topic": "Arriving late",
+            "questions": [
+              "Do you think it’s OK to arrive late when meeting a friend?",
+              "What should happen to people who arrive late for work?",
+              "Can you suggest how people can make sure they don’t arrive late?"
+            ]
+          },
+          {
+            "topic": "Managing study time",
+            "questions": [
+              "Is it better to study for long periods or in shorter blocks of time?",
+              "What are the likely effects of students not managing their study time well?",
+              "How important is it for students to have enough leisure time?"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+'use client';
+
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useSession } from "next-auth/react";
+
+interface User {
+    id: number;
+    username: string;
+    name: string;
+    email?: string;
+    role: 'student' | 'admin';
+    is_staff?: boolean;
+    account_type?: 'crm' | 'self_signup';
+    subscription_status?: 'free' | 'premium' | 'crm_full';
+    has_full_access?: boolean;
+    evaluations_remaining?: number;
+}
+
+interface AuthContextType {
+    user: User | null;
+    isLoading: boolean;
+    login: (username: string, password: string, role: 'student' | 'admin') => Promise<boolean>;
+    logout: () => Promise<void>;
+    isAuthenticated: boolean;
+    isAdmin: boolean;
+    token: string | null;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+    const [user, setUser] = useState<User | null>(null);
+    const [token, setToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Load user from localStorage on mount
+    useEffect(() => {
+        const savedUser = localStorage.getItem('ielts_user');
+        const savedToken = localStorage.getItem('ielts_token');
+        if (savedUser) {
+            try {
+                setUser(JSON.parse(savedUser));
+                if (savedToken) {
+                    setToken(savedToken);
+                }
+            } catch (e) {
+                localStorage.removeItem('ielts_user');
+                localStorage.removeItem('ielts_token');
+            }
+        }
+        setIsLoading(false);
+    }, []);
+
+    // Sync with NextAuth session (Google Login)
+    const { data: session } = useSession();
+    useEffect(() => {
+        if (session?.user && !user) {
+            const googleUser: User = {
+                id: 0, // Placeholder ID for external auth
+                username: session.user.email || "",
+                name: session.user.name || session.user.email || "",
+                email: session.user.email || undefined,
+                role: 'student', // Default role
+            };
+            setUser(googleUser);
+            // Optional: Persist to localStorage if you want it to survive refresh without waiting for session check
+            // but NextAuth handles session persistence better.
+        }
+    }, [session, user]);
+
+    // Try local JSON auth first (for development and standalone use)
+    const tryLocalAuth = async (username: string, password: string, role: 'student' | 'admin'): Promise<boolean> => {
+        try {
+            const response = await fetch('/data/users.json');
+            const data = await response.json();
+
+            const users = role === 'admin' ? data.admins : data.students;
+            const foundUser = users.find(
+                (u: { username: string; password: string }) => u.username === username && u.password === password
+            );
+
+            if (foundUser) {
+                const loggedInUser: User = {
+                    id: foundUser.id,
+                    username: foundUser.username,
+                    name: foundUser.name,
+                    role: role,
+                    is_staff: role === 'admin',
+                };
+                setUser(loggedInUser);
+                localStorage.setItem('ielts_user', JSON.stringify(loggedInUser));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Local auth error:', error);
+            return false;
+        }
+    };
+
+    // Try Django auth (for production with CRM integration)
+    const tryDjangoAuth = async (username: string, password: string, role: 'student' | 'admin'): Promise<boolean> => {
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.ok) {
+                // Django auth uses JWT cookies, not JSON response with token
+                // Call /me to get user info
+                const meResponse = await fetch(`${API_BASE}/api/auth/me/`, {
+                    credentials: 'include',
+                });
+
+                if (meResponse.ok) {
+                    const userData = await meResponse.json();
+
+                    // Check if user has correct role
+                    const isStaff = userData.is_superuser || userData.roles?.includes('Admin');
+                    if (role === 'admin' && !isStaff) {
+                        console.error('User is not an admin');
+                        return false;
+                    }
+
+                    const loggedInUser: User = {
+                        id: userData.id,
+                        username: userData.username,
+                        name: userData.first_name
+                            ? `${userData.first_name} ${userData.last_name || ''}`.trim()
+                            : userData.username,
+                        email: userData.email,
+                        role: isStaff ? 'admin' : 'student',
+                        is_staff: isStaff,
+                        account_type: userData.account_type,
+                        subscription_status: userData.subscription_status,
+                        has_full_access: userData.has_full_access,
+                        evaluations_remaining: userData.evaluations_remaining,
+                    };
+
+                    setUser(loggedInUser);
+                    setToken('django-cookie-auth'); // Mark as Django auth
+                    localStorage.setItem('ielts_user', JSON.stringify(loggedInUser));
+                    localStorage.setItem('ielts_token', 'django-cookie-auth');
+                    return true;
+                }
+            }
+            return false;
+        } catch (error) {
+            console.error('Django auth error:', error);
+            return false;
+        }
+    };
+
+    const login = async (username: string, password: string, role: 'student' | 'admin'): Promise<boolean> => {
+        // Try local JSON auth first (works offline and for development)
+        const localSuccess = await tryLocalAuth(username, password, role);
+        if (localSuccess) {
+            console.log('Logged in via local JSON auth');
+            return true;
+        }
+
+        // If local fails, try Django auth
+        const djangoSuccess = await tryDjangoAuth(username, password, role);
+        if (djangoSuccess) {
+            console.log('Logged in via Django auth');
+            return true;
+        }
+
+        return false;
+    };
+
+    const logout = async () => {
+        try {
+            // Try Django logout if we were using Django auth
+            if (token === 'django-cookie-auth') {
+                await fetch(`${API_BASE}/api/auth/logout/`, {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+            }
+            // Also clear IELTS student session cookies to prevent auto-login
+            // when switching between admin and student panels
+            await fetch(`/api/ielts/auth/logout/`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem('ielts_user');
+            localStorage.removeItem('ielts_token');
+        }
+    };
+
+    return (
+        <AuthContext.Provider
+            value={{
+                user,
+                isLoading,
+                login,
+                logout,
+                isAuthenticated: !!user,
+                isAdmin: user?.role === 'admin' || user?.is_staff === true,
+                token,
+            }}
+        >
+            {children}
+        </AuthContext.Provider>
+    );
+}
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+}

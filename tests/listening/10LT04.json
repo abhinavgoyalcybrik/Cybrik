@@ -1,0 +1,244 @@
+{
+  "test_id": "10LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion + Table Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "THORNDYKE'S BUILDERS",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Name: Edith ____" },
+        { "q": 2, "type": "text", "question": "Address: Flat 4, ____ Park Flats" },
+        { "q": 3, "type": "text", "question": "Behind the ____" },
+        { "q": 4, "type": "text", "question": "Best time to contact customer: during the ____" },
+        { "q": 5, "type": "text", "question": "Where to park: opposite entrance next to the ____" },
+        { "q": 6, "type": "text", "question": "Needs full quote showing all the jobs and the ____" },
+
+        { "q": 7, "type": "text", "question": "Kitchen: Replace the ____ in the door" },
+        { "q": 8, "type": "text", "question": "Paint wall above the ____" },
+        { "q": 9, "type": "text", "question": "Strip paint and plaster approximately one ____ in advance" },
+        { "q": 10, "type": "text", "question": "Garden: One ____ needs replacing (end of garden)" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Table Completion",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Why did a port originally develop at Manham?",
+          "options": [
+            "A It was safe from enemy attack.",
+            "B It was convenient for river transport.",
+            "C It had a good position on the sea coast."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What caused Manham's sudden expansion during the Industrial Revolution?",
+          "options": [
+            "A the improvement in mining techniques",
+            "B the increase in demand for metals",
+            "C the discovery of tin in the area"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Why did rocks have to be sent away from Manham to be processed?",
+          "options": [
+            "A shortage of fuel",
+            "B poor transport systems",
+            "C lack of skills among local people"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What happened when the port declined in the twentieth century?",
+          "options": [
+            "A The workers went away.",
+            "B Traditional skills were lost.",
+            "C Buildings were used for new purposes."
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "What did the Manham Trust hope to do?",
+          "options": [
+            "A discover the location of the original port",
+            "B provide jobs for the unemployed",
+            "C rebuild the port complex"
+          ]
+        },
+
+        { "q": 16, "type": "text", "question": "Copper mine: specially adapted miners’ ____ take visitors into the mountain" },
+        { "q": 17, "type": "text", "question": "The mine is ____ and enclosed – unsuitable for children and animals" },
+        { "q": 18, "type": "text", "question": "Village school: classrooms and a special exhibition of ____" },
+        { "q": 19, "type": "text", "question": "‘The George’: a ____ is recommended" },
+        { "q": 20, "type": "text", "question": "Children shouldn't use the ____" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + Matching",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO skills did Laura improve as a result of her work placement?",
+          "options": [
+            "A communication",
+            "B design",
+            "C IT",
+            "D marketing",
+            "E organisation"
+          ]
+        },
+        {
+          "q": "23-24",
+          "type": "mcq_multi",
+          "question": "Which TWO immediate benefits did the company get from Laura's work placement?",
+          "options": [
+            "A updates for its software",
+            "B cost savings",
+            "C an improved image",
+            "D new clients",
+            "E a growth in sales"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "match",
+          "question": "obtaining booklet",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 26,
+          "type": "match",
+          "question": "discussing options",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 27,
+          "type": "match",
+          "question": "getting updates",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 28,
+          "type": "match",
+          "question": "responding to invitation for interview",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 29,
+          "type": "match",
+          "question": "informing about outcome of interview",
+          "options": ["A","B","C","D","E","F","G"]
+        },
+        {
+          "q": 30,
+          "type": "match",
+          "question": "requesting a reference",
+          "options": ["A","B","C","D","E","F","G"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "MCQ + Note Completion",
+      "instructions": "Questions 31–33: Choose the correct letter A, B or C. Questions 34–40: Write ONE WORD ONLY.",
+      "title": "Nanotechnology: technology on a small scale",
+      "questions": [
+        {
+          "q": 31,
+          "type": "mcq",
+          "question": "The speaker says that one problem with nanotechnology is that",
+          "options": [
+            "A it could threaten our way of life.",
+            "B it could be used to spy on people.",
+            "C it is misunderstood by the public."
+          ]
+        },
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "According to the speaker, some scientists believe that nano-particles",
+          "options": [
+            "A should be restricted to secure environments.",
+            "B should be used with more caution.",
+            "C should only be developed for essential products."
+          ]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "In the speaker's opinion, research into nanotechnology",
+          "options": [
+            "A has yet to win popular support.",
+            "B could be seen as unethical.",
+            "C ought to be continued."
+          ]
+        },
+
+        { "q": 34, "type": "text", "question": "Nanotechnology could allow the development of stronger ____" },
+        { "q": 35, "type": "text", "question": "____ travel will be made available to the masses" },
+        { "q": 36, "type": "text", "question": "Computers will have a greater ____" },
+        { "q": 37, "type": "text", "question": "____ energy will become more affordable" },
+        { "q": 38, "type": "text", "question": "Pollutants such as ____ could be removed from water more easily" },
+        { "q": 39, "type": "text", "question": "There will be no ____ from manufacturing" },
+        { "q": 40, "type": "text", "question": "Analysis of medical ____ will be speeded up" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Pargetter"],
+    "2": ["East"],
+    "3": ["library"],
+    "4": ["morning", "mornings"],
+    "5": ["postbox"],
+    "6": ["prices"],
+    "7": ["glass"],
+    "8": ["cooker"],
+    "9": ["week"],
+    "10": ["fence"],
+
+    "11": ["B"],
+    "12": ["B"],
+    "13": ["A"],
+    "14": ["A"],
+    "15": ["C"],
+    "16": ["trains"],
+    "17": ["dark"],
+    "18": ["games"],
+    "19": ["guided tour"],
+    "20": ["ladder", "ladders"],
+
+    "21": ["A", "E"],
+    "22": ["A", "E"],
+    "23": ["B", "C"],
+    "24": ["B", "C"],
+    "25": ["D"],
+    "26": ["F"],
+    "27": ["G"],
+    "28": ["B"],
+    "29": ["E"],
+    "30": ["C"],
+
+    "31": ["C"],
+    "32": ["B"],
+    "33": ["C"],
+    "34": ["metal", "metals"],
+    "35": ["space"],
+    "36": ["memory"],
+    "37": ["solar"],
+    "38": ["oil"],
+    "39": ["waste"],
+    "40": ["tests"]
+  }
+}

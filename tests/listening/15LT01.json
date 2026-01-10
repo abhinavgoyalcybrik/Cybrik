@@ -1,0 +1,165 @@
+{
+  "test_id": "15LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Bankside Recruitment Agency",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Name of agent: Becky ____" },
+        { "q": 2, "type": "text", "question": "Best to call her in the ____" },
+        { "q": 3, "type": "text", "question": "Must have good ____ skills" },
+        { "q": 4, "type": "text", "question": "Jobs are usually for at least one ____" },
+        { "q": 5, "type": "text", "question": "Pay is usually £ ____ per hour" },
+        { "q": 6, "type": "text", "question": "Wear a ____ to the interview" },
+        { "q": 7, "type": "text", "question": "Must bring your ____ to the interview" },
+        { "q": 8, "type": "text", "question": "They will ask questions about each applicant’s ____" },
+        { "q": 9, "type": "text", "question": "The ____ you receive at interview will benefit you" },
+        { "q": 10, "type": "text", "question": "Less ____ is involved in applying for jobs" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Table Completion",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write ONE WORD AND/OR A NUMBER.",
+      "title": "Matthews Island Holidays – Isle of Man",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "According to the speaker, the company",
+          "options": [
+            "A has been in business for longer than most of its competitors",
+            "B arranges holidays to more destinations than its competitors",
+            "C has more customers than its competitors"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Where can customers meet the tour manager before travelling to the Isle of Man?",
+          "options": ["A Liverpool", "B Heysham", "C Luton"]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "How many lunches are included in the price of the holiday?",
+          "options": ["A three", "B four", "C five"]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "Customers have to pay extra for",
+          "options": [
+            "A guaranteeing themselves a larger room",
+            "B booking at short notice",
+            "C transferring to another date"
+          ]
+        },
+        { "q": 15, "type": "text", "question": "Hotel dining room has view of the ____" },
+        { "q": 16, "type": "text", "question": "Tynwald may have been founded in ____ not 979" },
+        { "q": 17, "type": "text", "question": "train to the ____ of Snaefell" },
+        { "q": 18, "type": "text", "question": "Company provides a ____ for local transport and heritage sites" },
+        { "q": 19, "type": "text", "question": "Take the ____ railway train from Douglas to Port Erin" },
+        { "q": 20, "type": "text", "question": "former ____ has old castle" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Matching + MCQ",
+      "instructions": "Questions 21–26: Choose SIX letters A–H. Questions 27–28: Choose the correct letter A, B or C. Questions 29–30: Choose TWO letters A–E.",
+      "title": "Birth order and personality",
+      "questions": [
+        { "q": 21, "type": "match", "question": "the eldest child", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 22, "type": "match", "question": "a middle child", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 23, "type": "match", "question": "the youngest child", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 24, "type": "match", "question": "a twin", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 25, "type": "match", "question": "an only child", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 26, "type": "match", "question": "a child with much older siblings", "options": ["A","B","C","D","E","F","G","H"] },
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "What do the speakers say about the evidence relating to birth order and academic success?",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "What does Ruth think is surprising about the difference in oldest children’s academic performance?",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": "29-30",
+          "type": "mcq_multi",
+          "question": "Which TWO experiences of sibling rivalry do the speakers agree has been valuable for them?",
+          "options": ["A","B","C","D","E"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The Eucalyptus Tree in Australia",
+      "questions": [
+        { "q": 31, "type": "text", "question": "it provides ____ and food for a wide range of species" },
+        { "q": 32, "type": "text", "question": "its leaves provide ____" },
+        { "q": 33, "type": "text", "question": "lime used for making ____ was absorbed" },
+        { "q": 34, "type": "text", "question": "Cause – ____ feed on eucalyptus leaves" },
+        { "q": 35, "type": "text", "question": "high-frequency bushfires result in the growth of ____" },
+        { "q": 36, "type": "text", "question": "make more ____ available to the trees" },
+        { "q": 37, "type": "text", "question": "maintain the quality of the ____" },
+        { "q": 38, "type": "text", "question": "growth of ____ rainforest" },
+        { "q": 39, "type": "text", "question": "a ____ ecosystem" },
+        { "q": 40, "type": "text", "question": "ideal environment for the ____ of the bell-miner" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Jamieson"],
+    "2": ["afternoon"],
+    "3": ["communication"],
+    "4": ["week"],
+    "5": ["10", "ten"],
+    "6": ["suit"],
+    "7": ["passport"],
+    "8": ["personality"],
+    "9": ["feedback"],
+    "10": ["time"],
+
+    "11": ["A"],
+    "12": ["B"],
+    "13": ["A"],
+    "14": ["C"],
+    "15": ["river"],
+    "16": ["1422"],
+    "17": ["top"],
+    "18": ["pass"],
+    "19": ["steam"],
+    "20": ["capital"],
+
+    "21": ["G"],
+    "22": ["F"],
+    "23": ["A"],
+    "24": ["E"],
+    "25": ["B"],
+    "26": ["C"],
+    "27": ["C"],
+    "28": ["A"],
+    "29": ["B"],
+    "30": ["D"],
+
+    "31": ["shelter"],
+    "32": ["oil"],
+    "33": ["roads"],
+    "34": ["insects"],
+    "35": ["grass", "grasses"],
+    "36": ["water"],
+    "37": ["soil"],
+    "38": ["dry"],
+    "39": ["simple"],
+    "40": ["nest", "nests"]
+  }
+}

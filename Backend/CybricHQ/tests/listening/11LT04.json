@@ -1,0 +1,210 @@
+{
+  "test_id": "11LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Table Completion + MCQ",
+      "instructions": "Questions 1–7: Write ONE WORD AND/OR A NUMBER. Questions 8–10: Choose A, B or C.",
+      "title": "Stretton Festival",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Jazz band venue: the ____ school" },
+        { "q": 2, "type": "text", "question": "Also appearing: Carolyn Hart (plays the ____)" },
+        { "q": 3, "type": "text", "question": "Duck races start behind the ____" },
+        { "q": 4, "type": "text", "question": "Prize: tickets for ____ held at the end of the festival" },
+        { "q": 5, "type": "text", "question": "Ducks can be bought in the ____" },
+        { "q": 6, "type": "text", "question": "Flower show venue: ____ Hall" },
+        { "q": 7, "type": "text", "question": "Prizes presented at 5 pm by a well-known ____" },
+
+        {
+          "q": 8,
+          "type": "mcq",
+          "question": "The Mystery of Muldoon is suitable for",
+          "options": ["A mainly for children", "B mainly for adults", "C suitable for people of all ages"]
+        },
+        {
+          "q": 9,
+          "type": "mcq",
+          "question": "Fire and Flood is suitable for",
+          "options": ["A mainly for children", "B mainly for adults", "C suitable for people of all ages"]
+        },
+        {
+          "q": 10,
+          "type": "mcq",
+          "question": "Silly Sailor is suitable for",
+          "options": ["A mainly for children", "B mainly for adults", "C suitable for people of all ages"]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Matching + Plan Labelling",
+      "instructions": "Questions 11–16: Choose the correct letter A–G. Questions 17–20: Choose the correct letter A–H.",
+      "title": "Museum Collections / Basement of Museum",
+      "questions": [
+        { "q": 11, "type": "match", "question": "20th- and 21st-century paintings", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 12, "type": "match", "question": "19th-century paintings", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 13, "type": "match", "question": "Sculptures", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 14, "type": "match", "question": "‘Around the world’ exhibition", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 15, "type": "match", "question": "Coins", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 16, "type": "match", "question": "Porcelain and glass", "options": ["A","B","C","D","E","F","G"] },
+
+        { "q": 17, "type": "map", "question": "restaurant", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 18, "type": "map", "question": "cafe", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 19, "type": "map", "question": "baby-changing facilities", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 20, "type": "map", "question": "cloakroom", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ",
+      "instructions": "Questions 21–26: Choose TWO letters A–E. Questions 27–30: Choose A, B or C.",
+      "title": "Joanna’s Psychology Study",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "Which TWO characteristics were shared by the subjects of Joanna’s psychology study?",
+          "options": [
+            "A they had all won prizes for their music",
+            "B they had all made music recordings",
+            "C they were all under 27 years old",
+            "D they had all toured internationally",
+            "E they all played a string instrument"
+          ]
+        },
+        {
+          "q": "23-24",
+          "type": "mcq_multi",
+          "question": "Which TWO points does Joanna make about her use of telephone interviews?",
+          "options": [
+            "A it meant rich data could be collected",
+            "B it allowed the involvement of top performers",
+            "C it led to a stressful atmosphere at times",
+            "D it meant interview times had to be limited",
+            "E it caused some technical problems"
+          ]
+        },
+        {
+          "q": "25-26",
+          "type": "mcq_multi",
+          "question": "Which TWO topics did Joanna originally intend to investigate in her research?",
+          "options": [
+            "A regulations concerning concert dress",
+            "B audience reactions to the dress of performers",
+            "C changes in performer attitudes to concert dress",
+            "D how choice of music relates to performer roles",
+            "E links between musical instrument and dress choice"
+          ]
+        },
+
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "Joanna concentrated on women performers because",
+          "options": [
+            "A women are more influenced by fashion",
+            "B women’s dress has led to more controversy",
+            "C women’s code of dress is less strict than men’s"
+          ]
+        },
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "Mike Frost’s article suggests that in popular music, women’s dress is affected by",
+          "options": [
+            "A their wish to be taken seriously",
+            "B their tendency to copy each other",
+            "C their reaction to the masculine nature of the music"
+          ]
+        },
+        {
+          "q": 29,
+          "type": "mcq",
+          "question": "What did Joanna’s subjects say about the incidence at a performance?",
+          "options": [
+            "A The musicians’ choice of clothing is linked to respect for the audience",
+            "B The clothing should not distract the audience from the music",
+            "C The audience should make an effort to dress appropriately"
+          ]
+        },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "According to the speakers, musicians could learn from sports scientists about",
+          "options": [
+            "A the importance of clothing for physical freedom",
+            "B the part played by clothing in improving performance",
+            "C the way clothing may protect against physical injury"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The use of soil to reduce carbon dioxide (CO₂) in the atmosphere",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Carbon in soil may remain there for ____" },
+        { "q": 32, "type": "text", "question": "Land in Africa that was very ____" },
+        { "q": 33, "type": "text", "question": "Plants turn CO₂ from the air into carbon-based substances such as ____" },
+        { "q": 34, "type": "text", "question": "Some CO₂ moves from the ____ of plants to microbes in the soil" },
+        { "q": 35, "type": "text", "question": "Carbon was lost from the soil when ____ was invented" },
+        { "q": 36, "type": "text", "question": "Increasing the ____ of plants that are grown" },
+        { "q": 37, "type": "text", "question": "Taking place on a big ____ farm" },
+        { "q": 38, "type": "text", "question": "Using compost made from waste from agriculture and ____" },
+        { "q": 39, "type": "text", "question": "Using ____ that are always green" },
+        { "q": 40, "type": "text", "question": "Giving farmers ____ for carbon storage" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["primary"],
+    "2": ["oboe"],
+    "3": ["river"],
+    "4": ["4"],
+    "5": ["market"],
+    "6": ["Byrwick"],
+    "7": ["writer"],
+
+    "8": ["C"],
+    "9": ["B"],
+    "10": ["A"],
+
+    "11": ["E"],
+    "12": ["D"],
+    "13": ["C"],
+    "14": ["B"],
+    "15": ["A"],
+    "16": ["G"],
+
+    "17": ["F"],
+    "18": ["A"],
+    "19": ["H"],
+    "20": ["B"],
+
+    "21": ["B", "D"],
+    "22": ["B", "D"],
+    "23": ["B", "E"],
+    "24": ["B", "E"],
+    "25": ["A", "C"],
+    "26": ["A", "C"],
+
+    "27": ["B"],
+    "28": ["C"],
+    "29": ["B"],
+    "30": ["A"],
+
+    "31": ["31"],
+    "32": ["fertile"],
+    "33": ["sugars"],
+    "34": ["roots"],
+    "35": ["agriculture"],
+    "36": ["variety"],
+    "37": ["dairy"],
+    "38": ["forestry"],
+    "39": ["plants"],
+    "40": ["payments"]
+  }
+}

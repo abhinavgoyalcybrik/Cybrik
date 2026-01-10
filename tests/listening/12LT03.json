@@ -1,0 +1,206 @@
+{
+  "test_id": "12LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "PUBLIC LIBRARY",
+      "questions": [
+        { "q": 1, "type": "text", "question": "an expanded section for books on ____" },
+        { "q": 2, "type": "text", "question": "a new section on local ____" },
+        { "q": 3, "type": "text", "question": "a community room for meetings (also possible to ____ there)" },
+        { "q": 4, "type": "text", "question": "a new section of books for ____" },
+        { "q": 5, "type": "text", "question": "experiments using things from your ____" },
+        { "q": 6, "type": "text", "question": "a novel based on a real ____" },
+        { "q": 7, "type": "text", "question": "IT support is available on Tuesdays – no ____ is necessary" },
+        { "q": 8, "type": "text", "question": "free check of blood ____ and cholesterol levels" },
+        { "q": 9, "type": "text", "question": "the library shop sells wall-charts, cards and ____" },
+        { "q": 10, "type": "text", "question": "evenings and weekends: free ____ is available" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Table Completion",
+      "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–17: Choose A, B or C. Questions 18–20: Write ONE WORD ONLY.",
+      "title": "BC Travel",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "Which TWO age groups are taking increasing numbers of holidays with BC Travel?",
+          "options": [
+            "A 16–30 years",
+            "B 31–42 years",
+            "C 43–54 years",
+            "D 55–64 years",
+            "E over 65 years"
+          ]
+        },
+        {
+          "q": "13-14",
+          "type": "mcq_multi",
+          "question": "Which TWO are the main reasons given for the popularity of activity holidays?",
+          "options": [
+            "A Clients make new friends",
+            "B Clients learn a useful skill",
+            "C Clients learn about a different culture",
+            "D Clients are excited by the risk involved",
+            "E Clients find them good value for money"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "How does BC Travel plan to expand the painting holidays?",
+          "options": [
+            "A by adding to the number of locations",
+            "B by increasing the range of levels",
+            "C by employing more teachers"
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "Why are BC Travel’s cooking holidays unusual?",
+          "options": [
+            "A They only use organic foods",
+            "B They have an international focus",
+            "C They mainly involve vegetarian dishes"
+          ]
+        },
+        {
+          "q": 17,
+          "type": "mcq",
+          "question": "What does the speaker say about the photography holidays?",
+          "options": [
+            "A Clients receive individual tuition",
+            "B The tutors are also trained guides",
+            "C Advice is given on selling photographs"
+          ]
+        },
+        { "q": 18, "type": "text", "question": "also reduces ____" },
+        { "q": 19, "type": "text", "question": "____ control" },
+        { "q": 20, "type": "text", "question": "specially designed for ____" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Flow-chart Completion + MCQ",
+      "instructions": "Questions 21–26: Choose SIX letters A–H. Questions 27–30: Choose A, B or C.",
+      "title": "STAGES IN DOING A TOURISM CASE STUDY",
+      "questions": [
+        { "q": 21, "type": "flow", "question": "noting key information and also ____" },
+        { "q": 22, "type": "flow", "question": "Select interviewees – these may be site ____" },
+        { "q": 23, "type": "flow", "question": "city ____" },
+        { "q": 24, "type": "flow", "question": "Check whether ____ of interviewees can be used" },
+        { "q": 25, "type": "flow", "question": "try to identify ____" },
+        { "q": 26, "type": "flow", "question": "Do NOT end with ____" },
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "One reason why so few people visit Horton Castle is that",
+          "options": [
+            "A the publicity is poor",
+            "B it is difficult to get to",
+            "C there is little there of interest"
+          ]
+        },
+        {
+          "q": 28,
+          "type": "mcq",
+          "question": "The greatest problem with a visitor centre could be",
+          "options": [
+            "A covering the investment costs",
+            "B finding a big enough space for it",
+            "C dealing with planning restrictions"
+          ]
+        },
+        {
+          "q": 29,
+          "type": "mcq",
+          "question": "What does Dave say about conditions in the town of Horton?",
+          "options": [
+            "A There is a lot of unemployment",
+            "B There are few people of working age",
+            "C There are opportunities for skilled workers"
+          ]
+        },
+        {
+          "q": 30,
+          "type": "mcq",
+          "question": "One way to prevent damage to the castle site would be to",
+          "options": [
+            "A insist visitors have a guide",
+            "B make visitors keep to the paths",
+            "C limit visitor numbers"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The effects of environmental change on birds",
+      "questions": [
+        { "q": 31, "type": "text", "question": "birds which feed on ____" },
+        { "q": 32, "type": "text", "question": "effects on birds’ ____ or mental processes" },
+        { "q": 33, "type": "text", "question": "song usually learned from a bird’s ____" },
+        { "q": 34, "type": "text", "question": "songs learned are less ____" },
+        { "q": 35, "type": "text", "question": "negative effect on birds’ ____" },
+        { "q": 36, "type": "text", "question": "allow more ____ for the experimenter" },
+        { "q": 37, "type": "text", "question": "migrating birds such as ____" },
+        { "q": 38, "type": "text", "question": "problems in learning ____" },
+        { "q": 39, "type": "text", "question": "mercury in a mother’s body from ____" },
+        { "q": 40, "type": "text", "question": "energy ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["travel"],
+    "2": ["history"],
+    "3": ["study"],
+    "4": ["teenagers"],
+    "5": ["kitchen"],
+    "6": ["crime"],
+    "7": ["appointment"],
+    "8": ["sugar"],
+    "9": ["stamps"],
+    "10": ["parking"],
+
+    "11": ["D", "E"],
+    "12": ["D", "E"],
+    "13": ["B", "C"],
+    "14": ["B", "C"],
+    "15": ["C"],
+    "16": ["B"],
+    "17": ["A"],
+    "18": ["stress"],
+    "19": ["weight"],
+    "20": ["families"],
+
+    "21": ["B"],
+    "22": ["E"],
+    "23": ["H"],
+    "24": ["B"],
+    "25": ["A"],
+    "26": ["D"],
+    "27": ["A"],
+    "28": ["C"],
+    "29": ["B"],
+    "30": ["B"],
+
+    "31": ["insects"],
+    "32": ["behaviour"],
+    "33": ["father"],
+    "34": ["complex"],
+    "35": ["reproduction"],
+    "36": ["control"],
+    "37": ["ducks"],
+    "38": ["language"],
+    "39": ["food"],
+    "40": ["costs"]
+  }
+}

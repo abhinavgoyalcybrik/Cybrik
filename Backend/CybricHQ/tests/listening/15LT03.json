@@ -1,0 +1,222 @@
+{
+  "test_id": "15LT03",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Employment Agency: Possible Jobs",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Administrative assistant in a company that produces ____ (North London)" },
+        { "q": 2, "type": "text", "question": "go to ____ and take notes" },
+        { "q": 3, "type": "text", "question": "management of ____" },
+        { "q": 4, "type": "text", "question": "attention to ____" },
+        { "q": 5, "type": "text", "question": "need a minimum of ____ of experience of teleconferencing" },
+
+        { "q": 6, "type": "text", "question": "managing ____" },
+        { "q": 7, "type": "text", "question": "very organised and ____" },
+        { "q": 8, "type": "text", "question": "used to working in a ____" },
+        { "q": 9, "type": "text", "question": "able to cope with items that are ____" },
+        { "q": 10, "type": "text", "question": "____ service" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + MCQ (Multiple)",
+      "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose TWO letters A–E.",
+      "title": "Street Play Scheme",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "When did the Street Play Scheme first take place?",
+          "options": [
+            "A two years ago",
+            "B three years ago",
+            "C six years ago"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "How often is Beechwood Road closed to traffic now?",
+          "options": [
+            "A once a week",
+            "B on Saturdays and Sundays",
+            "C once a month"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Who is responsible for closing the road?",
+          "options": [
+            "A a council official",
+            "B the police",
+            "C local wardens"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "Residents who want to use their cars",
+          "options": [
+            "A have to park in another street.",
+            "B must drive very slowly.",
+            "C need permission from a warden."
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "Alice says that Street Play Schemes are most needed in",
+          "options": [
+            "A wealthy areas.",
+            "B quiet suburban areas.",
+            "C areas with heavy traffic."
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "What has been the reaction of residents who are not parents?",
+          "options": [
+            "A Many of them were unhappy at first.",
+            "B They like seeing children play in the street.",
+            "C They are surprised by the lack of noise."
+          ]
+        },
+        {
+          "q": "17-18",
+          "type": "mcq_multi",
+          "question": "Which TWO benefits for children does Alice think are the most important?",
+          "options": [
+            "A increased physical activity",
+            "B increased sense of independence",
+            "C opportunity to learn new games",
+            "D opportunity to be part of a community",
+            "E opportunity to make new friends"
+          ]
+        },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "Which TWO results of the King Street experiment surprised Alice?",
+          "options": [
+            "A more shoppers",
+            "B improved safety",
+            "C less air pollution",
+            "D more relaxed atmosphere",
+            "E less noise pollution"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Note Completion + Matching",
+      "instructions": "Questions 21–26: Write ONE WORD ONLY. Questions 27–30: Choose the correct letter A, B or C.",
+      "title": "Media studies assignment",
+      "questions": [
+        { "q": 21, "type": "text", "question": "what ____ the item is on" },
+        { "q": 22, "type": "text", "question": "the ____ of the item, including the headline" },
+        { "q": 23, "type": "text", "question": "any ____ accompanying the item" },
+        { "q": 24, "type": "text", "question": "the ____ of the item, e.g. what's made prominent" },
+        { "q": 25, "type": "text", "question": "the writer's main ____" },
+        { "q": 26, "type": "text", "question": "the ____ the writer may make about the reader" },
+
+        {
+          "q": 27,
+          "type": "match",
+          "question": "national news item",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 28,
+          "type": "match",
+          "question": "editorial",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 29,
+          "type": "match",
+          "question": "human interest",
+          "options": ["A", "B", "C"]
+        },
+        {
+          "q": 30,
+          "type": "match",
+          "question": "arts",
+          "options": ["A", "B", "C"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Early history of keeping clean",
+      "questions": [
+        { "q": 31, "type": "text", "question": "water was used to wash off ____" },
+        { "q": 32, "type": "text", "question": "soap-like material found in ____ cylinders" },
+        { "q": 33, "type": "text", "question": "used a strigil – scraper made of ____" },
+        { "q": 34, "type": "text", "question": "used soap to colour their ____" },
+        { "q": 35, "type": "text", "question": "water carried to Roman ____ by aqueducts" },
+        { "q": 36, "type": "text", "question": "decline in bathing contributed to occurrence of ____" },
+        { "q": 37, "type": "text", "question": "____ began to be added to soap" },
+        { "q": 38, "type": "text", "question": "Leblanc invented a way of making soda ash from ____" },
+        { "q": 39, "type": "text", "question": "Chevreul turned soapmaking into a ____" },
+        { "q": 40, "type": "text", "question": "there was no longer a ____ on soap" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["furniture"],
+    "2": ["meetings"],
+    "3": ["diary"],
+    "4": ["detail(s)"],
+    "5": ["1 / one year"],
+
+    "6": ["deliveries"],
+    "7": ["tidy"],
+    "8": ["team"],
+    "9": ["heavy"],
+    "10": ["customer"],
+
+    "11": ["B"],
+    "12": ["A"],
+    "13": ["C"],
+    "14": ["B"],
+    "15": ["C"],
+    "16": ["B"],
+
+    "17": ["B","D"],
+    "18": ["B","D"],
+    "19": ["A","E"],
+    "20": ["A","E"],
+
+    "21": ["page"],
+    "22": ["size"],
+    "23": ["graphic(s)"],
+    "24": ["structure"],
+    "25": ["purpose"],
+    "26": ["assumption(s)"],
+
+    "27": ["A"],
+    "28": ["C"],
+    "29": ["C"],
+    "30": ["B"],
+
+    "31": ["mud"],
+    "32": ["clay"],
+    "33": ["metal"],
+    "34": ["hair"],
+    "35": ["bath(s)"],
+    "36": ["disease(s)"],
+    "37": ["perfume"],
+    "38": ["salt"],
+    "39": ["science"],
+    "40": ["tax"]
+  }
+}

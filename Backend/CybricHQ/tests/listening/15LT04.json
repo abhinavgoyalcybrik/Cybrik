@@ -1,0 +1,183 @@
+{
+  "test_id": "15LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Customer Satisfaction Survey",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Occupation: ____" },
+        { "q": 2, "type": "text", "question": "Reason for travel today: ____" },
+        { "q": 3, "type": "text", "question": "Name of station returning to: ____" },
+        { "q": 4, "type": "text", "question": "Type of ticket purchased: standard ____ ticket" },
+        { "q": 5, "type": "text", "question": "Cost of ticket: ____ £" },
+        { "q": 6, "type": "text", "question": "Where ticket was bought: ____" },
+        { "q": 7, "type": "text", "question": "Least satisfied with: the ____ this morning" },
+        { "q": 8, "type": "text", "question": "Most satisfied with: how much ____ was provided" },
+        { "q": 9, "type": "text", "question": "Least satisfied with: lack of seats, particularly on the ____" },
+        { "q": 10, "type": "text", "question": "Neither satisfied nor dissatisfied with: the ____ available" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Map Labelling + MCQ (Multiple)",
+      "instructions": "Questions 11–16: Write the correct letter, A–H. Questions 17–20: Choose TWO letters A–E.",
+      "title": "Croft Valley Park",
+      "questions": [
+        { "q": 11, "type": "map", "question": "café", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 12, "type": "map", "question": "toilets", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 13, "type": "map", "question": "formal gardens", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 14, "type": "map", "question": "outdoor gym", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 15, "type": "map", "question": "skateboard ramp", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 16, "type": "map", "question": "wild flowers", "options": ["A","B","C","D","E","F","G","H"] },
+
+        {
+          "q": "17-18",
+          "type": "mcq_multi",
+          "question": "What does the speaker say about the adventure playground?",
+          "options": [
+            "A Children must be supervised.",
+            "B It costs more in winter.",
+            "C Some activities are only for younger children.",
+            "D No payment is required.",
+            "E It was recently expanded."
+          ]
+        },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "What does the speaker say about the glass houses?",
+          "options": [
+            "A They are closed at weekends.",
+            "B Volunteers are needed to work there.",
+            "C They were badly damaged by fire.",
+            "D More money is needed to repair some of the glass.",
+            "E Visitors can see palm trees from tropical regions."
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write the correct letter A, B or C.",
+      "title": "Presentation about refrigeration",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What did Annie discover from reading about icehouses?",
+          "options": [
+            "A why they were first created",
+            "B how the ice was kept frozen",
+            "C where they were located"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "What point does Annie make about refrigeration in ancient Rome?",
+          "options": [
+            "A It became a commercial business.",
+            "B It used snow from nearby.",
+            "C It took a long time to become popular."
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "In connection with modern refrigerators, both Annie and Jack are worried about",
+          "options": [
+            "A the complexity of the technology.",
+            "B the fact that some are disposed of irresponsibly.",
+            "C the large number that quickly break down."
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "What do Jack and Annie agree regarding domestic fridges?",
+          "options": [
+            "A They are generally good value for money.",
+            "B There are plenty of useful variations.",
+            "C They are more useful than other domestic appliances."
+          ]
+        },
+
+        { "q": 25, "type": "match", "question": "the goods that are refrigerated", "options": ["A","B","C"] },
+        { "q": 26, "type": "match", "question": "the effects on health", "options": ["A","B","C"] },
+        { "q": 27, "type": "match", "question": "the impact on food producers", "options": ["A","B","C"] },
+        { "q": 28, "type": "match", "question": "the impact on cities", "options": ["A","B","C"] },
+        { "q": 29, "type": "match", "question": "refrigerated transport", "options": ["A","B","C"] },
+        { "q": 30, "type": "match", "question": "domestic fridges", "options": ["A","B","C"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "How the Industrial Revolution affected life in Britain",
+      "questions": [
+        { "q": 31, "type": "text", "question": "people's possessions were used to measure Britain's ____" },
+        { "q": 32, "type": "text", "question": "Developments in production of goods and in ____ greatly changed lives" },
+        { "q": 33, "type": "text", "question": "new types of ____ that were used then" },
+        { "q": 34, "type": "text", "question": "The leading industry was ____" },
+        { "q": 35, "type": "text", "question": "New ____ made factories necessary" },
+        { "q": 36, "type": "text", "question": "greater access to ____ made people more aware of what they could buy" },
+        { "q": 37, "type": "text", "question": "people were not limited to buying ____ goods" },
+        { "q": 38, "type": "text", "question": "inside stores because of better ____" },
+        { "q": 39, "type": "text", "question": "outside stores, because ____ were bigger" },
+        { "q": 40, "type": "text", "question": "____ that was persuasive became much more common" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["journalist"],
+    "2": ["shopping"],
+    "3": ["Staunfirth"],
+    "4": ["return"],
+    "5": ["23.70"],
+    "6": ["online"],
+    "7": ["delay"],
+    "8": ["information"],
+    "9": ["platform(s)"],
+    "10": ["parking"],
+
+    "11": ["D"],
+    "12": ["C"],
+    "13": ["G"],
+    "14": ["H"],
+    "15": ["A"],
+    "16": ["E"],
+
+    "17": ["A","D"],
+    "18": ["A","D"],
+    "19": ["A","C"],
+    "20": ["A","C"],
+
+    "21": ["B"],
+    "22": ["A"],
+    "23": ["B"],
+    "24": ["A"],
+
+    "25": ["A"],
+    "26": ["A"],
+    "27": ["B"],
+    "28": ["B"],
+    "29": ["A"],
+    "30": ["C"],
+
+    "31": ["wealth"],
+    "32": ["technology"],
+    "33": ["power"],
+    "34": ["textile(s)"],
+    "35": ["machines"],
+    "36": ["newspapers"],
+    "37": ["local"],
+    "38": ["lighting"],
+    "39": ["windows"],
+    "40": ["Advertising"]
+  }
+}

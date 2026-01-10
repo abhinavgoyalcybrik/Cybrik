@@ -1,0 +1,300 @@
+{
+  "test_id": "08LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form + Table Completion",
+      "instructions": "Questions 1–3: Complete the form. Questions 4–10: Complete the table. Write ONE WORD AND/OR A NUMBER.",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Name of removal company" },
+        { "q": 2, "type": "text", "question": "Type of movers" },
+        { "q": 3, "type": "text", "question": "Date of move" },
+
+        { "q": 4, "type": "text", "question": "Television: part that needs to be replaced" },
+        { "q": 5, "type": "text", "question": "Television: room location" },
+        { "q": 6, "type": "text", "question": "Door: damage" },
+        { "q": 7, "type": "text", "question": "Door: room location" },
+        { "q": 8, "type": "text", "question": "Carpet: problem" },
+        { "q": 9, "type": "text", "question": "Carpet: room location" },
+        { "q": 10, "type": "text", "question": "Bathroom: item damaged" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Multiple Choice",
+      "instructions": "Choose the correct letter A, B or C.",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "According to the speaker, the main purposes of the park are",
+          "options": [
+            "A education and entertainment",
+            "B research and education",
+            "C research and entertainment"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Where is the Forest Area?",
+          "options": [
+            "A next to the Rare Breeds section",
+            "B in the largest section of the park",
+            "C beside the Reception Block"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "What are kept in the Fish Farms?",
+          "options": [
+            "A endangered species",
+            "B fish for sale",
+            "C rare plants"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What is grown in the Market Garden area?",
+          "options": [
+            "A fruit trees",
+            "B crops for research",
+            "C vegetables and flowers"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "When are the experimental areas closed to the public?",
+          "options": [
+            "A all the year round",
+            "B almost all the year",
+            "C a short time every year"
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "How can visitors move around the park?",
+          "options": [
+            "A by tram, walking or bicycle",
+            "B by solar car or bicycle",
+            "C on foot only"
+          ]
+        },
+        {
+          "q": 17,
+          "type": "mcq",
+          "question": "What is not allowed in the park?",
+          "options": [
+            "A bringing dogs",
+            "B feeding animals",
+            "C taking photographs"
+          ]
+        },
+        {
+          "q": 18,
+          "type": "mcq",
+          "question": "What facility is available near the lake?",
+          "options": [
+            "A a picnic area",
+            "B a restaurant",
+            "C a playground"
+          ]
+        },
+        {
+          "q": 19,
+          "type": "mcq",
+          "question": "What time does the park close in winter?",
+          "options": [
+            "A 4 pm",
+            "B 5 pm",
+            "C 6 pm"
+          ]
+        },
+        {
+          "q": 20,
+          "type": "mcq",
+          "question": "What is free for visitors?",
+          "options": [
+            "A guided tours",
+            "B car parking",
+            "C entry for children"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Summary Completion",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write ONE WORD ONLY.",
+      "title": "Honey Bees in Australia",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Where in Australia have Asian honey bees been found in the past?",
+          "options": ["A Queensland", "B Victoria", "C Western Australia"]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Why are Asian honey bees a problem?",
+          "options": [
+            "A they damage crops",
+            "B they carry diseases",
+            "C they kill native bees"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "How are Asian honey bees usually found?",
+          "options": [
+            "A by looking for nests",
+            "B by following worker bees",
+            "C by examining bird pellets"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Why is this method effective?",
+          "options": [
+            "A birds eat large insects",
+            "B bees leave traces",
+            "C remains are easy to analyse"
+          ]
+        },
+
+        { "q": 25, "type": "text", "question": "Rainbow bee-eaters eat only ____" },
+        { "q": 26, "type": "text", "question": "Pellets contain parts of ____" },
+        { "q": 27, "type": "text", "question": "Pellets are softened by adding ____" },
+        { "q": 28, "type": "text", "question": "Under microscope, wings are pulled ____" },
+        { "q": 29, "type": "text", "question": "Researchers look for Asian bee ____" },
+        { "q": 30, "type": "text", "question": "This method is more ____ than finding live bees" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Multiple Choice + Matching",
+      "instructions": "Questions 31–36: Choose the correct letter A, B or C. Questions 37–40: Choose the correct letter A–F.",
+      "title": "Research on Questions about Doctors",
+      "questions": [
+        {
+          "q": 31,
+          "type": "mcq",
+          "question": "In order to set up her research programme, Shona got",
+          "options": [
+            "A advice from colleagues",
+            "B approval from a committee",
+            "C financial support"
+          ]
+        },
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "At first, most doctors were",
+          "options": [
+            "A unwilling to participate",
+            "B keen to help",
+            "C uncertain about the topic"
+          ]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "What surprised Shona about the responses?",
+          "options": [
+            "A how honest they were",
+            "B how varied they were",
+            "C how incomplete they were"
+          ]
+        },
+        {
+          "q": 34,
+          "type": "mcq",
+          "question": "One difficulty was that a doctor",
+          "options": [
+            "A gave false information",
+            "B withdrew from the study",
+            "C changed their appointment"
+          ]
+        },
+        {
+          "q": 35,
+          "type": "mcq",
+          "question": "Another difficulty was that some doctors",
+          "options": [
+            "A refused to talk about their job",
+            "B misunderstood the questions",
+            "C had no time to answer"
+          ]
+        },
+        {
+          "q": 36,
+          "type": "mcq",
+          "question": "Shona believes the method can be improved by",
+          "options": [
+            "A changing the questions",
+            "B increasing the sample size",
+            "C offering reassurance"
+          ]
+        },
+
+        { "q": 37, "type": "match", "question": "Doctor A", "options": ["A", "B", "C", "D", "E", "F"] },
+        { "q": 38, "type": "match", "question": "Doctor B", "options": ["A", "B", "C", "D", "E", "F"] },
+        { "q": 39, "type": "match", "question": "Doctor C", "options": ["A", "B", "C", "D", "E", "F"] },
+        { "q": 40, "type": "match", "question": "Doctor D", "options": ["A", "B", "C", "D", "E", "F"] }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Milperra"],
+    "2": ["First Class Movers"],
+    "3": ["28 November"],
+    "4": ["screen"],
+    "5": ["bathroom"],
+    "6": ["door"],
+    "7": ["bedroom"],
+    "8": ["stain"],
+    "9": ["lounge"],
+    "10": ["bath"],
+
+    "11": ["A"],
+    "12": ["B"],
+    "13": ["B"],
+    "14": ["C"],
+    "15": ["C"],
+    "16": ["A"],
+    "17": ["A"],
+    "18": ["A"],
+    "19": ["B"],
+    "20": ["B"],
+
+    "21": ["A"],
+    "22": ["B"],
+    "23": ["C"],
+    "24": ["A"],
+    "25": ["insects"],
+    "26": ["skeleton"],
+    "27": ["water"],
+    "28": ["straight"],
+    "29": ["wings"],
+    "30": ["reliable"],
+
+    "31": ["B"],
+    "32": ["B"],
+    "33": ["A"],
+    "34": ["B"],
+    "35": ["A"],
+    "36": ["C"],
+    "37": ["D"],
+    "38": ["C"],
+    "39": ["A"],
+    "40": ["F"]
+  }
+}

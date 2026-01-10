@@ -1,0 +1,218 @@
+{
+  "test_id": "14LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "CRIME REPORT FORM",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Nationality" },
+        { "q": 2, "type": "text", "question": "Reason for visit" },
+        { "q": 3, "type": "text", "question": "Current address" },
+        { "q": 4, "type": "text", "question": "Items stolen: a wallet containing approximately ____ £" },
+        { "q": 5, "type": "text", "question": "Items stolen: a ____" },
+        { "q": 6, "type": "text", "question": "Date of theft" },
+        { "q": 7, "type": "text", "question": "Location outside the ____" },
+        { "q": 8, "type": "text", "question": "Some boys asked for the ____" },
+        { "q": 9, "type": "text", "question": "He was about 12, slim build with ____ hair" },
+        { "q": 10, "type": "text", "question": "Crime reference number allocated" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–20: Choose the correct letter A, B or C.",
+      "title": "Induction talk for new apprentices",
+      "questions": [
+        {
+          "q": "11-12",
+          "type": "mcq_multi",
+          "question": "Which TWO pieces of advice for the first week of an apprenticeship does the manager give?",
+          "options": [
+            "A get to know colleagues",
+            "B learn from any mistakes",
+            "C ask lots of questions",
+            "D react positively to feedback",
+            "E enjoy new challenges"
+          ]
+        },
+        {
+          "q": "13-14",
+          "type": "mcq_multi",
+          "question": "Which TWO things does the manager say mentors can help with?",
+          "options": [
+            "A confidence-building",
+            "B making career plans",
+            "C completing difficult tasks",
+            "D making a weekly timetable",
+            "E reviewing progress"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "match",
+          "question": "Using the internet",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 16,
+          "type": "match",
+          "question": "Flexible working",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 17,
+          "type": "match",
+          "question": "Booking holidays",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 18,
+          "type": "match",
+          "question": "Working overtime",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 19,
+          "type": "match",
+          "question": "Wearing trainers",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 20,
+          "type": "match",
+          "question": "Bringing food to work",
+          "options": ["A","B","C"]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
+      "title": "Cities built by the sea",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Carla and Rob were surprised to learn that coastal cities",
+          "options": [
+            "A contain nearly half the world’s population",
+            "B include most of the world’s largest cities",
+            "C are growing twice as fast as other cities"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "According to Rob, building coastal cities near to rivers",
+          "options": [
+            "A may bring pollution to the cities",
+            "B may reduce the land available for agriculture",
+            "C may mean the countryside is spoiled by industry"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "What mistake was made when building water drainage channels in Miami in the 1950s?",
+          "options": [
+            "A There were not enough of them",
+            "B They were made of unsuitable materials",
+            "C They did not allow for the effects of climate change"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "What do Rob and Carla think that the authorities in Miami should do immediately?",
+          "options": [
+            "A take measures to restore ecosystems",
+            "B pay for a new flood prevention system",
+            "C stop disposing of waste materials into the ocean"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What do they agree should be the priority for international action?",
+          "options": [
+            "A greater coordination of activities",
+            "B more sharing of information",
+            "C agreement on shared policies"
+          ]
+        },
+        { "q": 26, "type": "match", "question": "Historical background", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 27, "type": "match", "question": "Geographical factors", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 28, "type": "match", "question": "Past mistakes", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 29, "type": "match", "question": "Future risks", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 30, "type": "match", "question": "International implications", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Marine renewable energy (ocean energy)",
+      "questions": [
+        { "q": 31, "type": "text", "question": "More energy required because of growth in population and ____" },
+        { "q": 32, "type": "text", "question": "waves provide a ____ source of renewable energy" },
+        { "q": 33, "type": "text", "question": "waves can move in any ____" },
+        { "q": 34, "type": "text", "question": "movement of sand on the ____ of the ocean" },
+        { "q": 35, "type": "text", "question": "Tides are more ____ than waves" },
+        { "q": 36, "type": "text", "question": "lagoon created in a ____ at Swansea" },
+        { "q": 37, "type": "text", "question": "stored water is released through ____" },
+        { "q": 38, "type": "text", "question": "no ____ is required to make it work" },
+        { "q": 39, "type": "text", "question": "likely to create a number of ____" },
+        { "q": 40, "type": "text", "question": "may harm fish and birds by affecting ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Canadian"],
+    "2": ["furniture"],
+    "3": ["Park"],
+    "4": ["250"],
+    "5": ["phone"],
+    "6": ["10th September"],
+    "7": ["museum"],
+    "8": ["time"],
+    "9": ["brown"],
+    "10": ["87954-82361"],
+
+    "11": ["C","E"],
+    "12": ["C","E"],
+    "13": ["B","E"],
+    "14": ["B","E"],
+    "15": ["B"],
+    "16": ["B"],
+    "17": ["B"],
+    "18": ["A"],
+    "19": ["A"],
+    "20": ["C"],
+
+    "21": ["B"],
+    "22": ["A"],
+    "23": ["C"],
+    "24": ["B"],
+    "25": ["A"],
+    "26": ["F"],
+    "27": ["A"],
+    "28": ["B"],
+    "29": ["G"],
+    "30": ["C"],
+
+    "31": ["industry"],
+    "32": ["constant"],
+    "33": ["direction"],
+    "34": ["floor"],
+    "35": ["predictable"],
+    "36": ["bay"],
+    "37": ["gates"],
+    "38": ["fuel"],
+    "39": ["jobs"],
+    "40": ["migration"]
+  }
+}

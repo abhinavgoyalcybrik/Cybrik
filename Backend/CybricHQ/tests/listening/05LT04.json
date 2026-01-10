@@ -1,0 +1,206 @@
+{
+  "test_id": "05LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Form Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "title": "Host Family Applicant",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Present address" },
+        { "q": 2, "type": "text", "question": "Best time to contact" },
+        { "q": 3, "type": "text", "question": "Intended length of stay" },
+        { "q": 4, "type": "text", "question": "General level of English" },
+        { "q": 5, "type": "text", "question": "Preferred location" },
+        { "q": 6, "type": "text", "question": "Special diet" },
+        { "q": 7, "type": "text", "question": "Other requirement: house should have a ____" },
+        { "q": 8, "type": "text", "question": "Preference regarding other guests" },
+        { "q": 9, "type": "text", "question": "Maximum price (£ per week)" },
+        { "q": 10, "type": "text", "question": "Preferred starting date" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Sentence + Table Completion",
+      "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+      "questions": [
+        { "q": 11, "type": "text", "question": "Next meeting of the soccer club will be in the ____" },
+        { "q": 12, "type": "text", "question": "The first event is a ____" },
+        { "q": 13, "type": "text", "question": "At the final dinner, players receive ____" },
+
+        { "q": 14, "type": "text", "question": "Number of junior teams" },
+        { "q": 15, "type": "text", "question": "Junior training session time" },
+        { "q": 16, "type": "text", "question": "Number of senior teams" },
+        { "q": 17, "type": "text", "question": "Senior training session time" },
+
+        { "q": 18, "type": "text", "question": "Treasurer’s responsibility" },
+        { "q": 19, "type": "text", "question": "Secretary’s responsibility" },
+        { "q": 20, "type": "text", "question": "Head coach’s responsibility" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Note Completion + Matching",
+      "instructions": "Write NO MORE THAN THREE WORDS.",
+      "title": "Box Telecom",
+      "questions": [
+        { "q": 21, "type": "text", "question": "Drop in ____" },
+        { "q": 22, "type": "text", "question": "Growing ____" },
+        { "q": 23, "type": "text", "question": "High ____" },
+        { "q": 24, "type": "text", "question": "Lack of good ____" },
+
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What does Karin think the company will do?",
+          "options": [
+            "A look for private investors",
+            "B accept a takeover offer",
+            "C issue some new shares"
+          ]
+        },
+        {
+          "q": 26,
+          "type": "mcq",
+          "question": "How does the tutor suggest the company can recover?",
+          "options": [
+            "A appoint a new managing director",
+            "B change the way it is organised",
+            "C close some retail outlets"
+          ]
+        },
+        {
+          "q": 27,
+          "type": "mcq",
+          "question": "The tutor wants the report to",
+          "options": [
+            "A offer solutions to Box Telecom’s problems",
+            "B analyse the UK market",
+            "C compare different companies"
+          ]
+        },
+
+        { "q": 28, "type": "match", "question": "Karin’s opinion", "options": ["A", "B", "C", "D", "E", "F"] },
+        { "q": 29, "type": "match", "question": "Jason’s opinion", "options": ["A", "B", "C", "D", "E", "F"] },
+        { "q": 30, "type": "match", "question": "Tutor’s opinion", "options": ["A", "B", "C", "D", "E", "F"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Multiple Choice + Matching",
+      "questions": [
+        {
+          "q": 31,
+          "type": "mcq",
+          "question": "During the first week of term, students are invited to",
+          "options": [
+            "A be shown round the library",
+            "B listen to descriptions of library resources",
+            "C do an intensive computer course"
+          ]
+        },
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "The speaker warns students that",
+          "options": [
+            "A internet materials can be unreliable",
+            "B downloaded information must be acknowledged",
+            "C computer access may be limited"
+          ]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "The library is acquiring more CDs because",
+          "options": [
+            "A they are cheap",
+            "B they take little space",
+            "C they are more up to date"
+          ]
+        },
+        {
+          "q": 34,
+          "type": "mcq",
+          "question": "Students are encouraged to use journals online because",
+          "options": [
+            "A articles do not need returning",
+            "B it is cheaper than photocopying",
+            "C printed stock will be reduced"
+          ]
+        },
+        {
+          "q": 35,
+          "type": "mcq",
+          "question": "Why might students continue to use reference books?",
+          "options": [
+            "A they can be taken away",
+            "B they provide unique information",
+            "C they can be borrowed longer"
+          ]
+        },
+        {
+          "q": 36,
+          "type": "mcq",
+          "question": "Responsibility of the Training Supervisor",
+          "options": [
+            "A supervise library staff",
+            "B provide library orientation",
+            "C identify needs and inform managers"
+          ]
+        },
+
+        { "q": 37, "type": "match", "question": "Training in specialised computer programs", "options": ["A", "B", "C"] },
+        { "q": 38, "type": "match", "question": "Advising on bibliography presentation", "options": ["A", "B", "C"] },
+        { "q": 39, "type": "match", "question": "Checking the draft of the dissertation", "options": ["A", "B", "C"] },
+        { "q": 40, "type": "match", "question": "Providing language support", "options": ["A", "B", "C"] }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["14 Hill Road"],
+    "2": ["between 9 and 9.30", "9–9.30"],
+    "3": ["1 year"],
+    "4": ["intermediate"],
+    "5": ["North-West"],
+    "6": ["vegetarian"],
+    "7": ["(a) real garden", "garden"],
+    "8": ["the only guest"],
+    "9": ["100"],
+    "10": ["23rd March", "Monday 23rd March"],
+
+    "11": ["clubhouse"],
+    "12": ["picnic"],
+    "13": ["prizes"],
+    "14": ["10"],
+    "15": ["Wednesday afternoons", "Wednesday afternoon"],
+    "16": ["4"],
+    "17": ["Sunday afternoons", "Sunday afternoon"],
+    "18": ["collect the fees", "collect the money"],
+    "19": ["send newsletters", "send out newsletters"],
+    "20": ["supervise the teams"],
+
+    "21": ["sales"],
+    "22": ["competition"],
+    "23": ["interest rates", "rates of interest"],
+    "24": ["training"],
+    "25": ["A"],
+    "26": ["B"],
+    "27": ["A"],
+    "28": ["C"],
+    "29": ["B"],
+    "30": ["D"],
+
+    "31": ["B"],
+    "32": ["A"],
+    "33": ["A"],
+    "34": ["C"],
+    "35": ["A"],
+    "36": ["B"],
+    "37": ["B"],
+    "38": ["A"],
+    "39": ["B"],
+    "40": ["C"]
+  }
+}

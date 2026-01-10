@@ -1,0 +1,216 @@
+{
+  "test_id": "14LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion + MCQ",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Enquiry about booking hotel room for event",
+      "questions": [
+        { "q": 1, "type": "text", "question": "number of people who can sit down to eat" },
+        { "q": 2, "type": "text", "question": "view of the ____" },
+        { "q": 3, "type": "text", "question": "can see a group of ____ on the terrace" },
+        { "q": 4, "type": "text", "question": "number of people who can sit down to eat (Carlton Room)" },
+        { "q": 5, "type": "text", "question": "can give a ____ while people are eating" },
+        { "q": 6, "type": "text", "question": "will provide a ____ if there are any problems" },
+        { "q": 7, "type": "text", "question": "hotel rooms for ____" },
+        {
+          "q": 8,
+          "type": "mcq",
+          "question": "outdoor swimming pool",
+          "options": [
+            "A included in cost of hiring room",
+            "B available at extra charge",
+            "C not available"
+          ]
+        },
+        {
+          "q": 9,
+          "type": "mcq",
+          "question": "gym",
+          "options": [
+            "A included in cost of hiring room",
+            "B available at extra charge",
+            "C not available"
+          ]
+        },
+        {
+          "q": 10,
+          "type": "mcq",
+          "question": "tennis courts",
+          "options": [
+            "A included in cost of hiring room",
+            "B available at extra charge",
+            "C not available"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Matching + Multiple Answer",
+      "instructions": "Questions 11–16: Choose SIX answers A–H. Questions 17–20: Choose TWO answers A–E.",
+      "title": "Excursions and attractions",
+      "questions": [
+        { "q": 11, "type": "match", "question": "dolphin watching", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 12, "type": "match", "question": "forest walk", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 13, "type": "match", "question": "cycle trip", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 14, "type": "match", "question": "local craft tour", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 15, "type": "match", "question": "observatory trip", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 16, "type": "match", "question": "horse riding", "options": ["A","B","C","D","E","F","G","H"] },
+
+        {
+          "q": "17-18",
+          "type": "mcq_multi",
+          "question": "Which TWO things does the speaker say about the attraction called Musical Favourites?",
+          "options": [
+            "A You pay extra for drinks",
+            "B You must book it in advance",
+            "C You get a reduction if you buy two tickets",
+            "D You can meet the performers",
+            "E You can take part in the show"
+          ]
+        },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "Which TWO things does the speaker say about the Castle Feast?",
+          "options": [
+            "A Visitors can dance after the meal",
+            "B There is a choice of food",
+            "C Visitors wear historical costume",
+            "D Knives and forks are not used",
+            "E The entertainment includes horse races"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
+      "title": "Children’s literature",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What does Trevor find interesting about the purpose of children’s literature?",
+          "options": [
+            "A the fact that authors may not realise what values they’re teaching",
+            "B the fact that literature can be entertaining and educational at the same time",
+            "C the fact that adults were once children too"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Trevor says the module about the purpose of children’s literature made him",
+          "options": [
+            "A analyse some of the stories that his niece reads",
+            "B consider how far popularity reflects good quality",
+            "C decide to start writing some children’s stories"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Stephanie is interested in the Pictures module because",
+          "options": [
+            "A she intends to become an illustrator",
+            "B she can remember beautiful illustrations from her childhood",
+            "C she believes illustrations are more important than words"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Trevor and Stephanie agree that comics",
+          "options": [
+            "A are inferior to books",
+            "B have the potential for being useful",
+            "C discourage children from using their imagination"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "With regard to books aimed at only boys or only girls, Trevor was surprised",
+          "options": [
+            "A how long the distinction had gone unquestioned",
+            "B how few books were aimed at both girls and boys",
+            "C how many children enjoyed books intended for the opposite sex"
+          ]
+        },
+        { "q": 26, "type": "match", "question": "Perrault’s fairy tales", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 27, "type": "match", "question": "The Swiss Family Robinson", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 28, "type": "match", "question": "The Nutcracker and the Mouse King", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 29, "type": "match", "question": "The Lord of the Rings", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 30, "type": "match", "question": "War Horse", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The hunt for sunken settlements and ancient shipwrecks",
+      "questions": [
+        { "q": 31, "type": "text", "question": "cause of destruction unknown – now under the ____" },
+        { "q": 32, "type": "text", "question": "research carried out in ____ waters" },
+        { "q": 33, "type": "text", "question": "used in the oil industry, e.g. to make ____" },
+        { "q": 34, "type": "text", "question": "problems they were expensive and ____" },
+        { "q": 35, "type": "text", "question": "shipwrecks were ____ preserved" },
+        { "q": 36, "type": "text", "question": "AUVs can operate without ____" },
+        { "q": 37, "type": "text", "question": "can share the coordinates with another AUV that has better ____" },
+        { "q": 38, "type": "text", "question": "ships carrying ____" },
+        { "q": 39, "type": "text", "question": "containers of olive oil or ____" },
+        { "q": 40, "type": "text", "question": "wooden ships have been buried under silt on the seabed for ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["85"],
+    "2": ["roses"],
+    "3": ["trees"],
+    "4": ["110"],
+    "5": ["speech"],
+    "6": ["support"],
+    "7": ["babies"],
+    "8": ["C"],
+    "9": ["A"],
+    "10": ["B"],
+
+    "11": ["G"],
+    "12": ["D"],
+    "13": ["A"],
+    "14": ["F"],
+    "15": ["E"],
+    "16": ["B"],
+    "17": ["D","B"],
+    "18": ["D","B"],
+    "19": ["A","D"],
+    "20": ["A","D"],
+
+    "21": ["A"],
+    "22": ["C"],
+    "23": ["A"],
+    "24": ["B"],
+    "25": ["B"],
+    "26": ["F"],
+    "27": ["E"],
+    "28": ["C"],
+    "29": ["B"],
+    "30": ["G"],
+
+    "31": ["spring"],
+    "32": ["tools"],
+    "33": ["maps"],
+    "34": ["heavy"],
+    "35": ["stable"],
+    "36": ["light"],
+    "37": ["camera"],
+    "38": ["medical"],
+    "39": ["wine"],
+    "40": ["ages"]
+  }
+}

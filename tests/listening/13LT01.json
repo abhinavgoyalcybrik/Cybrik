@@ -1,0 +1,195 @@
+{
+  "test_id": "13LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Table Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "COOKERY CLASSES",
+      "questions": [
+        { "q": 1, "type": "text", "question": "how to ____ and cook with seasonal products" },
+        { "q": 2, "type": "text", "question": "also offers ____ classes" },
+        { "q": 3, "type": "text", "question": "clients who return get a ____ discount" },
+        { "q": 4, "type": "text", "question": "food that is ____" },
+        { "q": 5, "type": "text", "question": "includes recipes to strengthen your ____" },
+        { "q": 6, "type": "text", "question": "they have a free ____ every Thursday" },
+        { "q": 7, "type": "text", "question": "The ____ Centre" },
+        { "q": 8, "type": "text", "question": "mainly ____ food" },
+        { "q": 9, "type": "text", "question": "located near the ____" },
+        { "q": 10, "type": "text", "question": "a special course in skills with a ____ is sometimes available" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "instructions": "Questions 11–13: Choose the correct letter A, B or C. Questions 14–20: Write the correct letter A–I.",
+      "title": "Traffic Changes in Granford",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Why are changes needed to traffic systems in Granford?",
+          "options": [
+            "A The number of traffic accidents has risen.",
+            "B The amount of traffic on the roads has increased.",
+            "C The types of vehicles on the roads have changed."
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "In a survey, local residents particularly complained about",
+          "options": [
+            "A dangerous driving by parents.",
+            "B pollution from trucks and lorries.",
+            "C inconvenience from parked cars."
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "According to the speaker, one problem with the new regulations will be",
+          "options": [
+            "A raising money to pay for them.",
+            "B finding a way to make people follow them.",
+            "C getting the support of the police."
+          ]
+        },
+        { "q": 14, "type": "map", "question": "New traffic lights", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 15, "type": "map", "question": "Pedestrian crossing", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 16, "type": "map", "question": "Parking allowed", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 17, "type": "map", "question": "New 'No Parking' sign", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 18, "type": "map", "question": "New disabled parking spaces", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 19, "type": "map", "question": "Widened pavement", "options": ["A","B","C","D","E","F","G","H","I"] },
+        { "q": 20, "type": "map", "question": "Lorry loading/unloading restrictions", "options": ["A","B","C","D","E","F","G","H","I"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Flow-chart Completion",
+      "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE answers from the box.",
+      "title": "Investigating seed germination",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Why is Jack interested in investigating seed germination?",
+          "options": [
+            "A He may do a module on a related topic later on.",
+            "B He wants to have a career in plant science.",
+            "C He is thinking of choosing this topic for his dissertation."
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Jack and Emma agree the main advantage of their present experiment is that it can be",
+          "options": [
+            "A described very easily.",
+            "B carried out inside the laboratory.",
+            "C completed in the time available."
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "What do they decide to check with their tutor?",
+          "options": [
+            "A whether their aim is appropriate",
+            "B whether anyone else has chosen this topic",
+            "C whether the assignment contributes to their final grade"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "They agree that Graves’ book on seed germination is disappointing because",
+          "options": [
+            "A it fails to cover recent advances in seed science.",
+            "B the content is irrelevant for them.",
+            "C its focus is very theoretical."
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What does Jack say about the article on seed germination by Lee Hall?",
+          "options": [
+            "A The diagrams of plant development are useful.",
+            "B The analysis of seed germination statistics is thorough.",
+            "C The findings on seed germination after fires are surprising."
+          ]
+        },
+        { "q": 26, "type": "flow", "question": "Select seeds of different ____ and sizes." },
+        { "q": 27, "type": "flow", "question": "Measure and record the ____ and size of each one." },
+        { "q": 28, "type": "flow", "question": "Decide on the ____ to be used." },
+        { "q": 29, "type": "flow", "question": "Use a different ____ for each seed and label it." },
+        { "q": 30, "type": "flow", "question": "After about 3 weeks, record the plant’s ____." }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Effects of urban environments on animals",
+      "questions": [
+        { "q": 31, "type": "text", "question": "the ____ – because of its general adaptability" },
+        { "q": 32, "type": "text", "question": "walls of city buildings are similar to ____" },
+        { "q": 33, "type": "text", "question": "animals are adapting with unusual ____" },
+        { "q": 34, "type": "text", "question": "size of their ____ had increased" },
+        { "q": 35, "type": "text", "question": "need to locate new sources of ____" },
+        { "q": 36, "type": "text", "question": "focused on the ____ of urban and rural blackbirds" },
+        { "q": 37, "type": "text", "question": "afraid of situations that were ____" },
+        { "q": 38, "type": "text", "question": "respond to ____ by producing lower levels of hormones" },
+        { "q": 39, "type": "text", "question": "urban squirrels use their ____ to help them communicate" },
+        { "q": 40, "type": "text", "question": "some changes may not be ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["choose"],
+    "2": ["private"],
+    "3": ["20 percent"],
+    "4": ["healthy"],
+    "5": ["bones"],
+    "6": ["lecture"],
+    "7": ["Arretsa"],
+    "8": ["vegetarian"],
+    "9": ["market"],
+    "10": ["knife"],
+
+    "11": ["B"],
+    "12": ["C"],
+    "13": ["B"],
+    "14": ["E"],
+    "15": ["D"],
+    "16": ["B"],
+    "17": ["G"],
+    "18": ["C"],
+    "19": ["H"],
+    "20": ["I"],
+
+    "21": ["A"],
+    "22": ["C"],
+    "23": ["B"],
+    "24": ["C"],
+    "25": ["B"],
+    "26": ["types"],
+    "27": ["weight"],
+    "28": ["depths"],
+    "29": ["container"],
+    "30": ["height"],
+
+    "31": ["crow"],
+    "32": ["cliffs"],
+    "33": ["speed"],
+    "34": ["brains"],
+    "35": ["food"],
+    "36": ["behaviour"],
+    "37": ["new"],
+    "38": ["stress"],
+    "39": ["tails"],
+    "40": ["permanent"]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "test_id": "LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Multiple Choice + Form Completion",
+      "questions": [
+        {
+          "q": 1,
+          "type": "mcq",
+          "question": "Where is the administration building?",
+          "options": [
+            "A Main Hall",
+            "B Great Hall",
+            "C Old Hall",
+            "D Old Building"
+          ]
+        },
+        {
+          "q": 2,
+          "type": "mcq",
+          "question": "How many people are waiting in the queue?",
+          "options": [
+            "A 50",
+            "B 100",
+            "C 200",
+            "D 300"
+          ]
+        },
+        {
+          "q": 3,
+          "type": "mcq",
+          "question": "What does the woman order for lunch?",
+          "options": ["A", "B", "C", "D"]
+        },
+        {
+          "q": 4,
+          "type": "mcq",
+          "question": "What does the woman order to drink?",
+          "options": ["A", "B", "C", "D"]
+        },
+        {
+          "q": 5,
+          "type": "mcq",
+          "question": "How much money does the woman give the man?",
+          "options": [
+            "A $2.00",
+            "B $3.00",
+            "C $3.50",
+            "D $5.00"
+          ]
+        },
+
+        { "q": 6, "type": "text", "question": "Name of student" },
+        { "q": 7, "type": "text", "question": "Address: Flat 5 / ____" },
+        { "q": 8, "type": "text", "question": "Town" },
+        { "q": 9, "type": "text", "question": "Telephone number" },
+        { "q": 10, "type": "text", "question": "Course" },
+
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "What did the man buy for her to eat?",
+          "options": ["A", "B", "C", "D"]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What must the students do as part of registration at the university?",
+          "options": [
+            "A Check the notice board in the Law Faculty",
+            "B Find out about lectures",
+            "C Organise tutorial groups",
+            "D Pay the union fees"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Note Completion",
+      "questions": [
+        { "q": 13, "type": "text", "question": "Recommended bank location (Midland)" },
+        { "q": 14, "type": "text", "question": "Must provide ____ I can support myself" },
+        { "q": 15, "type": "text", "question": "Take with me: ____ and letter of enrolment" },
+        { "q": 16, "type": "text", "question": "Recommended account" },
+        { "q": 17, "type": "text", "question": "Bank supplies: ____ and chequecard" },
+        { "q": 18, "type": "text", "question": "Cashcard: you can ____ cash at any time" },
+        { "q": 19, "type": "text", "question": "Switch/Delta cards take the money ____ the account" },
+        { "q": 20, "type": "text", "question": "Overdraft: must have ____" },
+        { "q": 21, "type": "text", "question": "Most banks open until ____ during the week" }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Factsheet + Diagram Labelling",
+      "questions": [
+        { "q": 22, "type": "text", "question": "Number of aluminium cans produced every day in the US" },
+        { "q": 23, "type": "text", "question": "More cans produced than nails or ____" },
+        { "q": 24, "type": "text", "question": "Thinner than two ____" },
+        { "q": 25, "type": "text", "question": "Pressure compared with a car tyre" },
+
+        { "q": 26, "type": "text", "question": "Body of the can is ____ at base" },
+        { "q": 27, "type": "text", "question": "Reflective surface easily decorated is the ____" },
+        { "q": 28, "type": "text", "question": "Base is shaped like a ____" },
+        { "q": 29, "type": "text", "question": "Name of the seal around the rim" },
+        { "q": 30, "type": "text", "question": "Lid makes up ____ of total weight" },
+        { "q": 31, "type": "text", "question": "Name of opening pushed into the can" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Lecture Notes Completion",
+      "questions": [
+        { "q": 32, "type": "text", "question": "Purpose: experience ____" },
+        { "q": 33, "type": "text", "question": "Purpose: find out about ____" },
+        { "q": 34, "type": "text", "question": "Second strand of Sports Studies" },
+        { "q": 35, "type": "text", "question": "Psychologists work with ____" },
+        { "q": 36, "type": "text", "question": "They want to discover what ____" },
+        { "q": 37, "type": "text", "question": "Sports marketing looks at ____" },
+        { "q": 38, "type": "text", "question": "Sport now competes with ____" },
+        { "q": 39, "type": "text", "question": "Spectators want ____" },
+        { "q": 40, "type": "text", "question": "Sports physiology is also known as ____" },
+        { "q": 41, "type": "text", "question": "Macro level looks at ____" },
+        { "q": 42, "type": "text", "question": "Micro level looks at ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["C"],
+    "2": ["A"],
+    "3": ["B"],
+    "4": ["D"],
+    "5": ["D"],
+    "6": ["Julia Perkins"],
+    "7": ["15 Waratah Road"],
+    "8": ["Brisbane"],
+    "9": ["to be advised", "not connected", "no phone", "none"],
+    "10": ["first year law"],
+    "11": ["C"],
+    "12": ["D"],
+
+    "13": ["Hope Street"],
+    "14": ["evidence"],
+    "15": ["passport"],
+    "16": ["current account", "student account"],
+    "17": ["chequebook"],
+    "18": ["withdraw", "draw out", "take out"],
+    "19": ["directly from", "right out of"],
+    "20": ["permission of bank", "permission from bank"],
+    "21": ["4.30 pm", "5 pm"],
+
+    "22": ["300 million"],
+    "23": ["paper clips"],
+    "24": ["magazine pages", "pieces of paper", "pages"],
+    "25": ["three times"],
+    "26": ["thicker"],
+    "27": ["label"],
+    "28": ["dome"],
+    "29": ["flange"],
+    "30": ["25%"],
+    "31": ["scored opening"],
+
+    "32": ["a university lecture"],
+    "33": ["sports studies"],
+    "34": ["management"],
+    "35": ["top athletes"],
+    "36": ["makes winners", "makes people win"],
+    "37": ["market forces"],
+    "38": ["leisure activities", "other leisure activities"],
+    "39": ["entertainment", "to be entertained"],
+    "40": ["exercise science"],
+    "41": ["fitness testing", "body measurements"],
+    "42": ["cellular research", "cellular change", "body cells"]
+  }
+}

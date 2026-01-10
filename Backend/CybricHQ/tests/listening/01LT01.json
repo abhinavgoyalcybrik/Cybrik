@@ -1,0 +1,463 @@
+{
+  "test_id": "LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Multiple Choice + Form Completion",
+      "questions": [
+        {
+          "q": 1,
+          "type": "mcq",
+          "question": "What does her briefcase look like?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 2,
+          "type": "mcq",
+          "question": "Which picture shows the distinguishing features?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 3,
+          "type": "mcq",
+          "question": "What did she have inside her briefcase?",
+          "options": [
+            "A wallet, pens and novel",
+            "papers and wallet",
+            "pens and novel",
+            "papers, pens and novel"
+          ]
+        },
+        {
+          "q": 4,
+          "type": "mcq",
+          "question": "Where was she standing when she lost her briefcase?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 5,
+          "type": "mcq",
+          "question": "What time was it when she lost her briefcase?",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 6,
+          "type": "text",
+          "question": "Name"
+        },
+        {
+          "q": 7,
+          "type": "text",
+          "question": "Flat number"
+        },
+        {
+          "q": 8,
+          "type": "text",
+          "question": "Street name"
+        },
+        {
+          "q": 9,
+          "type": "text",
+          "question": "Telephone number"
+        },
+        {
+          "q": 10,
+          "type": "text",
+          "question": "Estimated value of the briefcase (£)"
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Multiple Choice + Note Completion",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Passengers rescued from a plane"
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "Transport workers strike"
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "New uniform for QANTAS staff"
+        },
+        {
+          "q": 14,
+          "type": "text",
+          "question": "Government plans to give $____ to assist farmers"
+        },
+        {
+          "q": 15,
+          "type": "text",
+          "question": "Money was to be spent on Sydney’s ____"
+        },
+        {
+          "q": 16,
+          "type": "text",
+          "question": "Farmers say the money is ____"
+        },
+        {
+          "q": 17,
+          "type": "text",
+          "question": "Aeroplane was carrying a group of ____"
+        },
+        {
+          "q": 18,
+          "type": "text",
+          "question": "Forced to land ____ minutes after take-off"
+        },
+        {
+          "q": 19,
+          "type": "text",
+          "question": "Passengers rescued by ____"
+        },
+        {
+          "q": 20,
+          "type": "text",
+          "question": "Passengers thanked the ____"
+        },
+        {
+          "q": 21,
+          "type": "text",
+          "question": "Unfortunately they lost their ____"
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "Multiple Choice + Note Completion",
+      "questions": [
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "The orientation meeting",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Attendance at lectures is",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Tutorials take place",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "The lecturer’s name is",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 26,
+          "type": "text",
+          "question": "Students must ____ for 25 minutes"
+        },
+        {
+          "q": 27,
+          "type": "text",
+          "question": "Then students must ____"
+        },
+        {
+          "q": 28,
+          "type": "text",
+          "question": "Essay topic usually ____"
+        },
+        {
+          "q": 29,
+          "type": "text",
+          "question": "Type of exam"
+        },
+        {
+          "q": 30,
+          "type": "text",
+          "question": "Important books are in ____"
+        },
+        {
+          "q": 31,
+          "type": "text",
+          "question": "Focus of course"
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Multiple Choice + Note Completion",
+      "questions": [
+        {
+          "q": 32,
+          "type": "mcq",
+          "question": "Faculty the speaker works within",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "Faculty consists firstly of",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 34,
+          "type": "text",
+          "question": "Subjects include psychology, sociology, ____"
+        },
+        {
+          "q": 35,
+          "type": "text",
+          "question": "Students may have problems with ____"
+        },
+        {
+          "q": 36,
+          "type": "text",
+          "question": "And problems with ____"
+        },
+        {
+          "q": 37,
+          "type": "mcq",
+          "question": "Students can visit her",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 38,
+          "type": "mcq",
+          "question": "A tutorial",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 39,
+          "type": "mcq",
+          "question": "When writing essays, students should",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 40,
+          "type": "mcq",
+          "question": "Plagiarism is",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 41,
+          "type": "mcq",
+          "question": "Speaker’s aims are to",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": [
+      "A"
+    ],
+    "2": [
+      "C"
+    ],
+    "3": [
+      "D"
+    ],
+    "4": [
+      "D"
+    ],
+    "5": [
+      "C"
+    ],
+    "6": [
+      "Prescott"
+    ],
+    "7": [
+      "41"
+    ],
+    "8": [
+      "Fountain"
+    ],
+    "9": [
+      "752239"
+    ],
+    "10": [
+      "65"
+    ],
+    "11": [
+      "E"
+    ],
+    "12": [
+      "F"
+    ],
+    "13": [
+      "H"
+    ],
+    "14": [
+      "250 million"
+    ],
+    "15": [
+      "roads",
+      "road system"
+    ],
+    "16": [
+      "too late"
+    ],
+    "17": [
+      "school children",
+      "boys"
+    ],
+    "18": [
+      "3"
+    ],
+    "19": [
+      "boats",
+      "pleasure craft"
+    ],
+    "20": [
+      "pilot"
+    ],
+    "21": [
+      "musical instruments",
+      "instruments"
+    ],
+    "22": [
+      "A"
+    ],
+    "23": [
+      "B"
+    ],
+    "24": [
+      "C"
+    ],
+    "25": [
+      "A"
+    ],
+    "26": [
+      "talk",
+      "give a talk"
+    ],
+    "27": [
+      "write up work"
+    ],
+    "28": [
+      "can choose"
+    ],
+    "29": [
+      "open book"
+    ],
+    "30": [
+      "closed reserve"
+    ],
+    "31": [
+      "vocational",
+      "work",
+      "employment"
+    ],
+    "32": [
+      "B"
+    ],
+    "33": [
+      "C"
+    ],
+    "34": [
+      "history and economics"
+    ],
+    "35": [
+      "meeting deadlines"
+    ],
+    "36": [
+      "attendance"
+    ],
+    "37": [
+      "B"
+    ],
+    "38": [
+      "C"
+    ],
+    "39": [
+      "B"
+    ],
+    "40": [
+      "D"
+    ],
+    "41": [
+      "A"
+    ]
+  }
+}

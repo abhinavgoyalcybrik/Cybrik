@@ -1,0 +1,242 @@
+{
+  "test_id": "13LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "South City Cycling Club",
+      "questions": [
+        { "q": 1, "type": "text", "question": "covers cycling and ____ all over Australia" },
+        { "q": 2, "type": "text", "question": "Cost of membership includes the club fee and ____" },
+        { "q": 3, "type": "text", "question": "The club kit is made by a company called ____" },
+        { "q": 4, "type": "text", "question": "Level B: speed about ____ kph" },
+        { "q": 5, "type": "text", "question": "Tuesdays at 5.30 am, meet at the ____" },
+        { "q": 6, "type": "text", "question": "Thursdays at 5.30 am, meet at the entrance to the ____" },
+        { "q": 7, "type": "text", "question": "Members often have ____ together afterwards" },
+        { "q": 8, "type": "text", "question": "There is not always a ____ with the group on these rides" },
+        { "q": 9, "type": "text", "question": "Check and print the ____ on the website beforehand" },
+        { "q": 10, "type": "text", "question": "Bikes must have ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Multiple Answer",
+      "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose TWO letters A–E.",
+      "title": "Information on company volunteering projects",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "How much time for volunteering does the company allow per employee?",
+          "options": [
+            "A two hours per week",
+            "B one day per month",
+            "C 8 hours per year"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "In feedback almost all employees said that volunteering improved their",
+          "options": [
+            "A chances of promotion",
+            "B job satisfaction",
+            "C relationships with colleagues"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "Last year some staff helped unemployed people with their",
+          "options": [
+            "A literacy skills",
+            "B job applications",
+            "C communication skills"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "This year the company will start a new volunteering project with a local",
+          "options": [
+            "A school",
+            "B park",
+            "C charity"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "Where will the Digital Inclusion Day be held?",
+          "options": [
+            "A at the company’s training facility",
+            "B at a college",
+            "C in a community centre"
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "What should staff do if they want to take part in the Digital Inclusion Day?",
+          "options": [
+            "A fill in a form",
+            "B attend a training workshop",
+            "C get permission from their manager"
+          ]
+        },
+        {
+          "q": "17-18",
+          "type": "mcq_multi",
+          "question": "What TWO things are mentioned about the participants on the last Digital Inclusion Day?",
+          "options": [
+            "A They were all over 70",
+            "B They never used their computer",
+            "C Their phones were mostly old-fashioned",
+            "D They only used their phones for making calls",
+            "E They initially showed little interest"
+          ]
+        },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "What TWO activities on the last Digital Inclusion Day did participants describe as useful?",
+          "options": [
+            "A learning to use tablets",
+            "B communicating with family",
+            "C shopping online",
+            "D playing online games",
+            "E sending emails"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
+      "title": "Planning a presentation on nanotechnology",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "Russ says that his difficulty in planning the presentation is due to",
+          "options": [
+            "A his lack of knowledge about the topic",
+            "B his uncertainty about what he should try to achieve",
+            "C the short time that he has for preparation"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Russ and his tutor agree that his approach in the presentation will be",
+          "options": [
+            "A to concentrate on how nanotechnology is used in one field",
+            "B to follow the chronological development of nanotechnology",
+            "C to show the range of applications of nanotechnology"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "In connection with slides, the tutor advises Russ to",
+          "options": [
+            "A talk about things that he can find slides to illustrate",
+            "B look for slides to illustrate the points he makes",
+            "C consider omitting slides altogether"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "They both agree that the best way for Russ to start his presentation is",
+          "options": [
+            "A to encourage the audience to talk",
+            "B to explain what Russ intends to do",
+            "C to provide an example"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What does the tutor advise Russ to do next while preparing his presentation?",
+          "options": [
+            "A summarise the main point he wants to make",
+            "B read the notes he has already made",
+            "C list the topics he wants to cover"
+          ]
+        },
+        { "q": 26, "type": "match", "question": "structure", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 27, "type": "match", "question": "eye contact", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 28, "type": "match", "question": "body language", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 29, "type": "match", "question": "choice of words", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 30, "type": "match", "question": "handouts", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Episodic memory",
+      "questions": [
+        { "q": 31, "type": "text", "question": "the time and ____ of past events" },
+        { "q": 32, "type": "text", "question": "general information about the ____" },
+        { "q": 33, "type": "text", "question": "does not involve recalling ____ information" },
+        { "q": 34, "type": "text", "question": "the more ____ given to an event" },
+        { "q": 35, "type": "text", "question": "remember a ____" },
+        { "q": 36, "type": "text", "question": "added to a ____ of related information" },
+        { "q": 37, "type": "text", "question": "the ____ of retrieval affects the strength of memories" },
+        { "q": 38, "type": "text", "question": "the ____ of an object near the place" },
+        { "q": 39, "type": "text", "question": "games which stimulate the ____" },
+        { "q": 40, "type": "text", "question": "their concept of the ____ may be absent" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["races"],
+    "2": ["insurance"],
+    "3": ["Jerriz"],
+    "4": ["25", "twenty-five"],
+    "5": ["stadium"],
+    "6": ["park"],
+    "7": ["coffee"],
+    "8": ["leader"],
+    "9": ["route"],
+    "10": ["lights"],
+
+    "11": ["C"],
+    "12": ["B"],
+    "13": ["C"],
+    "14": ["B"],
+    "15": ["B"],
+    "16": ["A"],
+    "17": ["E"],
+    "18": ["C"],
+    "19": ["B"],
+    "20": ["D"],
+
+    "21": ["B"],
+    "22": ["A"],
+    "23": ["C"],
+    "24": ["C"],
+    "25": ["A"],
+    "26": ["A"],
+    "27": ["C"],
+    "28": ["D"],
+    "29": ["G"],
+    "30": ["B"],
+
+    "31": ["location"],
+    "32": ["world"],
+    "33": ["personal"],
+    "34": ["attention"],
+    "35": ["name"],
+    "36": ["network"],
+    "37": ["frequency"],
+    "38": ["colour", "color"],
+    "39": ["brain"],
+    "40": ["self"]
+  }
+}

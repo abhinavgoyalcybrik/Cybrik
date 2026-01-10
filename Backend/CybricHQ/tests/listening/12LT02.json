@@ -1,0 +1,201 @@
+{
+  "test_id": "12LT02",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Events during Kenton Festival",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Opening ceremony starts at ____" },
+        { "q": 2, "type": "text", "question": "Performance of a ____ will perform" },
+        { "q": 3, "type": "text", "question": "Performance of a play written by a ____ group" },
+        { "q": 4, "type": "text", "question": "Play is about Helen Tungate (a ____)" },
+        { "q": 5, "type": "text", "question": "Fireworks display situated across the ____" },
+        { "q": 6, "type": "text", "question": "Videos about relationships children have with their ____" },
+        { "q": 7, "type": "text", "question": "Venue: ____ House" },
+        { "q": 8, "type": "text", "question": "Performance of ____ dances" },
+        { "q": 9, "type": "text", "question": "Venue: the ____ market in the town centre" },
+        { "q": 10, "type": "text", "question": "Shops have the festival ____ in their windows" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Choose FIVE answers from the box.",
+      "title": "Theatre trip to Munich",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "When the group meet at the airport they will have",
+          "options": ["A breakfast", "B coffee", "C lunch"]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "The group will be met at Munich Airport by",
+          "options": [
+            "A an employee at the National Theatre",
+            "B a theatre manager",
+            "C a tour operator"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "How much will they pay per night for a double room at the hotel?",
+          "options": ["A 110 euros", "B 120 euros", "C 150 euros"]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "What type of restaurant will they go to on Tuesday evening?",
+          "options": [
+            "A an Italian restaurant",
+            "B a Lebanese restaurant",
+            "C a typical restaurant of the region"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "Who will they meet on Wednesday afternoon?",
+          "options": ["A an actor", "B a playwright", "C a theatre director"]
+        },
+        { "q": 16, "type": "match", "question": "Wednesday", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 17, "type": "match", "question": "Thursday", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 18, "type": "match", "question": "Friday", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 19, "type": "match", "question": "Saturday", "options": ["A","B","C","D","E","F","G"] },
+        { "q": 20, "type": "match", "question": "Monday", "options": ["A","B","C","D","E","F","G"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Flow-chart Completion",
+      "instructions": "Questions 21–25: Choose A, B or C. Questions 26–30: Choose FIVE answers from the box.",
+      "title": "Scandinavian Studies / Writing a paper",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "James chose Scandinavian Studies because",
+          "options": [
+            "A he was often taken to Denmark",
+            "B his mother spoke to him in Danish",
+            "C Danish people visited his family"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "When he graduates, James would like to",
+          "options": [
+            "A take a postgraduate course",
+            "B work in the media",
+            "C become a translator"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Which course will end this term?",
+          "options": [
+            "A Swedish cinema",
+            "B Danish television programmes",
+            "C Scandinavian literature"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "James’s literature paper will be on",
+          "options": [
+            "A 19th century playwrights",
+            "B the Icelandic sagas",
+            "C modern Scandinavian novels"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "Beth recommends that James’s paper should be",
+          "options": [
+            "A a historical overview",
+            "B an in-depth study of one writer",
+            "C a study of social background"
+          ]
+        },
+        { "q": 26, "type": "flow", "question": "Read a ____ and choose topic" },
+        { "q": 27, "type": "flow", "question": "Borrow a ____ from Beth" },
+        { "q": 28, "type": "flow", "question": "Plan the ____ of the paper" },
+        { "q": 29, "type": "flow", "question": "Read sources and write ____" },
+        { "q": 30, "type": "flow", "question": "Write the paper using ____" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Conflict at work",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Conflict mostly consists of behaviour in the category of ____" },
+        { "q": 32, "type": "text", "question": "People wanting to prove their ____" },
+        { "q": 33, "type": "text", "question": "Differences in ____ between people" },
+        { "q": 34, "type": "text", "question": "____ conflicts: loyalty to own team" },
+        { "q": 35, "type": "text", "question": "Conflict-related stress can cause ____" },
+        { "q": 36, "type": "text", "question": "CEOs often have ____ and anxiety" },
+        { "q": 37, "type": "text", "question": "Conflict between people with different ____" },
+        { "q": 38, "type": "text", "question": "A structure that is more ____ may create uncertainty" },
+        { "q": 39, "type": "text", "question": "Bosses need to gain ____" },
+        { "q": 40, "type": "text", "question": "Outside person may act as a ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["2.45"],
+    "2": ["band"],
+    "3": ["community"],
+    "4": ["scientist"],
+    "5": ["river"],
+    "6": ["grandparents"],
+    "7": ["Handsworth"],
+    "8": ["traditional"],
+    "9": ["outdoor"],
+    "10": ["logo"],
+
+    "11": ["B"],
+    "12": ["C"],
+    "13": ["A"],
+    "14": ["B"],
+    "15": ["C"],
+    "16": ["F"],
+    "17": ["B"],
+    "18": ["E"],
+    "19": ["G"],
+    "20": ["C"],
+
+    "21": ["C"],
+    "22": ["B"],
+    "23": ["C"],
+    "24": ["A"],
+    "25": ["C"],
+    "26": ["student paper"],
+    "27": ["documentary"],
+    "28": ["structure"],
+    "29": ["notes"],
+    "30": ["bullet points"],
+
+    "31": ["bullying"],
+    "32": ["superiority"],
+    "33": ["personality"],
+    "34": ["structural"],
+    "35": ["absence"],
+    "36": ["confidence"],
+    "37": ["visions"],
+    "38": ["democratic"],
+    "39": ["respect"],
+    "40": ["mediator"]
+  }
+}

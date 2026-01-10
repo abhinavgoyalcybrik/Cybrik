@@ -1,0 +1,239 @@
+{
+  "test_id": "13LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "Alex’s Training",
+      "questions": [
+        { "q": 1, "type": "text", "question": "At first, Alex did his training in the ____ department." },
+        { "q": 2, "type": "text", "question": "Alex didn’t have a qualification from school in ____." },
+        { "q": 3, "type": "text", "question": "Alex thinks he should have done the diploma in ____ skills." },
+        { "q": 4, "type": "text", "question": "Age of other trainees: the youngest was ____." },
+        { "q": 5, "type": "text", "question": "Trainees receive the same amount of ____ as permanent staff." },
+        { "q": 6, "type": "text", "question": "Trainees go to ____ one day per month." },
+        { "q": 7, "type": "text", "question": "The company is in a convenient ____." },
+        { "q": 8, "type": "text", "question": "Don’t wear ____." },
+        { "q": 9, "type": "text", "question": "Don’t be ____." },
+        { "q": 10, "type": "text", "question": "Make sure you ____." }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose FOUR letters A–F.",
+      "title": "The Snow Centre",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Annie recommends that when cross-country skiing, the visitors should",
+          "options": [
+            "A get away from the regular trails",
+            "B stop to enjoy views of the scenery",
+            "C go at a slow speed at the beginning"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "What does Annie tell the group about this afternoon’s dog-sled trip?",
+          "options": [
+            "A Those who want to can take part in a race",
+            "B Anyone has the chance to drive a team of dogs",
+            "C One group member will be chosen to lead the trail"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "What does Annie say about the team relay event?",
+          "options": [
+            "A All participants receive a medal",
+            "B The course is 4 km long",
+            "C Each team is led by a teacher"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "On the snow-shoe trip, the visitors will",
+          "options": [
+            "A visit an old gold mine",
+            "B learn about unusual flowers",
+            "C climb to the top of a mountain"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq",
+          "question": "The cost of accommodation in the mountain hut includes",
+          "options": [
+            "A a supply of drinking water",
+            "B transport of visitors’ luggage",
+            "C cooked meals"
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq",
+          "question": "If there is a storm while the visitors are in the hut, they should",
+          "options": [
+            "A contact the bus driver",
+            "B wait until the weather improves",
+            "C use the emergency locator beacon"
+          ]
+        },
+        { "q": 17, "type": "match", "question": "Highland Trail", "options": ["A","B","C","D","E","F"] },
+        { "q": 18, "type": "match", "question": "Pine Trail", "options": ["A","B","C","D","E","F"] },
+        { "q": 19, "type": "match", "question": "Stony Trail", "options": ["A","B","C","D","E","F"] },
+        { "q": 20, "type": "match", "question": "Loser’s Trail", "options": ["A","B","C","D","E","F"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Multiple Answer",
+      "instructions": "Questions 21–26: Choose the correct letter A, B or C. Questions 27–30: Choose TWO letters A–E.",
+      "title": "Labels giving nutritional information on food packaging",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What was Jack’s attitude to nutritional food labels before this project?",
+          "options": [
+            "A He didn’t read everything on them",
+            "B He didn’t think they were important",
+            "C He thought they were too complicated"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Alice says that before doing this project",
+          "options": [
+            "A she was unaware of what certain foods contained",
+            "B she was too lazy to read food labels",
+            "C she was only interested in the number of calories"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "When discussing supermarket brands of pizza, Jack agrees with Alice that",
+          "options": [
+            "A the list of ingredients is shocking",
+            "B he will hesitate before buying pizza again",
+            "C the nutritional label is misleading"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Jack prefers the daily value system because it is",
+          "options": [
+            "A more accessible",
+            "B more logical",
+            "C more comprehensive"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "mcq",
+          "question": "What surprised both students about one flavour of crisps?",
+          "options": [
+            "A The percentage of artificial additives was incorrect",
+            "B The products did not contain any meat",
+            "C The labels did not list all the ingredients"
+          ]
+        },
+        {
+          "q": 26,
+          "type": "mcq",
+          "question": "What do the students think about research into nutritional food labelling?",
+          "options": [
+            "A It did not produce clear results",
+            "B It focused on the wrong people",
+            "C It made unrealistic recommendations"
+          ]
+        },
+        {
+          "q": "27-28",
+          "type": "mcq_multi",
+          "question": "Which TWO things surprised the students about the traffic-light system for nutritional labels?",
+          "options": ["A","B","C","D","E"]
+        },
+        {
+          "q": "29-30",
+          "type": "mcq_multi",
+          "question": "Which TWO things are true about the participants in the study on the traffic-light system?",
+          "options": ["A","B","C","D","E"]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "The history of coffee",
+      "questions": [
+        { "q": 31, "type": "text", "question": "the ruler ordered the ____ of every coffee house" },
+        { "q": 32, "type": "text", "question": "Coffee shops were compared to ____" },
+        { "q": 33, "type": "text", "question": "played an important part in social and ____ changes" },
+        { "q": 34, "type": "text", "question": "named according to the ____ they came from" },
+        { "q": 35, "type": "text", "question": "most cultivation depended on ____" },
+        { "q": 36, "type": "text", "question": "coffee was used as a form of ____" },
+        { "q": 37, "type": "text", "question": "coffee became almost as important as ____" },
+        { "q": 38, "type": "text", "question": "consumption of ____ also took place in the USA" },
+        { "q": 39, "type": "text", "question": "prices dropped because of improvements in ____" },
+        { "q": 40, "type": "text", "question": "industrial workers found coffee helped them to work at ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["Finance"],
+    "2": ["Maths", "Math", "Mathematics"],
+    "3": ["business"],
+    "4": ["17", "seventeen"],
+    "5": ["holidays", "vacations"],
+    "6": ["college"],
+    "7": ["location"],
+    "8": ["jeans"],
+    "9": ["late"],
+    "10": ["smile"],
+
+    "11": ["A"],
+    "12": ["B"],
+    "13": ["A"],
+    "14": ["C"],
+    "15": ["A"],
+    "16": ["B"],
+    "17": ["B"],
+    "18": ["D"],
+    "19": ["A"],
+    "20": ["E"],
+
+    "21": ["A"],
+    "22": ["A"],
+    "23": ["C"],
+    "24": ["C"],
+    "25": ["B"],
+    "26": ["A"],
+    "27": ["B"],
+    "28": ["C"],
+    "29": ["D"],
+    "30": ["E"],
+
+    "31": ["destruction"],
+    "32": ["universities", "university"],
+    "33": ["political"],
+    "34": ["ports", "port"],
+    "35": ["slaves", "slavery"],
+    "36": ["taxation"],
+    "37": ["sugar"],
+    "38": ["tea"],
+    "39": ["transportation"],
+    "40": ["night"]
+  }
+}

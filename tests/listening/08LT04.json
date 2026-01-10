@@ -1,0 +1,161 @@
+{
+  "test_id": "08LT04",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Benefit: ____" },
+        { "q": 2, "type": "text", "question": "Time off: ____" },
+        { "q": 3, "type": "text", "question": "Length of break: ____" },
+        { "q": 4, "type": "text", "question": "Provided item: ____" },
+        { "q": 5, "type": "text", "question": "Uniform colour: ____" },
+        { "q": 6, "type": "text", "question": "Clothing item: ____" },
+        { "q": 7, "type": "text", "question": "Start date: ____" },
+        { "q": 8, "type": "text", "question": "Contact name: ____" },
+        { "q": 9, "type": "text", "question": "Best time to call: ____" },
+        { "q": 10, "type": "text", "question": "Reference required: ____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Map Labelling",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "Community groups are mainly concerned about",
+          "options": ["A pedestrian safety", "B traffic noise", "C parking"]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "The road surface at Thomas Street will be",
+          "options": ["A narrowed", "B widened", "C repainted"]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "The aim of the road changes is to",
+          "options": ["A speed traffic up", "B slow traffic down", "C reduce pollution"]
+        },
+        { "q": 14, "type": "map", "question": "Facility at position 14", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 15, "type": "map", "question": "Facility at position 15", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 16, "type": "map", "question": "Facility at position 16", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 17, "type": "map", "question": "Facility at position 17", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 18, "type": "map", "question": "Facility at position 18", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 19, "type": "map", "question": "Facility at position 19", "options": ["A","B","C","D","E","F","G","H"] },
+        { "q": 20, "type": "map", "question": "Facility at position 20", "options": ["A","B","C","D","E","F","G","H"] }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ (Multiple) + Flow-chart Completion",
+      "questions": [
+        {
+          "q": "21-22",
+          "type": "mcq_multi",
+          "question": "In which TWO ways is Dan financing his course?",
+          "options": [
+            "A government funding",
+            "B family support",
+            "C college grant",
+            "D local council support",
+            "E bank loan"
+          ]
+        },
+        { "q": 23, "type": "mcq", "question": "Jeannie gives up ____ activity", "options": ["A singing","B debating","C hockey"] },
+        { "q": 24, "type": "mcq", "question": "Jeannie continues with ____", "options": ["A tennis","B drama club","C choir"] },
+        { "q": 25, "type": "text", "question": "Exam preparation: know the ____" },
+        { "q": 26, "type": "text", "question": "Plan study in ____ stages" },
+        { "q": 27, "type": "text", "question": "Revise by writing a ____ paragraph" },
+        { "q": 28, "type": "text", "question": "Read it through ____" },
+        { "q": 29, "type": "text", "question": "Helps fix things in the ____" },
+        { "q": 30, "type": "text", "question": "Write answers for exam ____" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Matching + Note Completion",
+      "questions": [
+        {
+          "q": 31,
+          "type": "match",
+          "question": "Feature of Painting Style A",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 32,
+          "type": "match",
+          "question": "Feature of Painting Style B",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 33,
+          "type": "match",
+          "question": "Feature of Painting Style C",
+          "options": ["A","B","C"]
+        },
+        {
+          "q": 34,
+          "type": "match",
+          "question": "Feature of Painting Style (remaining)",
+          "options": ["A","B","C"]
+        },
+        { "q": 35, "type": "text", "question": "Aim: identify the ____ used as basis" },
+        { "q": 36, "type": "text", "question": "Period: the ____ period" },
+        { "q": 37, "type": "text", "question": "Environmental change: rising ____" },
+        { "q": 38, "type": "text", "question": "Disruption to hunting ____" },
+        { "q": 39, "type": "text", "question": "Number of paintings studied" },
+        { "q": 40, "type": "text", "question": "Creature identified most closely: ____" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["water"],
+    "2": ["day off"],
+    "3": ["break"],
+    "4": ["free meal"],
+    "5": ["dark"],
+    "6": ["jacket"],
+    "7": ["28 June"],
+    "8": ["Jane Irwin"],
+    "9": ["midday"],
+    "10": ["reference"],
+
+    "11": ["A"],
+    "12": ["B"],
+    "13": ["B"],
+    "14": ["A"],
+    "15": ["C"],
+    "16": ["D"],
+    "17": ["E"],
+    "18": ["F"],
+    "19": ["G"],
+    "20": ["H"],
+
+    "21": ["B"],
+    "22": ["E"],
+    "23": ["B"],
+    "24": ["B"],
+    "25": ["requirements"],
+    "26": ["clear"],
+    "27": ["single"],
+    "28": ["quickly"],
+    "29": ["mind"],
+    "30": ["practice"],
+
+    "31": ["A"],
+    "32": ["B"],
+    "33": ["C"],
+    "34": ["A"],
+    "35": ["animal"],
+    "36": ["Yam"],
+    "37": ["sea levels"],
+    "38": ["patterns"],
+    "39": ["107"],
+    "40": ["Ribboned Pipefish"]
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "test_id": "12LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
+      "title": "FAMILY EXCURSIONS",
+      "questions": [
+        { "q": 1, "type": "text", "question": "Can take photos of the ____ that surround the lake" },
+        { "q": 2, "type": "text", "question": "Visit can include a 40-minute ride on a ____" },
+        { "q": 3, "type": "text", "question": "Visitors can walk in the farm's ____ by the lake" },
+        { "q": 4, "type": "text", "question": "____ is available at extra cost" },
+        { "q": 5, "type": "text", "question": "A ____ is provided" },
+        { "q": 6, "type": "text", "question": "Only suitable for cyclists who have some ____" },
+        { "q": 7, "type": "text", "question": "Bikes can be hired from ____ (near the Cruise Ship Terminal)" },
+        { "q": 8, "type": "text", "question": "Cyclists need a ____ (can be hired)" },
+        { "q": 9, "type": "text", "question": "There are no ____ or accommodation in the area" },
+        { "q": 10, "type": "text", "question": "Total cost for whole family of cruise and farm visit: $____" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "MCQ + Matching",
+      "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Choose FOUR answers.",
+      "title": "Talk to new kitchen assistants",
+      "questions": [
+        {
+          "q": 11,
+          "type": "mcq",
+          "question": "According to the manager, what do most people like about the job of kitchen assistant?",
+          "options": [
+            "A the variety of work",
+            "B the friendly atmosphere",
+            "C the opportunities for promotion"
+          ]
+        },
+        {
+          "q": 12,
+          "type": "mcq",
+          "question": "The manager is concerned about some of the new staff's",
+          "options": [
+            "A jewellery",
+            "B hair styles",
+            "C shoes"
+          ]
+        },
+        {
+          "q": 13,
+          "type": "mcq",
+          "question": "The manager says that the day is likely to be busy for kitchen staff because",
+          "options": [
+            "A it is a public holiday",
+            "B the head chef is absent",
+            "C the restaurant is almost fully booked"
+          ]
+        },
+        {
+          "q": 14,
+          "type": "mcq",
+          "question": "Only kitchen staff who are 18 or older are allowed to use",
+          "options": [
+            "A the waste disposal unit",
+            "B the electric mixer",
+            "C the meat slicer"
+          ]
+        },
+        {
+          "q": 15,
+          "type": "mcq_multi",
+          "question": "Which TWO things can make the job of kitchen assistant stressful?",
+          "options": [
+            "A They have to follow orders immediately",
+            "B The kitchen gets very hot",
+            "C They may not be able to take a break",
+            "D They have to do overtime",
+            "E The work is physically demanding"
+          ]
+        },
+        {
+          "q": 16,
+          "type": "mcq_multi",
+          "question": "Which TWO things can make the job of kitchen assistant stressful?",
+          "options": [
+            "A They have to follow orders immediately",
+            "B The kitchen gets very hot",
+            "C They may not be able to take a break",
+            "D They have to do overtime",
+            "E The work is physically demanding"
+          ]
+        },
+        {
+          "q": 17,
+          "type": "match",
+          "question": "Joy Parkins",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 18,
+          "type": "match",
+          "question": "David Field",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 19,
+          "type": "match",
+          "question": "Dexter Wills",
+          "options": ["A","B","C","D","E","F"]
+        },
+        {
+          "q": 20,
+          "type": "match",
+          "question": "Mike Smith",
+          "options": ["A","B","C","D","E","F"]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + Note Completion",
+      "instructions": "Questions 21–23: Choose A, B or C. Questions 24–30: Write ONE WORD ONLY.",
+      "title": "Paper on Public Libraries",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "What will be the main topic of Trudie and Stewart's paper?",
+          "options": [
+            "A how public library services are organised in different countries",
+            "B how changes in society are reflected in public libraries",
+            "C how the funding of public libraries has changed"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "They agree that one disadvantage of free digitalised books is that",
+          "options": [
+            "A they may take a long time to read",
+            "B they can be difficult to read",
+            "C they are generally old"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Stewart expects that in the future libraries will",
+          "options": [
+            "A maintain their traditional function",
+            "B become centres for local communities",
+            "C no longer contain any books"
+          ]
+        },
+        { "q": 24, "type": "text", "question": "whether it has a ____ of its own" },
+        { "q": 25, "type": "text", "question": "how it's affected by laws regarding all aspects of ____" },
+        { "q": 26, "type": "text", "question": "how the design needs to take the ____ of customers into account" },
+        { "q": 27, "type": "text", "question": "what ____ is required in case of accidents" },
+        { "q": 28, "type": "text", "question": "why a famous person's ____ is located in the library" },
+        { "q": 29, "type": "text", "question": "whether it has a ____ of local organisations" },
+        { "q": 30, "type": "text", "question": "how it's different from a library in a ____" }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write NO MORE THAN TWO WORDS for each answer.",
+      "title": "Four business values",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Many business values can result in ____" },
+        { "q": 32, "type": "text", "question": "potential ____ that may result" },
+        { "q": 33, "type": "text", "question": "had to build a ____" },
+        { "q": 34, "type": "text", "question": "Other teams experienced ____ from trying to collaborate" },
+        { "q": 35, "type": "text", "question": "Sales of a ____ were poor because of collaboration" },
+        { "q": 36, "type": "text", "question": "bad use of various company ____" },
+        { "q": 37, "type": "text", "question": "tasks that are ____" },
+        { "q": 38, "type": "text", "question": "advertising campaign for a ____" },
+        { "q": 39, "type": "text", "question": "response to a particular ____" },
+        { "q": 40, "type": "text", "question": "pioneers had a ____ far higher than followers" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["mountains"],
+    "2": ["horse"],
+    "3": ["gardens"],
+    "4": ["lunch"],
+    "5": ["map"],
+    "6": ["experience"],
+    "7": ["Ratchesons"],
+    "8": ["helmet"],
+    "9": ["shops"],
+    "10": ["267"],
+
+    "11": ["A"],
+    "12": ["A"],
+    "13": ["C"],
+    "14": ["C"],
+    "15": ["A", "E"],
+    "16": ["A", "E"],
+    "17": ["F"],
+    "18": ["C"],
+    "19": ["D"],
+    "20": ["B"],
+
+    "21": ["B"],
+    "22": ["C"],
+    "23": ["B"],
+    "24": ["budget"],
+    "25": ["employment"],
+    "26": ["safety"],
+    "27": ["insurance"],
+    "28": ["diary"],
+    "29": ["database"],
+    "30": ["museum"],
+
+    "31": ["damage"],
+    "32": ["side effects"],
+    "33": ["bridge"],
+    "34": ["confusion"],
+    "35": ["smartphone"],
+    "36": ["resources"],
+    "37": ["unnecessary"],
+    "38": ["chocolate bar"],
+    "39": ["problem"],
+    "40": ["market share"]
+  }
+}

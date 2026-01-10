@@ -1,0 +1,192 @@
+{
+  "test_id": "08LT01",
+  "module": "listening",
+  "sections": [
+    {
+      "section": 1,
+      "question_type": "MCQ + Form Completion",
+      "instructions": "Questions 1–2: Choose the correct letter A, B or C. Questions 3–10: Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
+      "title": "Summer Music Festival – Booking Form",
+      "questions": [
+        {
+          "q": 1,
+          "type": "mcq",
+          "question": "George went into the library to",
+          "options": [
+            "A return some books",
+            "B look at a newspaper",
+            "C meet his secretary"
+          ]
+        },
+        {
+          "q": 2,
+          "type": "mcq",
+          "question": "Why has Nina been busy?",
+          "options": [
+            "A answering phone calls",
+            "B organising a festival",
+            "C booking concert tickets"
+          ]
+        },
+        { "q": 3, "type": "text", "question": "Name" },
+        { "q": 4, "type": "text", "question": "Address" },
+        { "q": 5, "type": "text", "question": "Telephone number" },
+        { "q": 6, "type": "text", "question": "Ticket price includes" },
+        { "q": 7, "type": "text", "question": "Date of second concert" },
+        { "q": 8, "type": "text", "question": "Cost of ticket (£)" },
+        { "q": 9, "type": "text", "question": "Number of tickets needed" },
+        { "q": 10, "type": "text", "question": "Discount available for" }
+      ]
+    },
+    {
+      "section": 2,
+      "question_type": "Sentence Completion + MCQ (Multiple)",
+      "instructions": "Questions 11–18: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 19–20: Choose TWO letters A–E.",
+      "title": "The Dinosaur Museum",
+      "questions": [
+        { "q": 11, "type": "text", "question": "The museum closes at ____ pm on Mondays" },
+        { "q": 12, "type": "text", "question": "Number of floors in the museum" },
+        { "q": 13, "type": "text", "question": "Price of adult ticket (£)" },
+        { "q": 14, "type": "text", "question": "Group booking discount applies to groups of ____ or more" },
+        { "q": 15, "type": "text", "question": "Maximum number of students per group" },
+        { "q": 16, "type": "text", "question": "Length of guided tour (minutes)" },
+        { "q": 17, "type": "text", "question": "Age group the tour is designed for" },
+        { "q": 18, "type": "text", "question": "Tours must be booked in advance by ____" },
+        {
+          "q": "19-20",
+          "type": "mcq_multi",
+          "question": "Which TWO activities can students do after the tour at present?",
+          "options": [
+            "A build model dinosaurs",
+            "B watch films",
+            "C draw dinosaurs",
+            "D find dinosaur eggs",
+            "E play computer games"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 3,
+      "question_type": "MCQ + MCQ (Multiple)",
+      "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–27: Choose THREE letters A–G.",
+      "title": "Field Trip Proposal",
+      "questions": [
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "The tutor thinks that Sandra’s proposal",
+          "options": [
+            "A should be re-ordered in some parts",
+            "B needs a contents page",
+            "C is too long"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "Sandra initially focused on",
+          "options": [
+            "A tourism",
+            "B landscape features",
+            "C social history"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "The tutor agrees that Sandra should include",
+          "options": [
+            "A climate change",
+            "B geological features",
+            "C field trip activities"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "The tutor feels the proposal should",
+          "options": [
+            "A be more academic",
+            "B be more practical",
+            "C include fewer topics"
+          ]
+        },
+        {
+          "q": "25-27",
+          "type": "mcq_multi",
+          "question": "Which THREE topics does Sandra agree to include in the proposal?",
+          "options": [
+            "A climate change",
+            "B field trip activities",
+            "C geographical features",
+            "D impact of tourism",
+            "E myths and legends",
+            "F plant and animal life",
+            "G social history"
+          ]
+        }
+      ]
+    },
+    {
+      "section": 4,
+      "question_type": "Note Completion",
+      "instructions": "Write ONE WORD ONLY for each answer.",
+      "title": "Geography",
+      "questions": [
+        { "q": 31, "type": "text", "question": "Studying geography helps us understand ____" },
+        { "q": 32, "type": "text", "question": "Relationships between people and their ____" },
+        { "q": 33, "type": "text", "question": "Two main branches: physical and ____ geography" },
+        { "q": 34, "type": "text", "question": "Maps are easy to ____" },
+        { "q": 35, "type": "text", "question": "Maps can show physical features of large and ____ areas" },
+        { "q": 36, "type": "text", "question": "A two-dimensional map will always have some ____" },
+        { "q": 37, "type": "text", "question": "Aerial photos taken from high ____" },
+        { "q": 38, "type": "text", "question": "They can show traffic ____" },
+        { "q": 39, "type": "text", "question": "Aerial photos can show vegetation ____" },
+        { "q": 40, "type": "text", "question": "Landsats transmit visual information to ____ stations" }
+      ]
+    }
+  ],
+  "answer_key": {
+    "1": ["B"],
+    "2": ["A"],
+    "3": ["George O’Neill", "George O'Neill"],
+    "4": ["Hill Avenue"],
+    "5": ["786543"],
+    "6": ["drinks"],
+    "7": ["22nd June", "22 June"],
+    "8": ["10.50"],
+    "9": ["four", "4"],
+    "10": ["students", "senior citizens"],
+
+    "11": ["5.30"],
+    "12": ["3"],
+    "13": ["8.50"],
+    "14": ["10"],
+    "15": ["20"],
+    "16": ["90"],
+    "17": ["school children"],
+    "18": ["telephone"],
+    "19": ["B"],
+    "20": ["E"],
+
+    "21": ["A"],
+    "22": ["B"],
+    "23": ["B"],
+    "24": ["C"],
+    "25": ["B"],
+    "26": ["C"],
+    "27": ["G"],
+
+    "31": ["processes"],
+    "32": ["environment"],
+    "33": ["human"],
+    "34": ["carry"],
+    "35": ["small"],
+    "36": ["distortion"],
+    "37": ["altitude"],
+    "38": ["density"],
+    "39": ["problems"],
+    "40": ["receiving"]
+  }
+}
