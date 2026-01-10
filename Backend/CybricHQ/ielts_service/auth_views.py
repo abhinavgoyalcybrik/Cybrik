@@ -82,7 +82,8 @@ def get_user_data(user):
             "exam_date": profile.exam_date or None,
             "referral_source": profile.referral_source or None,
         }
-    except IELTSUserProfile.DoesNotExist:
+    except Exception:
+        # Handle DoesNotExist, table not existing (migration not run), or any other error
         pass
     
     return {
