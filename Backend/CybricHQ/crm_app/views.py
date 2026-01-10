@@ -20,12 +20,13 @@ from .tasks import (
     forward_lead_to_elevenlabs,
     process_call_result,
     run_llm_extraction_task,
+    schedule_elevenlabs_call as start_voice_call_task,
 )
 from rest_framework import viewsets, status, permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .authentication import JWTAuthFromCookie
 
@@ -71,12 +72,13 @@ def _verify_webhook_secret(request) -> bool:
     Verify incoming webhook header secret.
     Checks ELEVENLABS_WEBHOOK_SECRET, then ELEVEN_WEBHOOK_SECRET, then WEBHOOK_SECRET in settings.
     Uses constant-time compare.
-    If no secret configured, returns True (dev convenience).
+    SECURITY: If no secret configured, rejects request (fail closed).
     """
     expected = getattr(settings, "ELEVENLABS_WEBHOOK_SECRET", None) or getattr(settings, "ELEVEN_WEBHOOK_SECRET", None) or getattr(settings, "WEBHOOK_SECRET", None)
     if not expected:
-        # No secret configured -> accept (development)
-        return True
+        # SECURITY FIX: Fail closed - reject if no secret configured
+        logger.warning("Webhook secret not configured - rejecting request for security")
+        return False
     header = request.headers.get("X-Webhook-Secret") or request.META.get("HTTP_X_WEBHOOK_SECRET")
     if not header:
         logger.warning("Webhook received without X-Webhook-Secret header")
@@ -120,7 +122,7 @@ def _field_exists(obj, field_name: str) -> bool:
 class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = Applicant.objects.all().order_by("-created_at")
     serializer_class = ApplicantSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
@@ -306,14 +308,14 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 class AcademicRecordViewSet(viewsets.ModelViewSet):
     queryset = AcademicRecord.objects.all().order_by("-created_at")
     serializer_class = AcademicRecordSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("applicant",)
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all().order_by("-created_at")
     serializer_class = DocumentSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("applicant", "document_type", "status")
 
     def perform_create(self, serializer):
@@ -334,21 +336,20 @@ class DocumentViewSet(viewsets.ModelViewSet):
             
         instance = serializer.save()
         
-        # Trigger Mock AI Extraction
-        # In production, this would be a celery task
+        # TODO: Trigger real AI document extraction via Celery task
+        # For now, mark as pending validation
         try:
-            instance.validation_status = "valid"  # Mock validation
-            instance.extraction_data = {"extracted_name": "Mock Name", "confidence": 0.95}
-            instance.save()
-            print(f"--- MOCK AI EXTRACTION: Document {instance.id} validated & extracted ---")
+            instance.validation_status = "pending"
+            instance.save(update_fields=['validation_status'])
+            logger.info(f"Document {instance.id} uploaded, pending AI extraction")
         except Exception as e:
-            print(f"AI Extraction Failed: {e}")
+            logger.error(f"Failed to update document status: {e}")
 
 
 class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = Application.objects.all().order_by("-created_at")
     serializer_class = ApplicationSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=["post"], url_path="start-voice-call")
     def start_voice_call(self, request, pk=None):
@@ -463,21 +464,21 @@ class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 class TranscriptViewSet(viewsets.ModelViewSet):
     queryset = Transcript.objects.all().order_by("-created_at")
     serializer_class = TranscriptSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("application", "asr_provider", "call")
 
 
 class AIResultViewSet(viewsets.ModelViewSet):
     queryset = AIResult.objects.all().order_by("-created_at")
     serializer_class = AIResultSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("application",)
 
 
 class OutboundMessageViewSet(viewsets.ModelViewSet):
     queryset = OutboundMessage.objects.all().order_by("-created_at")
     serializer_class = OutboundMessageSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("application", "status", "channel")
 
     @action(detail=True, methods=["post"])
@@ -497,7 +498,7 @@ class OutboundMessageViewSet(viewsets.ModelViewSet):
 class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = Lead.objects.all().order_by("-received_at")
     serializer_class = LeadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("source", "status")
 
     def perform_destroy(self, instance):
@@ -585,7 +586,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = CallRecord.objects.all().order_by("-created_at")
     serializer_class = CallRecordSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("status", "direction", "provider")
 
     def get_queryset(self):
@@ -659,7 +660,7 @@ class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 class FollowUpViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = FollowUp.objects.all().order_by("due_at")
     serializer_class = FollowUpSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     filterset_fields = ("assigned_to", "completed", "channel", "application", "lead", "status")
     
     def create(self, request, *args, **kwargs):
@@ -931,7 +932,7 @@ class ScheduleAICallView(APIView):
     API endpoint to schedule an AI call for an applicant at a specific time.
     The call will be automatically triggered by ElevenLabs at the scheduled time.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     
     def post(self, request):
         from .serializers import ScheduleAICallSerializer
@@ -986,7 +987,7 @@ class TriggerAICallNowView(APIView):
     """
     Immediately trigger an AI call to an applicant.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     
     def post(self, request):
         from .tasks import schedule_elevenlabs_call
@@ -1034,7 +1035,7 @@ class ProcessDueAICallsView(APIView):
     Manually trigger processing of all due AI calls.
     This is an alternative to relying on Celery Beat.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     
     def post(self, request):
         from .tasks import check_and_initiate_followups
@@ -1059,7 +1060,7 @@ class SyncElevenLabsCallsView(APIView):
     - Need to manually fetch call data
     - Initial sync of existing ElevenLabs conversations
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     
     def post(self, request):
         from .tasks import sync_all_elevenlabs_conversations

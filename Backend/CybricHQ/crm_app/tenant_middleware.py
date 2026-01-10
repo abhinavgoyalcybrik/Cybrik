@@ -2,7 +2,10 @@
 Tenant middleware for multi-tenant white-label support.
 Automatically detects and sets the current tenant on each request.
 """
+import logging
 from django.utils.deprecation import MiddlewareMixin
+
+logger = logging.getLogger(__name__)
 
 
 class TenantMiddleware(MiddlewareMixin):
@@ -59,11 +62,6 @@ class TenantMiddleware(MiddlewareMixin):
                     from django.conf import settings
                     from rest_framework_simplejwt.tokens import AccessToken
                     from django.contrib.auth import get_user_model
-                    import datetime
-                    
-                    with open('middleware_debug.log', 'a') as f:
-                         f.write(f"\n[{datetime.datetime.now()}] Middleware processing {request.path}\n")
-                         f.write(f"Cookies keys: {list(request.COOKIES.keys())}\n")
 
                     cookie_name = getattr(settings, "ACCESS_COOKIE_NAME", "cyb_access_v2")
                     token = request.COOKIES.get(cookie_name) or request.COOKIES.get("cyb_access")
@@ -73,25 +71,18 @@ class TenantMiddleware(MiddlewareMixin):
                         user_id = access.get("user_id")
                         User = get_user_model()
                         user = User.objects.get(pk=user_id)
-                        with open('middleware_debug.log', 'a') as f:
-                             f.write(f"Resolved user from JWT: {user.username}\n")
-                    else:
-                        with open('middleware_debug.log', 'a') as f:
-                             f.write(f"No token found in cookies. Expected {cookie_name}\n")
+                        logger.debug(f"Resolved user from JWT: {user.username}")
                 except Exception as e:
-                    with open('middleware_debug.log', 'a') as f:
-                         f.write(f"JWT Decode Exception: {e}\n")
+                    logger.debug(f"JWT decode failed: {e}")
                     pass
 
             if user and user.is_authenticated:
                 try:
                     if hasattr(user, 'profile') and user.profile.tenant:
                         tenant = user.profile.tenant
-                        with open('middleware_debug.log', 'a') as f:
-                             f.write(f"Resolved tenant from profile: {tenant.slug}\n")
+                        logger.debug(f"Resolved tenant from profile: {tenant.slug}")
                 except Exception as e:
-                    with open('middleware_debug.log', 'a') as f:
-                         f.write(f"Profile Tenant Lookups Exception: {e}\n")
+                    logger.debug(f"Profile tenant lookup failed: {e}")
                     pass
         
         # Set tenant on request for downstream use

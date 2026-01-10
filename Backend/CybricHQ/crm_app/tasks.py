@@ -19,9 +19,8 @@ def send_welcome_message(lead_id, phone, source):
         elif source == "WALK_IN":
             message = f"Welcome to CybricHQ, {lead.name}! We have registered your visit. You can reply here with documents."
         
-        # Mock sending
+        # Note: In production, integrate with Twilio/Meta API
         logger.info(f"[MOCK SMS] To: {phone} | Body: {message}")
-        print(f"--- SENT SMS to {phone}: {message} ---")
         
     except Lead.DoesNotExist:
         logger.error(f"Lead {lead_id} not found for welcome message.")
@@ -148,7 +147,6 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
             call_record.external_call_id = result.get("call_sid")
             call_record.metadata["call_sid"] = result.get("call_sid")
             call_record.metadata["full_response"] = result.get("full_response")
-            print(f"--- SMARTFLO CALL INITIATED for {name} ({phone}) ---")
             call_record.save()
             return {"ok": True, "call_sid": result.get("call_sid"), "call_record_id": call_record.id}
         else:
@@ -156,7 +154,6 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
             call_record.status = "failed"
             call_record.metadata["error"] = result.get("error")
             call_record.save()
-            print(f"--- SMARTFLO CALL FAILED for {name} ({phone}): {result.get('error')} ---")
             return {"ok": False, "error": result.get("error")}
     
     except Exception as e:
