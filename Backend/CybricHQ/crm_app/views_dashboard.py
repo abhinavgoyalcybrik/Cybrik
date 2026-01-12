@@ -83,32 +83,66 @@ def _apply_common_filters_lead_qs(qs, filters, request, restrict_to_user=False):
 @permission_classes([IsAuthenticated])
 def dashboard_overview(request):
     """
-    Unified role-aware dashboard endpoint.
+    Unified role-aware dashboard endpoint with tenant filtering.
     Query params supported (optional):
         - start=YYYY-MM-DD
         - end=YYYY-MM-DD
         - country=ISO or country name
         - counselor_id=123
     """
+    from .models import Lead, UserProfile
+    
     role = _get_user_role(request.user)
     filters = _parse_filters(request)
+    tenant = getattr(request, 'tenant', None)
+    
+    # Fallback: try to get tenant from user profile
+    if not tenant and request.user.is_authenticated:
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(
+                user=request.user
+            ).first()
+            if profile and profile.tenant:
+                tenant = profile.tenant
+        except Exception:
+            pass
 
-    cache_key = f"dashboard:overview:{role}:{request.user.id}:{filters.get('start_date')}:{filters.get('end_date')}:{filters.get('country')}:{filters.get('counselor_id')}"
-
+    cache_key = f"dashboard:overview:{role}:{request.user.id}:{filters.get('start_date')}:{filters.get('end_date')}:{filters.get('country')}:{filters.get('counselor_id')}:{tenant.id if tenant else 'none'}"
 
     payload = {"role": role}
+    
+    # Build base querysets filtered by tenant
+    if tenant:
+        leads_qs = Lead.objects.filter(tenant=tenant)
+        applicants_qs = Applicant.objects.filter(tenant=tenant)
+        applications_qs = Application.objects.filter(tenant=tenant)
+    else:
+        # Superuser without tenant can see all
+        if request.user.is_superuser:
+            leads_qs = Lead.objects.all()
+            applicants_qs = Applicant.objects.all()
+            applications_qs = Application.objects.all()
+        else:
+            # No tenant = no data
+            leads_qs = Lead.objects.none()
+            applicants_qs = Applicant.objects.none()
+            applications_qs = Application.objects.none()
 
     # ---- ADMIN payload ----
     if role == "Admin":
-        # basic counts
-        payload["total_users"] = User.objects.count()
-        payload["total_applicants"] = Applicant.objects.count()
-        payload["total_applications"] = Application.objects.count()
+        # User count - filter by tenant
+        if tenant:
+            tenant_users = UserProfile.objects.filter(tenant=tenant).values_list('user_id', flat=True)
+            payload["total_users"] = User.objects.filter(id__in=tenant_users).count()
+        else:
+            payload["total_users"] = User.objects.count()
+            
+        payload["total_applicants"] = applicants_qs.count()
+        payload["total_applications"] = applications_qs.count()
         
-        # Lead stats
-        from .models import Lead
-        total_leads = Lead.objects.count()
-        converted_leads = Lead.objects.filter(status="converted").count()
+        # Lead stats - tenant filtered
+        total_leads = leads_qs.count()
+        converted_leads = leads_qs.filter(status="converted").count()
         payload["total_leads"] = total_leads
 
         # conversion rate: converted leads / total leads
@@ -117,8 +151,8 @@ def dashboard_overview(request):
         except Exception:
             payload["conversion_rate_percent"] = 0.0
 
-        # recent applicants (10)
-        recent_qs = Applicant.objects.order_by("-created_at")[:10]
+        # recent applicants (10) - tenant filtered
+        recent_qs = applicants_qs.order_by("-created_at")[:10]
         payload["recent_applicants"] = [
             {
                 "id": a.id,
@@ -129,9 +163,9 @@ def dashboard_overview(request):
             for a in recent_qs
         ]
 
-        # per-counselor performance if assigned_to exists on Applicant
-        if _safe_field_exists(Applicant.objects.all(), "assigned_to"):
-            per_counselor = Applicant.objects.values(
+        # per-counselor performance - tenant filtered
+        if _safe_field_exists(applicants_qs, "assigned_to"):
+            per_counselor = applicants_qs.values(
                 "assigned_to__id", "assigned_to__username"
             ).annotate(count=Count("id")).order_by("-count")[:50]
             payload["per_counselor_counts"] = [
@@ -141,8 +175,8 @@ def dashboard_overview(request):
 
     # ---- ADMISSIONS payload ----
     elif role == "Admissions":
-        # total applications and country distribution
-        qs = Application.objects.all()
+        # total applications and country distribution - tenant filtered
+        qs = applications_qs
         qs = _apply_common_filters_lead_qs(qs, filters, request, restrict_to_user=False)
         payload["total_applications"] = qs.count()
 
@@ -169,8 +203,8 @@ def dashboard_overview(request):
 
     # ---- COUNSELLOR payload ----
     elif role == "Counsellor":
-        # Only show leads/applicants assigned to this counsellor if assigned_to exists
-        lead_qs = Applicant.objects.all()
+        # Only show leads/applicants assigned to this counsellor - tenant filtered
+        lead_qs = applicants_qs
         lead_qs = _apply_common_filters_lead_qs(lead_qs, filters, request, restrict_to_user=True)
 
         payload["my_total_applicants"] = lead_qs.count()
