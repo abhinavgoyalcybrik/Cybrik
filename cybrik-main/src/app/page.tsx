@@ -289,7 +289,13 @@ export default function Home() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrollY > 50 ? 'glass-nav shadow-lg' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <span className="text-3xl">✈️</span>
+            <Image
+              src="/images/cybrik-logo.png"
+              alt="Cybrik Logo"
+              width={44}
+              height={44}
+              className="rounded-xl logo-glow transition-transform group-hover:scale-110"
+            />
           </div>
           <div className="hidden md:flex items-center gap-8">
             {['Products', 'Features', 'About', 'Contact'].map((item) => (
@@ -551,7 +557,13 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-3xl">✈️</span>
+                <Image
+                  src="/images/cybrik-logo.png"
+                  alt="Cybrik Logo"
+                  width={40}
+                  height={40}
+                  className="rounded-xl logo-glow"
+                />
               </div>
               <p className="text-gray-500 text-sm leading-relaxed">
                 Empowering businesses and education with AI-powered tools.
