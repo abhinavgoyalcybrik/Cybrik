@@ -142,6 +142,60 @@ class TenantAdmin(admin.ModelAdmin):
 
 @admin.register(TenantSettings)
 class TenantSettingsAdmin(admin.ModelAdmin):
-    list_display = ("tenant", "company_name", "custom_domain", "primary_color")
+    list_display = ("tenant", "company_name", "custom_domain", "has_smartflo", "has_elevenlabs", "primary_color")
     search_fields = ("tenant__name", "company_name", "custom_domain")
     list_filter = ("tenant__is_active",)
+    
+    fieldsets = (
+        ('Tenant', {
+            'fields': ('tenant',)
+        }),
+        ('Branding', {
+            'fields': ('company_name', 'logo_url', 'favicon_url', 'primary_color', 'secondary_color', 'accent_color')
+        }),
+        ('Custom Domain (White-Label)', {
+            'fields': ('custom_domain',),
+            'description': 'Enter the custom domain for this tenant (e.g., crm.clientcompany.com). Client must set up DNS CNAME first.'
+        }),
+        ('SmartFlo API Configuration', {
+            'fields': ('smartflo_api_key', 'smartflo_voicebot_api_key', 'smartflo_caller_id', 'smartflo_config'),
+            'description': 'Configure SmartFlo API credentials for this tenant. Each tenant can have their own phone numbers and API keys.',
+            'classes': ('collapse',)
+        }),
+        ('ElevenLabs AI Configuration', {
+            'fields': ('elevenlabs_api_key', 'elevenlabs_agent_id', 'elevenlabs_config'),
+            'description': 'Configure ElevenLabs AI credentials for this tenant.',
+            'classes': ('collapse',)
+        }),
+        ('Contact & Support', {
+            'fields': ('support_email', 'website_url'),
+            'classes': ('collapse',)
+        }),
+        ('Feature Flags', {
+            'fields': ('features',),
+            'description': 'JSON object with feature flags (e.g., {"ielts_module": true, "ai_calls": true})',
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def has_smartflo(self, obj):
+        return bool(obj.smartflo_api_key)
+    has_smartflo.boolean = True
+    has_smartflo.short_description = "SmartFlo"
+    
+    def has_elevenlabs(self, obj):
+        return bool(obj.elevenlabs_api_key)
+    has_elevenlabs.boolean = True
+    has_elevenlabs.short_description = "ElevenLabs"
+
+
+# Register TenantUsage for viewing usage stats
+from .models import TenantUsage
+
+@admin.register(TenantUsage)
+class TenantUsageAdmin(admin.ModelAdmin):
+    list_display = ("tenant", "year", "month", "smartflo_calls_made", "smartflo_call_minutes", "ai_api_calls", "leads_created")
+    list_filter = ("tenant", "year", "month")
+    search_fields = ("tenant__name",)
+    readonly_fields = ("created_at", "updated_at")
+    ordering = ("-year", "-month")
