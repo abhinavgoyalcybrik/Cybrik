@@ -381,7 +381,7 @@ export default function LandingPage() {
                             </div>
                             <p className="text-sm text-[#B0BDCC] mb-6">For serious IELTS preparation.</p>
                             <ul className="space-y-3 mb-8">
-                                {['Unlimited evaluations', 'All free features', 'Priority AI analysis', 'Full AI Tutor access', 'Detailed progress reports', 'Email support'].map((item) => (
+                                {['Unlimited evaluations', 'All free features', 'Priority AI analysis', 'Full AI Tutor access'].map((item) => (
                                     <li key={item} className="flex items-center gap-2 text-sm text-white">
                                         <CheckCircle className="w-4 h-4 text-[#6FB63A] flex-shrink-0" />
                                         {item}
