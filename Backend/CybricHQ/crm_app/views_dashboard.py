@@ -247,19 +247,44 @@ def dashboard_overview(request):
 @api_view(["GET"])
 @permission_classes([RolePermission("Admin")])
 def admin_stats(request):
+    from .models import Lead, UserProfile
+    tenant = getattr(request, 'tenant', None)
+    
+    if tenant:
+        tenant_users = UserProfile.objects.filter(tenant=tenant).values_list('user_id', flat=True)
+        total_users = User.objects.filter(id__in=tenant_users).count()
+        total_applicants = Applicant.objects.filter(tenant=tenant).count()
+        total_applications = Application.objects.filter(tenant=tenant).count()
+        new_today = Applicant.objects.filter(tenant=tenant, created_at__date__exact__isnull=False).count()
+    else:
+        total_users = User.objects.count()
+        total_applicants = Applicant.objects.count()
+        total_applications = Application.objects.count()
+        new_today = Applicant.objects.filter(created_at__date__exact__isnull=False).count()
+    
     return Response({
-        "total_users": User.objects.count(),
-        "total_applicants": Applicant.objects.count(),
-        "total_applications": Application.objects.count(),
-        # keep this logic as before but correct new_today to use today's date, not user's date_joined
-        "new_today": Applicant.objects.filter(created_at__date__exact__isnull=False).count()
+        "total_users": total_users,
+        "total_applicants": total_applicants,
+        "total_applications": total_applications,
+        "new_today": new_today
     })
 
 
 @api_view(["GET"])
 @permission_classes([RolePermission("Counsellor")])
 def counsellor_stats(request):
-    total = Applicant.objects.filter(assigned_to=request.user).count() if _safe_field_exists(Applicant.objects.all(), "assigned_to") else Applicant.objects.count()
+    tenant = getattr(request, 'tenant', None)
+    
+    if tenant:
+        base_qs = Applicant.objects.filter(tenant=tenant)
+    else:
+        base_qs = Applicant.objects.all()
+    
+    if _safe_field_exists(base_qs, "assigned_to"):
+        total = base_qs.filter(assigned_to=request.user).count()
+    else:
+        total = base_qs.count()
+        
     return Response({
         "my_total_applicants": total,
     })
