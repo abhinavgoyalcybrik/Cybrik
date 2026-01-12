@@ -58,7 +58,7 @@ export default function AIChatBot() {
             }
 
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -90,11 +90,23 @@ export default function AIChatBot() {
             );
 
             const data = await response.json();
-            const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not process your request.';
+
+            // Better error handling
+            if (!response.ok) {
+                console.error('API Error:', data);
+                throw new Error(data.error?.message || 'API request failed');
+            }
+
+            const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!aiResponse) {
+                console.error('Unexpected response structure:', data);
+                throw new Error('Invalid response from AI');
+            }
+
             setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Chat error:', error);
-            setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${error.message || 'Please try again.'}` }]);
         } finally {
             setIsLoading(false);
         }
