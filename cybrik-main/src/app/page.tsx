@@ -1,10 +1,15 @@
 'use client';
 
+
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+
+image ?: string | null;
+}
 
 // Product Data
-const products = [
+const products: Product[] = [
   {
     id: 'ielts',
     name: 'IELTS Portal',
@@ -14,6 +19,7 @@ const products = [
     status: 'live',
     link: 'https://ielts.cybriksolutions.com',
     gradient: 'from-emerald-400 via-teal-500 to-cyan-600',
+    image: '/images/ielts-card.png',
   },
   {
     id: 'crm',
@@ -24,6 +30,7 @@ const products = [
     status: 'live',
     link: 'https://crm.cybriksolutions.com',
     gradient: 'from-violet-400 via-purple-500 to-fuchsia-600',
+    image: '/images/crm-card.png',
   },
   {
     id: 'pte',
@@ -32,8 +39,9 @@ const products = [
     icon: '🎯',
     features: ['Speaking & Writing', 'Reading & Listening', 'Instant Scoring', 'Performance Tracking'],
     status: 'coming-soon',
-    link: '#',
+    link: 'https://pte.cybriksolutions.com',
     gradient: 'from-amber-400 via-orange-500 to-red-500',
+    image: null,
   },
 ];
 
@@ -246,14 +254,25 @@ function ProductShowcase({ product, index }: { product: typeof products[0]; inde
                 : `translateX(${isEven ? '80px' : '-80px'}) scale(0.9)`,
             }}
           >
-            <div className={`aspect-square rounded-3xl bg-gradient-to-br ${product.gradient} p-1 shadow-2xl`}>
-              <div className="w-full h-full rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-9xl mb-6 animate-float">{product.icon}</div>
-                  <div className="text-white text-3xl font-bold">{product.name}</div>
+            {product.image ? (
+              <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500`}>
+                <Image
+                  src={product.image}
+                  alt={`${product.name} Preview`}
+                  fill
+                  className="object-contain p-4"
+                />
+              </div>
+            ) : (
+              <div className={`aspect-square rounded-3xl bg-gradient-to-br ${product.gradient} p-1 shadow-2xl`}>
+                <div className="w-full h-full rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-9xl mb-6 animate-float">{product.icon}</div>
+                    <div className="text-white text-3xl font-bold">{product.name}</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -289,25 +308,39 @@ export default function Home() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrollY > 50 ? 'glass-nav shadow-lg' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <Image
-              src="/images/cybrik-logo.png"
-              alt="Cybrik Logo"
-              width={44}
-              height={44}
-              className="rounded-xl logo-glow transition-transform group-hover:scale-110"
-            />
+            <Link href="/">
+              <Image
+                src="/images/cybrik-logo.png"
+                alt="Cybrik Logo"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: 'auto', height: '4rem' }}
+                className="logo-glow transition-transform group-hover:scale-105"
+              />
+            </Link>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            {['Products', 'Features', 'About', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group"
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
-              </a>
-            ))}
+            <a href="#products" className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group">
+              Products
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#features" className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group">
+              Features
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
+            </a>
+            <a href="#about" className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group">
+              About
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
+            </a>
+            <Link href="/contact" className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group">
+              Contact
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
+            </Link>
+            <Link href="/careers" className="relative text-gray-600 hover:text-[#6FB63A] transition-colors font-medium group">
+              Careers
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#6FB63A] transition-all group-hover:w-full"></span>
+            </Link>
           </div>
           <a href="#products" className="btn-primary px-6 py-2.5 rounded-full font-semibold shadow-lg">
             Find Our Products
@@ -316,7 +349,21 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center hero-mesh grid-pattern pt-20 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+        >
+          <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-white/80 hero-mesh grid-pattern"></div>
+
         {/* Dynamic Background Orbs */}
         <div
           className="floating-orb w-[600px] h-[600px] bg-[#6FB63A]/20 -top-40 -left-40"
