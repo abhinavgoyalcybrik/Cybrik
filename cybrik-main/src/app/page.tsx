@@ -289,14 +289,7 @@ export default function Home() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrollY > 50 ? 'glass-nav shadow-lg' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <Image
-              src="/images/cybrik-logo.png"
-              alt="Cybrik Logo"
-              width={44}
-              height={44}
-              className="rounded-xl logo-glow transition-transform group-hover:scale-110"
-            />
-            <span className="text-xl font-bold text-gradient">Cybrik Solution</span>
+            <span className="text-3xl">✈️</span>
           </div>
           <div className="hidden md:flex items-center gap-8">
             {['Products', 'Features', 'About', 'Contact'].map((item) => (
@@ -357,7 +350,7 @@ export default function Home() {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
             <span className="text-gray-900">Empower Your Business</span>
             <br />
             <span className="text-gray-900">Through </span>
@@ -365,7 +358,7 @@ export default function Home() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
             Comprehensive suite of <span className="text-[#6FB63A] font-semibold">AI-powered</span> tools for education and business management.
             Transform the way you work.
           </p>
@@ -416,11 +409,11 @@ export default function Home() {
           <span className="inline-block px-5 py-2 rounded-full bg-[#6FB63A]/10 text-[#5FA030] text-sm font-bold mb-6 border border-[#6FB63A]/20">
             OUR PRODUCTS
           </span>
-          <h2 className="text-4xl md:text-6xl font-black mb-6 text-gray-900">
+          <h2 className="text-3xl md:text-5xl font-black mb-6 text-gray-900">
             Powerful Solutions<br />
             <span className="text-gradient">for Every Need</span>
           </h2>
-          <p className="text-gray-600 text-xl max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Scroll down to discover our suite of innovative products designed to transform your business.
           </p>
         </AnimatedSection>
@@ -469,7 +462,7 @@ export default function Home() {
               <span className="inline-block px-5 py-2 rounded-full bg-[#6FB63A]/10 text-[#5FA030] text-sm font-bold mb-6 border border-[#6FB63A]/20">
                 ABOUT US
               </span>
-              <h2 className="text-4xl md:text-5xl font-black mb-8 text-gray-900 leading-tight">
+              <h2 className="text-3xl md:text-4xl font-black mb-8 text-gray-900 leading-tight">
                 Innovating the<br />
                 Future of <span className="text-gradient">Technology</span>
               </h2>
@@ -516,7 +509,7 @@ export default function Home() {
             <span className="inline-block px-5 py-2 rounded-full bg-[#6FB63A]/10 text-[#5FA030] text-sm font-bold mb-6 border border-[#6FB63A]/20">
               GET IN TOUCH
             </span>
-            <h2 className="text-4xl md:text-6xl font-black mb-6 text-gray-900">
+            <h2 className="text-3xl md:text-5xl font-black mb-6 text-gray-900">
               Ready to Get<br />
               <span className="text-gradient">Started?</span>
             </h2>
@@ -558,14 +551,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <Image
-                  src="/images/cybrik-logo.png"
-                  alt="Cybrik Logo"
-                  width={40}
-                  height={40}
-                  className="rounded-xl logo-glow"
-                />
-                <span className="text-xl font-bold text-gradient">Cybrik Solution</span>
+                <span className="text-3xl">✈️</span>
               </div>
               <p className="text-gray-500 text-sm leading-relaxed">
                 Empowering businesses and education with AI-powered tools.
