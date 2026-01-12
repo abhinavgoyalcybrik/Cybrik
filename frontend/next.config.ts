@@ -80,6 +80,10 @@ const nextConfig = {
           destination: 'http://127.0.0.1:8000/api/leads/',
         },
         {
+          source: '/api/web-leads/',
+          destination: 'http://127.0.0.1:8000/api/web-leads/',
+        },
+        {
           source: '/api/leads/create/',
           destination: 'http://127.0.0.1:8000/api/leads/create/',
         },
