@@ -82,7 +82,7 @@ export default function LeadCapturePage() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Capture New Lead</h1>
+            <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">Capture New Lead</h1>
             <p className="text-[var(--cy-text-muted)] text-sm max-w-md mx-auto">
               Enter the details below to add a new prospect to your CRM pipeline.
             </p>

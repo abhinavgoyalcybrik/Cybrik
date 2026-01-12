@@ -515,7 +515,7 @@ export default function LandingPage() {
             <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wider uppercase text-[#6FB63A] bg-[#E8F5DC] rounded-full mb-4 sm:mb-6">
               Testimonials
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1F3A]" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0B1F3A]" style={{ letterSpacing: '-0.02em' }}>
               Agencies Love the AI Advantage
             </h2>
           </motion.div>
@@ -560,10 +560,10 @@ export default function LandingPage() {
             <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold tracking-wider uppercase text-[#6FB63A] bg-[#E8F5DC] rounded-full mb-4 sm:mb-6">
               Pricing
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1F3A] mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#0B1F3A] mb-4" style={{ letterSpacing: '-0.02em' }}>
               Simple, Usage-Based Pricing
             </h2>
-            <p className="text-base sm:text-lg text-[#5B6A7F] max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-[#5B6A7F] max-w-2xl mx-auto">
               Pay for what you use. Scale up as your agency grows.
             </p>
           </motion.div>
@@ -675,7 +675,7 @@ export default function LandingPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-6" style={{ letterSpacing: '-0.02em' }}>
               Let AI Handle Your Calls.
               <br />
               <span className="text-[#6FB63A]">Focus on What Matters.</span>

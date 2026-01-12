@@ -15,12 +15,11 @@ export default function AnimatedHeader() {
   }, []);
 
   return (
-    <motion.header 
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg' 
+    <motion.header
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
-      }`}
+        }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
@@ -34,9 +33,6 @@ export default function AnimatedHeader() {
           >
             ✈️
           </motion.div>
-          <span className={`font-bold text-xl ${scrolled ? 'text-[var(--cy-navy)]' : 'text-white'}`}>
-            CybrikHQ
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
@@ -48,16 +44,15 @@ export default function AnimatedHeader() {
             <Link
               key={item.label}
               href={item.href}
-              className={`text-sm font-medium transition-colors ${
-                scrolled 
-                  ? 'text-gray-600 hover:text-[var(--cy-navy)]' 
+              className={`text-sm font-medium transition-colors ${scrolled
+                  ? 'text-gray-600 hover:text-[var(--cy-navy)]'
                   : 'text-white/80 hover:text-white'
-              }`}
+                }`}
             >
               {item.label}
             </Link>
           ))}
-          
+
           <Link href="/crm/login">
             <motion.button
               className="px-5 py-2 bg-gradient-to-r from-[#6FB63A] to-[#A6DA7A] text-white text-sm font-semibold rounded-lg"
@@ -70,10 +65,10 @@ export default function AnimatedHeader() {
         </nav>
 
         <button className="md:hidden">
-          <svg 
-            className={`w-6 h-6 ${scrolled ? 'text-[var(--cy-navy)]' : 'text-white'}`} 
-            fill="none" 
-            stroke="currentColor" 
+          <svg
+            className={`w-6 h-6 ${scrolled ? 'text-[var(--cy-navy)]' : 'text-white'}`}
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

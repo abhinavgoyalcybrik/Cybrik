@@ -25,7 +25,7 @@ const destinations = [
 ];
 
 const services = [
-  { 
+  {
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -34,7 +34,7 @@ const services = [
     title: 'University Selection',
     description: 'Expert guidance to find the perfect institution matching your goals and profile'
   },
-  { 
+  {
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -43,7 +43,7 @@ const services = [
     title: 'Application Support',
     description: 'Complete assistance with documentation, essays, and submission process'
   },
-  { 
+  {
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -52,7 +52,7 @@ const services = [
     title: 'Visa Processing',
     description: 'Streamlined visa application support with high success rate'
   },
-  { 
+  {
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -79,13 +79,13 @@ export default function AnimatedHero() {
           <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="heroCircuit" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-                <circle cx="40" cy="40" r="2" fill="#6FB63A"/>
-                <path d="M40 0 L40 38 M80 40 L42 40" stroke="#6FB63A" strokeWidth="0.5" fill="none"/>
-                <circle cx="10" cy="10" r="1.5" fill="#0B1F3A"/>
-                <path d="M10 10 L10 25" stroke="#0B1F3A" strokeWidth="0.3" fill="none"/>
+                <circle cx="40" cy="40" r="2" fill="#6FB63A" />
+                <path d="M40 0 L40 38 M80 40 L42 40" stroke="#6FB63A" strokeWidth="0.5" fill="none" />
+                <circle cx="10" cy="10" r="1.5" fill="#0B1F3A" />
+                <path d="M10 10 L10 25" stroke="#0B1F3A" strokeWidth="0.3" fill="none" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill="url(#heroCircuit)"/>
+            <rect width="100%" height="100%" fill="url(#heroCircuit)" />
           </svg>
         </div>
 
@@ -104,9 +104,9 @@ export default function AnimatedHero() {
                 </span>
               </motion.div>
 
-              <motion.h1 
+              <motion.h1
                 variants={fadeInUp}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#0B1F3A] mb-4 sm:mb-6"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1F3A] mb-4 sm:mb-6"
                 style={{ letterSpacing: '-0.02em', lineHeight: 1.1 }}
               >
                 Your Gateway to
@@ -116,11 +116,11 @@ export default function AnimatedHero() {
                 Education
               </motion.h1>
 
-              <motion.p 
+              <motion.p
                 variants={fadeInUp}
-                className="text-base sm:text-lg text-[#5B6A7F] mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0"
+                className="text-sm sm:text-base text-[#5B6A7F] mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0"
               >
-                Expert guidance for ambitious students seeking admission to prestigious 
+                Expert guidance for ambitious students seeking admission to prestigious
                 universities across the globe. Transform your future with Cybrik Solutions.
               </motion.p>
 
@@ -161,7 +161,7 @@ export default function AnimatedHero() {
               </motion.div>
             </div>
 
-            <motion.div 
+            <motion.div
               variants={fadeInUp}
               className="hidden lg:block"
             >
@@ -190,7 +190,7 @@ export default function AnimatedHero() {
                       </div>
                       <div className="mt-3 flex items-center gap-1">
                         <div className="w-full h-1 bg-[#E8F5DC] rounded-full overflow-hidden">
-                          <motion.div 
+                          <motion.div
                             className="h-full bg-[#6FB63A] rounded-full"
                             initial={{ width: 0 }}
                             animate={{ width: `${70 + i * 8}%` }}
@@ -205,7 +205,7 @@ export default function AnimatedHero() {
             </motion.div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="lg:hidden grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -225,7 +225,7 @@ export default function AnimatedHero() {
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -373,7 +373,7 @@ export default function AnimatedHero() {
               <span className="text-[#6FB63A]">Global Journey?</span>
             </h2>
             <p className="text-sm sm:text-base lg:text-lg text-[#B0BDCC] mb-6 sm:mb-8 max-w-2xl mx-auto">
-              Join thousands of successful students who have achieved their dreams with Cybrik Solutions. 
+              Join thousands of successful students who have achieved their dreams with Cybrik Solutions.
               Your future begins here.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">

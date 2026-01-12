@@ -44,7 +44,7 @@ export default function WalkInLeadCapture() {
         <DashboardLayout>
             <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="mb-8">
-                    <h1 className="h2 text-[var(--cy-navy)]">Walk-In Registration</h1>
+                    <h1 className="text-2xl font-bold text-[var(--cy-navy)]">Walk-In Registration</h1>
                     <p className="text-[var(--cy-text-secondary)]">Register a new visitor at the center.</p>
                 </div>
 

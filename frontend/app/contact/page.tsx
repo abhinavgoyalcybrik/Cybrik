@@ -63,15 +63,8 @@ export default function ContactPage() {
             </div>
 
             <header className="relative z-10 w-full p-6 flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-                <Link href="/">
-                    <Image
-                        src="/cybrik-logo.png"
-                        alt="Cybrik Solutions"
-                        width={150}
-                        height={40}
-                        className="h-8 w-auto"
-                        priority
-                    />
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="text-3xl">✈️</div>
                 </Link>
                 <Link href="/crm/login" className="text-sm font-medium text-[var(--cy-navy)] hover:text-[var(--cy-lime)] transition-colors">
                     Sign In
@@ -89,7 +82,7 @@ export default function ContactPage() {
                     <div className="bg-[var(--cy-navy)] p-8 md:p-12 text-white md:w-5/12 relative overflow-hidden flex flex-col justify-center">
                         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
                         <div className="relative z-10">
-                            <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
+                            <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
                             <p className="text-blue-100 mb-8 leading-relaxed">
                                 Have questions about our AI solutions? Need support? We're here to help.
                             </p>
@@ -125,7 +118,7 @@ export default function ContactPage() {
                     {/* Right Side: Form */}
                     <div className="p-8 md:p-12 md:w-7/12 bg-white">
                         <div className="mb-8">
-                            <h1 className="text-2xl font-bold text-[var(--cy-navy)] mb-2">Send us a Message</h1>
+                            <h1 className="text-xl font-bold text-[var(--cy-navy)] mb-2">Send us a Message</h1>
                             <p className="text-[var(--cy-text-muted)] text-sm">
                                 Fill out the form below and we'll get back to you as soon as possible.
                             </p>

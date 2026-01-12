@@ -7,8 +7,10 @@ export default function Footer() {
     <footer className="w-full mt-12 border-t bg-white">
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-start gap-6">
         <div>
-          <h4 className="font-semibold text-[var(--cy-navy)]">Cybrik Solutions</h4>
-          <p className="text-sm text-gray-600 mt-2">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="text-2xl">✈️</div>
+          </div>
+          <p className="text-sm text-gray-600">
             Smart CRM & Admissions automation for education consultants.
           </p>
         </div>
