@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ScrollProgress,
   AppleStyleShowcase,
@@ -31,7 +32,7 @@ const features = [
       </svg>
     ),
     title: 'AI Voice Agent',
-    description: 'Powered by ElevenLabs, our voice AI handles student calls 24/7 with human-like conversations'
+    description: 'Powered by Cybrik, our voice AI handles customer calls 24/7 with human-like conversations'
   },
   {
     icon: (
@@ -40,7 +41,7 @@ const features = [
       </svg>
     ),
     title: 'Personalized Conversations',
-    description: 'AI understands each student\'s needs, academic goals, and preferences to provide tailored guidance'
+    description: 'AI understands each customer\'s needs, goals, and preferences to provide tailored guidance'
   },
   {
     icon: (
@@ -58,7 +59,7 @@ const features = [
       </svg>
     ),
     title: 'Instant Lead Qualification',
-    description: 'AI qualifies leads in real-time based on eligibility, budget, and timeline during the call'
+    description: 'AI qualifies leads in real-time based on preset criteria during the call'
   },
   {
     icon: (
@@ -67,7 +68,7 @@ const features = [
       </svg>
     ),
     title: 'Real-Time Dashboard',
-    description: 'Monitor all AI interactions, student statuses, and pipeline progress from a single view'
+    description: 'Monitor all AI interactions, customer statuses, and pipeline progress from a single view'
   },
   {
     icon: (
@@ -76,7 +77,7 @@ const features = [
       </svg>
     ),
     title: 'Zero Wait Time',
-    description: 'Students get immediate responses any time of day - no hold queues, no missed calls'
+    description: 'Leads get immediate responses any time of day - no hold queues, no missed calls'
   },
 ];
 
@@ -90,8 +91,8 @@ const stats = [
 const howItWorks = [
   {
     step: '01',
-    title: 'Student Calls In',
-    description: 'Prospective students call your agency number anytime - day or night.'
+    title: 'Instant Communication',
+    description: 'Initiate conversation with your leads anytime, enabling real-time interaction around the clock.'
   },
   {
     step: '02',
@@ -137,8 +138,14 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <div className="flex items-center justify-between h-16 sm:h-20">
             <div className="flex items-center gap-2">
-              <span className="text-xl sm:text-2xl font-bold text-[#0B1F3A]">CYBRIK</span>
-              <span className="text-xl sm:text-2xl font-bold text-[#6FB63A]">SOLUTIONS</span>
+              <Image
+                src="/cybrik-logo.png"
+                alt="Cybrik Solutions"
+                width={180}
+                height={50}
+                className="h-8 sm:h-10 w-auto"
+                priority
+              />
             </div>
             <nav className="hidden md:flex items-center gap-8">
               <a href="#how-it-works" className="text-sm font-medium text-[#5B6A7F] hover:text-[#0B1F3A] transition-colors">How It Works</a>
@@ -188,7 +195,7 @@ export default function LandingPage() {
             <motion.div variants={fadeInUp} className="mb-4 sm:mb-6">
               <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold tracking-wider uppercase text-[#6FB63A] bg-[#E8F5DC] rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#6FB63A] animate-pulse" />
-                Powered by ElevenLabs AI
+                Powered by Cybrik AI
               </span>
             </motion.div>
 
@@ -199,14 +206,14 @@ export default function LandingPage() {
             >
               Your AI Voice Agent
               <br />
-              <span className="text-[#6FB63A]">Handles Every Student Call</span>
+              <span className="text-[#6FB63A]">Handles Every Call</span>
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
               className="text-base sm:text-lg lg:text-xl text-[#5B6A7F] mb-6 sm:mb-8 max-w-2xl mx-auto"
             >
-              Let AI handle student inquiries, qualify leads, and answer questions 24/7.
+              Let AI handle inquiries, qualify leads, and answer questions 24/7.
               Your dashboard shows you everything - conversations, insights, and ready-to-close leads.
             </motion.p>
 
@@ -254,13 +261,13 @@ export default function LandingPage() {
                 <svg className="w-4 h-4 text-[#6FB63A]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                Setup in 10 minutes
+                Personalized setup
               </span>
               <span className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-[#6FB63A]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                Works with your existing number
+                Automated followups
               </span>
             </motion.div>
           </motion.div>
@@ -370,7 +377,7 @@ export default function LandingPage() {
                 {[
                   'AI answers calls instantly - no more missed opportunities',
                   'Every conversation transcribed and summarized automatically',
-                  'Students get personalized advice based on their profile',
+                  'Your Customer gets personalized advice based on their queries',
                   'Your counselors only talk to pre-qualified, ready leads',
                 ].map((item, i) => (
                   <motion.li
