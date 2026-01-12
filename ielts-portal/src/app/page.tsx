@@ -444,14 +444,12 @@ export default function LandingPage() {
                             <ul className="space-y-2">
                                 <li><a href="#features" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Features</a></li>
                                 <li><a href="#pricing" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Pricing</a></li>
-                                <li><Link href="/tests/writing" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Writing</Link></li>
-                                <li><Link href="/tests/speaking" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Speaking</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
                             <ul className="space-y-2">
-                                <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">About Us</a></li>
+                                <li><a href="https://cybriksolutions.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">About Us</a></li>
                                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Contact</a></li>
                                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Blog</a></li>
                             </ul>
