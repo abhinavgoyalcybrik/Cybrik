@@ -1202,25 +1202,51 @@ class DashboardSummary(APIView):
 
     def get(self, request):
         user = request.user
+        tenant = getattr(request, 'tenant', None)
         
-        # Global stats (for Admin/Admissions)
-        leads_count = Applicant.objects.count() + Lead.objects.count()
-        applications_count = Application.objects.count()
-        open_calls = Transcript.objects.filter(Q(transcript_text__isnull=True) | Q(transcript_text="")).count()
-        ai_pending = Application.objects.annotate(num_ai=Count("ai_results")).filter(num_ai=0).count()
+        # Base querysets filtered by tenant
+        if tenant:
+            leads_qs = Lead.objects.filter(tenant=tenant)
+            applicants_qs = Applicant.objects.filter(tenant=tenant)
+            applications_qs = Application.objects.filter(tenant=tenant)
+            followups_qs = FollowUp.objects.filter(tenant=tenant)
+            call_records_qs = CallRecord.objects.filter(tenant=tenant)
+        else:
+            # Superuser without tenant can see all
+            if user.is_superuser:
+                leads_qs = Lead.objects.all()
+                applicants_qs = Applicant.objects.all()
+                applications_qs = Application.objects.all()
+                followups_qs = FollowUp.objects.all()
+                call_records_qs = CallRecord.objects.all()
+            else:
+                # No tenant = no data
+                leads_qs = Lead.objects.none()
+                applicants_qs = Applicant.objects.none()
+                applications_qs = Application.objects.none()
+                followups_qs = FollowUp.objects.none()
+                call_records_qs = CallRecord.objects.none()
+        
+        # Global stats (for Admin/Admissions) - now tenant-filtered
+        leads_count = applicants_qs.count() + leads_qs.count()
+        applications_count = applications_qs.count()
+        open_calls = Transcript.objects.filter(
+            call__in=call_records_qs
+        ).filter(Q(transcript_text__isnull=True) | Q(transcript_text="")).count()
+        ai_pending = applications_qs.annotate(num_ai=Count("ai_results")).filter(num_ai=0).count()
         
         # Calculate conversion rate (accepted / total applications * 100)
-        accepted_count = Application.objects.filter(status="accepted").count()
+        accepted_count = applications_qs.filter(status="accepted").count()
         conversion_rate_percent = 0
         if applications_count > 0:
             conversion_rate_percent = round((accepted_count / applications_count) * 100, 1)
 
         # Role-specific data
         # Counsellor: My Applicants, Followups, Pipeline
-        my_applications = Application.objects.filter(assigned_to=user)
+        my_applications = applications_qs.filter(assigned_to=user)
         my_total_applicants = my_applications.values("applicant").distinct().count()
         
-        followups_due = FollowUp.objects.filter(
+        followups_due = followups_qs.filter(
             assigned_to=user, 
             completed=False, 
             due_at__lte=timezone.now()
@@ -1234,9 +1260,9 @@ class DashboardSummary(APIView):
             pipeline_counts[item["status"]] = item["count"]
             
         # Recent Applicants (for Counsellor and Admin)
-        # For Counsellor: only assigned to them. For Admin: all.
+        # For Counsellor: only assigned to them. For Admin: all (within tenant).
         if user.is_superuser or user.groups.filter(name='admin').exists():
-            recent_apps_qs = Application.objects.select_related("applicant").order_by("-created_at")[:5]
+            recent_apps_qs = applications_qs.select_related("applicant").order_by("-created_at")[:5]
         else:
             recent_apps_qs = my_applications.select_related("applicant").order_by("-created_at")[:5]
             
@@ -1252,16 +1278,14 @@ class DashboardSummary(APIView):
             })
 
         # Admissions/Admin: Country & Intake Distribution
-        # Note: 'country' and 'intake' are assumed to be in metadata or inferred. 
-        # We'll try to aggregate from metadata if possible, or return empty/mock if not structured.
-        # For now, we'll return empty lists to prevent frontend crashes, or mock if needed for demo.
+        # For now, return empty lists to prevent frontend crashes.
         country_distribution = [] 
         intake_distribution = []
         
-        # Per Counselor Counts (Admin)
+        # Per Counselor Counts (Admin) - tenant filtered
         per_counselor_counts = []
         if user.is_superuser or user.groups.filter(name='admin').exists():
-            counselor_stats = Application.objects.values("assigned_to__username").annotate(count=Count("id")).order_by("-count")
+            counselor_stats = applications_qs.values("assigned_to__username").annotate(count=Count("id")).order_by("-count")
             for stat in counselor_stats:
                 if stat["assigned_to__username"]:
                     per_counselor_counts.append({
@@ -1269,14 +1293,11 @@ class DashboardSummary(APIView):
                         "value": stat["count"]
                     })
 
-        # Application Trends (Last 6 months)
-        # Group by month. For simplicity in this view, we'll do a basic aggregation or mock if DB is empty.
-        # Real implementation would use TruncMonth.
+        # Application Trends (Last 6 months) - tenant filtered
         from django.db.models.functions import TruncMonth
-        trends_qs = Application.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(count=Count('id')).order_by('month')
+        trends_qs = applications_qs.annotate(month=TruncMonth('created_at')).values('month').annotate(count=Count('id')).order_by('month')
         
         application_trends = []
-        # Fill with some data or empty
         for item in trends_qs:
             if item['month']:
                 application_trends.append({
@@ -1288,12 +1309,19 @@ class DashboardSummary(APIView):
         if not application_trends:
              application_trends = []
 
-        # User Distribution
-        # Students = Applicants, Counselors = Staff with 'counsellor' group, Admins = Superusers/Admin group
-        student_count = Applicant.objects.count()
-        # Assuming 'counsellor' group exists. If not, just count staff.
-        counselor_count = User.objects.filter(groups__name__iexact="counsellor").count()
-        admin_count = User.objects.filter(Q(is_superuser=True) | Q(groups__name__iexact="admin")).distinct().count()
+        # User Distribution - tenant filtered
+        student_count = applicants_qs.count()
+        # Count staff in this tenant
+        if tenant:
+            from crm_app.models import UserProfile
+            tenant_users = UserProfile.objects.filter(tenant=tenant).values_list('user_id', flat=True)
+            counselor_count = User.objects.filter(id__in=tenant_users, groups__name__iexact="counsellor").count()
+            admin_count = User.objects.filter(id__in=tenant_users).filter(
+                Q(is_superuser=True) | Q(groups__name__iexact="admin")
+            ).distinct().count()
+        else:
+            counselor_count = User.objects.filter(groups__name__iexact="counsellor").count()
+            admin_count = User.objects.filter(Q(is_superuser=True) | Q(groups__name__iexact="admin")).distinct().count()
         
         user_distribution = [
             {"label": "Students", "value": student_count, "color": "#0B1F3A"},
@@ -1301,17 +1329,17 @@ class DashboardSummary(APIView):
             {"label": "Admins", "value": admin_count, "color": "#E5E7EB"},
         ]
 
-        # Funnel Data
+        # Funnel Data - tenant filtered
         total_leads = leads_count
         # Active Leads: Leads with high interest or good quality score from AI
-        active_leads = Lead.objects.filter(
+        active_leads = leads_qs.filter(
             Q(call_records__ai_quality_score__gte=60) | 
             Q(call_records__ai_analysis_result__interest_level__in=['high', 'medium'])
         ).distinct().count()
         
-        applicants_count = Applicant.objects.count()
+        applicants_count = applicants_qs.count()
         applications_total = applications_count
-        accepted_count = Application.objects.filter(status="accepted").count()
+        accepted_count = applications_qs.filter(status="accepted").count()
         
         funnel_data = [
             {"label": "Total Leads", "value": total_leads, "fill": "#8884d8"},
@@ -1321,10 +1349,16 @@ class DashboardSummary(APIView):
             {"label": "Accepted", "value": accepted_count, "fill": "#00C49F"},
         ]
 
+        # Total users in tenant
+        if tenant:
+            total_users = UserProfile.objects.filter(tenant=tenant).count()
+        else:
+            total_users = User.objects.count()
+
         data = {
             # Global / Admin
             "leads_count": leads_count,
-            "total_users": User.objects.count(),
+            "total_users": total_users,
             "total_applicants": leads_count, # Assuming Applicant ~= Lead/User for this metric
             "total_applications": applications_count,
             "open_calls": open_calls,
