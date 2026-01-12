@@ -162,7 +162,7 @@ export default function LandingPage() {
 
                         {/* Subheading */}
                         <p className="text-base sm:text-lg lg:text-xl text-[#5B6A7F] mb-6 sm:mb-8 max-w-2xl mx-auto">
-                            Get instant AI feedback on your Writing and Speaking.
+                            Get instant AI feedback on all IELTS modules.
                             Real band score estimates and personalized tips to boost your score.
                         </p>
 
@@ -194,7 +194,7 @@ export default function LandingPage() {
                             </span>
                             <span className="flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4 text-[#6FB63A]" />
-                                3 free evaluations/week
+                                4 free evaluations
                             </span>
                             <span className="flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4 text-[#6FB63A]" />
@@ -279,9 +279,7 @@ export default function LandingPage() {
                     <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
                         {howItWorks.map((item, i) => (
                             <div key={item.step} className="relative">
-                                {i < howItWorks.length - 1 && (
-                                    <div className="hidden sm:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-[#6FB63A] to-transparent -translate-x-4" />
-                                )}
+                                {/* Removed connecting lines */}
                                 <div className="text-5xl sm:text-6xl font-bold text-[#E8F5DC] mb-4">{item.step}</div>
                                 <div className="w-12 h-12 mb-4 bg-[#E8F5DC] text-[#6FB63A] rounded-lg flex items-center justify-center">
                                     <item.icon className="w-6 h-6" />
@@ -357,7 +355,7 @@ export default function LandingPage() {
                             </div>
                             <p className="text-sm text-[#5B6A7F] mb-6">Perfect for trying out our AI evaluation.</p>
                             <ul className="space-y-3 mb-8">
-                                {['3 evaluations per week', 'Writing & Speaking scoring', 'AI Tutor access (limited)', 'Unlimited practice questions', 'Community support'].map((item) => (
+                                {['4 free evaluations', 'All module scoring', 'AI Tutor access (limited)', 'Unlimited practice questions', 'Community support'].map((item) => (
                                     <li key={item} className="flex items-center gap-2 text-sm text-[#3D4B5C]">
                                         <CheckCircle className="w-4 h-4 text-[#6FB63A] flex-shrink-0" />
                                         {item}

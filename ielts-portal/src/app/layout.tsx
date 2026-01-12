@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import AIChatBot from "@/components/AIChatBot";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,6 +30,7 @@ export default function RootLayout({
         <SessionProviderWrapper>
           <AuthProvider>
             {children}
+            <AIChatBot />
           </AuthProvider>
         </SessionProviderWrapper>
       </body>
