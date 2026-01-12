@@ -355,7 +355,7 @@ export default function LandingPage() {
                             </div>
                             <p className="text-sm text-[#5B6A7F] mb-6">Perfect for trying out our AI evaluation.</p>
                             <ul className="space-y-3 mb-8">
-                                {['4 free evaluations', 'All module scoring', 'AI Tutor access (limited)', 'Unlimited practice questions', 'Community support'].map((item) => (
+                                {['4 free evaluations', 'All module scoring', 'AI Tutor access (limited)'].map((item) => (
                                     <li key={item} className="flex items-center gap-2 text-sm text-[#3D4B5C]">
                                         <CheckCircle className="w-4 h-4 text-[#6FB63A] flex-shrink-0" />
                                         {item}
