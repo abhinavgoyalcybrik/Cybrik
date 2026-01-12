@@ -161,8 +161,21 @@ class UserRoleAssignmentView(APIView):
 class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
     """
     ViewSet for viewing user profiles with role information.
-    Admin-only access.
+    Tenant-scoped access to ensure data isolation.
     """
-    queryset = UserProfile.objects.select_related('user', 'role').all()
     serializer_class = UserProfileSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        """Filter profiles by the current request's tenant."""
+        queryset = UserProfile.objects.select_related('user', 'role', 'tenant')
+        tenant = getattr(self.request, 'tenant', None)
+        
+        if tenant:
+            return queryset.filter(tenant=tenant)
+        
+        # Superuser can see all
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            return queryset.all()
+        
+        return queryset.none()

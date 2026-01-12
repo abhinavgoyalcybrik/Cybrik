@@ -511,7 +511,12 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             raise e
 
     def perform_create(self, serializer):
-        lead = serializer.save()
+        # Assign tenant from request before saving
+        tenant = getattr(self.request, 'tenant', None)
+        if tenant:
+            lead = serializer.save(tenant=tenant)
+        else:
+            lead = serializer.save()
         
         # Auto-call the lead via SmartFlow if they have a phone number
         if lead.phone:
@@ -538,8 +543,9 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     "ieltsPteStatus": lead.english_test_scores or "",
                 }
                 
-                # Create call record
+                # Create call record with tenant
                 call_record = CallRecord.objects.create(
+                    tenant=tenant,  # Assign tenant to call record
                     lead=lead,
                     direction="outbound",
                     status="initiated",
@@ -1088,10 +1094,25 @@ class StaffViewSet(viewsets.ModelViewSet):
     """
     Manage staff members (Users).
     Only accessible by admins (is_staff=True).
+    Filtered by tenant to ensure data isolation.
     """
-    queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthFromCookie, SessionAuthentication, BasicAuthentication]
+    
+    def get_queryset(self):
+        """Filter users by the current request's tenant via UserProfile."""
+        tenant = getattr(self.request, 'tenant', None)
+        
+        if tenant:
+            # Return users whose profile belongs to this tenant
+            return User.objects.filter(profile__tenant=tenant).order_by("-date_joined")
+        
+        # If user is superuser without tenant, they can see all
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            return User.objects.all().order_by("-date_joined")
+        
+        # No tenant and not superuser = no data (security)
+        return User.objects.none()
     
     def get_permissions(self):
         """
@@ -1111,6 +1132,14 @@ class StaffViewSet(viewsets.ModelViewSet):
         from django.contrib.auth.models import Group
         group, _ = Group.objects.get_or_create(name=role)
         user.groups.add(group)
+        
+        # Assign the new user to the current tenant
+        tenant = getattr(self.request, 'tenant', None)
+        if tenant:
+            from crm_app.models import UserProfile
+            profile, _ = UserProfile.objects.get_or_create(user=user)
+            profile.tenant = tenant
+            profile.save()
 
     def perform_update(self, serializer):
         role = serializer.validated_data.pop("role", None)
