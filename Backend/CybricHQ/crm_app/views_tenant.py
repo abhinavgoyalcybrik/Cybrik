@@ -20,11 +20,24 @@ def get_tenant_branding(request):
     """
     Get branding for the current tenant (public endpoint, no auth required).
     Tenant is determined from:
-    1. Custom domain
-    2. Subdomain
+    1. request.tenant (set by middleware)
+    2. Authenticated user's profile tenant (fallback)
     3. Query param ?tenant=<slug> (for development)
     """
+    from crm_app.models import UserProfile
+    
     tenant = getattr(request, 'tenant', None)
+    
+    # Fallback: If no tenant from middleware, try authenticated user's profile
+    if not tenant and request.user and request.user.is_authenticated:
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(
+                user=request.user
+            ).first()
+            if profile and profile.tenant:
+                tenant = profile.tenant
+        except Exception:
+            pass
     
     # Fallback: check query param for dev/testing
     if not tenant:
@@ -35,9 +48,11 @@ def get_tenant_branding(request):
     if not tenant:
         # Return default branding if no tenant found
         return Response({
+            'tenant_id': None,
             'name': 'CybrikHQ',
             'slug': 'default',
             'company_name': 'CybrikHQ',
+            'logo': None,
             'logo_url': None,
             'favicon_url': None,
             'primary_color': '#6366f1',

@@ -20,7 +20,7 @@ class TenantMiddleware(MiddlewareMixin):
     
     def process_request(self, request):
         # Import here to avoid circular imports
-        from crm_app.models import TenantSettings, Tenant
+        from crm_app.models import TenantSettings, Tenant, UserProfile
         
         tenant = None
         host = request.get_host().split(':')[0]  # Remove port if present
@@ -33,8 +33,9 @@ class TenantMiddleware(MiddlewareMixin):
             ).first()
             if settings_obj:
                 tenant = settings_obj.tenant
-        except Exception:
-            pass
+                logger.debug(f"Resolved tenant from custom domain {host}: {tenant.slug}")
+        except Exception as e:
+            logger.debug(f"Custom domain lookup failed: {e}")
         
         # 2. Try subdomain pattern (e.g., tenant-slug.cybrikhq.com)
         if not tenant:
@@ -44,18 +45,21 @@ class TenantMiddleware(MiddlewareMixin):
             if len(parts) >= 2:
                 potential_slug = parts[0]
                 # Skip if it's common non-tenant subdomains
-                if potential_slug not in ['www', 'api', 'admin', 'localhost', '127']:
+                if potential_slug not in ['www', 'api', 'admin', 'localhost', '127', 'crm']:
                     try:
                         tenant = Tenant.objects.filter(
                             slug=potential_slug,
                             is_active=True
                         ).first()
-                    except Exception:
-                        pass
+                        if tenant:
+                            logger.debug(f"Resolved tenant from subdomain: {tenant.slug}")
+                    except Exception as e:
+                        logger.debug(f"Subdomain lookup failed: {e}")
         
-        # 3. Try from authenticated user's profile
+        # 3. Try from authenticated user's profile (important for API calls)
         if not tenant:
             user = request.user
+            
             # Fallback: If not authenticated via session/headers, try JWT cookie
             if not user.is_authenticated:
                 try:
@@ -74,19 +78,31 @@ class TenantMiddleware(MiddlewareMixin):
                         logger.debug(f"Resolved user from JWT: {user.username}")
                 except Exception as e:
                     logger.debug(f"JWT decode failed: {e}")
-                    pass
 
+            # Get tenant from user's profile
             if user and user.is_authenticated:
                 try:
-                    if hasattr(user, 'profile') and user.profile.tenant:
-                        tenant = user.profile.tenant
-                        logger.debug(f"Resolved tenant from profile: {tenant.slug}")
+                    # Use explicit query instead of reverse relation to avoid DoesNotExist
+                    profile = UserProfile.objects.select_related('tenant').filter(
+                        user=user
+                    ).first()
+                    
+                    if profile and profile.tenant:
+                        tenant = profile.tenant
+                        logger.debug(f"Resolved tenant from user {user.username}'s profile: {tenant.slug}")
+                    else:
+                        logger.debug(f"User {user.username} has no profile or no tenant assigned")
                 except Exception as e:
-                    logger.debug(f"Profile tenant lookup failed: {e}")
-                    pass
+                    logger.warning(f"Profile tenant lookup failed for user {user.username}: {e}")
         
         # Set tenant on request for downstream use
         request.tenant = tenant
+        
+        # Also set on request for debugging
+        if tenant:
+            logger.debug(f"Final tenant set on request: {tenant.slug} (id={tenant.id})")
+        else:
+            logger.debug(f"No tenant resolved for host={host}")
         
         return None  # Continue processing
     
