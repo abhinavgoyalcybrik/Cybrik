@@ -4,6 +4,11 @@ from django.utils import timezone
 from .models import Lead
 from .serializers import LeadSerializer
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -74,3 +79,57 @@ class WalkInLeadView(views.APIView):
             lead = serializer.save(source="WALK_IN", status="NEW")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WebLeadView(views.APIView):
+    """
+    Public endpoint for 'Get Started' form on the corporate website.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        data = request.data
+        
+        # Basic validation
+        required_fields = ['name', 'email', 'phone']
+        missing = [f for f in required_fields if not data.get(f)]
+        if missing:
+            return Response({"error": f"Missing required fields: {', '.join(missing)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Create Lead (for CybrikHQ itself, usually handles tenant=None or special tenant)
+            # Assuming tenant is optional or handled by mixin/default
+            serializer = LeadSerializer(data=data)
+            if serializer.is_valid():
+                lead = serializer.save(status="NEW") # Source is handled by serializer or default
+                
+                # Send Email
+                subject = f"New Lead: {lead.name} via Get Started"
+                message = f"""
+New web lead received:
+
+Name: {lead.name}
+Email: {lead.email}
+Phone: {lead.phone}
+Source: {lead.source}
+Message: {lead.message}
+
+View in CRM: https://crm.cybriksolutions.com/leads/{lead.id}
+"""
+                try:
+                    send_mail(
+                        subject,
+                        message,
+                        settings.DEFAULT_FROM_EMAIL,
+                        ['info@cybriksolutions.com'],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to send lead email: {e}")
+                    # Don't fail the request if email fails, but log it
+
+                return Response({"message": "Lead captured successfully"}, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error processing web lead: {e}")
+            return Response({"error": "Internal server error processing lead"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

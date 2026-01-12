@@ -100,7 +100,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
           // Redirect to login page (login is at /crm/login/)
           // Don't redirect from public pages: landing page (/), login pages, lead-capture
           const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
-          const publicPages = ['/', '/login', '/crm/login', '/lead-capture'];
+          const publicPages = ['/', '/login', '/crm/login', '/lead-capture', '/get-started'];
           const isPublicPage = publicPages.some(page =>
             currentPath === page || currentPath.startsWith('/lead-capture/') || currentPath.includes('/login')
           );

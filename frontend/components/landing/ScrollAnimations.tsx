@@ -1128,6 +1128,7 @@ export function AppleStyleShowcase() {
     });
 
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 30 });
+    const isInView = useInView(containerRef, { margin: "-20% 0px -20% 0px" });
 
     const [animationState, setAnimationState] = React.useState({
         scale: 0.88,
@@ -1194,7 +1195,7 @@ export function AppleStyleShowcase() {
 
     // Play audio when feature changes
     React.useEffect(() => {
-        if (prevFeatureIndex.current !== animationState.featureIndex && animationState.textOpacity > 0.5 && !isMuted) {
+        if (prevFeatureIndex.current !== animationState.featureIndex && animationState.textOpacity > 0.5 && !isMuted && isInView) {
             prevFeatureIndex.current = animationState.featureIndex;
 
             // Stop current audio if playing
@@ -1212,7 +1213,14 @@ export function AppleStyleShowcase() {
                 console.log('Audio autoplay prevented:', err);
             });
         }
-    }, [animationState.featureIndex, animationState.textOpacity, selectedLanguage, isMuted]);
+    }, [animationState.featureIndex, animationState.textOpacity, selectedLanguage, isMuted, isInView]);
+
+    // Cleanup audio when scrolling away
+    React.useEffect(() => {
+        if (!isInView && audioRef.current) {
+            audioRef.current.pause();
+        }
+    }, [isInView]);
 
     const features = [
         { title: 'Complete Dashboard', subtitle: 'Monitor everything in real-time', icon: '📊', color: '#6FB63A' },

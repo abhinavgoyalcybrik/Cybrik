@@ -5,7 +5,7 @@ from .views import ElevenLabsPostcallWebhook
 from . import auth_views
 from . import views
 from .views import TranscriptASRCallback, DashboardSummary, ElevenLabsWebhookView, ReportsSummary
-from .views_leads import PortalLeadView, WalkInLeadView
+from .views_leads import PortalLeadView, WalkInLeadView, WebLeadView
 from .views_dashboard import dashboard_overview
 from . import views_elevenlabs
 from . import views_analytics
@@ -50,6 +50,7 @@ urlpatterns = [
     # Lead intake endpoint (must be before router to avoid collision with leads/<pk>/)
     path("leads/portal/", PortalLeadView.as_view(), name="portal-lead"),
     path("leads/walk-in/", WalkInLeadView.as_view(), name="walk-in-lead"),
+    path("web-leads/", WebLeadView.as_view(), name="web-lead"),
 
     # auth-like endpoints
     path("auth/login/", auth_views.login_view, name="api_login"),

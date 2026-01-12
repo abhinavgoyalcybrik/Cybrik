@@ -84,7 +84,7 @@ const features = [
 const stats = [
   { value: '10K+', label: 'Calls Handled Monthly' },
   { value: '<3s', label: 'Average Response Time' },
-  { value: '94%', label: 'Student Satisfaction' },
+  { value: '94%', label: 'Customer Satisfaction' },
   { value: '24/7', label: 'Always Available' },
 ];
 
@@ -113,17 +113,17 @@ const howItWorks = [
 
 const testimonials = [
   {
-    quote: "The AI voice agent handles 80% of our initial inquiries. Our team now focuses only on qualified, ready-to-enroll students.",
+    quote: "The AI voice agent handles 80% of our initial inquiries. Our team now focuses only on qualified, ready-to-close leads.",
     author: "Sarah Chen",
     role: "Director, Global Education Partners",
   },
   {
-    quote: "We used to miss calls after hours. Now students get instant help 24/7, and we wake up to qualified leads in our dashboard.",
+    quote: "We used to miss calls after hours. Now customers get instant help 24/7, and we wake up to qualified leads in our dashboard.",
     author: "Michael Okonkwo",
     role: "CEO, StudyAbroad Connect",
   },
   {
-    quote: "The AI understands context better than I expected. It remembers student preferences and provides genuinely helpful advice.",
+    quote: "The AI understands context better than I expected. It remembers customer preferences and provides genuinely helpful advice.",
     author: "Priya Sharma",
     role: "Operations Head, EduPath International",
   },
@@ -159,7 +159,7 @@ export default function LandingPage() {
                   Sign In
                 </button>
               </Link>
-              <Link href="/crm/login">
+              <Link href="/get-started">
                 <button className="px-4 sm:px-6 py-2 sm:py-2.5 text-sm font-semibold bg-[#6FB63A] text-white rounded-lg hover:bg-[#5FA030] transition-colors shadow-md">
                   Get Started
                 </button>
@@ -218,7 +218,7 @@ export default function LandingPage() {
             </motion.p>
 
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
-              <Link href="/crm/login">
+              <Link href="/get-started">
                 <motion.button
                   className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold bg-[#6FB63A] text-white rounded-lg shadow-lg shadow-[#6FB63A]/25"
                   whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(111,182,58,0.35)' }}
@@ -422,8 +422,8 @@ export default function LandingPage() {
                       </svg>
                     </div>
                     <div className="bg-[#F8FAFC] rounded-lg p-3 flex-1">
-                      <p className="text-sm text-[#3D4B5C]">"Hi! I'm interested in studying computer science in Canada. What are my options?"</p>
-                      <span className="text-xs text-[#8494A7] mt-1">Student - 2:34 PM</span>
+                      <p className="text-sm text-[#3D4B5C]">"Hi! I'd like to learn more about your premium services. What's included?"</p>
+                      <span className="text-xs text-[#8494A7] mt-1">Lead - 2:34 PM</span>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -433,7 +433,7 @@ export default function LandingPage() {
                       </svg>
                     </div>
                     <div className="bg-[#0B1F3A] rounded-lg p-3 flex-1">
-                      <p className="text-sm text-white">"Great choice! Canada has excellent CS programs. Based on your profile, I'd recommend looking at University of Toronto, UBC, and Waterloo. May I ask about your current academic background?"</p>
+                      <p className="text-sm text-white">"Our premium package includes full extensive support and priority access. It's designed for clients who need fast results. Shall I schedule a quick call to discuss your specific needs?"</p>
                       <span className="text-xs text-[#8494A7] mt-1">Cybrik AI - 2:34 PM</span>
                     </div>
                   </div>
@@ -442,7 +442,7 @@ export default function LandingPage() {
                       <div className="w-2 h-2 rounded-full bg-[#6FB63A] animate-pulse" />
                       <span className="text-xs font-semibold text-[#6FB63A] uppercase">Auto-Logged to CRM</span>
                     </div>
-                    <p className="text-xs text-[#3D4B5C]">Lead qualified: CS interest, Canada destination, ready for counselor follow-up</p>
+                    <p className="text-xs text-[#3D4B5C]">Lead qualified: High interest in Premium, Requesting call, Ready for closing</p>
                   </div>
                 </div>
               </div>
@@ -588,7 +588,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/crm/login">
+              <Link href="/get-started">
                 <button className="w-full py-3 text-sm font-semibold text-[#0B1F3A] border-2 border-[#E6ECF4] rounded-lg hover:border-[#6FB63A] transition-colors">
                   Start Free Trial
                 </button>
@@ -621,7 +621,7 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/crm/login">
+              <Link href="/get-started">
                 <button className="w-full py-3 text-sm font-semibold bg-[#6FB63A] text-white rounded-lg hover:bg-[#5FA030] transition-colors shadow-lg">
                   Start Free Trial
                 </button>
@@ -678,10 +678,10 @@ export default function LandingPage() {
             </h2>
             <p className="text-sm sm:text-base lg:text-lg text-[#B0BDCC] mb-8 sm:mb-10 max-w-2xl mx-auto">
               Stop missing calls. Stop repetitive conversations. Let Cybrik's AI voice agent
-              handle student inquiries while you close deals.
+              handle customer inquiries while you close deals.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link href="/crm/login">
+              <Link href="/get-started">
                 <motion.button
                   className="w-full sm:w-auto px-8 py-4 text-sm font-semibold bg-[#6FB63A] text-white rounded-lg shadow-lg"
                   whileHover={{ scale: 1.02 }}
@@ -694,6 +694,7 @@ export default function LandingPage() {
                 className="w-full sm:w-auto px-8 py-4 text-sm font-semibold text-white border-2 border-[#16263F] rounded-lg hover:border-[#6FB63A] transition-colors"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => window.location.href = '/get-started'}
               >
                 Schedule a Demo
               </motion.button>
@@ -711,7 +712,7 @@ export default function LandingPage() {
                 <span className="text-xl font-bold text-[#6FB63A]">SOLUTIONS</span>
               </div>
               <p className="text-sm text-[#8494A7]">
-                AI-powered voice agents and CRM for education consultancies. Handle student calls 24/7.
+                AI-powered voice agents and CRM for growing businesses. Handle customer calls 24/7.
               </p>
             </div>
             <div>
