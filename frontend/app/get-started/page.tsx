@@ -257,6 +257,11 @@ export default function GetStartedPage() {
                                             )}
                                         </button>
                                     </div>
+                                    <div className="text-center mt-4">
+                                        <Link href="/" className="text-sm font-medium text-gray-500 hover:text-[var(--cy-navy)] transition-colors flex items-center justify-center gap-2 group">
+                                            <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Home
+                                        </Link>
+                                    </div>
                                 </motion.form>
                             )}
                         </AnimatePresence>
