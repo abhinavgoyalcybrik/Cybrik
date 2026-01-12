@@ -340,7 +340,11 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.1, duration: 0.5 }}
               >
                 {i < howItWorks.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-[#6FB63A] to-transparent -translate-x-4" />
+                  <div className="hidden lg:block absolute top-8 left-full w-full h-auto flex items-center justify-center -translate-x-1/2 opacity-30">
+                    <svg className="w-12 h-6 text-[#6FB63A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
                 )}
                 <div className="text-5xl sm:text-6xl font-bold text-[#E8F5DC] mb-4">{item.step}</div>
                 <h3 className="text-lg sm:text-xl font-semibold text-[#0B1F3A] mb-2">{item.title}</h3>
