@@ -91,31 +91,34 @@ export default function LoginPage() {
               <br />
               <span className="text-[#6FB63A]">Cybrik Solutions</span>
             </h2>
-            <p className="text-[#B0BDCC] text-sm xl:text-base mb-8">
-              Smart CRM & Admissions platform crafted for education consultants and counselors.
+            <p className="text-[#B0BDCC] text-sm xl:text-base mb-8 leading-relaxed">
+              Smart CRM & Business Automation Platform built to help teams manage leads, customers, and operations efficiently.
             </p>
 
             <div className="space-y-4">
               <FeatureRow
                 icon={<SpeedIcon />}
                 title="Faster Follow-ups"
-                desc="Auto-workflows and quick call actions"
+                desc="Automated workflows, instant call actions, and smart task routing to never miss an opportunity."
               />
               <FeatureRow
                 icon={<ChartIcon />}
                 title="Clear Dashboards"
-                desc="Role-specific metrics and KPIs"
+                desc="Role-based insights, real-time metrics, and performance KPIs that drive better decisions."
               />
               <FeatureRow
                 icon={<ShieldIcon />}
                 title="Secure Access"
-                desc="Enterprise-grade security"
+                desc="Enterprise-grade security with controlled access, audit logs, and data protection you can trust."
               />
             </div>
 
             <div className="mt-8 pt-6 border-t border-[#16263F]">
-              <p className="text-xs text-[#5B6A7F]">
-                Trusted by <span className="text-[#6FB63A] font-semibold">500+</span> education consultancies worldwide
+              <p className="text-xs text-[#5B6A7F] mb-1">
+                Trusted by <span className="text-[#6FB63A] font-semibold">500+ Businesses Worldwide</span>
+              </p>
+              <p className="text-xs text-[#5B6A7F] opacity-80">
+                Helping teams scale operations, improve conversions, and stay organized.
               </p>
             </div>
           </div>

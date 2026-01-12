@@ -103,26 +103,31 @@ class WebLeadView(views.APIView):
                 lead = serializer.save(status="NEW") # Source is handled by serializer or default
                 
                 # Send Email
+                # Prepare Email Content
+                from django.template.loader import render_to_string
+                from django.utils.html import strip_tags
+                from django.core.mail import EmailMultiAlternatives
+
                 subject = f"New Lead: {lead.name} via Get Started"
-                message = f"""
-New web lead received:
-
-Name: {lead.name}
-Email: {lead.email}
-Phone: {lead.phone}
-Source: {lead.source}
-Message: {lead.message}
-
-View in CRM: https://crm.cybriksolutions.com/leads/{lead.id}
-"""
+                
+                # Context for template
+                context = {
+                    "lead": lead,
+                }
+                
+                # Render HTML and Plain Text
+                html_content = render_to_string("crm_app/lead_notification.html", context)
+                text_content = strip_tags(html_content)
+                
                 try:
-                    send_mail(
+                    msg = EmailMultiAlternatives(
                         subject,
-                        message,
+                        text_content, # Plain text fallback
                         settings.DEFAULT_FROM_EMAIL,
-                        ['info@cybriksolutions.com'],
-                        fail_silently=False,
+                        ['info@cybriksolutions.com']
                     )
+                    msg.attach_alternative(html_content, "text/html")
+                    msg.send()
                 except Exception as e:
                     logger.error(f"Failed to send lead email: {e}")
                     # Don't fail the request if email fails, but log it
