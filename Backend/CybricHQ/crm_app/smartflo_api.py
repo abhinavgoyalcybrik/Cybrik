@@ -187,10 +187,38 @@ def initiate_ai_call(request):
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    # Check configuration
-    if not SMARTFLO_API_KEY:
+    # Get tenant and tenant settings
+    from .models import TenantSettings, TenantUsage, UserProfile
+    
+    tenant = getattr(request, 'tenant', None)
+    tenant_settings = None
+    
+    # Fallback: get tenant from user profile
+    if not tenant and request.user.is_authenticated:
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(user=request.user).first()
+            if profile and profile.tenant:
+                tenant = profile.tenant
+        except Exception:
+            pass
+    
+    # Get tenant-specific settings
+    if tenant:
+        try:
+            tenant_settings = TenantSettings.objects.get(tenant=tenant)
+        except TenantSettings.DoesNotExist:
+            pass
+    
+    # Check configuration - tenant-specific or global
+    api_key = None
+    if tenant_settings and tenant_settings.smartflo_api_key:
+        api_key = tenant_settings.smartflo_voicebot_api_key or tenant_settings.smartflo_api_key
+    else:
+        api_key = SMARTFLO_VOICEBOT_API_KEY or SMARTFLO_API_KEY
+    
+    if not api_key:
         return Response(
-            {'error': 'Smartflo API not configured. Please set SMARTFLO_API_KEY in .env'},
+            {'error': 'Smartflo API not configured. Please set up SmartFlo credentials in Tenant Settings.'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
     
@@ -206,15 +234,23 @@ def initiate_ai_call(request):
             'caller_name': request.user.get_full_name() or request.user.username,
         }
         
-        # Call Smartflo Click2Call API
+        # Call Smartflo Click2Call API with tenant settings
         response = initiate_smartflo_call(
             destination_number=phone_number,
             websocket_url=ws_url,
-            custom_params=custom_params
+            custom_params=custom_params,
+            tenant_settings=tenant_settings
         )
         
+        # Track usage if tenant exists
+        if tenant and response.get('success'):
+            try:
+                TenantUsage.increment_smartflo_call(tenant, answered=False, duration_seconds=0)
+            except Exception as e:
+                logger.warning(f"Failed to track SmartFlo usage for tenant {tenant.slug}: {e}")
+        
         if response.get('success'):
-            logger.info(f"Call initiated to {phone_number} (Lead: {lead_context.get('name', 'N/A')}), call_sid: {response.get('call_sid')}")
+            logger.info(f"Call initiated to {phone_number} (Lead: {lead_context.get('name', 'N/A')}), call_sid: {response.get('call_sid')}, tenant: {tenant.slug if tenant else 'global'}")
             return Response({
                 'success': True,
                 'message': 'Call initiated successfully',

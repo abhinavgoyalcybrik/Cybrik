@@ -96,6 +96,72 @@ class TenantSettings(models.Model):
     def __str__(self):
         return f"Settings for {self.tenant.name}"
 
+
+class TenantUsage(models.Model):
+    """
+    Track API usage per tenant for billing and monitoring.
+    Stores monthly aggregated usage metrics.
+    """
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, related_name='usage_records')
+    
+    # Time period
+    year = models.PositiveIntegerField()
+    month = models.PositiveIntegerField()  # 1-12
+    
+    # SmartFlo Usage
+    smartflo_calls_made = models.PositiveIntegerField(default=0, help_text="Total outbound calls initiated")
+    smartflo_calls_answered = models.PositiveIntegerField(default=0, help_text="Calls that were answered")
+    smartflo_call_minutes = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="Total call duration in minutes")
+    
+    # AI Usage (ElevenLabs, OpenAI, etc.)
+    ai_api_calls = models.PositiveIntegerField(default=0, help_text="Total AI API calls")
+    ai_tokens_used = models.PositiveIntegerField(default=0, help_text="Total AI tokens consumed")
+    
+    # Lead/CRM Usage
+    leads_created = models.PositiveIntegerField(default=0)
+    emails_sent = models.PositiveIntegerField(default=0)
+    sms_sent = models.PositiveIntegerField(default=0)
+    whatsapp_messages_sent = models.PositiveIntegerField(default=0)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = "Tenant Usage"
+        verbose_name_plural = "Tenant Usage Records"
+        unique_together = ['tenant', 'year', 'month']
+        ordering = ['-year', '-month']
+    
+    def __str__(self):
+        return f"{self.tenant.name} - {self.year}/{self.month:02d}"
+    
+    @classmethod
+    def get_or_create_current(cls, tenant):
+        """Get or create the usage record for the current month."""
+        from django.utils import timezone
+        now = timezone.now()
+        usage, _ = cls.objects.get_or_create(
+            tenant=tenant,
+            year=now.year,
+            month=now.month,
+            defaults={}
+        )
+        return usage
+    
+    @classmethod
+    def increment_smartflo_call(cls, tenant, answered=False, duration_seconds=0):
+        """Increment SmartFlo call counters for a tenant."""
+        from django.db.models import F
+        usage = cls.get_or_create_current(tenant)
+        usage.smartflo_calls_made = F('smartflo_calls_made') + 1
+        if answered:
+            usage.smartflo_calls_answered = F('smartflo_calls_answered') + 1
+        if duration_seconds > 0:
+            duration_minutes = duration_seconds / 60.0
+            usage.smartflo_call_minutes = F('smartflo_call_minutes') + duration_minutes
+        usage.save(update_fields=['smartflo_calls_made', 'smartflo_calls_answered', 'smartflo_call_minutes', 'updated_at'])
+
 def transcript_upload_path(instance, filename):
     """
     Upload path for transcript files (used by migrations and FileField).

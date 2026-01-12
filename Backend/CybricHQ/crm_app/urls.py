@@ -100,6 +100,7 @@ urlpatterns = [
     path("tenant/branding/", views_tenant.get_tenant_branding, name="tenant-branding"),
     path("tenant/settings/", views_tenant.tenant_settings, name="tenant-settings"),
     path("tenant/current/", views_tenant.current_tenant, name="current-tenant"),
+    path("tenant/usage/", views_tenant.tenant_usage, name="tenant-usage"),
     
     # Smartflo AI Calling endpoints
     path("smartflo/call/initiate/", __import__('crm_app.smartflo_api', fromlist=['initiate_ai_call']).initiate_ai_call, name="smartflo-initiate-call"),

@@ -133,3 +133,99 @@ def current_tenant(request):
     tenant = request.user.profile.tenant
     serializer = TenantSerializer(tenant)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def tenant_usage(request):
+    """
+    Get usage statistics for the current tenant.
+    Query params:
+        - year: Year to filter (default: current year)
+        - month: Month to filter (default: current month)
+    """
+    from crm_app.models import TenantUsage, UserProfile
+    from django.utils import timezone
+    
+    # Get tenant
+    tenant = getattr(request, 'tenant', None)
+    if not tenant:
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(user=request.user).first()
+            if profile and profile.tenant:
+                tenant = profile.tenant
+        except Exception:
+            pass
+    
+    if not tenant:
+        return Response(
+            {'error': 'No tenant associated with user'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    # Parse query params
+    now = timezone.now()
+    year = int(request.query_params.get('year', now.year))
+    month = request.query_params.get('month')
+    
+    if month:
+        # Get specific month
+        try:
+            usage = TenantUsage.objects.get(tenant=tenant, year=year, month=int(month))
+            return Response({
+                'tenant': tenant.name,
+                'period': f"{year}/{int(month):02d}",
+                'smartflo_calls_made': usage.smartflo_calls_made,
+                'smartflo_calls_answered': usage.smartflo_calls_answered,
+                'smartflo_call_minutes': float(usage.smartflo_call_minutes),
+                'ai_api_calls': usage.ai_api_calls,
+                'ai_tokens_used': usage.ai_tokens_used,
+                'leads_created': usage.leads_created,
+                'emails_sent': usage.emails_sent,
+                'sms_sent': usage.sms_sent,
+                'whatsapp_messages_sent': usage.whatsapp_messages_sent,
+            })
+        except TenantUsage.DoesNotExist:
+            return Response({
+                'tenant': tenant.name,
+                'period': f"{year}/{int(month):02d}",
+                'smartflo_calls_made': 0,
+                'smartflo_calls_answered': 0,
+                'smartflo_call_minutes': 0,
+                'ai_api_calls': 0,
+                'ai_tokens_used': 0,
+                'leads_created': 0,
+                'emails_sent': 0,
+                'sms_sent': 0,
+                'whatsapp_messages_sent': 0,
+            })
+    else:
+        # Get all months for the year
+        usage_records = TenantUsage.objects.filter(tenant=tenant, year=year).order_by('month')
+        records = []
+        for usage in usage_records:
+            records.append({
+                'month': usage.month,
+                'period': f"{year}/{usage.month:02d}",
+                'smartflo_calls_made': usage.smartflo_calls_made,
+                'smartflo_calls_answered': usage.smartflo_calls_answered,
+                'smartflo_call_minutes': float(usage.smartflo_call_minutes),
+                'ai_api_calls': usage.ai_api_calls,
+                'leads_created': usage.leads_created,
+            })
+        
+        # Calculate totals
+        totals = {
+            'smartflo_calls_made': sum(r['smartflo_calls_made'] for r in records),
+            'smartflo_calls_answered': sum(r['smartflo_calls_answered'] for r in records),
+            'smartflo_call_minutes': sum(r['smartflo_call_minutes'] for r in records),
+            'ai_api_calls': sum(r['ai_api_calls'] for r in records),
+            'leads_created': sum(r['leads_created'] for r in records),
+        }
+        
+        return Response({
+            'tenant': tenant.name,
+            'year': year,
+            'months': records,
+            'totals': totals,
+        })
