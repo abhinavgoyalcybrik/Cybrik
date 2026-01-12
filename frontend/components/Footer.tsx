@@ -30,7 +30,10 @@ export default function Footer() {
             <h5 className="text-sm font-semibold text-gray-700">Company</h5>
             <ul className="mt-3 text-sm text-gray-600 space-y-2">
               <li>
-                <Link href="/about">About</Link>
+                <a href="https://cybriksolutions.com" target="_blank" rel="noopener noreferrer">About</a>
+              </li>
+              <li>
+                <Link href="/careers">Careers</Link>
               </li>
               <li>
                 <Link href="/contact">Contact</Link>

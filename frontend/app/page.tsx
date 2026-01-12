@@ -726,16 +726,16 @@ export default function LandingPage() {
             <div>
               <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">About</a></li>
+                <li><a href="https://cybriksolutions.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">About</a></li>
                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Blog</a></li>
-                <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Careers</a></li>
+                <li><Link href="/careers" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Careers</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Support</h4>
               <ul className="space-y-2">
                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Contact</a></li>
+                <li><Link href="/contact" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Contact</Link></li>
                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Privacy</a></li>
               </ul>
             </div>
