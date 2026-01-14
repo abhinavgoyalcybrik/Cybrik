@@ -208,10 +208,11 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 
                 # IMPORTANT: Unlink lead from applicant to prevent CASCADE DELETE
                 # The model has on_delete=models.CASCADE, so deleting lead deletes applicant if linked!
-                applicant.lead = None
+                # Use direct DB update to be absolutely sure
+                Applicant.objects.filter(id=applicant.id).update(lead=None)
                 
-                # Save applicant with new metadata and unlinked lead
-                applicant.save(update_fields=["metadata", "lead"])
+                # Update metadata separate from lead unlink
+                applicant.save(update_fields=["metadata"])
 
                 # DELETE the lead
                 lead.delete()
