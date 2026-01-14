@@ -159,8 +159,15 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         
         # Manually save with tenant
+        # Defensive: Save strictly with tenant, and double-check
         if target_tenant:
              applicant = serializer.save(tenant=target_tenant)
+             # Verify tenant was set (DRF sometimes ignores kwargs if not in fields)
+             if applicant.tenant_id != target_tenant.id:
+                 input_tenant_id = target_tenant.id
+                 logger.warning(f"Applicant {applicant.id} created but tenant mismatch! Expected {input_tenant_id}, got {applicant.tenant_id}. Forcing update.")
+                 applicant.tenant = target_tenant
+                 applicant.save(update_fields=['tenant'])
         else:
              applicant = serializer.save()
 
