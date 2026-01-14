@@ -124,6 +124,19 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     serializer_class = ApplicantSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        """Explicitly filter by tenant to ensure visibility."""
+        qs = Applicant.objects.all().order_by("-created_at")
+        tenant = getattr(self.request, 'tenant', None)
+        if tenant:
+             return qs.filter(tenant_id=tenant.id)
+        
+        # Superuser fallback
+        if self.request.user.is_superuser:
+            return qs
+            
+        return qs.none()
+
     def perform_create(self, serializer):
         """Assign tenant from request before saving."""
         tenant = getattr(self.request, 'tenant', None)
