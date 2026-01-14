@@ -61,6 +61,7 @@ urlpatterns = [
     path("auth/logout", auth_views.logout_view, name="api_logout_noslash"),
     path("auth/me/", auth_views.me_view, name="api_me"),
     path("auth/me", auth_views.me_view, name="api_me_noslash"),
+    path("auth/change-password/", auth_views.change_password_view, name="api_change_password"),
 
     # ElevenLabs webhook / callback (single, canonical endpoint)
     # Ensure ELEVENLABS_POSTCALL_WEBHOOK in settings points to this route.
