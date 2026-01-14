@@ -10,6 +10,7 @@ export default function ContactPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         subject: '',
         message: '',
     });
@@ -28,10 +29,22 @@ export default function ContactPage() {
         setError(null);
 
         try {
-            const response = await fetch('/api/contact', {
+            const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+            // Prepare data for Django backend
+            const leadData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                message: `${formData.subject ? `Subject: ${formData.subject}\n\n` : ''}${formData.message || ''}`,
+                source: 'ielts_portal_contact',
+            };
+
+            // Send directly to Django web-leads endpoint
+            const response = await fetch(`${API_BASE}/api/web-leads/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(leadData),
             });
 
             if (!response.ok) {
@@ -180,7 +193,22 @@ export default function ContactPage() {
 
                                     <div>
                                         <label className="text-sm font-semibold text-[#0B1F3A] mb-2 block">
-                                            Subject <span className="text-red-500">*</span>
+                                            Phone Number <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent outline-none"
+                                            placeholder="+91 98765 43210"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="text-sm font-semibold text-[#0B1F3A] mb-2 block">
+                                            Subject
                                         </label>
                                         <input
                                             type="text"

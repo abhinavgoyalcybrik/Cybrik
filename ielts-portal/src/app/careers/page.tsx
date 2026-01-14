@@ -28,13 +28,22 @@ export default function CareersPage() {
         setError(null);
 
         try {
-            const response = await fetch('/api/contact', {
+            const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+            // Prepare data for Django backend
+            const leadData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                message: formData.message || 'Career application',
+                source: 'ielts_portal_careers',
+            };
+
+            // Send directly to Django web-leads endpoint
+            const response = await fetch(`${API_BASE}/api/web-leads/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                    subject: 'Career Application',
-                }),
+                body: JSON.stringify(leadData),
             });
 
             if (!response.ok) {

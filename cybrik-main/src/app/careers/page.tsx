@@ -33,11 +33,15 @@ export default function CareersPage() {
         try {
             // Prepare lead/applicant data
             const leadData = {
-                ...formData,
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                message: formData.message || 'Career application',
+                source: 'cybrik_main_careers',
                 external_id: `career_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             };
 
-            // Send to backend (reusing web-leads for now as requested)
+            // Send to Django backend
             const response = await apiFetch('/api/web-leads/', {
                 method: 'POST',
                 body: JSON.stringify(leadData),

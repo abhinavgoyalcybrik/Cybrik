@@ -12,6 +12,7 @@ export default function ContactPage() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         subject: '',
         message: '',
         source: 'contact_page', // Hidden field to identify source
@@ -33,34 +34,23 @@ export default function ContactPage() {
         try {
             // Prepare data
             const leadData = {
-                ...formData,
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                message: `${formData.subject ? `Subject: ${formData.subject}\n\n` : ''}${formData.message || ''}`,
+                source: 'cybrik_main_contact',
                 external_id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             };
 
-            // Send to backend CRM
-            const crmPromise = apiFetch('/api/web-leads/', {
+            // Send to Django backend
+            const response = await apiFetch('/api/web-leads/', {
                 method: 'POST',
                 body: JSON.stringify(leadData),
-            }).catch(err => {
-                console.warn('CRM submission failed (non-blocking):', err);
-                return null; // Don't fail if CRM is down
             });
 
-            // Send email notification
-            const emailPromise = fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
-
-            // Wait for both (email is required, CRM is optional)
-            const [, emailResponse] = await Promise.all([crmPromise, emailPromise]);
-
-            if (!emailResponse.ok) {
-                throw new Error('Failed to send email');
+            if (response) {
+                setSuccess(true);
             }
-
-            setSuccess(true);
         } catch (err: any) {
             console.error('Error submitting contact form:', err);
             setError(err.message || 'Failed to send message. Please try again.');
@@ -205,6 +195,22 @@ export default function ContactPage() {
                                             required
                                             className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] focus:border-transparent transition-all outline-none"
                                             placeholder="you@example.com"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label htmlFor="phone" className="text-sm font-semibold text-[var(--cy-navy)]">
+                                            Phone Number <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] focus:border-transparent transition-all outline-none"
+                                            placeholder="+1 (555) 123-4567"
                                         />
                                     </div>
 
