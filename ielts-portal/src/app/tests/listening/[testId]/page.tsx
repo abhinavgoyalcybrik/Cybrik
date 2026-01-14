@@ -414,6 +414,7 @@ export default function ListeningTestPage({ params }: PageProps) {
                 const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({
                         test_id: test.id,
                         module_type: 'listening',

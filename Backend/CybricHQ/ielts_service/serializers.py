@@ -45,10 +45,11 @@ class UserAnswerSerializer(serializers.ModelSerializer):
 
 class UserModuleAttemptSerializer(serializers.ModelSerializer):
     answers = UserAnswerSerializer(many=True, read_only=True)
+    module_type = serializers.CharField(source='module.module_type', read_only=True)
     
     class Meta:
         model = UserModuleAttempt
-        fields = ['id', 'module', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers']
+        fields = ['id', 'module', 'module_type', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers']
         read_only_fields = ['band_score', 'raw_score', 'start_time', 'end_time']
 
 class UserTestSessionSerializer(serializers.ModelSerializer):
