@@ -24,21 +24,47 @@ interface Passage {
 }
 
 // Helper function to render text with highlighted answers
-function renderHighlightedText(text: string, highlights: Array<{ start: number, end: number, questionNumber: number, answer: string }>) {
-    if (!highlights.length) return <p className="text-slate-700 leading-relaxed">{text}</p>;
+function renderHighlightedText(text: string, withHighlights: Array<{ start: number, end: number, questionNumber: number, answer: string }>) {
+    if (!withHighlights || !withHighlights.length) return <p className="text-slate-700 leading-relaxed">{text}</p>;
 
-    // Sort highlights by start index
-    const sortedHighlights = [...highlights].sort((a, b) => a.start - b.start);
+    // 1. Sort highlights by start index
+    const sortedHighlights = [...withHighlights].sort((a, b) => a.start - b.start);
+
+    // 2. Filter out invalid or completely contained highlights (simple overlap handling)
+    // For a production app, we might want to merge overlaps, but for now we'll just skip
+    // highlights that start before the previous one ends (nested/overlapped) to prevent crashes.
+    const validHighlights: typeof sortedHighlights = [];
+    let lastEnd = -1;
+
+    sortedHighlights.forEach(h => {
+        if (h.start >= lastEnd) {
+            validHighlights.push(h);
+            lastEnd = h.end;
+        } else {
+            // Handle overlap: if this one ends after the last one, maybe we can show partial? 
+            // For simplicity in this fix, we prioritize the first one to avoid UI breakage.
+            // Or, we could try to just render it if it starts strictly after the previous start?
+            // Let's stick to non-overlapping for safety as React doesn't like nested marks easily without parsing.
+            if (h.start > lastEnd) { // Should be covered by >= check, but just to be sure
+                validHighlights.push(h);
+                lastEnd = h.end;
+            }
+        }
+    });
 
     const parts = [];
     let lastIndex = 0;
 
-    sortedHighlights.forEach((highlight, i) => {
+    validHighlights.forEach((highlight, i) => {
+        // Safety check for bounds
+        const start = Math.max(0, Math.min(highlight.start, text.length));
+        const end = Math.max(start, Math.min(highlight.end, text.length));
+
         // Add text before highlight
-        if (lastIndex < highlight.start) {
+        if (lastIndex < start) {
             parts.push(
                 <span key={`text-${i}`} className="text-slate-700">
-                    {text.slice(lastIndex, highlight.start)}
+                    {text.slice(lastIndex, start)}
                 </span>
             );
         }
@@ -50,14 +76,14 @@ function renderHighlightedText(text: string, highlights: Array<{ start: number, 
                 className="bg-yellow-200 text-slate-900 px-1 py-0.5 rounded font-medium relative group cursor-help"
                 title={`Q${highlight.questionNumber}: ${highlight.answer}`}
             >
-                {text.slice(highlight.start, highlight.end)}
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                {text.slice(start, end)}
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
                     Q{highlight.questionNumber}
                 </span>
             </mark>
         );
 
-        lastIndex = highlight.end;
+        lastIndex = end;
     });
 
     // Add remaining text
@@ -69,7 +95,7 @@ function renderHighlightedText(text: string, highlights: Array<{ start: number, 
         );
     }
 
-    return <p className="text-[15px] leading-relaxed">{parts}</p>;
+    return <p className="text-[15px] leading-relaxed whitespace-pre-wrap">{parts}</p>;
 }
 
 export default function AnswerKeyPage() {

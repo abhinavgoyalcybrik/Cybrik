@@ -823,6 +823,12 @@ export default function ReadingTestPage({ params }: PageProps) {
                             Back to Tests
                         </Link>
                         <Link
+                            href={`/tests/reading/answer-key/${test.id}`}
+                            className="px-6 py-3 rounded-xl bg-white text-emerald-600 font-medium border border-emerald-200 hover:bg-emerald-50 transition-colors shadow"
+                        >
+                            View Answer Key
+                        </Link>
+                        <Link
                             href="/dashboard"
                             className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg"
                         >
