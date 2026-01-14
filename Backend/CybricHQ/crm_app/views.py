@@ -124,6 +124,14 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     serializer_class = ApplicantSerializer
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        """Assign tenant from request before saving."""
+        tenant = getattr(self.request, 'tenant', None)
+        if tenant:
+            serializer.save(tenant=tenant)
+        else:
+            serializer.save()
+
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         
@@ -138,7 +146,13 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             lead_id = request.data.get("leadId") or request.data.get("lead_id")
             if lead_id:
                 try:
-                    lead = Lead.objects.get(id=lead_id)
+                    # FIX: Filter by tenant to respect multi-tenancy
+                    tenant = getattr(request, 'tenant', None)
+                    if tenant:
+                        lead = Lead.objects.get(id=lead_id, tenant=tenant)
+                    else:
+                        # Fallback: try to get lead by user
+                        lead = Lead.objects.get(id=lead_id)
                     
                     # Transfer lead metadata to applicant
                     if not applicant.metadata:
@@ -166,8 +180,28 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     
                     logger.info(f"Converted Lead {lead_id} to Applicant {applicant_id} and deleted Lead.")
 
+                except Lead.DoesNotExist:
+                    logger.error(f"Lead {lead_id} not found or doesn't belong to tenant {tenant}")
+                    # Return error to user instead of silently failing
+                    return Response(
+                        {
+                            "error": f"Lead with ID {lead_id} not found. The applicant was created but the lead data could not be linked.",
+                            "applicant_id": applicant_id,
+                            "warning": "Please verify the lead ID and try again."
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
                 except Exception as e:
                     logger.exception(f"Failed to convert lead {lead_id} to applicant: {e}")
+                    # Return error to user
+                    return Response(
+                        {
+                            "error": f"Failed to link lead data: {str(e)}",
+                            "applicant_id": applicant_id,
+                            "warning": "The applicant was created but lead data could not be linked."
+                        },
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
 
             # 2. Link calls with matching phone number (ALWAYS run this)
             if applicant.phone:

@@ -15,7 +15,10 @@ from .views_ai import AIAnalysisViewSet, DocumentVerificationViewSet
 from . import views_search
 from .views_rbac import RoleViewSet, UserRoleAssignmentView, UserProfileViewSet
 from . import views_notifications
-from .views_integrations import AdIntegrationViewSet, AdCampaignViewSet
+from .views_integrations import (
+    AdIntegrationViewSet, AdCampaignViewSet,
+    meta_oauth_init, meta_oauth_callback, meta_get_accounts
+)
 from . import views_tenant  # Multi-tenant / white-label
 
 app_name = "crm_app"
@@ -91,6 +94,11 @@ urlpatterns = [
     
     # Global Search
     path("search/", views_search.GlobalSearchView.as_view(), name="global-search"),
+    
+    # Meta Ads OAuth
+    path("integrations/meta_ads/oauth/init/", meta_oauth_init, name="meta-oauth-init"),
+    path("integrations/meta_ads/callback/", meta_oauth_callback, name="meta-oauth-callback"),
+    path("integrations/meta_ads/accounts/<str:temp_token>/", meta_get_accounts, name="meta-get-accounts"),
     
     # AI Call Scheduling
     path("ai-calls/schedule/", views.ScheduleAICallView.as_view(), name="schedule-ai-call"),
