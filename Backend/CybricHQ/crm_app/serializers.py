@@ -139,14 +139,12 @@ class ApplicantSerializer(serializers.ModelSerializer):
         highest_qualification = validated_data.pop('highest_qualification', None)
         qualification_marks = validated_data.pop('qualification_marks', None)
         english_test_scores = validated_data.pop('english_test_scores', None)
-        lead_id = validated_data.pop('leadId', None)
-        
-        if lead_id and not validated_data.get('lead'):
-            from .models import Lead
-            try:
-                validated_data['lead'] = Lead.objects.get(id=lead_id)
-            except Lead.DoesNotExist:
-                pass
+        # Pop leadId but DO NOT link lead FK here - this is handled by the view
+        # Reason: Lead.on_delete=CASCADE means if we link lead here and then delete it,
+        # the applicant will be cascade-deleted. View handles conversion safely.
+        validated_data.pop('leadId', None)
+        # Also explicitly remove 'lead' if it was passed, as view handles this
+        validated_data.pop('lead', None)
         
         metadata = validated_data.get('metadata') or {}
         if highest_qualification:
