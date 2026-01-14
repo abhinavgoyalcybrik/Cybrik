@@ -37,15 +37,30 @@ export default function ContactPage() {
                 external_id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             };
 
-            // Send to backend
-            const response = await apiFetch('/api/web-leads/', {
+            // Send to backend CRM
+            const crmPromise = apiFetch('/api/web-leads/', {
                 method: 'POST',
                 body: JSON.stringify(leadData),
+            }).catch(err => {
+                console.warn('CRM submission failed (non-blocking):', err);
+                return null; // Don't fail if CRM is down
             });
 
-            if (response) {
-                setSuccess(true);
+            // Send email notification
+            const emailPromise = fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            // Wait for both (email is required, CRM is optional)
+            const [, emailResponse] = await Promise.all([crmPromise, emailPromise]);
+
+            if (!emailResponse.ok) {
+                throw new Error('Failed to send email');
             }
+
+            setSuccess(true);
         } catch (err: any) {
             console.error('Error submitting contact form:', err);
             setError(err.message || 'Failed to send message. Please try again.');
