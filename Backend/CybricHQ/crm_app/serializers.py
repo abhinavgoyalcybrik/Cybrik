@@ -132,8 +132,13 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "english_test_scores",
             "leadId",
             "metadata",
+            "tenant",  # Added to ensure tenant assignment works
         ]
         read_only_fields = ("created_at", "updated_at")
+        extra_kwargs = {
+            "tenant": {"required": False, "allow_null": True},  # Allow setting tenant via save()
+        }
+
 
     def create(self, validated_data):
         highest_qualification = validated_data.pop('highest_qualification', None)
