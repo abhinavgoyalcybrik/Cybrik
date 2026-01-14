@@ -186,6 +186,33 @@ export default function WritingTestPage({ params }: PageProps) {
             );
             setEvaluationResult(result);
             setTestCompleted(true);
+
+            // Save result to backend for Reports
+            try {
+                const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        test_id: test?.test_id ? String(test.test_id) : testId,
+                        module_type: 'writing',
+                        band_score: result?.overall_writing_band || 0,
+                        raw_score: 0, // Writing doesn't have a raw score implies band
+                        answers: {
+                            task_1: part1Response,
+                            task_2: part2Response
+                        }
+                    })
+                });
+
+                if (saveRes.ok) {
+                    console.log('Result saved successfully');
+                } else {
+                    console.warn('Failed to save result:', await saveRes.text());
+                }
+            } catch (saveError) {
+                console.error('Error saving result:', saveError);
+            }
+
         } catch (error) {
             console.error('Evaluation failed:', error);
             setEvaluationError(error instanceof Error ? error.message : 'Evaluation failed');

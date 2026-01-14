@@ -335,6 +335,30 @@ export default function ReadingTestPage({ params }: PageProps) {
         try {
             const result = await evaluateReading(questions, userAnswersMap);
             setEvaluationResult(result);
+
+            // Save result to backend for Reports
+            try {
+                const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        test_id: test.id,
+                        module_type: 'reading',
+                        band_score: result?.overall_band || 0,
+                        raw_score: correctCount,
+                        answers: userAnswersMap
+                    })
+                });
+
+                if (saveRes.ok) {
+                    console.log('Result saved successfully');
+                } else {
+                    console.warn('Failed to save result:', await saveRes.text());
+                }
+            } catch (saveError) {
+                console.error('Error saving result:', saveError);
+            }
+
         } catch (error) {
             console.error('Reading evaluation failed:', error);
             setEvaluationError(error instanceof Error ? error.message : 'Evaluation failed');

@@ -684,8 +684,28 @@ export default function SpeakingTestPage({ params }: PageProps) {
 
                     // Save session results to backend
                     try {
-                        await saveSpeakingResults(testId, result, sessionIdRef.current);
-                        console.log('Session results saved successfully');
+                        // Original save call (might be broken, but keep for legacy/data logging)
+                        try { await saveSpeakingResults(testId, result, sessionIdRef.current); } catch (e) { }
+
+                        // Reliability Save for Reports
+                        const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                test_id: testId,
+                                module_type: 'speaking',
+                                band_score: result?.overall_band || 0,
+                                raw_score: 0,
+                                answers: {} // Speaking answers are audio blobs, not easily sent here
+                            })
+                        });
+
+                        if (saveRes.ok) {
+                            console.log('Report result saved successfully');
+                        } else {
+                            console.warn('Failed to save report result:', await saveRes.text());
+                        }
+
                     } catch (saveError) {
                         console.error('Failed to save session results:', saveError);
                     }

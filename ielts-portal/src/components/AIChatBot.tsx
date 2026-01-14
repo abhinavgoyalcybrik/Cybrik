@@ -119,21 +119,185 @@ export default function AIChatBot() {
         }
     };
 
+
+    // Dragging logic
+    const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const dragStartPos = useRef<{ x: number, y: number } | null>(null);
+    const dragStartTime = useRef<number>(0);
+
+    // Initialize position on mount (optional, or just rely on CSS default until first drag)
+
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDragging) {
+                setPosition({
+                    x: e.clientX - (dragStartPos.current?.x || 0),
+                    y: e.clientY - (dragStartPos.current?.y || 0)
+                });
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging]);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        // Only allow primary button drag
+        if (e.button !== 0) return;
+
+        // e.preventDefault(); // Don't prevent default immediately, might block input focus if used elsewhere, but for button it's fine. 
+        // Actually, preventing default might stop text selection which is good.
+        // e.preventDefault();
+
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+
+        // Calculate offset from top-left of the element
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+
+        // If this is the very first drag, and position is null, we need to respect the current CSS position
+        // rect.left and rect.top ARE the current position.
+
+        // We want subsequent mouse moves to set the Top/Left style.
+        // newX = currentMouseX - offsetX
+        // newY = currentMouseY - offsetY
+
+        // But wait, our state `position` corresponds to the `top/left` styles we apply.
+        // So offset needed is just the difference.
+
+        dragStartPos.current = { x: offsetX, y: offsetY };
+        dragStartTime.current = Date.now();
+
+        // If we haven't set a manual position yet, capture the current computed position
+        if (!position) {
+            setPosition({ x: rect.left, y: rect.top });
+        }
+
+        setIsDragging(true);
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        // Prevent click if we dragged
+        const dragDuration = Date.now() - dragStartTime.current;
+        // Simple heuristic: if held down for > 200ms, assume drag/hold, but better to check distance.
+        // Since we don't track start x/y for click, let's just rely on isDragging logic?
+        // Actually, typical 'click' fires after mouseup.
+        // We can just check drag duration implies intentional drag?
+        // Or better: did we move?
+        // Let's assume if the mouse didn't move much, it's a click.
+        // Ideally we track moved distance.
+        // For now, let's just allow click if drag was short or didn't move much (handled by the fact that if it moved, position updated)
+        // A simple way:
+        if (isDragging) {
+            // e.stopPropagation(); // maybe?
+        }
+    };
+
+    // Helper to determine if we should toggle on click
+    const handleToggle = () => {
+        // If a drag just happened (or is happening), don't toggle.
+        // But handleMouseUp fires before click.
+        // Let's track if we actually MOVED.
+        // We can use a ref 'hasMoved' set in mouseMove.
+    };
+
+    // We need 'hasMoved' ref.
+    const hasMoved = useRef(false);
+
+    // Updated Effect
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDragging) {
+                hasMoved.current = true;
+                setPosition({
+                    x: e.clientX - (dragStartPos.current?.x || 0),
+                    y: e.clientY - (dragStartPos.current?.y || 0)
+                });
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+        };
+
+        if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging]);
+
+    const onMouseDown = (e: React.MouseEvent) => {
+        hasMoved.current = false;
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        dragStartPos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+
+        if (!position) {
+            setPosition({ x: rect.left, y: rect.top });
+        }
+        setIsDragging(true);
+    };
+
+    const onButtonClick = () => {
+        if (!hasMoved.current) {
+            setIsOpen(true);
+        }
+    };
+
+    // For the modal window (also draggable? maybe by header?)
+    const onHeaderMouseDown = (e: React.MouseEvent) => {
+        hasMoved.current = false;
+        const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
+        dragStartPos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+
+        if (!position) {
+            setPosition({ x: rect.left, y: rect.top });
+        }
+        setIsDragging(true);
+    };
+
+    // Dynamic style
+    const style = position ? { left: position.x, top: position.y, bottom: 'auto', right: 'auto' } : {};
+
     return (
         <>
             {/* Chat Bubble */}
             <button
-                onClick={() => setIsOpen(true)}
-                className={`fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#6FB63A] text-white rounded-full shadow-lg hover:bg-[#5FA030] transition-all duration-300 flex items-center justify-center ${isOpen ? 'scale-0' : 'scale-100'}`}
+                onMouseDown={onMouseDown}
+                onClick={onButtonClick}
+                style={style}
+                className={`fixed z-50 w-14 h-14 bg-[#6FB63A] text-white rounded-full shadow-lg hover:bg-[#5FA030] transition-transform duration-300 flex items-center justify-center ${!position ? 'bottom-6 right-6' : ''} ${isOpen ? 'scale-0' : 'scale-100'} cursor-move`}
                 aria-label="Open AI Chat"
             >
                 <MessageCircle className="w-6 h-6" />
             </button>
 
             {/* Chat Modal */}
-            <div className={`fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-100px)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300 ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
-                {/* Header */}
-                <div className="bg-[#0B1F3A] text-white p-4 flex items-center justify-between">
+            <div
+                style={style}
+                className={`fixed z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-100px)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-transform duration-300 ${!position ? 'bottom-6 right-6' : ''} ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
+            >
+                {/* Header - Draggable */}
+                <div
+                    onMouseDown={onHeaderMouseDown}
+                    className="bg-[#0B1F3A] text-white p-4 flex items-center justify-between cursor-move"
+                >
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-[#6FB63A] rounded-full flex items-center justify-center">
                             <Bot className="w-5 h-5" />
@@ -143,7 +307,12 @@ export default function AIChatBot() {
                             <p className="text-xs text-gray-300">Ask me about IELTS prep!</p>
                         </div>
                     </div>
-                    <button onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white transition-colors">
+                    {/* Close button shouldn't trigger drag - handled by bubbling? stopPropagation on close click */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        className="text-gray-300 hover:text-white transition-colors"
+                    >
                         <X className="w-5 h-5" />
                     </button>
                 </div>

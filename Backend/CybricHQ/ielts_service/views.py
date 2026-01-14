@@ -101,6 +101,74 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(UserAnswerSerializer(answer).data)
 
 
+    @action(detail=False, methods=['post'])
+    def save_module_result(self, request):
+        """
+        Save a complete result for a test module (e.g., Reading/Listening).
+        Expects:
+        {
+            "test_id": "...",
+            "module_type": "reading", 
+            "band_score": 7.5,
+            "raw_score": 32,
+            "answers": {...}  // Optional
+        }
+        """
+        user = request.user
+        data = request.data
+        test_id = data.get('test_id')
+        module_type = data.get('module_type')
+        
+        if not test_id or not module_type:
+            return Response({"error": "test_id and module_type are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            test = IELTSTest.objects.get(id=test_id)
+        except IELTSTest.DoesNotExist:
+            # Try to find by string ID match if UUID fails or if it's a legacy ID
+            # In production, we should be strict, but for development with mixed data:
+            return Response({"error": f"Test not found: {test_id}"}, status=status.HTTP_404_NOT_FOUND)
+
+        # 1. Create or Get Session
+        # Logic: If there's an open session for this test, use it. Else create new.
+        # For simplicity in this 'save result' flow, we generally assume we are finalizing a session.
+        
+        session = UserTestSession.objects.create(
+            user=user,
+            test=test,
+            start_time=timezone.now(), # In exact usage, start_time should be passed, but this failsafe
+            is_completed=True,
+            end_time=timezone.now()
+        )
+        
+        # 2. Find Module
+        try:
+            module = test.modules.get(module_type=module_type)
+        except TestModule.DoesNotExist:
+             return Response({"error": f"Module {module_type} not found for test"}, status=status.HTTP_404_NOT_FOUND)
+
+        # 3. Create Attempt
+        try:
+            attempt = UserModuleAttempt.objects.create(
+                session=session,
+                module=module,
+                start_time=timezone.now(),
+                end_time=timezone.now(),
+                is_completed=True,
+                band_score=data.get('band_score'),
+                raw_score=data.get('raw_score')
+            )
+            
+            # Update session overall score if it's the only module or simple logic
+            # For now, if it's reading, set overall to reading (simplified)
+            session.overall_band_score = data.get('band_score')
+            session.save()
+            
+            return Response(UserTestSessionSerializer(session).data, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         """
@@ -110,8 +178,6 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
         session.is_completed = True
         session.end_time = timezone.now()
         session.save()
-        
-        # TODO: Trigger Grading Logic Here
         
         return Response(UserTestSessionSerializer(session).data)
 

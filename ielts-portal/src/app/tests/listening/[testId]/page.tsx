@@ -369,6 +369,7 @@ export default function ListeningTestPage({ params }: PageProps) {
     };
 
     const handleSubmit = async () => {
+        if (!test) return;
         setIsEvaluating(true);
         setEvaluationError(null);
 
@@ -407,6 +408,30 @@ export default function ListeningTestPage({ params }: PageProps) {
         try {
             const result = await evaluateListening(answerKey, userAnswersMap);
             setEvaluationResult(result);
+
+            // Save result to backend for Reports
+            try {
+                const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        test_id: test.id,
+                        module_type: 'listening',
+                        band_score: result?.overall_band || 0,
+                        raw_score: correct,
+                        answers: userAnswersMap
+                    })
+                });
+
+                if (saveRes.ok) {
+                    console.log('Result saved successfully');
+                } else {
+                    console.warn('Failed to save result:', await saveRes.text());
+                }
+            } catch (saveError) {
+                console.error('Error saving result:', saveError);
+            }
+
         } catch (error) {
             console.error('Listening evaluation failed:', error);
             setEvaluationError(error instanceof Error ? error.message : 'Evaluation failed');
