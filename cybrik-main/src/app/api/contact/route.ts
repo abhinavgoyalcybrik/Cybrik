@@ -1,63 +1,67 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, phone } = body;
 
     // Validate required fields
-    if (!name || !email || !message) {
+    if (!name || !email || !phone) {
       return NextResponse.json(
-        { error: 'Name, email, and message are required' },
+        { error: 'Name, email, and phone are required' },
         { status: 400 }
       );
     }
 
-    // Create transporter using SMTP settings (Google Workspace / Gmail)
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false, // true for 465, false for 587
-      auth: {
-        user: process.env.SMTP_USER || 'noreply@cybriksolutions.com',
-        pass: process.env.SMTP_PASSWORD,
+    // Prepare data for Django backend (web-leads endpoint)
+    const leadData = {
+      name,
+      email,
+      phone,
+      message: `${subject ? `Subject: ${subject}\n\n` : ''}${message || ''}`,
+      source: 'cybrik_main_contact',
+    };
+
+    // Send to existing Django web-leads endpoint
+    const response = await fetch(`${API_BASE}/api/web-leads/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(leadData),
     });
 
-    // Email content
-    const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #1a2f4d; border-bottom: 2px solid #6FB63A; padding-bottom: 10px;">
-          New Contact Form Submission
-        </h2>
-        
-        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <p><strong>From:</strong> ${name}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-          <p><strong>Subject:</strong> ${subject || 'No subject provided'}</p>
-        </div>
-        
-        <div style="padding: 20px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px;">
-          <h3 style="color: #1a2f4d; margin-top: 0;">Message:</h3>
-          <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
-        </div>
-        
-        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;" />
-        
-        <p style="color: #666; font-size: 12px; text-align: center;">
-          This email was sent from the Cybrik Solutions contact form.<br/>
-          <a href="https://cybriksolutions.com">cybriksolutions.com</a>
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(errorData.error || 'Failed to send message');
+    }
+
+    return NextResponse.json(
+      { message: 'Message sent successfully' },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error('Error sending contact form:', error);
+    return NextResponse.json(
+      { error: 'Failed to send message', details: error.message },
+      { status: 500 }
+    );
+  }
+  <p style="color: #666; font-size: 12px; text-align: center;" >
+    This email was sent from the Cybrik Solutions contact form.< br />
+      <a href="https://cybriksolutions.com" > cybriksolutions.com </a>
         </p>
-      </div>
-    `;
+        </div>
+          `;
 
     // Send email
     await transporter.sendMail({
       from: '"Cybrik Contact Form" <noreply@cybriksolutions.com>',
       to: 'info@cybriksolutions.com',
       replyTo: email,
-      subject: `[Contact Form] ${subject || 'New Message'} - from ${name}`,
+      subject: `[Contact Form] ${ subject || 'New Message' } - from ${ name } `,
       html: emailHtml,
     });
 
