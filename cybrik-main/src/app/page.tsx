@@ -997,16 +997,40 @@ export default function Home() {
               </p>
             </div>
             {[
-              { title: 'Products', links: ['IELTS Portal', 'CRM System', 'PTE Portal'] },
-              { title: 'Company', links: ['About Us', 'Contact', 'Careers'] },
-              { title: 'Legal', links: ['Privacy Policy', 'Terms of Service'] },
+              {
+                title: 'Products',
+                links: [
+                  { label: 'IELTS Portal', href: 'https://ielts.cybriksolutions.com' },
+                  { label: 'CRM System', href: 'https://crm.cybriksolutions.com' },
+                  { label: 'PTE Portal', href: 'https://pte.cybriksolutions.com' }
+                ]
+              },
+              {
+                title: 'Company',
+                links: [
+                  { label: 'About Us', href: '#about' },
+                  { label: 'Contact', href: '/contact' },
+                  { label: 'Careers', href: '/careers' }
+                ]
+              },
+              {
+                title: 'Legal',
+                links: [
+                  { label: 'Privacy Policy', href: '#' },
+                  { label: 'Terms of Service', href: '#' }
+                ]
+              },
             ].map((section, idx) => (
               <div key={idx}>
                 <h4 className="font-bold mb-4 text-gray-900">{section.title}</h4>
                 <ul className="space-y-3 text-gray-500 text-sm">
                   {section.links.map((link, lIdx) => (
                     <li key={lIdx}>
-                      <a href="#" className="hover:text-[#6FB63A] transition-colors">{link}</a>
+                      {link.href.startsWith('http') ? (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" className="hover:text-[#6FB63A] transition-colors">{link.label}</a>
+                      ) : (
+                        <Link href={link.href} className="hover:text-[#6FB63A] transition-colors">{link.label}</Link>
+                      )}
                     </li>
                   ))}
                 </ul>

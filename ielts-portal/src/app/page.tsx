@@ -109,6 +109,12 @@ export default function LandingPage() {
                             <a href="#pricing" className="text-sm font-medium text-[#5B6A7F] hover:text-[#0B1F3A] transition-colors">
                                 Pricing
                             </a>
+                            <Link href="/contact" className="text-sm font-medium text-[#5B6A7F] hover:text-[#0B1F3A] transition-colors">
+                                Contact
+                            </Link>
+                            <Link href="/careers" className="text-sm font-medium text-[#5B6A7F] hover:text-[#0B1F3A] transition-colors">
+                                Careers
+                            </Link>
                         </nav>
                         <div className="flex items-center gap-3">
                             <Link href="/login">
@@ -450,7 +456,8 @@ export default function LandingPage() {
                             <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
                             <ul className="space-y-2">
                                 <li><a href="https://cybriksolutions.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">About Us</a></li>
-                                <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Contact</a></li>
+                                <li><Link href="/contact" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Contact</Link></li>
+                                <li><Link href="/careers" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Careers</Link></li>
                                 <li><a href="#" className="text-sm text-[#8494A7] hover:text-[#6FB63A] transition-colors">Blog</a></li>
                             </ul>
                         </div>
