@@ -150,6 +150,8 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         lead_id = request.data.get("leadId") or request.data.get("lead_id")
         lead = None
         target_tenant = getattr(request, 'tenant', None)
+        
+        logger.info(f"ApplicantViewSet.create called. lead_id={lead_id}, request_tenant={target_tenant}, user={request.user}")
 
         if lead_id:
             from .models import Lead
@@ -161,7 +163,9 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     # If no request tenant (e.g. admin/superuser), get lead and USE ITS TENANT
                     lead = Lead.objects.get(id=lead_id)
                     target_tenant = lead.tenant
+                logger.info(f"Lead {lead_id} found: {lead}, tenant={lead.tenant}")
             except Lead.DoesNotExist:
+                logger.error(f"Lead {lead_id} not found for tenant {target_tenant}")
                 return Response(
                     {"error": f"Lead {lead_id} not found. Cannot convert to applicant."},
                     status=status.HTTP_400_BAD_REQUEST
@@ -171,10 +175,14 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
+        logger.info(f"Serializer validated. target_tenant={target_tenant}")
+        
         # Manually save with tenant
         # Defensive: Save strictly with tenant, and double-check
         if target_tenant:
              applicant = serializer.save(tenant=target_tenant)
+             logger.info(f"Applicant created: id={applicant.id}, tenant_id={applicant.tenant_id}, lead_id={applicant.lead_id}")
+             
              # Verify tenant was set (DRF sometimes ignores kwargs if not in fields)
              if applicant.tenant_id != target_tenant.id:
                  input_tenant_id = target_tenant.id
@@ -183,6 +191,7 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                  applicant.save(update_fields=['tenant'])
         else:
              applicant = serializer.save()
+             logger.warning(f"Applicant created WITHOUT tenant: id={applicant.id}")
 
         # 3. Post-creation: Link metadata and delete lead
         if lead:
@@ -213,9 +222,25 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 
                 # Update metadata separate from lead unlink
                 applicant.save(update_fields=["metadata"])
+                
+                logger.info(f"About to delete lead {lead.id}. Applicant {applicant.id} has lead_id set? Checking DB...")
+                
+                # Refresh from DB to confirm state before deleting lead
+                db_applicant = Applicant.objects.filter(id=applicant.id).first()
+                if db_applicant:
+                    logger.info(f"DB check: Applicant {db_applicant.id} exists, lead_id={db_applicant.lead_id}, tenant_id={db_applicant.tenant_id}")
+                else:
+                    logger.error(f"DB check: Applicant {applicant.id} NOT FOUND in DB before lead deletion!")
 
                 # DELETE the lead
                 lead.delete()
+                
+                # Verify applicant still exists after lead deletion
+                post_delete_check = Applicant.objects.filter(id=applicant.id).first()
+                if post_delete_check:
+                    logger.info(f"SUCCESS: Applicant {applicant.id} still exists after lead deletion")
+                else:
+                    logger.error(f"CRITICAL: Applicant {applicant.id} was deleted when lead was deleted! CASCADE issue!")
                 
                 logger.info(f"Converted Lead {lead.id} to Applicant {applicant.id} (Tenant: {target_tenant}) and deleted Lead.")
 
@@ -241,8 +266,13 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             if updated_count > 0:
                 logger.info(f"Linked {updated_count} existing calls to new Applicant {applicant.id} by phone {applicant.phone}")
 
+        # Final verification
+        final_check = Applicant.objects.filter(id=applicant.id).first()
+        logger.info(f"Final check: Applicant exists={final_check is not None}, tenant={final_check.tenant_id if final_check else 'N/A'}")
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
     @action(detail=True, methods=["get"], url_path="activity")
     def activity(self, request, pk=None):
