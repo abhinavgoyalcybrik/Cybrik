@@ -596,41 +596,7 @@ export default function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // Contact form state
-  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
-  const [contactLoading, setContactLoading] = useState(false);
-  const [contactSuccess, setContactSuccess] = useState(false);
-  const [contactError, setContactError] = useState<string | null>(null);
 
-  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setContactForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setContactLoading(true);
-    setContactError(null);
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contactForm),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      setContactSuccess(true);
-      setContactForm({ name: '', email: '', message: '' });
-    } catch (err: any) {
-      setContactError(err.message || 'Failed to send message. Please try again.');
-    } finally {
-      setContactLoading(false);
-    }
-  };
 
   useEffect(() => {
     setIsVisible(true);
@@ -918,62 +884,12 @@ export default function Home() {
             </p>
           </AnimatedSection>
 
-          <AnimatedSection delay={200} className="glass-card rounded-3xl p-10 shadow-2xl">
-            {contactSuccess ? (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Message Sent!</h3>
-                <p className="text-gray-600">Thank you for reaching out. We'll get back to you shortly.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <input
-                    type="text"
-                    name="name"
-                    value={contactForm.name}
-                    onChange={handleContactChange}
-                    placeholder="Your Name"
-                    required
-                    className="input-futuristic w-full px-6 py-4 rounded-xl text-gray-800 placeholder-gray-400"
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    value={contactForm.email}
-                    onChange={handleContactChange}
-                    placeholder="Your Email"
-                    required
-                    className="input-futuristic w-full px-6 py-4 rounded-xl text-gray-800 placeholder-gray-400"
-                  />
-                </div>
-                <textarea
-                  name="message"
-                  value={contactForm.message}
-                  onChange={handleContactChange}
-                  placeholder="Your Message"
-                  required
-                  rows={5}
-                  className="input-futuristic w-full px-6 py-4 rounded-xl text-gray-800 placeholder-gray-400 resize-none"
-                ></textarea>
-                {contactError && (
-                  <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-                    {contactError}
-                  </div>
-                )}
-                <button
-                  type="submit"
-                  disabled={contactLoading}
-                  className="btn-primary w-full py-5 rounded-xl font-bold text-lg shadow-2xl disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {contactLoading ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
-            )}
+          <AnimatedSection delay={200} className="text-center">
+            <Link href="/contact">
+              <button className="btn-primary px-10 py-5 rounded-full text-xl font-bold shadow-2xl hover:scale-105 transition-transform duration-300">
+                Contact Us
+              </button>
+            </Link>
           </AnimatedSection>
         </div>
       </section>
