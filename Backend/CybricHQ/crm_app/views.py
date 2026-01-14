@@ -133,92 +133,91 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             serializer.save()
 
     def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
+        # 1. Check if we're converting a lead
+        lead_id = request.data.get("leadId") or request.data.get("lead_id")
+        lead = None
+        target_tenant = getattr(request, 'tenant', None)
+
+        if lead_id:
+            from .models import Lead
+            try:
+                # If we have a request tenant, ensure lead belongs to it
+                if target_tenant:
+                    lead = Lead.objects.get(id=lead_id, tenant=target_tenant)
+                else:
+                    # If no request tenant (e.g. admin/superuser), get lead and USE ITS TENANT
+                    lead = Lead.objects.get(id=lead_id)
+                    target_tenant = lead.tenant
+            except Lead.DoesNotExist:
+                return Response(
+                    {"error": f"Lead {lead_id} not found. Cannot convert to applicant."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # 2. Create the applicant with the correct tenant
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         
-        # If creation was successful
-        if response.status_code == 201:
-            applicant_id = response.data.get("id")
-            applicant = Applicant.objects.get(id=applicant_id)
-            from .models import Lead, CallRecord
+        # Manually save with tenant
+        if target_tenant:
+             applicant = serializer.save(tenant=target_tenant)
+        else:
+             applicant = serializer.save()
+
+        # 3. Post-creation: Link metadata and delete lead
+        if lead:
+             try:
+                # Transfer lead metadata to applicant
+                if not applicant.metadata:
+                    applicant.metadata = {}
+                
+                applicant.metadata.update({
+                    "original_lead_id": lead.id,
+                    "lead_external_id": lead.external_id,
+                    "lead_source": lead.source,
+                    "lead_message": lead.message,
+                    "lead_received_at": lead.received_at.isoformat() if lead.received_at else None,
+                })
+                # Also copy raw payload if useful
+                if lead.raw_payload:
+                    applicant.metadata["lead_raw_payload"] = lead.raw_payload
+
+                # Link calls linked to this lead
+                from .models import CallRecord
+                CallRecord.objects.filter(lead=lead).update(applicant=applicant)
+
+                # Save applicant with new metadata
+                applicant.save(update_fields=["metadata"])
+
+                # DELETE the lead
+                lead.delete()
+                
+                logger.info(f"Converted Lead {lead.id} to Applicant {applicant.id} (Tenant: {target_tenant}) and deleted Lead.")
+
+             except Exception as e:
+                logger.exception(f"Failed to link lead data after creation: {e}")
+                # Don't fail the request since applicant is created, but warn?
+                # Actually, we should probably warn, but for now let's just log.
+
+        # 4. Link calls with matching phone number (ALWAYS run this)
+        if applicant.phone:
+            from .models import CallRecord
             from django.db.models import Q
+            updated_count = CallRecord.objects.filter(
+                Q(applicant__isnull=True) &
+                (
+                    Q(metadata__phone_number=applicant.phone) |
+                    Q(metadata__customer_phone=applicant.phone) |
+                    Q(metadata__phone=applicant.phone) |
+                    Q(metadata__to=applicant.phone) |
+                    Q(metadata__from=applicant.phone)
+                )
+            ).update(applicant=applicant)
+            if updated_count > 0:
+                logger.info(f"Linked {updated_count} existing calls to new Applicant {applicant.id} by phone {applicant.phone}")
 
-            # 1. If lead_id is present, link lead and calls
-            lead_id = request.data.get("leadId") or request.data.get("lead_id")
-            if lead_id:
-                try:
-                    # FIX: Filter by tenant to respect multi-tenancy
-                    tenant = getattr(request, 'tenant', None)
-                    if tenant:
-                        lead = Lead.objects.get(id=lead_id, tenant=tenant)
-                    else:
-                        # Fallback: try to get lead by user
-                        lead = Lead.objects.get(id=lead_id)
-                    
-                    # Transfer lead metadata to applicant
-                    if not applicant.metadata:
-                        applicant.metadata = {}
-                    
-                    applicant.metadata.update({
-                        "original_lead_id": lead.id,
-                        "lead_external_id": lead.external_id,
-                        "lead_source": lead.source,
-                        "lead_message": lead.message,
-                        "lead_received_at": lead.received_at.isoformat() if lead.received_at else None,
-                    })
-                    # Also copy raw payload if useful
-                    if lead.raw_payload:
-                        applicant.metadata["lead_raw_payload"] = lead.raw_payload
-
-                    # Link calls linked to this lead
-                    CallRecord.objects.filter(lead=lead).update(applicant=applicant)
-
-                    # Save applicant with new metadata
-                    applicant.save(update_fields=["metadata"])
-
-                    # DELETE the lead
-                    lead.delete()
-                    
-                    logger.info(f"Converted Lead {lead_id} to Applicant {applicant_id} and deleted Lead.")
-
-                except Lead.DoesNotExist:
-                    logger.error(f"Lead {lead_id} not found or doesn't belong to tenant {tenant}")
-                    # Return error to user instead of silently failing
-                    return Response(
-                        {
-                            "error": f"Lead with ID {lead_id} not found. The applicant was created but the lead data could not be linked.",
-                            "applicant_id": applicant_id,
-                            "warning": "Please verify the lead ID and try again."
-                        },
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-                except Exception as e:
-                    logger.exception(f"Failed to convert lead {lead_id} to applicant: {e}")
-                    # Return error to user
-                    return Response(
-                        {
-                            "error": f"Failed to link lead data: {str(e)}",
-                            "applicant_id": applicant_id,
-                            "warning": "The applicant was created but lead data could not be linked."
-                        },
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-
-            # 2. Link calls with matching phone number (ALWAYS run this)
-            if applicant.phone:
-                updated_count = CallRecord.objects.filter(
-                    Q(applicant__isnull=True) &
-                    (
-                        Q(metadata__phone_number=applicant.phone) |
-                        Q(metadata__customer_phone=applicant.phone) |
-                        Q(metadata__phone=applicant.phone) |
-                        Q(metadata__to=applicant.phone) |
-                        Q(metadata__from=applicant.phone)
-                    )
-                ).update(applicant=applicant)
-                if updated_count > 0:
-                    logger.info(f"Linked {updated_count} existing calls to new Applicant {applicant.id} by phone {applicant.phone}")
-                    
-        return response
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=["get"], url_path="activity")
     def activity(self, request, pk=None):
