@@ -206,8 +206,12 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 from .models import CallRecord
                 CallRecord.objects.filter(lead=lead).update(applicant=applicant)
 
-                # Save applicant with new metadata
-                applicant.save(update_fields=["metadata"])
+                # IMPORTANT: Unlink lead from applicant to prevent CASCADE DELETE
+                # The model has on_delete=models.CASCADE, so deleting lead deletes applicant if linked!
+                applicant.lead = None
+                
+                # Save applicant with new metadata and unlinked lead
+                applicant.save(update_fields=["metadata", "lead"])
 
                 # DELETE the lead
                 lead.delete()
