@@ -96,6 +96,14 @@ export default function ReadingTestPage({ params }: PageProps) {
     const [evaluationResult, setEvaluationResult] = useState<ReadingEvaluationResult | null>(null);
     const [evaluationError, setEvaluationError] = useState<string | null>(null);
 
+    const passagePanelRef = React.useRef<HTMLDivElement>(null);
+    const questionsPanelRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (passagePanelRef.current) passagePanelRef.current.scrollTop = 0;
+        if (questionsPanelRef.current) questionsPanelRef.current.scrollTop = 0;
+    }, [currentPartIndex]);
+
     useEffect(() => {
         const view = searchParams.get('view');
         const sessionId = searchParams.get('sessionId');
@@ -904,11 +912,15 @@ export default function ReadingTestPage({ params }: PageProps) {
                 </div>
             </div>
 
+
+
+                    // ... existing code ...
+
             {/* Main Content - Two Columns */}
             <div className="flex-1 flex overflow-hidden bg-slate-50/50">
                 {/* Left Column: Passage Text - Enhanced Typography */}
                 <div className="w-1/2 flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
-                    <div className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                    <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
                         <div className="max-w-2xl mx-auto">
                             <h2 className="font-bold text-slate-900 text-3xl mb-8 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
                                 {currentPart?.title}
@@ -944,7 +956,7 @@ export default function ReadingTestPage({ params }: PageProps) {
 
                 {/* Right Column: Questions - Modern Cards */}
                 <div className="w-1/2 flex flex-col bg-slate-50/50">
-                    <div className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                    <div ref={questionsPanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
                         <div className="max-w-2xl mx-auto pb-20">
                             {currentPart?.groups.map((group, gIdx) => (
                                 <div key={group.id} className="mb-12">
