@@ -282,8 +282,8 @@ ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 ELEVENLABS_INBOUND_API_KEY = os.environ.get("ELEVENLABS_INBOUND_API_KEY", "sk_457f8530c8955f60c730eb61aa6ccaf6ee6b64c981094366")
 ELEVENLABS_AGENT_ID = os.environ.get("ELEVENLABS_AGENT_ID", "agent_4101kbhn9ay7fxrvqjjxjgh7kj7k")  # Outbound agent
 ELEVENLABS_INBOUND_AGENT_ID = os.environ.get("ELEVENLABS_INBOUND_AGENT_ID", "agent_6901kd2t1dxcecr9s3s6ec3nhmrk")  # Inbound agent
-ELEVENLABS_POSTCALL_WEBHOOK = "https://sauciest-westin-noniridescently.ngrok-free.dev/api/webhooks/elevenlabs/postcall/" # os.environ.get("ELEVENLABS_POSTCALL_WEBHOOK", "")
-ELEVENLABS_PHONE_ID = os.getenv("ELEVENLABS_PHONE_ID")
+ELEVENLABS_POSTCALL_WEBHOOK = os.getenv("ELEVENLABS_POSTCALL_WEBHOOK", "https://api.cybriksolutions.com/api/webhooks/elevenlabs/postcall/")
+ELEVENLABS_PHONE_ID = os.getenv("ELEVENLABS_PHONE_ID")  # Required for outbound calls - set in production env
 ELEVENLABS_WEBHOOK_SECRET = os.getenv("ELEVENLABS_WEBHOOK_SECRET", "")
 ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "EXAVITQu4vr4xnSDxMaL")  # Default: Sarah
 

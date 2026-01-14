@@ -18,6 +18,8 @@ import {
     MessageSquare,
     Mic,
     Play,
+    ChevronDown,
+    BookOpen,
 } from 'lucide-react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -27,6 +29,15 @@ interface QuestionResult {
     user_answer: string;
     correct_answer: string;
     is_correct: boolean;
+}
+
+interface PassageHighlight {
+    questionNumber: number;
+    passageText: string;
+    startIndex: number;
+    endIndex: number;
+    passageTitle: string;
+    isCorrect: boolean;
 }
 
 interface ReportDetail {
@@ -40,6 +51,66 @@ interface ReportDetail {
     questionBreakdown?: QuestionResult[]; // For Reading/Listening
     transcript?: string; // For Speaking/Writing (if we have audio transcript)
     audioUrl?: string; // For Speaking/Listening playback
+    answerHighlights?: PassageHighlight[]; // For Reading - passage text highlights
+}
+
+// Answer Highlight Card Component
+function AnswerHighlightCard({
+    questionNumber,
+    passageText,
+    startIndex,
+    endIndex,
+    passageTitle,
+    isCorrect
+}: PassageHighlight) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Extract context: 150 chars before and after for better context
+    const contextStart = Math.max(0, startIndex - 150);
+    const contextEnd = Math.min(passageText.length, endIndex + 150);
+
+    const beforeText = passageText.slice(contextStart, startIndex);
+    const highlightedText = passageText.slice(startIndex, endIndex);
+    const afterText = passageText.slice(endIndex, contextEnd);
+
+    return (
+        <div className="border border-slate-200 rounded-xl overflow-hidden hover:border-slate-300 transition-colors">
+            <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors flex items-center justify-between"
+            >
+                <div className="flex items-center gap-3">
+                    <span className={`px-2.5 py-1 rounded-md text-sm font-semibold ${isCorrect
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
+                        }`}>
+                        Q{questionNumber}
+                    </span>
+                    <span className="text-sm font-medium text-slate-700 truncate">
+                        {passageTitle}
+                    </span>
+                    {isCorrect && <CheckCircle className="w-4 h-4 text-green-500" />}
+                    {!isCorrect && <XCircle className="w-4 h-4 text-red-500" />}
+                </div>
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''
+                    }`} />
+            </button>
+
+            {isExpanded && (
+                <div className="p-4 bg-white border-t border-slate-100">
+                    <p className="text-slate-600 leading-relaxed text-[15px]">
+                        {contextStart > 0 && <span className="text-slate-400">...</span>}
+                        <span className="text-slate-500">{beforeText}</span>
+                        <mark className="bg-yellow-200 text-slate-900 px-1 py-0.5 rounded font-medium">
+                            {highlightedText}
+                        </mark>
+                        <span className="text-slate-500">{afterText}</span>
+                        {contextEnd < passageText.length && <span className="text-slate-400">...</span>}
+                    </p>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default function ReportDetailPage() {
@@ -95,6 +166,8 @@ export default function ReportDetailPage() {
             } catch (err) {
                 console.error(err);
                 // Fallback Mock Data for Demo if API fails (since endpoint might not exist yet)
+                const mockPassageText = "The control of fire was the first and perhaps greatest of humanity's steps towards a life-enhancing technology. To early man, fire was a divine gift randomly delivered in the form of lightning, forest fire or burning lava. Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots. How and where man learnt how to produce flame at will is unknown. It was probably a secondary invention, accidentally made during tool-making operations with wood or stone. Studies of primitive societies suggest that the earliest method of making fire was through friction.";
+
                 setReport({
                     id: id as string,
                     testName: 'Mock IELTS Reading Test',
@@ -108,7 +181,41 @@ export default function ReportDetailPage() {
                         user_answer: i % 5 === 0 ? 'Wrong Answer' : 'Correct Answer',
                         correct_answer: 'Correct Answer',
                         is_correct: i % 5 !== 0
-                    }))
+                    })),
+                    answerHighlights: [
+                        {
+                            questionNumber: 1,
+                            passageText: mockPassageText,
+                            startIndex: 218,
+                            endIndex: 268,
+                            passageTitle: 'A spark, a flint: How fire leapt to life',
+                            isCorrect: true
+                        },
+                        {
+                            questionNumber: 2,
+                            passageText: mockPassageText,
+                            startIndex: 158,
+                            endIndex: 195,
+                            passageTitle: 'A spark, a flint: How fire leapt to life',
+                            isCorrect: true
+                        },
+                        {
+                            questionNumber: 3,
+                            passageText: mockPassageText,
+                            startIndex: 339,
+                            endIndex: 405,
+                            passageTitle: 'A spark, a flint: How fire leapt to life',
+                            isCorrect: true
+                        },
+                        {
+                            questionNumber: 5,
+                            passageText: mockPassageText,
+                            startIndex: 507,
+                            endIndex: 560,
+                            passageTitle: 'A spark, a flint: How fire leapt to life',
+                            isCorrect: false
+                        },
+                    ]
                 });
             } finally {
                 setLoading(false);
@@ -177,7 +284,7 @@ export default function ReportDetailPage() {
                             <div className="text-right">
                                 <p className="text-sm text-slate-500">Overall Band</p>
                                 <p className={`text-4xl font-bold ${report.bandScore >= 7.0 ? 'text-green-600' :
-                                        report.bandScore >= 6.0 ? 'text-emerald-600' : 'text-amber-600'
+                                    report.bandScore >= 6.0 ? 'text-emerald-600' : 'text-amber-600'
                                     }`}>
                                     {report.bandScore}
                                 </p>
@@ -289,6 +396,27 @@ export default function ReportDetailPage() {
                                     No transcript available for this session.
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {/* Answer Highlights Section (Reading) */}
+                    {report.testType === 'reading' && report.answerHighlights && report.answerHighlights.length > 0 && (
+                        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                            <div className="p-6 border-b border-slate-100">
+                                <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                                    <BookOpen className="w-5 h-5 text-indigo-600" />
+                                    Answer Review - Passage Highlights
+                                </h3>
+                                <p className="text-sm text-slate-500 mt-1">
+                                    Click on each question to see where the answer appears in the passage
+                                </p>
+                            </div>
+
+                            <div className="p-6 space-y-3">
+                                {report.answerHighlights.map((highlight, index) => (
+                                    <AnswerHighlightCard key={index} {...highlight} />
+                                ))}
+                            </div>
                         </div>
                     )}
 
