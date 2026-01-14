@@ -6,6 +6,46 @@ import apiFetch from "@/lib/api";
 import { Eye, EyeOff, CheckCircle } from "lucide-react";
 import { CheckCircle2, XCircle, ShieldCheck } from "lucide-react";
 
+// Move component outside to prevent re-creation on every render
+const PasswordInput = ({
+    label,
+    name,
+    value,
+    show,
+    onToggle,
+    onChange
+}: {
+    label: string,
+    name: string,
+    value: string,
+    show: boolean,
+    onToggle: () => void,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}) => (
+    <div className="form-control w-full">
+        <label className="label">
+            <span className="label-text font-medium text-[var(--cy-navy)]">{label}</span>
+        </label>
+        <div className="relative">
+            <input
+                type={show ? "text" : "password"}
+                name={name}
+                value={value}
+                onChange={onChange}
+                className="input input-bordered w-full pr-10 focus:border-[var(--cy-lime)] focus:ring-1 focus:ring-[var(--cy-lime)]"
+                required
+            />
+            <button
+                type="button"
+                onClick={onToggle}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--cy-navy)]"
+            >
+                {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+        </div>
+    </div>
+);
+
 export default function ChangePasswordPage() {
     const [formData, setFormData] = useState({
         old_password: "",
@@ -68,43 +108,6 @@ export default function ChangePasswordPage() {
         }
     };
 
-    const PasswordInput = ({
-        label,
-        name,
-        value,
-        show,
-        onToggle
-    }: {
-        label: string,
-        name: string,
-        value: string,
-        show: boolean,
-        onToggle: () => void
-    }) => (
-        <div className="form-control w-full">
-            <label className="label">
-                <span className="label-text font-medium text-[var(--cy-navy)]">{label}</span>
-            </label>
-            <div className="relative">
-                <input
-                    type={show ? "text" : "password"}
-                    name={name}
-                    value={value}
-                    onChange={handleChange}
-                    className="input input-bordered w-full pr-10 focus:border-[var(--cy-lime)] focus:ring-1 focus:ring-[var(--cy-lime)]"
-                    required
-                />
-                <button
-                    type="button"
-                    onClick={onToggle}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--cy-navy)]"
-                >
-                    {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-            </div>
-        </div>
-    );
-
     return (
         <DashboardLayout>
             <div className="max-w-2xl mx-auto p-6">
@@ -134,6 +137,7 @@ export default function ChangePasswordPage() {
                             value={formData.old_password}
                             show={showPassword.old}
                             onToggle={() => toggleShow('old')}
+                            onChange={handleChange}
                         />
 
                         <div className="divider"></div>
@@ -145,6 +149,7 @@ export default function ChangePasswordPage() {
                                 value={formData.new_password}
                                 show={showPassword.new}
                                 onToggle={() => toggleShow('new')}
+                                onChange={handleChange}
                             />
 
                             <PasswordInput
@@ -153,6 +158,7 @@ export default function ChangePasswordPage() {
                                 value={formData.confirm_password}
                                 show={showPassword.confirm}
                                 onToggle={() => toggleShow('confirm')}
+                                onChange={handleChange}
                             />
                         </div>
 
