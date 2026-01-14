@@ -10,11 +10,16 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext'; // Updated import for username
 
+interface OptionItem {
+    key: string;
+    text: string;
+}
+
 interface Question {
     id: string;
     question_text: string;
     question_type: string;
-    options: string[];
+    options: OptionItem[];
     correct_answer: string;
     order: number;
 }
@@ -214,7 +219,10 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                             id: item.item_id,
                                             question_text: item.prompt || '',
                                             question_type: group.type,
-                                            options: item.options?.map((o: any) => o.text || o.key || o) || group.options?.map((o: any) => o.text || o.key) || ['TRUE', 'FALSE', 'NOT GIVEN'],
+                                            options: (item.options || group.options || ['TRUE', 'FALSE', 'NOT GIVEN']).map((o: any) => {
+                                                if (typeof o === 'string') return { key: o, text: o };
+                                                return { key: o.key || o.text, text: o.text || o.key };
+                                            }),
                                             correct_answer: item.answer?.value || '',
                                             order: item.number
                                         })) || []
@@ -306,15 +314,17 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                     <p className="mb-3 text-lg font-medium text-slate-800 leading-relaxed">{question.question_text}</p>
                                     <div className="flex gap-4">
                                         {question.options.map((option, optIdx) => {
-                                            const isCorrect = question.correct_answer?.toUpperCase() === option.toUpperCase() ||
-                                                (question.correct_answer?.toUpperCase().startsWith('T') && option.startsWith('T')) ||
-                                                (question.correct_answer?.toUpperCase().startsWith('F') && option.startsWith('F')) ||
-                                                (question.correct_answer?.toUpperCase().startsWith('Y') && option.startsWith('Y')) ||
-                                                (question.correct_answer?.toUpperCase().startsWith('N') && option.startsWith('N'));
+                                            const optKey = option.key;
+                                            const optText = option.text;
+                                            const isCorrect =
+                                                question.correct_answer === optKey ||
+                                                question.correct_answer === optText ||
+                                                (question.correct_answer?.toUpperCase() === optKey?.toUpperCase()) ||
+                                                (question.correct_answer?.toUpperCase().startsWith(optKey?.charAt(0).toUpperCase()) && ['TRUE', 'FALSE', 'YES', 'NO'].includes(optKey?.toUpperCase()));
 
                                             return (
                                                 <div key={optIdx} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'}`}>
-                                                    <span className="text-sm font-bold">{option}</span>
+                                                    <span className="text-sm font-bold">{optText}</span>
                                                     {isCorrect && <CheckCircle className="w-3 h-3 text-white" />}
                                                 </div>
                                             );
@@ -329,9 +339,9 @@ export default function AnswerKeyPage({ params }: PageProps) {
             );
         }
 
-        // 2. Multiple Choice
-        if (group.group_type === 'multiple_choice' || group.questions[0]?.question_type === 'MULTIPLE_CHOICE') {
-            const isChooseN = group.options && group.options.length > 0 && group.questions.some(q => !q.question_text || q.question_text.startsWith('Question'));
+        // 2. Multiple Choice & Matching Features
+        if (group.group_type === 'multiple_choice' || group.group_type === 'matching_features' || group.questions[0]?.question_type === 'MULTIPLE_CHOICE') {
+            const isChooseN = group.options && group.options.length > 0 && group.questions.some(q => !q.question_text || q.question_text.startsWith('Question') || group.group_type === 'matching_features');
 
             if (isChooseN) {
                 // List selection style
@@ -375,16 +385,19 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                 <p className="mb-4 text-lg font-medium text-slate-800">{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => {
-                                        const isObject = typeof option === 'object' && option !== null;
-                                        const optKey = isObject ? (option as any).key : option;
-                                        const optText = isObject ? (option as any).text : option;
+                                        const optKey = option.key;
+                                        const optText = option.text;
                                         const isCorrect = question.correct_answer === String(optKey);
 
                                         return (
                                             <div key={optIdx} className={`flex items-start gap-3 p-3 rounded-xl border ${isCorrect ? 'bg-emerald-50 border-emerald-500 shadow-sm' : 'bg-white border-slate-100 opacity-50'}`}>
-                                                <div className={`w-4 h-4 rounded-full border mt-1 ${isCorrect ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`} />
+                                                <div className={`w-4 h-4 rounded-full border mt-1 flex-shrink-0 ${isCorrect ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`} />
                                                 <div className={`text-base ${isCorrect ? 'text-slate-900 font-bold' : 'text-slate-500'}`}>
-                                                    {isObject ? <span><span className="font-bold mr-2">{optKey}</span>{optText}</span> : optText}
+                                                    {optKey !== optText ? (
+                                                        <span><span className="font-bold mr-2 text-slate-700">{optKey}</span>{optText}</span>
+                                                    ) : (
+                                                        <span>{optText}</span>
+                                                    )}
                                                 </div>
                                             </div>
                                         );
@@ -440,7 +453,9 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                     readOnly
                                     className="w-full max-w-sm h-10 px-4 border border-emerald-300 bg-emerald-50 rounded-lg text-sm font-bold text-emerald-900 focus:outline-none"
                                 />
-                                <div className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-full mr-3 text-emerald-600 text-xs font-bold">ANSWER</div>
+                                <div className="absolute right-0 top-1/2 -translate-y-1/2 mr-3 pointer-events-none">
+                                    <span className="text-emerald-600 text-xs font-bold bg-emerald-100 px-2 py-1 rounded">ANSWER</span>
+                                </div>
                             </div>
                         </div>
                     </div>
