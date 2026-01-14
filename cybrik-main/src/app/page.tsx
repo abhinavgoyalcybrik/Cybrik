@@ -2,10 +2,22 @@
 
 
 import { useState, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
-image ?: string | null;
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  features: string[];
+  status: string;
+  link: string;
+  gradient: string;
+  image?: string | null;
+  images?: string[];
 }
 
 // Product Data
@@ -19,7 +31,12 @@ const products: Product[] = [
     status: 'live',
     link: 'https://ielts.cybriksolutions.com',
     gradient: 'from-emerald-400 via-teal-500 to-cyan-600',
-    image: '/images/ielts-card.png',
+    image: null,
+    images: [
+      '/assets/products/ielts-portal.png',
+      '/assets/products/ielts-portal-2.png',
+      '/assets/products/ielts-portal-3.png'
+    ],
   },
   {
     id: 'crm',
@@ -30,7 +47,13 @@ const products: Product[] = [
     status: 'live',
     link: 'https://crm.cybriksolutions.com',
     gradient: 'from-violet-400 via-purple-500 to-fuchsia-600',
-    image: '/images/crm-card.png',
+    image: null,
+    images: [
+      '/assets/products/crm-system.png',
+      '/assets/products/crm-system-2.png',
+      '/assets/products/crm-system-3.png',
+      '/assets/products/crm-system-4.png'
+    ],
   },
   {
     id: 'pte',
@@ -40,8 +63,13 @@ const products: Product[] = [
     features: ['Speaking & Writing', 'Reading & Listening', 'Instant Scoring', 'Performance Tracking'],
     status: 'coming-soon',
     link: 'https://pte.cybriksolutions.com',
-    gradient: 'from-amber-400 via-orange-500 to-red-500',
+    gradient: 'from-blue-400 via-cyan-300 to-emerald-400',
     image: null,
+    images: [
+      '/assets/products/ielts-portal.png',
+      '/assets/products/ielts-portal-2.png',
+      '/assets/products/ielts-portal-3.png'
+    ],
   },
 ];
 
@@ -159,10 +187,78 @@ function AnimatedCounter({ value, suffix = '' }: { value: string; suffix?: strin
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
+// Floating Badge Data Mapping
+const productBadges: Record<string, {
+  topRight: { icon: string; text: string };
+  bottomLeft: { icon: string; text: string };
+  centerRight: { icon: string; text: string; color: string };
+}> = {
+  ielts: {
+    topRight: { icon: '📚', text: 'Reading & Listening' },
+    bottomLeft: { icon: '🤖', text: 'AI Evaluation' },
+    centerRight: { icon: '', text: 'Band 9.0 Ready', color: 'bg-green-500' }
+  },
+  crm: {
+    topRight: { icon: '📊', text: 'Lead Management' },
+    bottomLeft: { icon: '📞', text: 'AI Phone Calls' },
+    centerRight: { icon: '', text: '24/7 Automation', color: 'bg-purple-500' }
+  },
+  pte: {
+    topRight: { icon: '🗣️', text: 'Speaking & Writing' },
+    bottomLeft: { icon: '📝', text: 'Instant Scoring' },
+    centerRight: { icon: '', text: 'AI Powered', color: 'bg-emerald-500' }
+  }
+};
+
 // Full Screen Product Showcase
 function ProductShowcase({ product, index }: { product: typeof products[0]; index: number }) {
   const { ref, isVisible } = useScrollAnimation(0.3);
   const isEven = index % 2 === 0;
+
+  // Get Badges for current product (fallback to default empty if not found)
+  const badges = productBadges[product.id];
+
+  // Slideshow Logic
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Interaction Logic
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    if (product.images && product.images.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % (product.images?.length || 1));
+      }, 3500);
+      return () => clearInterval(timer);
+    }
+  }, [product.images]);
+
+  // 3D Tilt Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useSpring(x, { stiffness: 500, damping: 100 });
+  const mouseY = useSpring(y, { stiffness: 500, damping: 100 });
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseXFromCenter = e.clientX - rect.left - width / 2;
+    const mouseYFromCenter = e.clientY - rect.top - height / 2;
+    x.set(mouseXFromCenter / width);
+    y.set(mouseYFromCenter / height);
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+    setIsHovering(false);
+  };
 
   return (
     <div
@@ -254,24 +350,239 @@ function ProductShowcase({ product, index }: { product: typeof products[0]; inde
                 : `translateX(${isEven ? '80px' : '-80px'}) scale(0.9)`,
             }}
           >
-            {product.image ? (
-              <div className={`relative aspect-square rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500`}>
-                <Image
-                  src={product.image}
-                  alt={`${product.name} Preview`}
-                  fill
-                  className="object-contain p-4"
-                />
-              </div>
+            {product.images && product.images.length > 0 ? (
+              // 3D Collage Effect for products with multiple images
+              <motion.div
+                style={{
+                  rotateX,
+                  rotateY,
+                  transformStyle: "preserve-3d",
+                }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                className="relative perspective-1000 cursor-pointer w-full max-w-4xl mx-auto py-8"
+              >
+
+                {/* Main Card */}
+                <motion.div
+                  layout
+                  className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-gray-200"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <AnimatePresence mode="wait">
+                    {product.images && (
+                      <motion.div
+                        key={currentImageIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative"
+                      >
+                        <Image
+                          src={product.images[currentImageIndex]}
+                          alt={`${product.name} Preview ${currentImageIndex + 1}`}
+                          width={1200}
+                          height={800}
+                          sizes="(max-width: 768px) 100vw, 800px"
+                          className={`w-full h-auto ${product.status === 'coming-soon' ? 'blur-xl' : ''}`}
+                          priority={index === 0}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Coming Soon Overlay */}
+                  {product.status === 'coming-soon' && (
+                    <div className="absolute inset-0 bg-white/30 backdrop-blur-sm flex flex-col items-center justify-center">
+                      <div className="w-20 h-20 bg-white/70 rounded-full flex items-center justify-center mb-6 border border-gray-200 shadow-lg">
+                        <span className="text-4xl">🔒</span>
+                      </div>
+                      <div className="bg-white/80 px-8 py-3 rounded-full border border-gray-200 shadow-lg">
+                        <span className="text-gray-800 text-2xl font-bold tracking-widest uppercase">Coming Soon</span>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Floating Feature Cards */}
+                {badges && (
+                  <>
+                    <motion.div
+                      className="absolute -top-20 right-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 max-w-[200px]"
+                      style={{ transform: "translateZ(100px)", zIndex: 50 }}
+                      animate={{
+                        y: [0, -10, 0],
+                        x: isHovering ? 40 : 0,
+                        scale: isHovering ? 1.1 : 1,
+                        rotate: isHovering ? 5 : 0
+                      }}
+                      whileHover={{ scale: 1.25, zIndex: 200, x: 50, rotate: 0 }}
+                      transition={{
+                        y: { repeat: Infinity, duration: 4, ease: "easeInOut" },
+                        default: { duration: 0.4, type: "spring" }
+                      }}
+                    >
+                      <span className={`w-10 h-10 rounded-full ${product.id === 'crm' ? 'bg-purple-100' : 'bg-emerald-100'} flex items-center justify-center text-xl`}>{badges.topRight.icon}</span>
+                      <div className="text-sm font-bold text-gray-800">{badges.topRight.text}</div>
+                    </motion.div>
+
+                    <motion.div
+                      className="absolute -bottom-20 left-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 max-w-[200px]"
+                      style={{ transform: "translateZ(120px)", zIndex: 50 }}
+                      animate={{
+                        y: [0, 15, 0],
+                        x: isHovering ? -40 : 0,
+                        scale: isHovering ? 1.1 : 1,
+                        rotate: isHovering ? -5 : 0
+                      }}
+                      whileHover={{ scale: 1.25, zIndex: 200, x: -50, rotate: 0 }}
+                      transition={{
+                        y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 },
+                        default: { duration: 0.4, type: "spring" }
+                      }}
+                    >
+                      <span className={`w-10 h-10 rounded-full ${product.id === 'crm' ? 'bg-pink-100' : 'bg-blue-100'} flex items-center justify-center text-xl`}>{badges.bottomLeft.icon}</span>
+                      <div className="text-sm font-bold text-gray-800">{badges.bottomLeft.text}</div>
+                    </motion.div>
+
+                    <motion.div
+                      className="absolute top-1/3 -left-4 -translate-x-full bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 border border-gray-100"
+                      style={{ transform: "translateZ(80px)", zIndex: 50 }}
+                      animate={{
+                        x: isHovering ? -40 : [0, -10, 0],
+                        scale: isHovering ? 1.1 : 1
+                      }}
+                      whileHover={{ scale: 1.25, zIndex: 200, x: -50 }}
+                      transition={{
+                        x: isHovering ? { duration: 0.4, type: "spring" } : { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 },
+                        default: { duration: 0.3 }
+                      }}
+                    >
+                      <span className={`w-2 h-2 rounded-full ${badges.centerRight.color} animate-pulse`} />
+                      <span className="text-xs font-bold text-gray-600">{badges.centerRight.text}</span>
+                    </motion.div>
+                  </>
+                )}
+
+              </motion.div>
             ) : (
-              <div className={`aspect-square rounded-3xl bg-gradient-to-br ${product.gradient} p-1 shadow-2xl`}>
-                <div className="w-full h-full rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-9xl mb-6 animate-float">{product.icon}</div>
-                    <div className="text-white text-3xl font-bold">{product.name}</div>
+              // Standard View for other products
+              product.image ? (
+                <motion.div
+                  layout
+                  className={`relative rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition-transform duration-500 w-full max-w-2xl mx-auto`}
+                >
+                  <Image
+                    src={product.image}
+                    alt={`${product.name} Preview`}
+                    width={1200}
+                    height={800}
+                    sizes="(max-width: 768px) 100vw, 800px"
+                    className="w-full h-auto object-contain"
+                  />
+                </motion.div>
+              ) : product.status === 'coming-soon' && badges ? (
+                // Coming Soon with 3D Effect and Floating Badges
+                <motion.div
+                  style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                  }}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative perspective-1000 cursor-pointer w-full max-w-4xl mx-auto py-8"
+                >
+                  {/* Main Blurred Card */}
+                  <motion.div
+                    layout
+                    className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border border-gray-200"
+                    style={{ transform: "translateZ(20px)" }}
+                  >
+                    <div className={`w-full h-full bg-gradient-to-br ${product.gradient} relative`}>
+                      {/* Blur Overlay */}
+                      <div className="absolute inset-0 backdrop-blur-md bg-white/30" />
+
+                      {/* Coming Soon Content */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="w-20 h-20 bg-white/40 rounded-full flex items-center justify-center backdrop-blur-md mb-6 border border-white/50 shadow-lg">
+                          <span className="text-4xl">🔒</span>
+                        </div>
+                        <div className="bg-white/40 backdrop-blur-md px-8 py-3 rounded-full border border-white/50 shadow-lg">
+                          <span className="text-gray-800 text-2xl font-bold tracking-widest uppercase">Coming Soon</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Floating Feature Cards */}
+                  <motion.div
+                    className="absolute -top-20 right-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 max-w-[200px]"
+                    style={{ transform: "translateZ(100px)", zIndex: 50 }}
+                    animate={{
+                      y: [0, -10, 0],
+                      x: isHovering ? 40 : 0,
+                      scale: isHovering ? 1.1 : 1,
+                      rotate: isHovering ? 5 : 0
+                    }}
+                    whileHover={{ scale: 1.25, zIndex: 200, x: 50, rotate: 0 }}
+                    transition={{
+                      y: { repeat: Infinity, duration: 4, ease: "easeInOut" },
+                      default: { duration: 0.4, type: "spring" }
+                    }}
+                  >
+                    <span className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-xl">{badges.topRight.icon}</span>
+                    <div className="text-sm font-bold text-gray-800">{badges.topRight.text}</div>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute -bottom-20 left-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 max-w-[200px]"
+                    style={{ transform: "translateZ(120px)", zIndex: 50 }}
+                    animate={{
+                      y: [0, 15, 0],
+                      x: isHovering ? -40 : 0,
+                      scale: isHovering ? 1.1 : 1,
+                      rotate: isHovering ? -5 : 0
+                    }}
+                    whileHover={{ scale: 1.25, zIndex: 200, x: -50, rotate: 0 }}
+                    transition={{
+                      y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 },
+                      default: { duration: 0.4, type: "spring" }
+                    }}
+                  >
+                    <span className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-xl">{badges.bottomLeft.icon}</span>
+                    <div className="text-sm font-bold text-gray-800">{badges.bottomLeft.text}</div>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute top-1/3 -left-4 -translate-x-full bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 border border-gray-100"
+                    style={{ transform: "translateZ(80px)", zIndex: 50 }}
+                    animate={{
+                      x: isHovering ? -40 : [0, -10, 0],
+                      scale: isHovering ? 1.1 : 1
+                    }}
+                    whileHover={{ scale: 1.25, zIndex: 200, x: -50 }}
+                    transition={{
+                      x: isHovering ? { duration: 0.4, type: "spring" } : { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 },
+                      default: { duration: 0.3 }
+                    }}
+                  >
+                    <span className={`w-2 h-2 rounded-full ${badges.centerRight.color} animate-pulse`} />
+                    <span className="text-xs font-bold text-gray-600">{badges.centerRight.text}</span>
+                  </motion.div>
+
+                </motion.div>
+              ) : (
+                <div className={`aspect-square rounded-3xl bg-gradient-to-br ${product.gradient} p-1 shadow-2xl w-full max-w-4xl mx-auto`}>
+                  <div className="w-full h-full rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-9xl mb-6 animate-float">{product.icon}</div>
+                      <div className="text-white text-3xl font-bold">{product.name}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             )}
           </div>
         </div>
@@ -315,7 +626,7 @@ export default function Home() {
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: 'auto', height: '4rem' }}
+                style={{ width: 'auto', height: '2.5rem' }}
                 className="logo-glow transition-transform group-hover:scale-105"
               />
             </Link>
