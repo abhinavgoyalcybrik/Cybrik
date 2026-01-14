@@ -466,8 +466,8 @@ export default function AnswerKeyPage({ params }: PageProps) {
                         <div className="bg-emerald-500 rounded p-1"><BookOpen className="w-4 h-4 text-white" /></div>
                         <div className="flex flex-col">
                             <h1 className="font-bold text-lg text-slate-800 leading-tight">Answer Key: {test.title}</h1>
-                            {user?.first_name ? (
-                                <span className="text-xs text-slate-500">Welcome back, {user.first_name}</span>
+                            {user?.name ? (
+                                <span className="text-xs text-slate-500">Welcome back, {user.name}</span>
                             ) : (
                                 <span className="text-xs text-slate-500">Review Mode</span>
                             )}
