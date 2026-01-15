@@ -73,12 +73,27 @@ export default function LeadDetailPage() {
   });
   const [taskCreating, setTaskCreating] = useState(false);
 
+  // Document Upload State
+  const [selectedEnglishTest, setSelectedEnglishTest] = useState("IELTS");
+  const [customEnglishTest, setCustomEnglishTest] = useState("");
+  const [showEnglishTestDropdown, setShowEnglishTestDropdown] = useState(false);
+  const [scanningDocId, setScanningDocId] = useState<number | null>(null);
+
   // Stage configuration
   const stageConfig: Record<string, { label: string; color: string; bgColor: string }> = {
     new: { label: "New", color: "text-blue-400", bgColor: "bg-blue-500/20" },
     docs_pending: { label: "Docs Pending", color: "text-amber-400", bgColor: "bg-amber-500/20" },
     verified: { label: "Verified", color: "text-green-400", bgColor: "bg-green-500/20" },
     rejected: { label: "Rejected", color: "text-red-400", bgColor: "bg-red-500/20" },
+  };
+
+  // English Test configuration
+  const englishTestConfig: Record<string, { label: string; color: string; bgColor: string }> = {
+    IELTS: { label: "IELTS", color: "text-red-600", bgColor: "bg-red-50" },
+    PTE: { label: "PTE", color: "text-purple-600", bgColor: "bg-purple-50" },
+    Duolingo: { label: "Duolingo", color: "text-green-600", bgColor: "bg-green-50" },
+    TOEFL: { label: "TOEFL", color: "text-blue-600", bgColor: "bg-blue-50" },
+    Other: { label: "Other", color: "text-gray-600", bgColor: "bg-gray-50" },
   };
 
   async function loadLead() {
@@ -442,6 +457,28 @@ export default function LeadDetailPage() {
 
       case "education":
         const records = lead.academic_records || [];
+        // Helper to categorize records
+        const schoolingKeywords = ["10th", "12th", "ssc", "hsc", "high school", "secondary", "matriculation"];
+        const schooling = records.filter((r: any) =>
+          schoolingKeywords.some(k => r.degree?.toLowerCase().includes(k))
+        ).sort((a: any, b: any) => (b.end_year || b.year_of_completion) - (a.end_year || a.year_of_completion));
+
+        const higherEd = records.filter((r: any) =>
+          !schoolingKeywords.some(k => r.degree?.toLowerCase().includes(k))
+        ).sort((a: any, b: any) => (b.end_year || b.year_of_completion) - (a.end_year || a.year_of_completion));
+
+        const calculateGap = (nextRecord: any, previousRecord: any) => {
+          const nextStart = nextRecord.start_year || nextRecord.year_of_completion;
+          const previousEnd = previousRecord.end_year || previousRecord.year_of_completion;
+          if (!nextStart || !previousEnd) return 0;
+          const gap = nextStart - previousEnd;
+          return gap > 0 ? gap : 0;
+        };
+
+        const twelfthRecord = schooling.find((r: any) => r.degree?.toLowerCase().includes('12th'));
+        const firstHigherEd = higherEd.length > 0 ? higherEd[higherEd.length - 1] : null;
+        const gapAfter12th = twelfthRecord && firstHigherEd ? calculateGap(firstHigherEd, twelfthRecord) : 0;
+
         return (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -453,69 +490,271 @@ export default function LeadDetailPage() {
                 + Add Education
               </button>
             </div>
+
+            {/* Timeline Gaps */}
+            {(gapAfter12th > 0 || higherEd.some((r: any, i: number) => i < higherEd.length - 1 && calculateGap(r, higherEd[i + 1]) > 0)) && (
+              <div className="border border-amber-200 rounded-lg overflow-hidden bg-amber-50">
+                <div className="px-4 py-2 bg-amber-500 text-white text-xs font-medium uppercase tracking-wide">
+                  ⚠️ Timeline Gaps Detected
+                </div>
+                <div className="divide-y divide-amber-200">
+                  {gapAfter12th > 0 && twelfthRecord && firstHigherEd && (
+                    <div className="px-4 py-3 flex items-center justify-between">
+                      <span className="text-sm text-amber-800">After 12th Grade</span>
+                      <span className="text-sm font-medium text-amber-800">{gapAfter12th} year ({twelfthRecord.end_year || twelfthRecord.year_of_completion} → {firstHigherEd.start_year || firstHigherEd.year_of_completion})</span>
+                    </div>
+                  )}
+                  {higherEd.map((record: any, i: number) => {
+                    if (i >= higherEd.length - 1) return null;
+                    const gap = calculateGap(record, higherEd[i + 1]);
+                    if (gap <= 0) return null;
+                    return (
+                      <div key={`gap-${i}`} className="px-4 py-3 flex items-center justify-between">
+                        <span className="text-sm text-amber-800">{higherEd[i + 1].degree} → {record.degree}</span>
+                        <span className="text-sm font-medium text-amber-800">{gap} year</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {records.length === 0 ? (
               <div className="p-8 text-center border border-dashed border-[#0B1F3A]/20 rounded-lg">
                 <p className="text-[#0B1F3A]/60">No academic records yet</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {records.map((record: any) => (
-                  <div key={record.id} className="p-4 bg-white border border-[#0B1F3A]/10 rounded-lg hover:border-[#6FB63A]/50 transition-colors group">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="font-semibold text-[#0B1F3A]">{record.degree}</div>
-                        <div className="text-sm text-[#0B1F3A]/60">{record.institution}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm font-medium text-[#0B1F3A]/60">
-                          {record.start_year && record.end_year ? `${record.start_year} - ${record.end_year}` : record.year_of_completion}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Higher Education */}
+                <div>
+                  <h4 className="text-sm font-semibold text-[#0B1F3A]/60 uppercase tracking-wide mb-4">Higher Education</h4>
+                  {higherEd.length > 0 ? (
+                    <div className="space-y-3">
+                      {higherEd.map((record: any) => (
+                        <div key={record.id} className="p-4 bg-white border border-[#0B1F3A]/10 rounded-lg hover:border-[#6FB63A]/50 transition-colors group">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-semibold text-[#0B1F3A]">{record.degree}</div>
+                              <div className="text-sm text-[#0B1F3A]/60">{record.institution}</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm font-medium text-[#0B1F3A]/60">
+                                {record.start_year && record.end_year ? `${record.start_year} - ${record.end_year}` : record.year_of_completion}
+                              </div>
+                              <div className="text-lg font-bold text-[#6FB63A]">{record.grade}</div>
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B1F3A]/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onClick={() => handleDeleteEducation(record.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
+                          </div>
                         </div>
-                        <div className="text-lg font-bold text-[#6FB63A]">{record.grade}</div>
-                      </div>
+                      ))}
                     </div>
-                    <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B1F3A]/5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => handleDeleteEducation(record.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
+                  ) : (
+                    <p className="text-sm text-[#0B1F3A]/40">No records</p>
+                  )}
+                </div>
+
+                {/* Schooling */}
+                <div>
+                  <h4 className="text-sm font-semibold text-[#0B1F3A]/60 uppercase tracking-wide mb-4">Schooling</h4>
+                  {schooling.length > 0 ? (
+                    <div className="space-y-3">
+                      {schooling.map((record: any) => (
+                        <div key={record.id} className="p-4 bg-white border border-[#0B1F3A]/10 rounded-lg hover:border-[#6FB63A]/50 transition-colors group">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-semibold text-[#0B1F3A]">{record.degree}</div>
+                              <div className="text-sm text-[#0B1F3A]/60">{record.institution}</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-sm font-medium text-[#0B1F3A]/60">
+                                {record.start_year && record.end_year ? `${record.start_year} - ${record.end_year}` : record.year_of_completion}
+                              </div>
+                              <div className="text-lg font-bold text-[#6FB63A]">{record.grade}</div>
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B1F3A]/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onClick={() => handleDeleteEducation(record.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
+                  ) : (
+                    <p className="text-sm text-[#0B1F3A]/40">No records</p>
+                  )}
+                </div>
               </div>
             )}
           </div>
         );
 
       case "documents":
-        const docs = lead.documents || [];
+        const docSections = [
+          { id: "10th_marksheet", title: "10th Marksheet" },
+          { id: "12th_marksheet", title: "12th Marksheet" },
+          { id: "degree_certificate", title: "Degree/Diploma" },
+          { id: "passport", title: "Passport" },
+          { id: "english_test", title: "English Test" },
+          { id: "other", title: "Other Documents" }
+        ];
+
+        const getDocsByType = (type: string) => {
+          return lead?.documents?.filter((d: any) => d.document_type === type) || [];
+        };
+
+        const handleScanMatch = async (docId: number) => {
+          if (!lead) return;
+          setScanningDocId(docId);
+          try {
+            await apiFetch(`/api/ai/documents/${docId}/scan-match/`, { method: "POST" });
+            await loadLead();
+            alert("Document scanned and verified!");
+          } catch (err: any) {
+            alert("Scan failed: " + err.message);
+          } finally {
+            setScanningDocId(null);
+          }
+        };
+
         return (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold text-[#0B1F3A]">Documents</h3>
-              <label className="px-4 py-2 bg-[#6FB63A] text-white text-sm font-medium rounded-lg hover:bg-[#5a9e2e] transition-colors cursor-pointer">
-                {uploading ? "Uploading..." : "+ Upload Document"}
-                <input type="file" className="hidden" onChange={(e) => handleFileUpload(e, "other")} disabled={uploading} />
-              </label>
-            </div>
-            {docs.length === 0 ? (
-              <div className="p-8 text-center border border-dashed border-[#0B1F3A]/20 rounded-lg">
-                <p className="text-[#0B1F3A]/60">No documents uploaded yet</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {docs.map((doc: any) => (
-                  <div key={doc.id} className="p-4 bg-white border border-[#0B1F3A]/10 rounded-lg flex justify-between items-center">
-                    <div>
-                      <div className="font-semibold text-[#0B1F3A]">{doc.document_type}</div>
-                      <div className="text-xs text-[#0B1F3A]/60">{new Date(doc.created_at).toLocaleDateString()}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`badge ${doc.status === 'verified' ? 'badge-success' : doc.status === 'rejected' ? 'badge-error' : 'badge-warning'}`}>
-                        {doc.status}
-                      </span>
-                      <button onClick={() => handleDeleteDocument(doc.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
+          <div className="space-y-8">
+            {docSections.map((section) => {
+              const sectionDocs = getDocsByType(section.id);
+              return (
+                <div key={section.id} className="space-y-4">
+                  <div className="flex justify-between items-center border-b border-[var(--cy-border)] pb-2">
+                    <h3 className="text-lg font-bold text-[var(--cy-navy)]">{section.title}</h3>
+                    <div className="relative flex items-center gap-2">
+                      {section.id === "english_test" && (
+                        <div className="flex items-center gap-2">
+                          <div className="relative">
+                            <button
+                              type="button"
+                              onClick={() => setShowEnglishTestDropdown(!showEnglishTestDropdown)}
+                              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--cy-border)] bg-white hover:bg-gray-50 transition-all ${englishTestConfig[selectedEnglishTest]?.color || "text-gray-700"}`}
+                            >
+                              <span className={`w-2 h-2 rounded-full ${selectedEnglishTest === "IELTS" ? "bg-red-500" : selectedEnglishTest === "PTE" ? "bg-purple-500" : selectedEnglishTest === "Duolingo" ? "bg-green-500" : selectedEnglishTest === "TOEFL" ? "bg-blue-500" : "bg-gray-500"}`}></span>
+                              <span className="font-medium text-sm">{selectedEnglishTest}</span>
+                              <svg className={`w-4 h-4 text-gray-400 transition-transform ${showEnglishTestDropdown ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+
+                            {showEnglishTestDropdown && (
+                              <>
+                                <div className="fixed inset-0 z-40" onClick={() => setShowEnglishTestDropdown(false)} />
+                                <div className="absolute top-full right-0 mt-1 w-44 bg-white border border-[var(--cy-border)] rounded-xl shadow-lg overflow-hidden z-50">
+                                  <div className="py-1">
+                                    {Object.entries(englishTestConfig).map(([key, config]) => (
+                                      <button
+                                        key={key}
+                                        type="button"
+                                        onClick={() => {
+                                          setSelectedEnglishTest(key);
+                                          setShowEnglishTestDropdown(false);
+                                        }}
+                                        className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-all ${selectedEnglishTest === key
+                                          ? `${config.bgColor} ${config.color} font-medium`
+                                          : "text-gray-700 hover:bg-gray-50"
+                                          }`}
+                                      >
+                                        <span className={`w-2.5 h-2.5 rounded-full ${key === "IELTS" ? "bg-red-500" : key === "PTE" ? "bg-purple-500" : key === "Duolingo" ? "bg-green-500" : key === "TOEFL" ? "bg-blue-500" : "bg-gray-400"}`}></span>
+                                        <span className="text-sm">{config.label}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                          </div>
+
+                          {selectedEnglishTest === "Other" && (
+                            <input
+                              type="text"
+                              placeholder="Specify test..."
+                              className="input input-bordered input-sm w-28 text-sm"
+                              value={customEnglishTest}
+                              onChange={(e) => setCustomEnglishTest(e.target.value)}
+                            />
+                          )}
+                        </div>
+                      )}
+                      <div className="relative">
+                        <input
+                          type="file"
+                          onChange={(e) => handleFileUpload(e, section.id)}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          disabled={uploading}
+                        />
+                        <button className="btn btn-xs btn-outline gap-2" disabled={uploading}>
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                          Upload
+                        </button>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+
+                  {sectionDocs.length === 0 ? (
+                    <div className="p-6 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                      <p className="text-xs text-[var(--cy-text-muted)] italic">No {section.title} uploaded.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {sectionDocs.map((doc: any) => (
+                        <div key={doc.id} className="group relative bg-white border border-[var(--cy-border)] rounded-xl p-4 hover:border-[var(--cy-navy)] hover:shadow-md transition-all">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="p-2 bg-[var(--cy-bg-surface)] rounded-lg text-[var(--cy-navy)]">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className={`badge badge-xs ${doc.status === 'verified' ? 'badge-success' : 'badge-warning'}`}>
+                                {doc.status}
+                              </span>
+                              <button
+                                onClick={() => handleDeleteDocument(doc.id)}
+                                className="text-gray-400 hover:text-red-500 transition-colors"
+                                title="Delete Document"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                              </button>
+                            </div>
+                          </div>
+                          <h4 className="font-bold text-sm text-[var(--cy-navy)] mb-1 truncate" title={doc.file?.split('/').pop()}>
+                            {doc.file?.split('/').pop() || 'Document'}
+                          </h4>
+                          <p className="text-[10px] text-[var(--cy-text-muted)] mb-3">
+                            {new Date(doc.created_at).toLocaleDateString()}
+                          </p>
+                          <a
+                            href={doc.file}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-xs btn-outline w-full mb-1"
+                          >
+                            View
+                          </a>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleScanMatch(doc.id); }}
+                            disabled={scanningDocId === doc.id}
+                            className={`btn btn-xs w-full ${doc.status === 'verified' ? 'btn-ghost text-green-600' : 'btn-primary'}`}
+                          >
+                            {scanningDocId === doc.id ? (
+                              <span className="loading loading-spinner loading-xs"></span>
+                            ) : (
+                              <>
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                Scan & Verify
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         );
 
@@ -724,8 +963,8 @@ export default function LeadDetailPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-1 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
-                    ? "border-[var(--cy-lime)] text-[var(--cy-navy)]"
-                    : "border-transparent text-[var(--cy-text-muted)] hover:text-[var(--cy-navy)]"
+                  ? "border-[var(--cy-lime)] text-[var(--cy-navy)]"
+                  : "border-transparent text-[var(--cy-text-muted)] hover:text-[var(--cy-navy)]"
                   }`}
               >
                 <span>{tab.icon}</span>
