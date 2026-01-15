@@ -28,7 +28,7 @@ import { addDays, format } from "date-fns";
 
 const DEFAULT_LAYOUT = [
   { i: "stat_leads", x: 0, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
-  { i: "stat_applicants", x: 4, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
+
   { i: "stat_conversion", x: 8, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
   { i: "trend_chart", x: 0, y: 2, w: 8, h: 4, minW: 2, minH: 3 },
   { i: "funnel_chart", x: 8, y: 2, w: 4, h: 4, minW: 2, minH: 3 },
@@ -181,22 +181,7 @@ export default function DashboardPage() {
             </div>
           </Link>
         );
-      case "stat_applicants":
-        return (
-          <Link href="/applicants" className="block h-full">
-            <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-white/20 shadow-sm flex flex-col justify-center hover:shadow-md transition-shadow h-full cursor-pointer group">
-              <div className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-wider font-bold group-hover:text-indigo-600 transition-colors">
-                Applicants
-              </div>
-              <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-indigo-600 mt-1 sm:mt-2">
-                {analyticsData.funnel?.funnel?.[2]?.count || 0}
-              </div>
-              <div className="text-[10px] sm:text-xs text-indigo-400 mt-1 font-medium">
-                Active pipeline
-              </div>
-            </div>
-          </Link>
-        );
+
       case "stat_conversion":
         return (
           <Link href="/applications" className="block h-full">

@@ -394,17 +394,19 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
 
 
 class AcademicRecordViewSet(viewsets.ModelViewSet):
-    queryset = AcademicRecord.objects.all().order_by("-created_at")
+    queryset = AcademicRecord.objects.all()
     serializer_class = AcademicRecordSerializer
-    permission_classes = [IsAuthenticated]
-    filterset_fields = ("applicant", "lead")
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['lead']
+    permission_classes = [IsAuthenticated, TenantQuerySetMixin]
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
-    queryset = Document.objects.all().order_by("-created_at")
+    queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    permission_classes = [IsAuthenticated]
-    filterset_fields = ("applicant", "lead", "document_type", "status")
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['lead', 'document_type', 'status']
+    permission_classes = [IsAuthenticated, TenantQuerySetMixin]
 
     def perform_create(self, serializer):
         # Security Validation

@@ -190,14 +190,12 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class AcademicRecordSerializer(serializers.ModelSerializer):
-    applicant = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
     lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = AcademicRecord
         fields = [
             "id",
-            "applicant",
             "lead",
             "institution",
             "degree",
@@ -212,14 +210,12 @@ class AcademicRecordSerializer(serializers.ModelSerializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    applicant = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
     lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Document
         fields = [
             "id",
-            "applicant",
             "lead",
             "document_type",
             "file",
