@@ -4,6 +4,7 @@
  */
 
 const API_URL = process.env.NEXT_PUBLIC_EVALUATOR_API || 'http://localhost:8001';
+const BACKEND_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // ============================================
 // Utilities
@@ -170,7 +171,7 @@ export async function evaluateSpeakingPart(
     }
 
     // Use Django backend proxy endpoint instead of direct evaluator
-    const response = await fetch('/api/ielts/speaking/evaluate-part/', {
+    const response = await fetch(`${BACKEND_API_URL}/api/ielts/speaking/evaluate-part/`, {
         method: 'POST',
         body: formData,
         credentials: 'include',
@@ -325,7 +326,7 @@ export async function saveSpeakingResults(
         }))
     };
 
-    const response = await fetch('/api/ielts/speaking/save-results/', {
+    const response = await fetch(`${BACKEND_API_URL}/api/ielts/speaking/save-results/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

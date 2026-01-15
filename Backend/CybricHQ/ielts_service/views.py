@@ -512,3 +512,166 @@ def speech_to_text(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def evaluate_speaking_part(request):
+    """
+    Evaluate a speaking test part by proxying to AI Evaluator.
+    
+    Expects multipart form data:
+    - file: Audio file (webm)
+    - part: Part number (1, 2, or 3)
+    - attempt_id: Optional attempt ID
+    
+    Returns speaking evaluation result from AI.
+    """
+    import requests
+    import os
+    
+    try:
+        if 'file' not in request.FILES:
+            return Response(
+                {"error": "No audio file provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        audio_file = request.FILES['file']
+        part = request.data.get('part', '1')
+        attempt_id = request.data.get('attempt_id', '')
+        
+        # Get the evaluator API URL from environment
+        evaluator_url = os.getenv('EVALUATOR_API_URL', 'http://localhost:8001')
+        
+        # Forward to the AI evaluator service
+        files = {'file': (audio_file.name, audio_file.read(), audio_file.content_type)}
+        data = {'part': part}
+        if attempt_id:
+            data['attempt_id'] = attempt_id
+        
+        response = requests.post(
+            f"{evaluator_url}/speaking/evaluate",
+            files=files,
+            data=data,
+            timeout=120  # 2 minute timeout for AI evaluation
+        )
+        
+        if response.ok:
+            result = response.json()
+            return Response({
+                "attempt_id": attempt_id or f"part_{part}",
+                "part": int(part),
+                "result": result
+            })
+        else:
+            logger.error(f"Evaluator error: {response.text}")
+            return Response(
+                {"error": "AI evaluation failed"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+            
+    except requests.exceptions.ConnectionError:
+        logger.error("Could not connect to AI evaluator service")
+        return Response(
+            {"error": "AI evaluator service unavailable"},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
+        )
+    except Exception as e:
+        logger.error(f"Error evaluating speaking: {e}")
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def save_speaking_results(request):
+    """
+    Save aggregated speaking test results to the database.
+    
+    Expects JSON:
+    - session_id: Session ID
+    - test_id: Test ID
+    - overall_band: Overall band score
+    - parts: Array of part results
+    
+    Returns success status.
+    """
+    from django.utils import timezone
+    
+    try:
+        data = request.data
+        session_id = data.get('session_id')
+        test_id = data.get('test_id')
+        overall_band = data.get('overall_band', 0)
+        parts = data.get('parts', [])
+        
+        if not test_id:
+            return Response(
+                {"error": "test_id is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Get or create the test record
+        test_title = f"Speaking Test {test_id}"
+        test, _ = IELTSTest.objects.get_or_create(
+            title=test_title,
+            defaults={
+                'description': f'Speaking test #{test_id}',
+                'test_type': 'academic',
+                'active': True
+            }
+        )
+        
+        # Get or create the speaking module
+        module, _ = TestModule.objects.get_or_create(
+            test=test,
+            module_type='speaking',
+            defaults={
+                'duration_minutes': 15,
+                'order': 4
+            }
+        )
+        
+        # Get user if authenticated
+        user = request.user if request.user.is_authenticated else None
+        
+        if not user:
+            # For unauthenticated requests, just log and return success
+            logger.info(f"Speaking results received (unauthenticated): test={test_id}, band={overall_band}")
+            return Response({"success": True, "message": "Results logged (user not authenticated)"})
+        
+        # Create session and attempt
+        session = UserTestSession.objects.create(
+            user=user,
+            test=test,
+            start_time=timezone.now(),
+            end_time=timezone.now(),
+            is_completed=True,
+            overall_band_score=overall_band
+        )
+        
+        attempt = UserModuleAttempt.objects.create(
+            session=session,
+            module=module,
+            start_time=timezone.now(),
+            end_time=timezone.now(),
+            is_completed=True,
+            band_score=overall_band
+        )
+        
+        logger.info(f"Speaking results saved: user={user.email}, test={test_id}, band={overall_band}")
+        
+        return Response({
+            "success": True,
+            "session_id": str(session.id),
+            "attempt_id": str(attempt.id)
+        })
+        
+    except Exception as e:
+        logger.error(f"Error saving speaking results: {e}")
+        return Response(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

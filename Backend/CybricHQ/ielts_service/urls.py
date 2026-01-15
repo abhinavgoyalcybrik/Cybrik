@@ -24,6 +24,10 @@ urlpatterns = [
     path('auth/register/', auth_views.ielts_register, name='ielts-register'),
     path('auth/onboarding/', auth_views.ielts_onboarding, name='ielts-onboarding'),
     
+    # Speaking evaluation endpoints
+    path('speaking/evaluate-part/', views.evaluate_speaking_part, name='evaluate-speaking-part'),
+    path('speaking/save-results/', views.save_speaking_results, name='save-speaking-results'),
+    
     # Main IELTS routes
     path('', include(router.urls)),
     path('admin/', include(admin_router.urls)),
