@@ -461,22 +461,16 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         media = message.get('media', {})
         payload = media.get('payload', '')
         
-        if payload and self.elevenlabs_ws:
-            # Note: We do NOT check self.elevenlabs_ready here anymore.
-            # We pass everything to handle_binary_audio which handles buffering
-            # while waiting for the handshake.
-                
+        if payload:
             try:
                 # Decode mulaw audio from Smartflo (base64 -> bytes)
                 mulaw_audio = base64.b64decode(payload)
                 
-                # Buffer and process via common logic (reuse handle_binary_audio logic)
-                # But handle_binary_audio is async and expects bytes... 
-                # Let's direct call logic to avoid overhead or just call handle_binary_audio since it's cleaner
+                # Forward to handle_binary_audio which manages the ElevenLabs connection
                 await self.handle_binary_audio(mulaw_audio)
                 
             except Exception as e:
-                logger.error(f"Error sending to ElevenLabs: {e}")
+                logger.error(f"Error processing media: {e}")
                 
     async def handle_dtmf(self, message):
         """Handle DTMF keypress from caller"""
