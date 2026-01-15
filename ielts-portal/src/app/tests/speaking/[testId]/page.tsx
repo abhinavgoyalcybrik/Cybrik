@@ -156,9 +156,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
                 if (res.ok) {
                     const data = await res.json();
                     if (data.is_completed) {
-                        // Test already completed - redirect to reports
-                        alert(`You have already completed this test with a band score of ${data.band_score || 'N/A'}. Redirecting to your report.`);
-                        router.push(`/reports/speaking/${data.session_id}`);
+                        // Test already completed - show a notice but stay on page
+                        alert(`You have already completed this test with a band score of ${data.band_score || 'N/A'}.`);
                     }
                 }
             } catch (e) {
@@ -228,16 +227,19 @@ export default function SpeakingTestPage({ params }: PageProps) {
     }, [interviewState]);
 
     // Part 2 prep timer
+    const [isGapCompleted, setIsGapCompleted] = useState(false);
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if (isPreparing && prepTime > 0) {
             interval = setInterval(() => setPrepTime((t) => t - 1), 1000);
         } else if (prepTime === 0 && isPreparing) {
             setIsPreparing(false);
-            speakText("Your preparation time is over. Please begin speaking now.").then(async () => {
-                // 5 second gap after TTS finishes before starting the 2-minute timer
-                await new Promise(r => setTimeout(r, 5000));
+            // Speak the TTS message, then enforce a 5‑second pause before enabling Part 2
+            speakText("Your preparation time is over. Please begin speaking now").then(async () => {
+                // 4.5 second gap after TTS finishes before starting the 2-minute timer
+                await new Promise(r => setTimeout(r, 4500));
                 if (isMountedRef.current) {
+                    setIsGapCompleted(true);
                     setIsSpeakingPart2(true);
                     startListening();
                 }
@@ -659,6 +661,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
             await speakText("You have one minute to prepare. Your time starts now.");
             setIsPreparing(true);
             setPrepTime(60);
+            // Reset gap flag for a fresh attempt
+            setIsGapCompleted(false);
         }
     };
 
