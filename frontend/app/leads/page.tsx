@@ -22,13 +22,13 @@ type Lead = {
 };
 
 const STATUS_TABS = [
-  { key: "all", label: "All", color: "bg-slate-100 text-slate-700", activeColor: "bg-slate-700 text-white" },
-  { key: "new", label: "New", color: "bg-blue-50 text-blue-700", activeColor: "bg-blue-600 text-white" },
-  { key: "contacted", label: "Contacted", color: "bg-amber-50 text-amber-700", activeColor: "bg-amber-500 text-white" },
-  { key: "qualified", label: "Qualified", color: "bg-emerald-50 text-emerald-700", activeColor: "bg-emerald-600 text-white" },
-  { key: "converted", label: "Converted", color: "bg-green-50 text-green-700", activeColor: "bg-green-600 text-white" },
-  { key: "junk", label: "Junk", color: "bg-red-50 text-red-700", activeColor: "bg-red-500 text-white" },
-  { key: "lost", label: "Lost", color: "bg-gray-50 text-gray-600", activeColor: "bg-gray-600 text-white" },
+  { key: "all", label: "All", color: "bg-slate-100 text-slate-700", activeColor: "bg-slate-700 text-white", description: "All leads in the system." },
+  { key: "new", label: "New", color: "bg-blue-50 text-blue-700", activeColor: "bg-blue-600 text-white", description: "Fresh leads, not yet contacted." },
+  { key: "contacted", label: "Contacted", color: "bg-amber-50 text-amber-700", activeColor: "bg-amber-500 text-white", description: "Leads reached via AI/Agent call." },
+  { key: "qualified", label: "Qualified", color: "bg-emerald-50 text-emerald-700", activeColor: "bg-emerald-600 text-white", description: "High interest or valid criteria met." },
+  { key: "converted", label: "Converted", color: "bg-green-50 text-green-700", activeColor: "bg-green-600 text-white", description: "Leads converted to Applications." },
+  { key: "junk", label: "Junk", color: "bg-red-50 text-red-700", activeColor: "bg-red-500 text-white", description: "Spam or low-quality leads." },
+  { key: "lost", label: "Lost", color: "bg-gray-50 text-gray-600", activeColor: "bg-gray-600 text-white", description: "Unresponsive or not interested." },
 ];
 
 export default function LeadsPage() {
@@ -236,6 +236,7 @@ export default function LeadsPage() {
               <button
                 key={tab.key}
                 onClick={() => setSelectedStatus(tab.key)}
+                title={tab.description}
                 className={`px-4 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${isActive ? tab.activeColor + " shadow-md" : tab.color + " hover:opacity-80"
                   }`}
               >
@@ -247,6 +248,20 @@ export default function LeadsPage() {
               </button>
             );
           })}
+        </div>
+
+        {/* Status Definition Helper */}
+        <div className="px-2 -mt-2">
+          {STATUS_TABS.map((tab) => (
+            selectedStatus === tab.key && (
+              <p key={tab.key} className="text-sm text-gray-500 flex items-center gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-medium">{tab.label}:</span> {tab.description}
+              </p>
+            )
+          ))}
         </div>
 
         {error && (
@@ -269,7 +284,7 @@ export default function LeadsPage() {
           }}
         />
       </div>
-    </DashboardLayout>
+    </DashboardLayout >
   );
 }
 
