@@ -141,6 +141,33 @@ export default function SpeakingTestPage({ params }: PageProps) {
             .catch(() => setLoading(false));
     }, [testId]);
 
+    // Check if test is already completed (backend enforcement)
+    useEffect(() => {
+        const view = searchParams.get('view');
+        // Skip check if viewing results
+        if (view === 'result') return;
+
+        const checkCompletion = async () => {
+            try {
+                const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                const res = await fetch(`${API_BASE}/api/ielts/check-completion/speaking/${testId}/`, {
+                    credentials: 'include',
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.is_completed) {
+                        // Test already completed - redirect to reports
+                        alert(`You have already completed this test with a band score of ${data.band_score || 'N/A'}. Redirecting to your report.`);
+                        router.push(`/reports/speaking/${data.session_id}`);
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not check test completion:', e);
+            }
+        };
+        checkCompletion();
+    }, [testId, searchParams, router]);
+
     // Load session result if view=result
     useEffect(() => {
         const view = searchParams.get('view');

@@ -675,3 +675,66 @@ def save_speaking_results(request):
             {"error": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def check_test_completion(request, module_type, test_id):
+    """
+    Check if the authenticated user has completed a specific test.
+    
+    URL: /api/ielts/check-completion/<module_type>/<test_id>/
+    
+    Returns:
+    - is_completed: bool
+    - session_id: str (if completed)
+    - band_score: float (if completed)
+    """
+    try:
+        user = request.user
+        
+        if not user.is_authenticated:
+            return Response({
+                "is_completed": False,
+                "message": "User not authenticated"
+            })
+        
+        # Normalize module_type
+        module_type = module_type.lower()
+        
+        # Build test title pattern to search
+        test_title = f"{module_type.capitalize()} Test {test_id}"
+        
+        # Find completed sessions for this user and test
+        completed_session = UserTestSession.objects.filter(
+            user=user,
+            test__title__icontains=test_title,
+            is_completed=True
+        ).order_by('-end_time').first()
+        
+        if completed_session:
+            # Get the module attempt for band score
+            attempt = UserModuleAttempt.objects.filter(
+                session=completed_session,
+                module__module_type=module_type,
+                is_completed=True
+            ).first()
+            
+            return Response({
+                "is_completed": True,
+                "session_id": str(completed_session.id),
+                "test_title": completed_session.test.title,
+                "band_score": float(attempt.band_score) if attempt and attempt.band_score else None,
+                "completed_at": completed_session.end_time.isoformat() if completed_session.end_time else None
+            })
+        
+        return Response({
+            "is_completed": False
+        })
+        
+    except Exception as e:
+        logger.error(f"Error checking test completion: {e}")
+        return Response({
+            "is_completed": False,
+            "error": str(e)
+        })

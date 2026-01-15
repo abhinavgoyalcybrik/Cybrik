@@ -28,6 +28,9 @@ urlpatterns = [
     path('speaking/evaluate-part/', views.evaluate_speaking_part, name='evaluate-speaking-part'),
     path('speaking/save-results/', views.save_speaking_results, name='save-speaking-results'),
     
+    # Test completion check (for blocking repeat attempts)
+    path('check-completion/<str:module_type>/<str:test_id>/', views.check_test_completion, name='check-test-completion'),
+    
     # Main IELTS routes
     path('', include(router.urls)),
     path('admin/', include(admin_router.urls)),
