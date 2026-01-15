@@ -501,6 +501,15 @@ class AuditLog(models.Model):
 
 
 class Lead(models.Model):
+    LEAD_STATUS_CHOICES = [
+        ('new', 'New'),
+        ('contacted', 'Contacted'),
+        ('qualified', 'Qualified'),
+        ('converted', 'Converted'),
+        ('junk', 'Junk'),
+        ('lost', 'Lost'),
+    ]
+    
     # Tenant for data isolation
     tenant = models.ForeignKey(
         Tenant, on_delete=models.CASCADE,
@@ -565,7 +574,11 @@ class Lead(models.Model):
     )
     
     raw_payload = models.JSONField(blank=True, null=True)
-    status = models.CharField(max_length=32, default="NEW")  # NEW, CONTACTED, QUALIFIED, LOST, etc.
+    status = models.CharField(
+        max_length=32, 
+        choices=LEAD_STATUS_CHOICES,
+        default="new"
+    )
     forward_response = models.JSONField(blank=True, null=True)
     received_at = models.DateTimeField(default=timezone.now)
     forwarded_at = models.DateTimeField(blank=True, null=True)

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import apiFetch from "@/lib/api";
 import Link from "next/link";
 import DashboardLayout from "@/components/DashboardLayout";
@@ -21,10 +21,21 @@ type Lead = {
   external_id?: string;
 };
 
+const STATUS_TABS = [
+  { key: "all", label: "All", color: "bg-slate-100 text-slate-700", activeColor: "bg-slate-700 text-white" },
+  { key: "new", label: "New", color: "bg-blue-50 text-blue-700", activeColor: "bg-blue-600 text-white" },
+  { key: "contacted", label: "Contacted", color: "bg-amber-50 text-amber-700", activeColor: "bg-amber-500 text-white" },
+  { key: "qualified", label: "Qualified", color: "bg-emerald-50 text-emerald-700", activeColor: "bg-emerald-600 text-white" },
+  { key: "converted", label: "Converted", color: "bg-green-50 text-green-700", activeColor: "bg-green-600 text-white" },
+  { key: "junk", label: "Junk", color: "bg-red-50 text-red-700", activeColor: "bg-red-500 text-white" },
+  { key: "lost", label: "Lost", color: "bg-gray-50 text-gray-600", activeColor: "bg-gray-600 text-white" },
+];
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const router = useRouter();
 
   const [showCaptureModal, setShowCaptureModal] = useState(false);
@@ -46,6 +57,18 @@ export default function LeadsPage() {
     loadLeads();
   }, []);
 
+  // Filter leads by selected status
+  const filteredLeads = useMemo(() => {
+    if (selectedStatus === "all") return leads;
+    return leads.filter(l => (l.status || "new").toLowerCase() === selectedStatus);
+  }, [leads, selectedStatus]);
+
+  // Get count for each status
+  const getCount = (statusKey: string) => {
+    if (statusKey === "all") return leads.length;
+    return leads.filter(l => (l.status || "new").toLowerCase() === statusKey).length;
+  };
+
   async function handleDelete(id: number | string) {
     if (!confirm("Are you sure you want to delete this lead?")) return;
     try {
@@ -55,6 +78,19 @@ export default function LeadsPage() {
       alert("Failed to delete lead: " + err.message);
     }
   }
+
+  const getStatusBadgeClass = (status: string) => {
+    const s = (status || "new").toLowerCase();
+    switch (s) {
+      case "new": return "bg-blue-100 text-blue-700";
+      case "contacted": return "bg-amber-100 text-amber-700";
+      case "qualified": return "bg-emerald-100 text-emerald-700";
+      case "converted": return "bg-green-100 text-green-700";
+      case "junk": return "bg-red-100 text-red-700";
+      case "lost": return "bg-gray-100 text-gray-600";
+      default: return "bg-slate-100 text-slate-700";
+    }
+  };
 
   const columns = [
     {
@@ -94,11 +130,10 @@ export default function LeadsPage() {
       header: "Status",
       accessorKey: "status" as keyof Lead,
       cell: (lead: Lead) => {
-        const status = lead.status || "received";
-        const isSuccess = status === "forwarded" || status === "converted";
+        const status = lead.status || "new";
         return (
-          <span className={`badge ${isSuccess ? "badge-success" : "badge-warning"}`}>
-            {status}
+          <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusBadgeClass(status)}`}>
+            {status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}
           </span>
         );
       },
@@ -119,9 +154,9 @@ export default function LeadsPage() {
       cell: (lead: Lead) => (
         <div className="flex items-center justify-end gap-3">
           <Link
-            href={`/applicants/new?leadId=${lead.id}`}
+            href={`/applications/new?leadId=${lead.id}`}
             className="text-xs font-medium text-[var(--cy-navy)] hover:text-[var(--cy-lime)] transition-colors"
-            title="Convert to Applicant"
+            title="Convert to Application"
           >
             Convert
           </Link>
@@ -183,6 +218,28 @@ export default function LeadsPage() {
           <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-cyan-500 rounded-full blur-3xl opacity-10"></div>
         </div>
 
+        {/* Status Tabs */}
+        <div className="flex flex-wrap gap-2 p-1 bg-white/50 backdrop-blur rounded-2xl border border-white/20 shadow-sm">
+          {STATUS_TABS.map((tab) => {
+            const count = getCount(tab.key);
+            const isActive = selectedStatus === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setSelectedStatus(tab.key)}
+                className={`px-4 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 ${isActive ? tab.activeColor + " shadow-md" : tab.color + " hover:opacity-80"
+                  }`}
+              >
+                {tab.label}
+                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${isActive ? "bg-white/20" : "bg-black/10"
+                  }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {error && (
           <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm">
             {error}
@@ -190,9 +247,9 @@ export default function LeadsPage() {
         )}
 
         <DataGrid
-          data={leads}
+          data={filteredLeads}
           columns={columns}
-          title="Recent Leads"
+          title={selectedStatus === "all" ? "All Leads" : `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} Leads`}
         />
 
         <LeadCaptureModal
@@ -206,3 +263,4 @@ export default function LeadsPage() {
     </DashboardLayout>
   );
 }
+
