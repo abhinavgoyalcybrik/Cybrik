@@ -386,6 +386,25 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         logger.warning("[SMARTFLO] No Lead found in DB for number")
         return None
 
+    def _update_call_completion_sync(self, call_record_id, conversation_id=None):
+        """Update CallRecord to completed status (Synchronous - call via database_sync_to_async)"""
+        from crm_app.models import CallRecord
+        from django.db import close_old_connections
+        close_old_connections()
+        
+        try:
+            call_record = CallRecord.objects.filter(id=call_record_id).first()
+            if call_record:
+                call_record.status = 'completed'
+                if conversation_id:
+                    call_record.metadata = call_record.metadata or {}
+                    call_record.metadata['conversation_id'] = conversation_id
+                    call_record.external_call_id = conversation_id
+                call_record.save()
+                logger.info(f"Updated CallRecord {call_record_id} to completed status")
+        except Exception as e:
+            logger.error(f"Error updating CallRecord DB op: {e}")
+
     async def handle_start(self, message):
         """Handle stream start with metadata"""
         start_data = message.get('start', {})
@@ -480,21 +499,10 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Update CallRecord with completed status
         try:
             call_record_id = self.lead_context.get('call_record_id')
+            conversation_id = getattr(self, 'elevenlabs_conversation_id', None)
+            
             if call_record_id:
-                from crm_app.models import CallRecord
-                from django.db import close_old_connections
-                close_old_connections()
-                
-                call_record = CallRecord.objects.filter(id=call_record_id).first()
-                if call_record:
-                    call_record.status = 'completed'
-                    # Store conversation_id if we got one from ElevenLabs
-                    if hasattr(self, 'elevenlabs_conversation_id') and self.elevenlabs_conversation_id:
-                        call_record.metadata = call_record.metadata or {}
-                        call_record.metadata['conversation_id'] = self.elevenlabs_conversation_id
-                        call_record.external_call_id = self.elevenlabs_conversation_id
-                    call_record.save()
-                    logger.info(f"Updated CallRecord {call_record_id} to completed status")
+                await database_sync_to_async(self._update_call_completion_sync)(call_record_id, conversation_id)
         except Exception as e:
             logger.error(f"Error updating CallRecord on call end: {e}")
         
@@ -573,10 +581,17 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 print(f"[DEBUG]   {key}: {value}")
             logger.info(f"[ELEVENLABS] Dynamic variables: {dynamic_vars}")
             
-            # Send conversation initiation with dynamic variables
+            # Send conversation initiation with dynamic variables and explicit audio config
             init_message = {
                 "type": "conversation_initiation_client_data",
-                "dynamic_variables": dynamic_vars
+                "dynamic_variables": dynamic_vars,
+                "conversation_config_override": {
+                    "tts": {
+                        "agent_output_audio_render_config": {
+                            "format": "pcm_16000"
+                        }
+                    }
+                }
             }
             
             print(f"[DEBUG] Sending init message: {json.dumps(init_message, indent=2)}")
@@ -640,9 +655,14 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     data = json.loads(message)
                     msg_type = data.get('type', '')
                     
-                    # Debug: log all message types received
-                    if msg_type != 'audio':
-                        logger.info(f"[ELEVENLABS] Received type: {msg_type}")
+                    
+                    # LOG ALL FLAGS to debug missing audio
+                    # if msg_type != 'audio':
+                    logger.info(f"[ELEVENLABS] Received type: {msg_type}")
+                    if msg_type == 'audio':
+                         logger.debug(f"[ELEVENLABS] Audio keys: {list(data.keys())}")
+                         if 'audio_event' in data:
+                             logger.debug(f"[ELEVENLABS] Audio event keys: {list(data['audio_event'].keys())}")
                     
                     # Handle server handshake - must receive this before sending audio
                     if msg_type == 'conversation_initiation_metadata':
