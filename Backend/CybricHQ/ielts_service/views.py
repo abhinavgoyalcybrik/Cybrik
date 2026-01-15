@@ -182,7 +182,12 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
                 end_time=timezone.now(),
                 is_completed=True,
                 band_score=data.get('band_score'),
-                raw_score=data.get('raw_score')
+                raw_score=data.get('raw_score'),
+                data={
+                    'answers': data.get('answers', {}),
+                    'feedback': data.get('feedback', {}),
+                    'extra_data': {k: v for k, v in data.items() if k not in ['test_id', 'module_type', 'band_score', 'raw_score', 'answers', 'feedback']}
+                }
             )
             
             # Store feedback if provided (for AI evaluation results)

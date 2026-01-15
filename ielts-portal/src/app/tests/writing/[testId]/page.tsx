@@ -64,6 +64,28 @@ export default function WritingTestPage({ params }: PageProps) {
             .catch(() => setLoading(false));
     }, [testId, searchParams]);
 
+    // Check completion status and redirect to result view if done
+    useEffect(() => {
+        const view = searchParams.get('view');
+        if (view === 'result') return; // Already viewing result
+
+        const checkCompletion = async () => {
+            try {
+                const res = await fetch(`/api/ielts/check-completion/writing/${testId}/`, { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.is_completed && data.session_id) {
+                        // Redirect to result view
+                        window.location.href = `/tests/writing/${testId}?view=result&sessionId=${data.session_id}`;
+                    }
+                }
+            } catch (e) {
+                console.error('Error checking completion:', e);
+            }
+        };
+        checkCompletion();
+    }, [testId, searchParams]);
+
     // Load session result if view=result
     useEffect(() => {
         const view = searchParams.get('view');
@@ -84,19 +106,23 @@ export default function WritingTestPage({ params }: PageProps) {
                             attempt = session.module_attempts?.find((a: any) => a.module_type === 'writing');
                         }
 
-                        if (attempt && attempt.feedback) {
-                            // Assuming feedback contains the evaluation result structure directly
-                            // or we reconstruct it. safely.
-                            const result = attempt.feedback as WritingEvaluationResult;
+                        if (attempt) {
+                            // Check for feedback in 'data' field (new structure) or fallback to 'feedback' field if available
+                            const feedbackData = attempt.data?.feedback || attempt.feedback;
 
-                            // Fill responses if stored (backend might usually store user_answers too?)
-                            // If not in feedback, we might check attempt.user_answers
-                            const userAnswers = attempt.user_answers || {};
-                            if (userAnswers.task_1) setPart1Response(userAnswers.task_1);
-                            if (userAnswers.task_2) setPart2Response(userAnswers.task_2);
+                            if (feedbackData) {
+                                // Assuming feedback contains the evaluation result structure directly
+                                const result = feedbackData as WritingEvaluationResult;
 
-                            setEvaluationResult(result);
-                            setTestCompleted(true);
+                                // Fill responses if stored (backend might usually store user_answers too?)
+                                // If not in feedback, we might check attempt.user_answers
+                                const userAnswers = attempt.user_answers || {};
+                                if (userAnswers.task_1) setPart1Response(userAnswers.task_1);
+                                if (userAnswers.task_2) setPart2Response(userAnswers.task_2);
+
+                                setEvaluationResult(result);
+                                setTestCompleted(true);
+                            }
                         }
                     }
                 } catch (e) {
@@ -201,7 +227,8 @@ export default function WritingTestPage({ params }: PageProps) {
                         answers: {
                             task_1: part1Response,
                             task_2: part2Response
-                        }
+                        },
+                        feedback: result // Send the full evaluation result as feedback
                     })
                 });
 

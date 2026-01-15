@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PenTool, Clock, Filter, ArrowLeft, Search, FileText, BarChart2, Map, Workflow } from 'lucide-react';
+import { PenTool, Clock, Filter, ArrowLeft, Search, FileText, BarChart2, Map, Workflow, Check } from 'lucide-react';
 import { WritingTestsData, WritingTest } from '@/types';
 import AdminLayout from '@/components/AdminLayout';
 
@@ -26,18 +26,40 @@ export default function WritingTestsPage() {
     const [difficultyFilter, setDifficultyFilter] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
     const [typeFilter, setTypeFilter] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const [completedTests, setCompletedTests] = useState<Record<number, any>>({});
 
     useEffect(() => {
-        fetch('/data/writing_tests.json')
-            .then((res) => res.json())
-            .then((data: WritingTestsData) => {
-                setTests(data.tests);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error('Failed to load writing tests:', err);
-                setLoading(false);
+        Promise.all([
+            fetch('/data/writing_tests.json').then(res => res.json()),
+            fetch('/api/ielts/sessions/', { credentials: 'include' }).then(res => res.ok ? res.json() : [])
+        ]).then(([data, sessions]) => {
+            setTests((data as WritingTestsData).tests);
+
+            // Map completed tests
+            const completed: Record<number, any> = {};
+
+            // For each test, check if there's a matching completed session
+            // Logic: Title = "Writing Test {id}"
+            (data as WritingTestsData).tests.forEach(test => {
+                const expectedTitle = `Writing Test ${test.test_id}`;
+                // Find matching session
+                const matchingSession = sessions.find((s: any) =>
+                    s.is_completed &&
+                    s.test_title &&
+                    s.test_title.toLowerCase().includes(expectedTitle.toLowerCase())
+                );
+
+                if (matchingSession) {
+                    completed[test.test_id] = matchingSession;
+                }
             });
+
+            setCompletedTests(completed);
+            setLoading(false);
+        }).catch(err => {
+            console.error('Failed to load data:', err);
+            setLoading(false);
+        });
     }, []);
 
     const taskTypes = Array.from(new Set(tests.map((t) => t.task_1.type))).sort();
@@ -150,60 +172,72 @@ export default function WritingTestsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredTests.map((test) => {
                     const TypeIcon = taskTypeIcons[test.task_1.type] || FileText;
+                    const isCompleted = !!completedTests[test.test_id];
+
                     return (
-                        <Link
-                            key={test.test_id}
-                            href={`/tests/writing/${test.test_id}`}
-                            className="group bg-white p-6 rounded-xl border border-slate-200 hover:border-amber-500 transition-all hover:shadow-lg"
-                        >
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-amber-50 p-2 rounded-lg text-amber-600">
-                                        <PenTool className="w-5 h-5" />
+                        <div key={test.test_id} className="relative group">
+                            {/* Block overlay if completed */}
+                            {isCompleted && (
+                                <div className="absolute inset-0 z-10 bg-white/60 backdrop-blur-[1px] rounded-xl flex items-center justify-center border border-slate-200">
+                                    <div className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full font-bold shadow-sm flex items-center gap-2">
+                                        <Check className="w-5 h-5" />
+                                        Completed
                                     </div>
-                                    <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium flex items-center gap-1">
-                                        <TypeIcon className="w-3 h-3" />
-                                        {test.task_1.type}
+                                </div>
+                            )}
+
+                            <Link
+                                href={isCompleted ? '#' : `/tests/writing/${test.test_id}`}
+                                className={`block h-full bg-white p-6 rounded-xl border border-slate-200 transition-all ${isCompleted
+                                    ? 'opacity-50 cursor-default'
+                                    : 'hover:border-amber-500 hover:shadow-lg'
+                                    }`}
+                                aria-disabled={isCompleted}
+                            >
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`p-2 rounded-lg ${isCompleted ? 'bg-slate-100 text-slate-400' : 'bg-amber-50 text-amber-600'}`}>
+                                            <PenTool className="w-5 h-5" />
+                                        </div>
+                                        <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium flex items-center gap-1">
+                                            <TypeIcon className="w-3 h-3" />
+                                            {test.task_1.type}
+                                        </span>
+                                    </div>
+                                    <span
+                                        className={`text-xs px-2.5 py-1 rounded-full font-medium ${difficultyColors[test.difficulty]
+                                            }`}
+                                    >
+                                        {test.difficulty.charAt(0).toUpperCase() + test.difficulty.slice(1)}
                                     </span>
                                 </div>
-                                <span
-                                    className={`text-xs px-2.5 py-1 rounded-full font-medium ${difficultyColors[test.difficulty]
-                                        }`}
-                                >
-                                    {test.difficulty.charAt(0).toUpperCase() + test.difficulty.slice(1)}
-                                </span>
-                            </div>
 
-                            <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                                Writing Test {test.test_id}
-                            </h3>
+                                <h3 className={`font-semibold mb-2 transition-colors ${isCompleted ? 'text-slate-500' : 'text-slate-900 group-hover:text-amber-600'
+                                    }`}>
+                                    Writing Test {test.test_id}
+                                </h3>
 
-                            <p className="text-sm text-slate-500 mb-2 line-clamp-2">
-                                <strong>Task 1:</strong> {test.task_1.question}
-                            </p>
+                                <p className="text-sm text-slate-500 mb-2 line-clamp-2">
+                                    <strong>Task 1:</strong> {test.task_1.question}
+                                </p>
 
-                            <p className="text-sm text-slate-500 mb-4 line-clamp-2">
-                                <strong>Task 2:</strong> {test.task_2.question}
-                            </p>
+                                <p className="text-sm text-slate-500 mb-4 line-clamp-2">
+                                    <strong>Task 2:</strong> {test.task_2.question}
+                                </p>
 
-                            <div className="flex items-center gap-4 text-xs text-slate-500 border-t border-slate-100 pt-4">
-                                <div className="flex items-center gap-1">
-                                    <Clock className="w-3 h-3" />
-                                    60 min
+                                <div className="flex items-center gap-4 text-xs text-slate-500 border-t border-slate-100 pt-4">
+                                    <div className="flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        60 min
+                                    </div>
+                                    <div>Task 1: 150+ words</div>
+                                    <div>Task 2: 250+ words</div>
                                 </div>
-                                <div>Task 1: 150+ words</div>
-                                <div>Task 2: 250+ words</div>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     );
                 })}
             </div>
-
-            {filteredTests.length === 0 && (
-                <div className="text-center py-12">
-                    <p className="text-slate-500">No tests found matching your criteria.</p>
-                </div>
-            )}
         </AdminLayout>
     );
 }

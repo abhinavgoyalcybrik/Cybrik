@@ -90,6 +90,29 @@ export default function ListeningTestPage({ params }: PageProps) {
 
     const audioRef = useRef<HTMLAudioElement>(null);
 
+
+    // Check completion status and redirect to result view if done
+    useEffect(() => {
+        const view = searchParams.get('view');
+        if (view === 'result') return; // Already viewing result
+
+        const checkCompletion = async () => {
+            try {
+                const res = await fetch(`/api/ielts/check-completion/listening/${testId}/`, { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.is_completed && data.session_id) {
+                        // Redirect to result view
+                        window.location.href = `/tests/listening/${testId}?view=result&sessionId=${data.session_id}`;
+                    }
+                }
+            } catch (e) {
+                console.error('Error checking completion:', e);
+            }
+        };
+        checkCompletion();
+    }, [testId, searchParams]);
+
     // Load session result if viewed from history
     useEffect(() => {
         const view = searchParams.get('view');
@@ -118,7 +141,7 @@ export default function ListeningTestPage({ params }: PageProps) {
                             setScore(attempt.raw_score || 0);
                             // Reconstruct evaluation result
                             // If feedback is stored in attempt.feedback (json field)
-                            const feedback = attempt.feedback || {};
+                            const feedback = attempt.data?.feedback || attempt.feedback || {};
 
                             if (feedback.examiner_feedback || feedback.analysis) {
                                 setEvaluationResult({
@@ -420,7 +443,8 @@ export default function ListeningTestPage({ params }: PageProps) {
                         module_type: 'listening',
                         band_score: result?.overall_band || 0,
                         raw_score: correct,
-                        answers: userAnswersMap
+                        answers: userAnswersMap,
+                        feedback: result // Send full evaluation result
                     })
                 });
 

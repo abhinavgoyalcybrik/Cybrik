@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Headphones, Clock, PlayCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Headphones, Clock, PlayCircle, CheckCircle2, Check } from 'lucide-react';
 import AdminLayout from '@/components/AdminLayout';
 
 interface ListeningTest {
@@ -17,36 +17,69 @@ export default function ListeningTestsPage() {
     const [tests, setTests] = useState<ListeningTest[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [completedTests, setCompletedTests] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
-        fetchTests();
-    }, []);
+        const loadData = async () => {
+            let fetchedTests: ListeningTest[] = [];
+            // 1. Fetch Tests
+            try {
+                // Try local JSON first
+                try {
+                    const localRes = await fetch('/data/listening_tests.json');
+                    const localData = await localRes.json();
+                    if (localData.tests && localData.tests.length > 0) {
+                        fetchedTests = localData.tests;
+                    }
+                } catch {
+                    // Continue to API fallback
+                }
 
-    const fetchTests = async () => {
-        // Try local JSON first (most reliable for static data)
-        try {
-            const localRes = await fetch('/data/listening_tests.json');
-            const localData = await localRes.json();
-            if (localData.tests && localData.tests.length > 0) {
-                setTests(localData.tests);
+                if (fetchedTests.length === 0) {
+                    // Fallback to backend API
+                    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                    const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=listening`);
+                    if (!res.ok) throw new Error('Failed to fetch tests');
+                    const data = await res.json();
+                    fetchedTests = data.results || data || [];
+                }
+                setTests(fetchedTests);
+            } catch (err: any) {
+                setError(err.message);
                 setLoading(false);
                 return;
             }
-        } catch {
-            // Continue to API fallback
-        }
 
-        // Fallback to backend API
-        try {
-            const res = await fetch('/api/ielts/tests/?module_type=listening');
-            if (!res.ok) throw new Error('Failed to fetch tests');
-            const data = await res.json();
-            setTests(data.results || data || []);
-        } catch (err: any) {
-            setError(err.message);
-        }
-        setLoading(false);
-    };
+            // 2. Fetch Sessions for Blocking
+            try {
+                const res = await fetch('/api/ielts/sessions/', { credentials: 'include' });
+                if (res.ok) {
+                    const sessions = await res.json();
+                    const completed: Record<string, boolean> = {};
+
+                    fetchedTests.forEach(test => {
+                        // Match completed sessions
+                        const isCompleted = sessions.some((s: any) =>
+                            s.is_completed && (
+                                String(s.test_id) === String(test.id) ||
+                                (s.test_title && s.test_title.toLowerCase().includes(test.title.toLowerCase())) ||
+                                (s.test_title && s.test_title.toLowerCase().includes(`listening test ${test.id}`))
+                            )
+                        );
+                        if (isCompleted) {
+                            completed[test.id] = true;
+                        }
+                    });
+                    setCompletedTests(completed);
+                }
+            } catch (e) {
+                console.error('Failed to load sessions:', e);
+            }
+
+            setLoading(false);
+        };
+        loadData();
+    }, []);
 
     if (loading) {
         return (
@@ -91,40 +124,58 @@ export default function ListeningTestsPage() {
             {/* Tests Grid */}
             {tests.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {tests.map((test, index) => (
-                        <Link
-                            key={test.id}
-                            href={`/tests/listening/${test.id}`}
-                            className="group bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all"
-                        >
-                            <div className="flex items-start justify-between mb-4">
-                                <div className="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                                    <Headphones className="w-6 h-6 text-blue-600" />
-                                </div>
-                                <span className="text-xs px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 font-medium">
-                                    {test.test_type || 'Academic'}
-                                </span>
+                    {tests.map((test, index) => {
+                        const isCompleted = completedTests[test.id];
+
+                        return (
+                            <div key={test.id} className="relative group">
+                                {/* Block overlay if completed */}
+                                {isCompleted && (
+                                    <div className="absolute inset-0 z-10 bg-white/60 dark:bg-black/60 backdrop-blur-[1px] rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-800">
+                                        <div className="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-full font-bold shadow-sm flex items-center gap-2">
+                                            <Check className="w-5 h-5" />
+                                            Completed
+                                        </div>
+                                    </div>
+                                )}
+
+                                <Link
+                                    href={isCompleted ? '#' : `/tests/listening/${test.id}`}
+                                    className={`block bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 transition-all ${isCompleted
+                                        ? 'opacity-50 cursor-default'
+                                        : 'hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg'}`}
+                                    aria-disabled={isCompleted}
+                                >
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isCompleted ? 'bg-zinc-100 text-zinc-400' : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600'}`}>
+                                            <Headphones className="w-6 h-6" />
+                                        </div>
+                                        <span className="text-xs px-2 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 font-medium">
+                                            {test.test_type || 'Academic'}
+                                        </span>
+                                    </div>
+                                    <h3 className={`text-lg font-semibold mb-2 transition-colors ${isCompleted ? 'text-zinc-500' : 'text-zinc-900 dark:text-white group-hover:text-blue-600'}`}>
+                                        {test.title}
+                                    </h3>
+                                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">
+                                        {test.description || `IELTS Listening Practice Test`}
+                                    </p>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-xs text-zinc-500">
+                                            <Clock className="w-3 h-3" />
+                                            <span>30 mins</span>
+                                            <span className="text-zinc-300">•</span>
+                                            <span>40 questions</span>
+                                        </div>
+                                        <div className={`flex items-center gap-1 text-sm font-medium transition-transform ${isCompleted ? 'text-zinc-400' : 'text-blue-600 group-hover:translate-x-1'}`}>
+                                            {isCompleted ? 'Completed' : 'Start'}
+                                            {!isCompleted && <PlayCircle className="w-4 h-4" />}
+                                        </div>
+                                    </div>
+                                </Link>
                             </div>
-                            <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
-                                {test.title}
-                            </h3>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4 line-clamp-2">
-                                {test.description || `IELTS Listening Practice Test`}
-                            </p>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 text-xs text-zinc-500">
-                                    <Clock className="w-3 h-3" />
-                                    <span>30 mins</span>
-                                    <span className="text-zinc-300">•</span>
-                                    <span>40 questions</span>
-                                </div>
-                                <div className="flex items-center gap-1 text-blue-600 text-sm font-medium group-hover:translate-x-1 transition-transform">
-                                    <PlayCircle className="w-4 h-4" />
-                                    <span>Start</span>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
+                        );
+                    })}
                 </div>
             ) : (
                 <div className="text-center py-16">
@@ -142,4 +193,3 @@ export default function ListeningTestsPage() {
         </AdminLayout>
     );
 }
-

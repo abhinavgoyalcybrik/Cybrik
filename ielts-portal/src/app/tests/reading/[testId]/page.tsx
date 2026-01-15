@@ -104,6 +104,28 @@ export default function ReadingTestPage({ params }: PageProps) {
         if (questionsPanelRef.current) questionsPanelRef.current.scrollTop = 0;
     }, [currentPartIndex]);
 
+    // Check completion status and redirect to result view if done
+    useEffect(() => {
+        const view = searchParams.get('view');
+        if (view === 'result') return; // Already viewing result
+
+        const checkCompletion = async () => {
+            try {
+                const res = await fetch(`/api/ielts/check-completion/reading/${testId}/`, { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.is_completed && data.session_id) {
+                        // Redirect to result view
+                        window.location.href = `/tests/reading/${testId}?view=result&sessionId=${data.session_id}`;
+                    }
+                }
+            } catch (e) {
+                console.error('Error checking completion:', e);
+            }
+        };
+        checkCompletion();
+    }, [testId, searchParams]);
+
     useEffect(() => {
         const view = searchParams.get('view');
         const sessionId = searchParams.get('sessionId');
@@ -126,7 +148,8 @@ export default function ReadingTestPage({ params }: PageProps) {
                         if (attempt) {
                             setScore(attempt.raw_score || 0);
                             // Reconstruct evaluation result
-                            const feedback = attempt.feedback || {};
+                            // Check for feedback in 'data' field (new structure) or fallback to 'feedback' field if available
+                            const feedback = attempt.data?.feedback || attempt.feedback || {};
 
                             if (feedback.examiner_feedback || feedback.analysis) {
                                 setEvaluationResult({
@@ -347,7 +370,8 @@ export default function ReadingTestPage({ params }: PageProps) {
                         module_type: 'reading',
                         band_score: result?.overall_band || 0,
                         raw_score: correctCount,
-                        answers: userAnswersMap
+                        answers: userAnswersMap,
+                        feedback: result // Send the full evaluation result
                     })
                 });
 
