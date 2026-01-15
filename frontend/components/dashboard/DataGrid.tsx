@@ -13,6 +13,7 @@ interface DataGridProps<T> {
     data: T[];
     columns: Column<T>[];
     title?: string;
+    subtitle?: React.ReactNode;
     action?: React.ReactNode;
     enableFiltering?: boolean;
 }
@@ -21,6 +22,7 @@ export default function DataGrid<T extends { id?: string | number }>({
     data,
     columns,
     title,
+    subtitle,
     action,
     enableFiltering = true
 }: DataGridProps<T>) {
@@ -62,7 +64,10 @@ export default function DataGrid<T extends { id?: string | number }>({
             {(title || action || enableFiltering) && (
                 <div className="px-6 py-4 border-b border-[var(--cy-border)] flex items-center justify-between bg-[var(--cy-bg-surface)]">
                     <div className="flex items-center gap-4">
-                        {title && <h3 className="h3 text-[var(--cy-navy)]">{title}</h3>}
+                        <div className="flex flex-col">
+                            {title && <h3 className="h3 text-[var(--cy-navy)]">{title}</h3>}
+                            {subtitle && <div className="text-sm text-[var(--cy-text-muted)] mt-1">{subtitle}</div>}
+                        </div>
                         {enableFiltering && (
                             <div className="flex items-center gap-2">
                                 <button

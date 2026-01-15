@@ -250,19 +250,7 @@ export default function LeadsPage() {
           })}
         </div>
 
-        {/* Status Definition Helper */}
-        <div className="px-2 -mt-2">
-          {STATUS_TABS.map((tab) => (
-            selectedStatus === tab.key && (
-              <p key={tab.key} className="text-sm text-gray-500 flex items-center gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
-                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="font-medium">{tab.label}:</span> {tab.description}
-              </p>
-            )
-          ))}
-        </div>
+
 
         {error && (
           <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm">
@@ -273,7 +261,20 @@ export default function LeadsPage() {
         <DataGrid
           data={filteredLeads}
           columns={columns}
-          title={selectedStatus === "all" ? "All Leads" : `${selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} Leads`}
+          title={selectedStatus === "all" ? "All Leads" : `${STATUS_TABS.find(t => t.key === selectedStatus)?.label || 'Leads'} Leads`}
+          subtitle={
+            (() => {
+              const tab = STATUS_TABS.find(t => t.key === selectedStatus);
+              return tab?.description ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {tab.description}
+                </span>
+              ) : null;
+            })()
+          }
         />
 
         <LeadCaptureModal
