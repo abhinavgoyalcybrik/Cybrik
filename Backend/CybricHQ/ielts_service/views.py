@@ -2,6 +2,8 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
+from django.db import transaction
+
 from .models import IELTSTest, UserTestSession, UserModuleAttempt, UserAnswer, Question, TestModule, QuestionGroup
 from .serializers import (
     IELTSTestListSerializer, IELTSTestDetailSerializer, 
@@ -102,6 +104,7 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
     @action(detail=False, methods=['post'])
+    @transaction.atomic
     def save_module_result(self, request):
         """
         Save a complete result for a test module (e.g., Reading/Listening).
@@ -264,13 +267,6 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
             'reading_modules': reading_count,
         })
 
-
-class AdminIELTSTestViewSet(viewsets.ModelViewSet):
-    """Admin CRUD for IELTS Tests (full access for frontend admin)"""
-    queryset = IELTSTest.objects.all()
-    serializer_class = AdminIELTSTestSerializer
-    permission_classes = [permissions.AllowAny]  # Allow frontend admin access
-
     def get_queryset(self):
         queryset = IELTSTest.objects.all()
         module_type = self.request.query_params.get('module_type')
@@ -279,6 +275,9 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(modules__module_type=module_type).distinct()
         
         return queryset.order_by('-created_at')
+
+
+
 
 
 class AdminTestModuleViewSet(viewsets.ModelViewSet):
@@ -591,6 +590,7 @@ def evaluate_speaking_part(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@transaction.atomic
 def save_speaking_results(request):
     """
     Save aggregated speaking test results to the database.
