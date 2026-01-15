@@ -268,24 +268,61 @@ export default function DashboardAnalytics() {
                                 if (moduleType === 'writing' && data?.feedback) {
                                     // Writing Criteria: Task Response, Cohesion/Coherence, Grammar, Lexical
                                     const fb = data.feedback;
-                                    // Map various potential API response keys to standard keys
-                                    const tr = fb?.task_response?.band || fb?.['Task Response']?.band || band;
-                                    const cc = fb?.coherence_cohesion?.band || fb?.['Coherence and Cohesion']?.band || band;
-                                    const gra = fb?.grammatical_range?.band || fb?.['Grammatical Range and Accuracy']?.band || band;
-                                    const lr = fb?.lexical_resource?.band || fb?.['Lexical Resource']?.band || band;
 
-                                    addCriteriaScore('writing', 'Task Response', Number(tr));
-                                    addCriteriaScore('writing', 'Coherence', Number(cc));
-                                    addCriteriaScore('writing', 'Grammar', Number(gra));
-                                    addCriteriaScore('writing', 'Lexical', Number(lr));
+                                    // Handle new nested structure (tasks.task_1.criteria_scores...)
+                                    if (fb.tasks) {
+                                        const t1 = fb.tasks.task_1?.criteria_scores;
+                                        const t2 = fb.tasks.task_2?.criteria_scores;
+
+                                        // Calculate averages across available tasks
+                                        // Task 2 usually weighs more in IELTS (2/3), but for analytics simple average represents performance well enough
+                                        // or we can do weighted. Let's do simple average of the band scores presented.
+
+                                        const getAvg = (key: string) => {
+                                            let sum = 0;
+                                            let count = 0;
+                                            if (t1?.[key]) { sum += t1[key]; count++; }
+                                            if (t2?.[key]) { sum += t2[key]; count++; }
+                                            return count > 0 ? sum / count : 0;
+                                        };
+
+                                        addCriteriaScore('writing', 'Task Response', getAvg('task_response'));
+                                        addCriteriaScore('writing', 'Coherence', getAvg('coherence_cohesion'));
+                                        addCriteriaScore('writing', 'Grammar', getAvg('grammar_accuracy'));
+                                        addCriteriaScore('writing', 'Lexical', getAvg('lexical_resource'));
+                                    } else {
+                                        // Legacy / Fallback Flat Structure
+                                        const tr = fb?.task_response?.band || fb?.['Task Response']?.band || band;
+                                        const cc = fb?.coherence_cohesion?.band || fb?.['Coherence and Cohesion']?.band || band;
+                                        const gra = fb?.grammatical_range?.band || fb?.['Grammatical Range and Accuracy']?.band || band;
+                                        const lr = fb?.lexical_resource?.band || fb?.['Lexical Resource']?.band || band;
+
+                                        addCriteriaScore('writing', 'Task Response', Number(tr));
+                                        addCriteriaScore('writing', 'Coherence', Number(cc));
+                                        addCriteriaScore('writing', 'Grammar', Number(gra));
+                                        addCriteriaScore('writing', 'Lexical', Number(lr));
+                                    }
                                 }
                                 else if (moduleType === 'speaking' && data?.feedback) {
                                     // Speaking Criteria: Fluency, Lexical, Grammar, Pronunciation
                                     const fb = data.feedback;
-                                    const fc = fb?.fluency_coherence?.band || fb?.['Fluency and Coherence']?.band || band;
-                                    const lr = fb?.lexical_resource?.band || fb?.['Lexical Resource']?.band || band;
-                                    const gra = fb?.grammatical_range?.band || fb?.['Grammatical Range and Accuracy']?.band || band;
-                                    const pro = fb?.pronunciation?.band || fb?.['Pronunciation']?.band || band;
+
+                                    // Check for direct numeric values (from CombinedSpeakingResult)
+                                    // or object-based values (legacy/alternative structure)
+                                    // or defined aliases
+
+                                    const getVal = (keys: string[]) => {
+                                        for (const k of keys) {
+                                            if (typeof fb[k] === 'number') return fb[k];
+                                            if (fb[k]?.band) return fb[k].band;
+                                        }
+                                        return band; // Fallback to overall score
+                                    };
+
+                                    const fc = getVal(['fluency', 'fluency_coherence', 'Fluency and Coherence']);
+                                    const lr = getVal(['lexical', 'lexical_resource', 'Lexical Resource']);
+                                    const gra = getVal(['grammar', 'grammatical_range', 'Grammatical Range and Accuracy']);
+                                    const pro = getVal(['pronunciation', 'Pronunciation']);
 
                                     addCriteriaScore('speaking', 'Fluency', Number(fc));
                                     addCriteriaScore('speaking', 'Lexical', Number(lr));
@@ -301,7 +338,26 @@ export default function DashboardAnalytics() {
                                     const scoresByPart: Record<string, { correct: number; total: number }> = {};
 
                                     Object.entries(data.answers).forEach(([qId, val]: [string, any]) => {
-                                        const qNum = parseInt(qId.replace(/\D/g, '')); // Extract number from "q1", "1", etc.
+                                        // Robust ID extraction:
+                                        // 1. "Q1" or "P1-Q1" -> matches Q(\d+)
+                                        // 2. "Part1-q1" -> matches q(\d+)
+                                        // 3. "1" -> matches ^(\d+)$
+
+                                        let qNum = NaN;
+                                        const matchQ = qId.match(/Q(\d+)/i);
+                                        if (matchQ) {
+                                            qNum = parseInt(matchQ[1]);
+                                        } else {
+                                            // Fallback: try to find any digits at the end
+                                            const matchEnd = qId.match(/(\d+)$/);
+                                            if (matchEnd) {
+                                                qNum = parseInt(matchEnd[1]);
+                                            } else {
+                                                // Fallback: strip simple non-digits if string is short
+                                                qNum = parseInt(qId.replace(/\D/g, ''));
+                                            }
+                                        }
+
                                         if (isNaN(qNum)) return;
 
                                         let partName = '';

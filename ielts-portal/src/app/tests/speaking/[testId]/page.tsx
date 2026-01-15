@@ -733,7 +733,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
                                 module_type: 'speaking',
                                 band_score: result?.overall_band || 0,
                                 raw_score: 0,
-                                answers: {} // Speaking answers are audio blobs, not easily sent here
+                                answers: {},
+                                feedback: result
                             })
                         });
 
