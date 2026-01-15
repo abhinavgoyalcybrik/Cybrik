@@ -177,7 +177,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         self.call_sid = None
         self.caller_from = None
         self.caller_to = None
-        self.chunk_number = 0
+        self.input_chunk_number = 0
+        self.output_chunk_number = 0
         self.elevenlabs_ws = None
         
         # Lead context for ElevenLabs dynamic variables
@@ -335,9 +336,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     "user_audio_chunk": base64.b64encode(pcm_16k).decode('utf-8')
                 }))
                 
-                self.chunk_number += 1
-                if self.chunk_number % 20 == 0:
-                    logger.info(f"[SMARTFLO] Forwarded input chunk #{self.chunk_number} ({len(chunk_to_process)} bytes)")
+                self.input_chunk_number += 1
+                if self.input_chunk_number % 20 == 0:
+                    logger.info(f"[SMARTFLO] Forwarded input chunk #{self.input_chunk_number} ({len(chunk_to_process)} bytes)")
                     
             except Exception as e:
                 logger.error(f"[SMARTFLO] Error forwarding audio: {e}")
@@ -700,10 +701,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                             pcm_audio = base64.b64decode(audio_base64)
                             
                             # Log for debugging
-                            self.chunk_number += 1
-                            if self.chunk_number <= 5:
-                                print(f"[DEBUG] ELEVENLABS AUDIO: chunk {self.chunk_number}, PCM size={len(pcm_audio)} bytes")
-                                logger.info(f"[ELEVENLABS] Audio chunk {self.chunk_number}: PCM size={len(pcm_audio)} bytes")
+                            self.output_chunk_number += 1
+                            if self.output_chunk_number <= 10:
+                                logger.info(f"[ELEVENLABS] Audio chunk {self.output_chunk_number}: PCM size={len(pcm_audio)} bytes")
                             
                             # Convert PCM 16kHz to PCM 8kHz (downsample)
                             pcm_8k = downsample_16k_to_8k(pcm_audio)
@@ -730,8 +730,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                                 # Adding sleep for 20ms audio (0.02s) might cause gaps if processing is slow.
                                 # Let's try sending without sleep first, or very minimal.
                             
-                            if self.chunk_number % 50 == 0:
-                                logger.info(f"[ELEVENLABS] Processed output chunk")
+                            if self.output_chunk_number % 50 == 0:
+                                logger.info(f"[ELEVENLABS] Processed {self.output_chunk_number} output chunks")
                         else:
                             logger.warning(f"[ELEVENLABS] audio message but no data found: {list(data.keys())}")
                     
@@ -792,7 +792,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             "streamSid": self.stream_sid,
             "media": {
                 "payload": audio_b64,
-                "chunk": self.chunk_number
+                "chunk": self.output_chunk_number
             }
         }
         
