@@ -442,6 +442,13 @@ class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        application = serializer.save()
+        if application.lead:
+            application.lead.status = 'converted'
+            application.lead.save(update_fields=['status'])
+            logging.info(f"Lead {application.lead.id} converted to application {application.id}")
+
     @action(detail=True, methods=["post"], url_path="start-voice-call")
     def start_voice_call(self, request, pk=None):
         """

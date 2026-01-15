@@ -60,13 +60,21 @@ export default function LeadsPage() {
   // Filter leads by selected status
   const filteredLeads = useMemo(() => {
     if (selectedStatus === "all") return leads;
-    return leads.filter(l => (l.status || "new").toLowerCase() === selectedStatus);
+    return leads.filter(l => {
+      const s = (l.status || "new").toLowerCase();
+      const normalized = (s === 'received' || s === 'new') ? 'new' : s;
+      return normalized === selectedStatus;
+    });
   }, [leads, selectedStatus]);
 
   // Get count for each status
   const getCount = (statusKey: string) => {
     if (statusKey === "all") return leads.length;
-    return leads.filter(l => (l.status || "new").toLowerCase() === statusKey).length;
+    return leads.filter(l => {
+      const s = (l.status || "new").toLowerCase();
+      const normalized = (s === 'received' || s === 'new') ? 'new' : s;
+      return normalized === statusKey;
+    }).length;
   };
 
   async function handleDelete(id: number | string) {
@@ -82,7 +90,8 @@ export default function LeadsPage() {
   const getStatusBadgeClass = (status: string) => {
     const s = (status || "new").toLowerCase();
     switch (s) {
-      case "new": return "bg-blue-100 text-blue-700";
+      case "new":
+      case "received": return "bg-blue-100 text-blue-700";
       case "contacted": return "bg-amber-100 text-amber-700";
       case "qualified": return "bg-emerald-100 text-emerald-700";
       case "converted": return "bg-green-100 text-green-700";

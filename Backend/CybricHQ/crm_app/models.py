@@ -396,6 +396,7 @@ class FollowUp(models.Model):
 
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="followups", blank=True, null=True)
     lead = models.ForeignKey(Applicant, on_delete=models.CASCADE, blank=True, null=True, related_name="lead_followups")
+    crm_lead = models.ForeignKey('Lead', on_delete=models.CASCADE, blank=True, null=True, related_name="followups")
     
     # Tenant for data isolation
     tenant = models.ForeignKey(

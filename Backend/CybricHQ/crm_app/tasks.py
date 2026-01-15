@@ -175,17 +175,26 @@ def check_and_initiate_followups():
         completed=False,
         channel__in=['ai_call', 'phone'],
         status__in=['pending', 'scheduled']
-    ).select_related('lead')
+    ).select_related('lead', 'crm_lead')
     
     count = 0
     failed = 0
     
     for task in due_ai_calls:
-        if not task.lead:
+        target_id = None
+        is_applicant = False
+        
+        if task.lead:
+            target_id = task.lead.id
+            is_applicant = True
+        elif task.crm_lead:
+            target_id = task.crm_lead.id
+            is_applicant = False
+        else:
             logger.warning(f"FollowUp {task.id} has no lead/applicant, skipping")
             continue
             
-        logger.info(f"Processing scheduled AI call {task.id} for Applicant {task.lead.id}")
+        logger.info(f"Processing scheduled AI call {task.id} for {'Applicant' if is_applicant else 'Lead'} {target_id}")
         
         # Update status to in_progress
         task.status = "in_progress"
@@ -198,8 +207,10 @@ def check_and_initiate_followups():
             context['reason'] = 'scheduled_follow_up'
         else:
             from .services.followup_generator import followup_generator
+            # Fallback generator currently expects Applicant, might need update if we pass Lead
+            # For now passing None if it's a lead, relying on metadata context mostly
             context = followup_generator.generate_call_context(
-                applicant=task.lead,
+                applicant=task.lead if is_applicant else None,
                 reason='scheduled_follow_up',
                 notes=task.notes,
                 task=task,
@@ -209,7 +220,11 @@ def check_and_initiate_followups():
         context['task_notes'] = task.notes or "Follow up call as scheduled."
         
         # Initiate Call
-        res = schedule_elevenlabs_call(applicant_id=task.lead.id, extra_context=context)
+        res = schedule_elevenlabs_call(
+            applicant_id=target_id if is_applicant else None,
+            lead_id=target_id if not is_applicant else None,
+            extra_context=context
+        )
         
         if res.get("ok"):
             task.status = "completed"
@@ -254,8 +269,17 @@ def trigger_scheduled_ai_call(followup_id):
         if task.completed or task.status in ['completed', 'cancelled']:
             return {"ok": False, "error": "Task already completed or cancelled"}
         
-        if not task.lead:
-            return {"ok": False, "error": "No applicant linked to task"}
+        if not task.lead and not task.crm_lead:
+            return {"ok": False, "error": "No applicant or lead linked to task"}
+            
+        target_id = None
+        is_applicant = False
+        if task.lead:
+            target_id = task.lead.id
+            is_applicant = True
+        elif task.crm_lead:
+            target_id = task.crm_lead.id
+            is_applicant = False
         
         # Update status
         task.status = "in_progress"
@@ -269,7 +293,7 @@ def trigger_scheduled_ai_call(followup_id):
         else:
             from .services.followup_generator import followup_generator
             context = followup_generator.generate_call_context(
-                applicant=task.lead,
+                applicant=task.lead if is_applicant else None,
                 reason='manual_trigger',
                 notes=task.notes,
                 task=task,
@@ -278,7 +302,11 @@ def trigger_scheduled_ai_call(followup_id):
         
         context['task_notes'] = task.notes or "Follow up call."
         
-        res = schedule_elevenlabs_call(applicant_id=task.lead.id, extra_context=context)
+        res = schedule_elevenlabs_call(
+            applicant_id=target_id if is_applicant else None,
+            lead_id=target_id if not is_applicant else None,
+            extra_context=context
+        )
         
         if res.get("ok"):
             task.status = "completed"
@@ -449,6 +477,35 @@ def analyze_call_transcript(call_record_id):
                             lead.save(update_fields=lead_updates)
                             logger.info(f"Updated Lead qualification fields for lead {lead.id}: {lead_updates}")
 
+                    # --- AUTOMATIC STATUS UPDATES ---
+                    target_lead = None
+                    if call.lead:
+                        target_lead = call.lead
+                    elif call.applicant and call.applicant.lead:
+                        target_lead = call.applicant.lead
+                        
+                    if target_lead:
+                        old_status = target_lead.status
+                        
+                        # Logic for status transitions
+                        interest = analysis.get('interest_level', 'unknown').lower()
+                        score = analysis.get('qualification_score', 0)
+                        
+                        new_status = old_status # Default to no change
+                        
+                        if interest in ['high', 'medium'] or score >= 40:
+                            new_status = 'qualified'
+                        elif interest == 'low' and score < 20:
+                            new_status = 'junk'
+                        elif old_status == 'new':
+                            # If it was new and we have a transcript/analysis, it's at least contacted
+                            new_status = 'contacted'
+                            
+                        if new_status != old_status:
+                            target_lead.status = new_status
+                            target_lead.save(update_fields=['status'])
+                            logger.info(f"Auto-transitioned Lead {target_lead.id} status from {old_status} to {new_status} (Interest: {interest}, Score: {score})")
+
             except Exception as e:
                 logger.error(f"Error saving extracted applicant details: {e}")
 
@@ -503,7 +560,7 @@ def analyze_call_transcript(call_record_id):
         follow_up = analysis.get('follow_up', {})
         doc_status = analysis.get('document_status', {})
         
-        if (follow_up.get('needed') or doc_status.get('status') in ['pending', 'partial']) and call.applicant:
+        if (follow_up.get('needed') or doc_status.get('status') in ['pending', 'partial']) and (call.applicant or call.lead):
             priority = 'HIGH' if analysis.get('interest_level') == 'high' else 'MEDIUM'
             
             # Construct task notes
@@ -539,6 +596,7 @@ def analyze_call_transcript(call_record_id):
             
             FollowUp.objects.create(
                 lead=call.applicant,
+                crm_lead=call.lead,
                 channel='ai_call',  # Use AI call channel for automated follow-ups
                 notes=notes,
                 due_at=calculate_follow_up_time(follow_up.get('timing', '2 days')),
@@ -550,7 +608,7 @@ def analyze_call_transcript(call_record_id):
                     'follow_up_analysis': follow_up,  # Full AI analysis of follow-up
                 }
             )
-            logger.info(f"Created AI follow-up task for applicant {call.applicant.id} with call context")
+            logger.info(f"Created AI follow-up task for {'Applicant' if call.applicant else 'Lead'} {call.applicant.id if call.applicant else call.lead.id} with call context")
             
             # Send automated email if needed
             if analysis.get('interest_level') in ['high', 'medium']:
