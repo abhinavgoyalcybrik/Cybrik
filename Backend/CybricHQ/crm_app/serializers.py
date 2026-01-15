@@ -195,6 +195,7 @@ class AcademicRecordSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "applicant",
+            "lead",
             "institution",
             "degree",
             "start_year",
@@ -205,7 +206,10 @@ class AcademicRecordSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ("created_at",)
-        extra_kwargs = {"applicant": {"write_only": True}}
+        extra_kwargs = {
+            "applicant": {"write_only": True, "required": False, "allow_null": True},
+            "lead": {"write_only": True, "required": False, "allow_null": True}
+        }
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -214,6 +218,7 @@ class DocumentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "applicant",
+            "lead",
             "document_type",
             "file",
             "status",
@@ -221,7 +226,10 @@ class DocumentSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ("created_at",)
-        extra_kwargs = {"applicant": {"write_only": True}}
+        extra_kwargs = {
+            "applicant": {"write_only": True, "required": False, "allow_null": True},
+            "lead": {"write_only": True, "required": False, "allow_null": True}
+        }
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
@@ -543,21 +551,22 @@ class ScheduleAICallSerializer(serializers.Serializer):
 
 
 class LeadSerializer(serializers.ModelSerializer):
+    # Nested relationships for full profile view
+    documents = serializers.SerializerMethodField(read_only=True)
+    academic_records = serializers.SerializerMethodField(read_only=True)
+    applications = serializers.SerializerMethodField(read_only=True)
+    
     class Meta:
         model = Lead
         fields = [
             'id', 
             'external_id', 
+            # Basic contact info
             'name', 
             'email', 
             'phone', 
             'source', 
             'message', 
-            'raw_payload', 
-            'status', 
-            'forward_response', 
-            'received_at', 
-            'forwarded_at',
             'city',
             'country',
             'preferred_language',
@@ -565,20 +574,65 @@ class LeadSerializer(serializers.ModelSerializer):
             'consent_given',
             'visit_type',
             'assigned_to',
-            # New qualification fields for ElevenLabs
+            # Applicant-like profile fields
+            'first_name',
+            'last_name',
+            'dob',
+            'passport_number',
+            'address',
+            'preferred_country',
+            'stage',
+            'profile_completeness_score',
+            'qualification_status',
+            'counseling_notes',
+            'metadata',
+            # Qualification fields for ElevenLabs
             'highest_qualification',
             'qualification_marks',
-            'english_test_scores'
+            'english_test_scores',
+            # System fields
+            'raw_payload', 
+            'status', 
+            'forward_response', 
+            'received_at', 
+            'forwarded_at',
+            'created_at',
+            'updated_at',
+            # Nested relationships
+            'documents',
+            'academic_records',
+            'applications',
         ]
-        read_only_fields = ('id', 'received_at', 'forwarded_at')
+        read_only_fields = ('id', 'received_at', 'forwarded_at', 'created_at', 'updated_at')
         extra_kwargs = {
             'external_id': {'required': False, 'allow_blank': True}
         }
+
+    def get_documents(self, obj):
+        qs = getattr(obj, "documents", None)
+        if not qs:
+            return []
+        return DocumentSerializer(qs.all(), many=True, context=self.context).data
+
+    def get_academic_records(self, obj):
+        qs = getattr(obj, "academic_records", None)
+        if not qs:
+            return []
+        return AcademicRecordSerializer(qs.all(), many=True, context=self.context).data
+
+    def get_applications(self, obj):
+        qs = getattr(obj, "applications", None)
+        if not qs:
+            return []
+        return ApplicationSerializer(qs.all(), many=True, context=self.context).data
 
     def create(self, validated_data):
         if not validated_data.get('external_id'):
             import uuid
             validated_data['external_id'] = f"lead_{uuid.uuid4().hex[:12]}"
+        # Sync name from first_name/last_name if not provided
+        if not validated_data.get('name') and validated_data.get('first_name'):
+            validated_data['name'] = f"{validated_data.get('first_name', '')} {validated_data.get('last_name', '')}".strip()
         return super().create(validated_data)
 
 

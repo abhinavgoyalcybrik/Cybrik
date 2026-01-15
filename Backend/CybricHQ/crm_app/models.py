@@ -232,7 +232,8 @@ class Document(models.Model):
         ("rejected", "Rejected"),
     ]
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="documents")
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="documents", null=True, blank=True)
+    lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="documents", null=True, blank=True)
     document_type = models.CharField(max_length=64, choices=DOCUMENT_TYPES, default="other")
     file = models.FileField(upload_to="documents/%Y/%m/%d/")
     status = models.CharField(max_length=32, choices=STATUS_CHOICES, default="pending")
@@ -246,11 +247,13 @@ class Document(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        return f"{self.get_document_type_display()} for {self.applicant}"
+        owner = self.applicant or self.lead
+        return f"{self.get_document_type_display()} for {owner}"
 
 
 class AcademicRecord(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="academic_records")
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="academic_records", null=True, blank=True)
+    lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="academic_records", null=True, blank=True)
     institution = models.CharField(max_length=255, blank=True, null=True)
     degree = models.CharField(max_length=255, blank=True, null=True)
     start_year = models.IntegerField(blank=True, null=True)
@@ -275,7 +278,8 @@ class Application(models.Model):
         ("rejected", "Rejected"),
     ]
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="applications")
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
+    lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
     
     # Tenant for data isolation (denormalized for query efficiency)
     tenant = models.ForeignKey(
@@ -506,6 +510,8 @@ class Lead(models.Model):
     )
     
     external_id = models.CharField(max_length=128, unique=True)
+    
+    # Basic contact info (original Lead fields)
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=32, blank=True, null=True)
@@ -518,6 +524,25 @@ class Lead(models.Model):
     visit_type = models.CharField(max_length=64, blank=True, null=True)
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     message = models.TextField(blank=True, null=True)
+    
+    # ============== APPLICANT-LIKE PROFILE FIELDS ==============
+    # These fields enable Lead to function like Applicant without conversion
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    dob = models.DateField(blank=True, null=True, help_text="Date of Birth")
+    passport_number = models.CharField(max_length=128, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    preferred_country = models.CharField(max_length=128, blank=True, null=True)
+    
+    # Stage management (like Applicant)
+    stage = models.CharField(max_length=64, default="new")  # new, docs_pending, verified, etc.
+    profile_completeness_score = models.IntegerField(default=0)
+    qualification_status = models.CharField(max_length=64, default="pending")
+    counseling_notes = models.TextField(blank=True, null=True)
+    
+    # Metadata for flexible storage
+    metadata = JSONField(blank=True, null=True)
+    # ============================================================
     
     # Optional qualification fields for ElevenLabs dynamic variables
     highest_qualification = models.CharField(
@@ -544,6 +569,8 @@ class Lead(models.Model):
     forward_response = models.JSONField(blank=True, null=True)
     received_at = models.DateTimeField(default=timezone.now)
     forwarded_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ("-received_at",)
@@ -551,7 +578,10 @@ class Lead(models.Model):
         verbose_name_plural = "Leads"
 
     def __str__(self):
-        return f"Lead {self.id} ({self.external_id or self.email or self.phone})"
+        # Use first_name/last_name if available, otherwise use name
+        if self.first_name:
+            return f"{self.first_name} {self.last_name or ''}".strip()
+        return self.name or f"Lead {self.id}"
 
 
 class UserDashboardPreference(models.Model):

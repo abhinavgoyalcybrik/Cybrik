@@ -397,14 +397,14 @@ class AcademicRecordViewSet(viewsets.ModelViewSet):
     queryset = AcademicRecord.objects.all().order_by("-created_at")
     serializer_class = AcademicRecordSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ("applicant",)
+    filterset_fields = ("applicant", "lead")
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all().order_by("-created_at")
     serializer_class = DocumentSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ("applicant", "document_type", "status")
+    filterset_fields = ("applicant", "lead", "document_type", "status")
 
     def perform_create(self, serializer):
         # Security Validation
@@ -587,7 +587,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = Lead.objects.all().order_by("-received_at")
     serializer_class = LeadSerializer
     permission_classes = [IsAuthenticated]
-    filterset_fields = ("source", "status")
+    filterset_fields = ("source", "status", "stage")
 
     def perform_destroy(self, instance):
         try:
@@ -623,8 +623,8 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 # Build dynamic variables for ElevenLabs agent (via SmartFlow WebSocket)
                 dynamic_vars = {
                     "counsellorName": "Cybric Assistant",
-                    "name": lead.name or "Student",
-                    "preferredCountry": lead.country or "",
+                    "name": lead.name or lead.first_name or "Student",
+                    "preferredCountry": lead.preferred_country or lead.country or "",
                     "highestQualification": lead.highest_qualification or "",
                     "marksHighestQualification": lead.qualification_marks or "",
                     "yearCompletion": getattr(lead, 'year_completion', '') or "",
@@ -640,7 +640,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     provider="smartflo",
                     metadata={
                         "lead_id": str(lead.id),
-                        "name": lead.name,
+                        "name": lead.name or lead.first_name,
                         "source": lead.source,
                         "dynamic_variables": dynamic_vars
                     }
@@ -675,6 +675,84 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 
             except Exception as e:
                 logger.exception(f"Failed to initiate SmartFlow call for lead {lead.id}: {e}")
+
+    @action(detail=True, methods=["get"], url_path="activity")
+    def activity(self, request, pk=None):
+        """
+        Fetch activity logs for this lead.
+        """
+        lead = self.get_object()
+        from .models import AuditLog
+        from .serializers import AuditLogSerializer
+        
+        # Get logs linked to this lead (via metadata or direct relation if added)
+        logs = AuditLog.objects.filter(
+            data__lead_id=str(lead.id)
+        ).order_by("-created_at")[:50]
+        
+        serializer = AuditLogSerializer(logs, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["post"], url_path="generate-follow-ups")
+    def generate_follow_ups(self, request, pk=None):
+        """
+        Analyze all transcripts for this lead and generate follow-up tasks.
+        """
+        lead = self.get_object()
+        
+        # Gather all transcripts from calls linked to this lead
+        from .models import CallRecord
+        calls = CallRecord.objects.filter(lead=lead).order_by("-created_at")
+        
+        full_transcript = ""
+        
+        for call in calls:
+            text = None
+            if call.transcripts.exists():
+                text = call.transcripts.first().transcript_text
+            elif call.metadata and call.metadata.get("transcript"):
+                text = call.metadata.get("transcript")
+            
+            if text:
+                date_str = call.created_at.strftime("%Y-%m-%d %H:%M")
+                full_transcript += f"\n\n--- Call on {date_str} ---\n{text}"
+        
+        if not full_transcript:
+            return Response({"error": "No transcripts found for this lead"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Analyze
+        try:
+            from .services.ai_analyzer import CallAnalyzer
+            from .tasks import calculate_follow_up_time
+            
+            logger.debug("Initializing CallAnalyzer...")
+            analyzer = CallAnalyzer()
+            logger.debug("Sending to AI...")
+            analysis = analyzer.analyze_transcript(full_transcript, metadata={"lead_id": lead.id, "name": lead.first_name or lead.name})
+            logger.debug(f"AI Analysis Result: {analysis}")
+            
+            created_tasks = []
+            if analysis.get('follow_up', {}).get('needed'):
+                priority = 'HIGH' if analysis.get('interest_level') == 'high' else 'MEDIUM'
+                
+                # Create FollowUp linked to Lead
+                task = FollowUp.objects.create(
+                    lead=None,  # FollowUp.lead points to Applicant, not Lead - we need to handle this
+                    channel='phone' if analysis.get('interest_level') == 'high' else 'email',
+                    notes=f"AI Recommendation: {analysis.get('follow_up', {}).get('reason', 'Follow-up needed')}",
+                    due_at=calculate_follow_up_time(analysis.get('follow_up', {}).get('timing', '2 days')),
+                    metadata={'created_by_ai': True, 'analysis': analysis, 'priority': priority, 'lead_id': lead.id}
+                )
+                created_tasks.append(task)
+                
+            return Response({
+                "message": "Analysis complete", 
+                "tasks_created": len(created_tasks),
+                "analysis": analysis
+            })
+        except Exception as e:
+            logger.exception(f"Error generating follow-ups: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
