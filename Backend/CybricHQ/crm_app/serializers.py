@@ -190,6 +190,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class AcademicRecordSerializer(serializers.ModelSerializer):
+    applicant = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
+    lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
+
     class Meta:
         model = AcademicRecord
         fields = [
@@ -206,13 +209,12 @@ class AcademicRecordSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ("created_at",)
-        extra_kwargs = {
-            "applicant": {"write_only": True, "required": False, "allow_null": True},
-            "lead": {"write_only": True, "required": False, "allow_null": True}
-        }
 
 
 class DocumentSerializer(serializers.ModelSerializer):
+    applicant = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
+    lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
+
     class Meta:
         model = Document
         fields = [
@@ -226,10 +228,6 @@ class DocumentSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ("created_at",)
-        extra_kwargs = {
-            "applicant": {"write_only": True, "required": False, "allow_null": True},
-            "lead": {"write_only": True, "required": False, "allow_null": True}
-        }
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
