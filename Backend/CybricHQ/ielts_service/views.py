@@ -658,7 +658,12 @@ def save_speaking_results(request):
             start_time=timezone.now(),
             end_time=timezone.now(),
             is_completed=True,
-            band_score=overall_band
+            band_score=overall_band,
+            data={
+                'feedback': data.get('feedback', {}),
+                'parts': data.get('parts', []),
+                'is_evaluated': True
+            }
         )
         
         logger.info(f"Speaking results saved: user={user.email}, test={test_id}, band={overall_band}")

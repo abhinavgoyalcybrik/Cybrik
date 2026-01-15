@@ -49,7 +49,7 @@ class UserModuleAttemptSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserModuleAttempt
-        fields = ['id', 'module', 'module_type', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers']
+        fields = ['id', 'module', 'module_type', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers', 'data']
         read_only_fields = ['band_score', 'raw_score', 'start_time', 'end_time']
 
 class UserTestSessionSerializer(serializers.ModelSerializer):

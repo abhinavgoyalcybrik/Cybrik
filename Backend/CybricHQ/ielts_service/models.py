@@ -140,6 +140,7 @@ class UserModuleAttempt(models.Model):
     
     band_score = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
     raw_score = models.PositiveIntegerField(null=True, blank=True)
+    data = models.JSONField(default=dict, blank=True, help_text="Detailed results/feedback JSON")
 
     def __str__(self):
         return f"{self.session} - {self.module.module_type}"
