@@ -168,7 +168,7 @@ export default function ReportsPage() {
             setLoading(true);
 
             try {
-                const response = await fetch(`${API_BASE}/api/ielts/sessions/`, {
+                const response = await fetch('/api/ielts/sessions/', {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',

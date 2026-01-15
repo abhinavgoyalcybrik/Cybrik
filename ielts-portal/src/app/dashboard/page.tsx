@@ -98,9 +98,9 @@ export default function Dashboard() {
       fetch('/data/listening_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
       fetch('/data/reading_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
       // Also fetch from backend API if available
-      fetch(`${API_BASE}/api/ielts/tests/?module_type=listening`, { credentials: 'include' })
+      fetch('/api/ielts/tests/?module_type=listening', { credentials: 'include' })
         .then(r => r.json()).catch(() => []),
-      fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`, { credentials: 'include' })
+      fetch('/api/ielts/tests/?module_type=reading', { credentials: 'include' })
         .then(r => r.json()).catch(() => []),
     ]).then(([speakingData, writingData, listeningJsonData, readingJsonData, listeningApiData, readingApiData]) => {
       // Combine counts from JSON and API - Prioritize API if available to avoid duplicates
@@ -116,7 +116,7 @@ export default function Dashboard() {
     });
 
     // Fetch user sessions for completed counts
-    fetch(`${API_BASE}/api/ielts/sessions/`, { credentials: 'include' })
+    fetch('/api/ielts/sessions/', { credentials: 'include' })
       .then(r => r.json())
       .then((sessions: any[]) => {
         if (!Array.isArray(sessions)) return;
