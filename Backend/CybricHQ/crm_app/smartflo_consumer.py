@@ -331,7 +331,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 }))
                 
                 self.input_chunk_number += 1
-                if self.input_chunk_number % 50 == 0:
+                if self.input_chunk_number <= 5:
+                    logger.info(f"[SMARTFLO->11LABS] Sent input chunk #{self.input_chunk_number}: {len(chunk)} bytes")
+                elif self.input_chunk_number % 50 == 0:
                     logger.info(f"[SMARTFLO] Sent μ-law chunk #{self.input_chunk_number}")
                     
             except Exception as e:
@@ -569,12 +571,13 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 print(f"[DEBUG]   {key}: {value}")
             logger.info(f"[ELEVENLABS] Dynamic variables: {dynamic_vars}")
             
-            # Send conversation initiation with dynamic variables ONLY
-            # Audio format is controlled by ElevenLabs dashboard (currently μ-law 8000 Hz)
-            # Do NOT override first_message or audio format - ElevenLabs rejects these
+            # Send conversation initiation with dynamic variables and INPUT format
+            # We must tell ElevenLabs what format we're sending!
+            # Output format is controlled by dashboard (μ-law 8000 Hz)
             init_message = {
                 "type": "conversation_initiation_client_data",
-                "dynamic_variables": dynamic_vars
+                "dynamic_variables": dynamic_vars,
+                "user_input_audio_format": "ulaw_8000"
             }
             
             print(f"[DEBUG] Sending init message: {json.dumps(init_message, indent=2)}")
