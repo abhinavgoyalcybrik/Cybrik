@@ -30,6 +30,10 @@ interface ModuleAttempt {
     is_completed: boolean;
     band_score: number | null;
     raw_score?: number | null;
+    data?: {
+        feedback?: any; // Writing/Speaking evaluation
+        answers?: Record<string, any>; // Reading/Listening answers
+    };
 }
 
 interface TestSession {
@@ -48,6 +52,7 @@ interface SectionStats {
     testsCompleted: number;
     totalTests: number;
     scores: number[];
+    criteriaScores: Record<string, { total: number; count: number }>;
 }
 
 interface SectionCardProps {
@@ -74,15 +79,20 @@ function SectionCard({ title, bandScore, data, color, bgColor, icon, href, tests
     const chartColor = colorMap[strokeColor] || '#6FB63A';
 
     // Empty state logic
-    const isEmpty = data.length === 0;
-    const displayData = isEmpty ? [
-        { subject: 'Crit 1', A: 4, fullMark: 9 },
-        { subject: 'Crit 2', A: 6, fullMark: 9 },
-        { subject: 'Crit 3', A: 5, fullMark: 9 },
-        { subject: 'Crit 4', A: 7, fullMark: 9 },
-        { subject: 'Crit 5', A: 4, fullMark: 9 },
-    ] : data;
+    const isEmpty = data.length === 0 || data.every(d => d.A === 0);
 
+    // Default placeholder data for empty state
+    const placeholderData = title === 'Reading' ? [
+        { subject: 'Part 1', A: 0, fullMark: 9 }, { subject: 'Part 2', A: 0, fullMark: 9 }, { subject: 'Part 3', A: 0, fullMark: 9 }
+    ] : title === 'Listening' ? [
+        { subject: 'Part 1', A: 0, fullMark: 9 }, { subject: 'Part 2', A: 0, fullMark: 9 }, { subject: 'Part 3', A: 0, fullMark: 9 }, { subject: 'Part 4', A: 0, fullMark: 9 }
+    ] : title === 'Writing' ? [
+        { subject: 'Task Response', A: 0, fullMark: 9 }, { subject: 'Coherence', A: 0, fullMark: 9 }, { subject: 'Grammar', A: 0, fullMark: 9 }, { subject: 'Lexical', A: 0, fullMark: 9 }
+    ] : [
+        { subject: 'Fluency', A: 0, fullMark: 9 }, { subject: 'Lexical', A: 0, fullMark: 9 }, { subject: 'Grammar', A: 0, fullMark: 9 }, { subject: 'Pronunciation', A: 0, fullMark: 9 }
+    ];
+
+    const displayData = isEmpty ? placeholderData : data;
     const chartId = `radar-${title.toLowerCase()}`;
 
     return (
@@ -171,36 +181,14 @@ function SectionCard({ title, bandScore, data, color, bgColor, icon, href, tests
     );
 }
 
-// Generate radar data from scores
-function generateRadarData(sectionType: string, avgScore: number): RadarDataPoint[] {
-    if (avgScore === 0) return [];
-
-    // Simulate sub-criteria based on section type
-    const criteriaMap: Record<string, string[]> = {
-        reading: ['Comprehension', 'Vocabulary', 'Speed', 'Accuracy', 'Inference'],
-        listening: ['Main Ideas', 'Details', 'Spelling', 'Note Taking', 'Following'],
-        writing: ['Task Achievement', 'Coherence', 'Vocabulary', 'Grammar'],
-        speaking: ['Fluency', 'Vocabulary', 'Grammar', 'Pronunciation'],
-    };
-
-    const criteria = criteriaMap[sectionType] || [];
-
-    // Generate slight variations around the average score for visual effect
-    return criteria.map((subject, index) => ({
-        subject,
-        A: Math.min(9, Math.max(0, avgScore + (Math.random() - 0.5) * 1.5)),
-        fullMark: 9,
-    }));
-}
-
 export default function DashboardAnalytics() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [sectionStats, setSectionStats] = useState<Record<string, SectionStats>>({
-        reading: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-        listening: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-        writing: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-        speaking: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
+        reading: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+        listening: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+        writing: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+        speaking: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
     });
     const [overallScore, setOverallScore] = useState<number>(0);
 
@@ -210,8 +198,8 @@ export default function DashboardAnalytics() {
             setError(null);
 
             try {
-                // Fetch test sessions
-                const response = await fetch(`${API_BASE}/api/ielts/sessions/`, {
+                // Use relative path to avoid block/CORS issues
+                const response = await fetch('/api/ielts/sessions/', {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
@@ -220,11 +208,9 @@ export default function DashboardAnalytics() {
 
                 if (!response.ok) {
                     if (response.status === 401 || response.status === 403) {
-                        // Not authenticated - show empty state silently
                         setLoading(false);
                         return;
                     }
-                    // For other errors, just log and show empty state
                     console.warn('Failed to fetch test data:', response.status);
                     setLoading(false);
                     return;
@@ -232,49 +218,133 @@ export default function DashboardAnalytics() {
 
                 const sessions: TestSession[] = await response.json();
 
-                // Process sessions to calculate statistics
+                // Initialize stats
                 const stats: Record<string, SectionStats> = {
-                    reading: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-                    listening: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-                    writing: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
-                    speaking: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [] },
+                    reading: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+                    listening: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+                    writing: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+                    speaking: { averageScore: 0, testsCompleted: 0, totalTests: 0, scores: [], criteriaScores: {} },
+                };
+
+                // Helper to safely add to criteria scores
+                const addCriteriaScore = (module: string, criteriaName: string, score: number) => {
+                    if (!stats[module].criteriaScores[criteriaName]) {
+                        stats[module].criteriaScores[criteriaName] = { total: 0, count: 0 };
+                    }
+                    stats[module].criteriaScores[criteriaName].total += score;
+                    stats[module].criteriaScores[criteriaName].count++;
                 };
 
                 sessions.forEach((session) => {
-                    if (session.module_attempts && session.module_attempts.length > 0) {
-                        session.module_attempts.forEach((attempt) => {
-                            const moduleType = (attempt as any).module_type ||
-                                guessModuleType(session.test_title);
+                    const attempts = session.module_attempts || [];
 
-                            if (stats[moduleType]) {
-                                stats[moduleType].totalTests++;
-                                if (attempt.is_completed && attempt.band_score !== null) {
-                                    stats[moduleType].testsCompleted++;
-                                    stats[moduleType].scores.push(Number(attempt.band_score));
-                                }
-                            }
-                        });
-                    } else {
+                    // If no attempts but session is completed (legacy support or direct session)
+                    if (attempts.length === 0 && session.is_completed) {
                         const moduleType = guessModuleType(session.test_title);
                         if (stats[moduleType]) {
                             stats[moduleType].totalTests++;
-                            if (session.is_completed && session.overall_band_score !== null) {
+                            if (session.overall_band_score) {
                                 stats[moduleType].testsCompleted++;
                                 stats[moduleType].scores.push(Number(session.overall_band_score));
+                                // Cannot guess criteria for legacy sessions
                             }
                         }
                     }
+
+                    attempts.forEach((attempt) => {
+                        const moduleType = (attempt.module_type || guessModuleType(session.test_title)).toLowerCase();
+
+                        if (stats[moduleType]) {
+                            stats[moduleType].totalTests++;
+
+                            if (attempt.is_completed && attempt.band_score !== null) {
+                                stats[moduleType].testsCompleted++;
+                                const band = Number(attempt.band_score);
+                                stats[moduleType].scores.push(band);
+
+                                // --- Parse Criteria Scores ---
+                                const data = attempt.data;
+
+                                if (moduleType === 'writing' && data?.feedback) {
+                                    // Writing Criteria: Task Response, Cohesion/Coherence, Grammar, Lexical
+                                    const fb = data.feedback;
+                                    // Map various potential API response keys to standard keys
+                                    const tr = fb?.task_response?.band || fb?.['Task Response']?.band || band;
+                                    const cc = fb?.coherence_cohesion?.band || fb?.['Coherence and Cohesion']?.band || band;
+                                    const gra = fb?.grammatical_range?.band || fb?.['Grammatical Range and Accuracy']?.band || band;
+                                    const lr = fb?.lexical_resource?.band || fb?.['Lexical Resource']?.band || band;
+
+                                    addCriteriaScore('writing', 'Task Response', Number(tr));
+                                    addCriteriaScore('writing', 'Coherence', Number(cc));
+                                    addCriteriaScore('writing', 'Grammar', Number(gra));
+                                    addCriteriaScore('writing', 'Lexical', Number(lr));
+                                }
+                                else if (moduleType === 'speaking' && data?.feedback) {
+                                    // Speaking Criteria: Fluency, Lexical, Grammar, Pronunciation
+                                    const fb = data.feedback;
+                                    const fc = fb?.fluency_coherence?.band || fb?.['Fluency and Coherence']?.band || band;
+                                    const lr = fb?.lexical_resource?.band || fb?.['Lexical Resource']?.band || band;
+                                    const gra = fb?.grammatical_range?.band || fb?.['Grammatical Range and Accuracy']?.band || band;
+                                    const pro = fb?.pronunciation?.band || fb?.['Pronunciation']?.band || band;
+
+                                    addCriteriaScore('speaking', 'Fluency', Number(fc));
+                                    addCriteriaScore('speaking', 'Lexical', Number(lr));
+                                    addCriteriaScore('speaking', 'Grammar', Number(gra));
+                                    addCriteriaScore('speaking', 'Pronunciation', Number(pro));
+                                }
+                                else if ((moduleType === 'reading' || moduleType === 'listening') && data?.answers) {
+                                    // Reading/Listening: Calculate Part-wise usage
+                                    // Assuming keys are Question IDs (integers). 
+                                    // Reading: Part 1 (1-13), Part 2 (14-26), Part 3 (27-40)
+                                    // Listening: Part 1 (1-10), Part 2 (11-20), Part 3 (21-30), Part 4 (31-40)
+
+                                    const scoresByPart: Record<string, { correct: number; total: number }> = {};
+
+                                    Object.entries(data.answers).forEach(([qId, val]: [string, any]) => {
+                                        const qNum = parseInt(qId.replace(/\D/g, '')); // Extract number from "q1", "1", etc.
+                                        if (isNaN(qNum)) return;
+
+                                        let partName = '';
+                                        if (moduleType === 'reading') {
+                                            if (qNum <= 13) partName = 'Part 1';
+                                            else if (qNum <= 26) partName = 'Part 2';
+                                            else partName = 'Part 3';
+                                        } else {
+                                            if (qNum <= 10) partName = 'Part 1';
+                                            else if (qNum <= 20) partName = 'Part 2';
+                                            else if (qNum <= 30) partName = 'Part 3';
+                                            else partName = 'Part 4';
+                                        }
+
+                                        if (!scoresByPart[partName]) scoresByPart[partName] = { correct: 0, total: 0 };
+                                        scoresByPart[partName].total++;
+                                        if (val?.is_correct || val === true) {
+                                            scoresByPart[partName].correct++;
+                                        }
+                                    });
+
+                                    // Convert Part raw scores to pseudo-bands (approximate scale 0-9)
+                                    Object.entries(scoresByPart).forEach(([part, score]) => {
+                                        const percentage = score.total > 0 ? (score.correct / score.total) : 0;
+                                        // Rough IELTS Band approximation: 50% ~ 5.0, 70% ~ 6.0, 85% ~ 7.0, etc.
+                                        // Using simple 9 * percentage for granular visual feedback
+                                        addCriteriaScore(moduleType, part, percentage * 9);
+                                    });
+                                }
+                            }
+                        }
+                    });
                 });
 
-                // Calculate averages
+                // Finalize Averages
                 let totalAvg = 0;
                 let sectionsWithScores = 0;
 
                 Object.keys(stats).forEach((key) => {
-                    if (stats[key].scores.length > 0) {
-                        stats[key].averageScore =
-                            stats[key].scores.reduce((a, b) => a + b, 0) / stats[key].scores.length;
-                        totalAvg += stats[key].averageScore;
+                    const stat = stats[key];
+                    if (stat.scores.length > 0) {
+                        stat.averageScore = stat.scores.reduce((a, b) => a + b, 0) / stat.scores.length;
+                        totalAvg += stat.averageScore;
                         sectionsWithScores++;
                     }
                 });
@@ -283,9 +353,7 @@ export default function DashboardAnalytics() {
                 setOverallScore(sectionsWithScores > 0 ? totalAvg / sectionsWithScores : 0);
 
             } catch (err) {
-                // Silently handle network errors - just log and show empty state
                 console.warn('Error fetching analytics:', err);
-                // Don't set error state - just show empty state
             } finally {
                 setLoading(false);
             }
@@ -294,9 +362,9 @@ export default function DashboardAnalytics() {
         fetchData();
     }, []);
 
-    // Helper function to guess module type from title
+    // Helper function to guess module type
     function guessModuleType(title: string | null | undefined): string {
-        if (!title) return 'reading'; // Default fallback
+        if (!title) return 'reading';
         const lowerTitle = title.toLowerCase();
         if (lowerTitle.includes('read') || lowerTitle.includes('rt')) return 'reading';
         if (lowerTitle.includes('listen') || lowerTitle.includes('lt')) return 'listening';
@@ -304,6 +372,32 @@ export default function DashboardAnalytics() {
         if (lowerTitle.includes('speak')) return 'speaking';
         return 'reading';
     }
+
+    // Generate Chart Data from Accumulated Criteria
+    const getChartData = (module: string) => {
+        const criteria = sectionStats[module].criteriaScores;
+        const keys = Object.keys(criteria);
+
+        // Define standard ordering
+        let order: string[] = [];
+        if (module === 'reading') order = ['Part 1', 'Part 2', 'Part 3'];
+        else if (module === 'listening') order = ['Part 1', 'Part 2', 'Part 3', 'Part 4'];
+        else if (module === 'writing') order = ['Task Response', 'Coherence', 'Grammar', 'Lexical'];
+        else if (module === 'speaking') order = ['Fluency', 'Lexical', 'Grammar', 'Pronunciation'];
+
+        if (keys.length === 0) return [];
+
+        // Map and sort based on standard order
+        return order.map(subject => {
+            const data = criteria[subject];
+            const avg = data ? (data.total / data.count) : 0;
+            return {
+                subject,
+                A: Number(avg.toFixed(1)),
+                fullMark: 9
+            };
+        });
+    };
 
     return (
         <div className="space-y-8">
@@ -320,11 +414,6 @@ export default function DashboardAnalytics() {
                         </p>
                         <p className="text-xs text-slate-500">Overall Band</p>
                     </div>
-                    <select className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#6FB63A]">
-                        <option>All Time</option>
-                        <option>Last 30 Days</option>
-                        <option>Last 7 Days</option>
-                    </select>
                 </div>
             </div>
 
@@ -342,7 +431,7 @@ export default function DashboardAnalytics() {
                 <SectionCard
                     title="Reading"
                     bandScore={sectionStats.reading.averageScore}
-                    data={generateRadarData('reading', sectionStats.reading.averageScore)}
+                    data={getChartData('reading')}
                     color="text-emerald-600"
                     bgColor="bg-emerald-50"
                     icon={<BookOpen className="w-6 h-6 text-emerald-600" />}
@@ -356,7 +445,7 @@ export default function DashboardAnalytics() {
                 <SectionCard
                     title="Listening"
                     bandScore={sectionStats.listening.averageScore}
-                    data={generateRadarData('listening', sectionStats.listening.averageScore)}
+                    data={getChartData('listening')}
                     color="text-purple-600"
                     bgColor="bg-purple-50"
                     icon={<Headphones className="w-6 h-6 text-purple-600" />}
@@ -370,7 +459,7 @@ export default function DashboardAnalytics() {
                 <SectionCard
                     title="Writing"
                     bandScore={sectionStats.writing.averageScore}
-                    data={generateRadarData('writing', sectionStats.writing.averageScore)}
+                    data={getChartData('writing')}
                     color="text-orange-600"
                     bgColor="bg-orange-50"
                     icon={<PenTool className="w-6 h-6 text-orange-600" />}
@@ -384,7 +473,7 @@ export default function DashboardAnalytics() {
                 <SectionCard
                     title="Speaking"
                     bandScore={sectionStats.speaking.averageScore}
-                    data={generateRadarData('speaking', sectionStats.speaking.averageScore)}
+                    data={getChartData('speaking')}
                     color="text-blue-600"
                     bgColor="bg-blue-50"
                     icon={<Mic className="w-6 h-6 text-blue-600" />}
@@ -393,71 +482,6 @@ export default function DashboardAnalytics() {
                     totalTests={sectionStats.speaking.totalTests}
                     loading={loading}
                 />
-            </div>
-
-            {/* Quick Summary */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
-                <h3 className="font-bold text-slate-900 mb-6 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-[#6FB63A] rounded-full"></span>
-                    Performance Summary
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    {/* Reading */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-emerald-700">Reading</span>
-                            <span className="text-emerald-900">{sectionStats.reading.averageScore > 0 ? sectionStats.reading.averageScore.toFixed(1) : '-'}</span>
-                        </div>
-                        <div className="w-full bg-emerald-50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                                className="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(16,185,129,0.3)]"
-                                style={{ width: `${(sectionStats.reading.averageScore / 9) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-
-                    {/* Listening */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-purple-700">Listening</span>
-                            <span className="text-purple-900">{sectionStats.listening.averageScore > 0 ? sectionStats.listening.averageScore.toFixed(1) : '-'}</span>
-                        </div>
-                        <div className="w-full bg-purple-50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                                className="bg-purple-500 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(147,51,234,0.3)]"
-                                style={{ width: `${(sectionStats.listening.averageScore / 9) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-
-                    {/* Writing */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-orange-700">Writing</span>
-                            <span className="text-orange-900">{sectionStats.writing.averageScore > 0 ? sectionStats.writing.averageScore.toFixed(1) : '-'}</span>
-                        </div>
-                        <div className="w-full bg-orange-50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                                className="bg-orange-500 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(249,115,22,0.3)]"
-                                style={{ width: `${(sectionStats.writing.averageScore / 9) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-
-                    {/* Speaking */}
-                    <div className="space-y-2">
-                        <div className="flex justify-between text-xs font-semibold">
-                            <span className="text-blue-700">Speaking</span>
-                            <span className="text-blue-900">{sectionStats.speaking.averageScore > 0 ? sectionStats.speaking.averageScore.toFixed(1) : '-'}</span>
-                        </div>
-                        <div className="w-full bg-blue-50 rounded-full h-2.5 overflow-hidden">
-                            <div
-                                className="bg-blue-500 h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(59,130,246,0.3)]"
-                                style={{ width: `${(sectionStats.speaking.averageScore / 9) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
