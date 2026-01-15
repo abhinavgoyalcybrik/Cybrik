@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -144,13 +144,15 @@ function getScoreTrend(current: number, previous: number | null): 'up' | 'down' 
     return 'same';
 }
 
-export default function ReportsPage() {
+function ReportsContent() {
     const router = useRouter();
+    const searchParams = useSearchParams(); // Add this
     const { user, isLoading: authLoading } = useAuth();
     const [reports, setReports] = useState<TestReport[]>([]);
     const [filteredReports, setFilteredReports] = useState<TestReport[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedType, setSelectedType] = useState<string>('all');
+    // Initialize from URL param
+    const [selectedType, setSelectedType] = useState<string>(searchParams.get('type') || 'all');
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState<'date' | 'score'>('date');
 
@@ -554,5 +556,17 @@ export default function ReportsPage() {
                 </div>
             )}
         </AdminLayout>
+    );
+}
+
+export default function ReportsPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#6FB63A]"></div>
+            </div>
+        }>
+            <ReportsContent />
+        </Suspense>
     );
 }

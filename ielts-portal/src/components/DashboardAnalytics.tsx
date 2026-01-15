@@ -491,7 +491,7 @@ export default function DashboardAnalytics() {
                     color="text-emerald-600"
                     bgColor="bg-emerald-50"
                     icon={<BookOpen className="w-6 h-6 text-emerald-600" />}
-                    href="/tests/reading"
+                    href="/reports?type=reading"
                     testsCompleted={sectionStats.reading.testsCompleted}
                     totalTests={sectionStats.reading.totalTests}
                     loading={loading}
@@ -505,7 +505,7 @@ export default function DashboardAnalytics() {
                     color="text-purple-600"
                     bgColor="bg-purple-50"
                     icon={<Headphones className="w-6 h-6 text-purple-600" />}
-                    href="/tests/listening"
+                    href="/reports?type=listening"
                     testsCompleted={sectionStats.listening.testsCompleted}
                     totalTests={sectionStats.listening.totalTests}
                     loading={loading}
@@ -519,7 +519,7 @@ export default function DashboardAnalytics() {
                     color="text-orange-600"
                     bgColor="bg-orange-50"
                     icon={<PenTool className="w-6 h-6 text-orange-600" />}
-                    href="/tests/writing"
+                    href="/reports?type=writing"
                     testsCompleted={sectionStats.writing.testsCompleted}
                     totalTests={sectionStats.writing.totalTests}
                     loading={loading}
@@ -533,7 +533,7 @@ export default function DashboardAnalytics() {
                     color="text-blue-600"
                     bgColor="bg-blue-50"
                     icon={<Mic className="w-6 h-6 text-blue-600" />}
-                    href="/tests/speaking"
+                    href="/reports?type=speaking"
                     testsCompleted={sectionStats.speaking.testsCompleted}
                     totalTests={sectionStats.speaking.totalTests}
                     loading={loading}
