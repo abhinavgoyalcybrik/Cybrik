@@ -207,9 +207,13 @@ export default function SpeakingTestPage({ params }: PageProps) {
             interval = setInterval(() => setPrepTime((t) => t - 1), 1000);
         } else if (prepTime === 0 && isPreparing) {
             setIsPreparing(false);
-            setIsSpeakingPart2(true);
-            speakText("Your preparation time is over. Please begin speaking now.").then(() => {
-                startListening();
+            speakText("Your preparation time is over. Please begin speaking now.").then(async () => {
+                // 5 second gap after TTS finishes before starting the 2-minute timer
+                await new Promise(r => setTimeout(r, 5000));
+                if (isMountedRef.current) {
+                    setIsSpeakingPart2(true);
+                    startListening();
+                }
             });
         }
         return () => clearInterval(interval);
@@ -688,7 +692,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
                         try { await saveSpeakingResults(testId, result, sessionIdRef.current); } catch (e) { }
 
                         // Reliability Save for Reports
-                        const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
+                        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                        const saveRes = await fetch(`${API_BASE}/api/ielts/sessions/save_module_result/`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             credentials: 'include',
