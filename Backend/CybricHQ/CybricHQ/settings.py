@@ -26,6 +26,9 @@ DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
 REPLIT_DOMAIN = os.getenv("REPLIT_DEV_DOMAIN", "")
 RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
 
+# Frontend URL for generating links (upload links, etc)
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://crm.cybriksolutions.com")
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
