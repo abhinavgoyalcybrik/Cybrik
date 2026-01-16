@@ -128,11 +128,18 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
         from .smartflo_api import initiate_smartflo_call
         
         # Build custom params for SmartFlow (passed to WebSocket consumer)
+        # is_followup is True if this call is from a scheduled task (has task_id, reason, or followUpReason)
+        is_followup_call = bool(extra_context and (
+            extra_context.get('task_id') or  # Any task-based call is a follow-up
+            extra_context.get('followUpReason') or
+            extra_context.get('reason')
+        ))
+        
         custom_params = {
             'lead_id': str(entity.id),
             'entity_type': entity_type,
             'call_record_id': str(call_record.id),
-            'is_followup': 'True' if extra_context and (extra_context.get('followUpReason') or extra_context.get('reason')) else 'False',
+            'is_followup': 'True' if is_followup_call else 'False',
             **dynamic_vars  # Include all the ElevenLabs dynamic variables
         }
         
