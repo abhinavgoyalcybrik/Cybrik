@@ -548,7 +548,9 @@ class FollowUpSerializer(serializers.ModelSerializer):
 
 class ScheduleAICallSerializer(serializers.Serializer):
     """Serializer for scheduling AI calls."""
-    applicant_id = serializers.IntegerField(required=True, help_text="ID of the applicant to call")
+    applicant_id = serializers.IntegerField(required=False, help_text="ID of the applicant to call")
+    lead_id = serializers.IntegerField(required=False, help_text="ID of the CRM lead to call")
+    crm_lead_id = serializers.IntegerField(required=False, help_text="Alias for lead_id")
     scheduled_time = serializers.DateTimeField(required=True, help_text="When to make the call (ISO format)")
     notes = serializers.CharField(required=False, allow_blank=True, help_text="Notes/context for the AI")
     call_context = serializers.DictField(required=False, help_text="Additional context to pass to AI agent")
