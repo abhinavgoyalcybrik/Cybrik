@@ -797,14 +797,31 @@ export default function LeadDetailPage() {
                 <p className="text-sm text-[var(--cy-text-muted)] italic">No calls recorded for this lead.</p>
               ) : (
                 calls.map((call) => {
-                  const transcript = transcripts.find(t => t.call === call.id);
+                  // Use transcripts nested in the call object (from CallRecordSerializer)
+                  // This avoids call ID mismatch issues from separate transcript fetching
+                  const callTranscripts = call.transcripts || [];
+                  const firstTranscript = callTranscripts.length > 0 ? callTranscripts[0] : null;
                   const hasRecording = !!call.recording_url;
-                  const hasTranscript = !!transcript?.transcript_text;
+                  const hasTranscript = callTranscripts.some((t: any) => t.transcript_text);
                   const wasAnswered = hasRecording || hasTranscript || (call.duration_seconds && call.duration_seconds > 0);
                   const isFetching = fetchingCallId === call.id;
 
+                  const isOngoing = ['initiated', 'ringing', 'in_progress', 'scheduled'].includes(call.status);
+                  const isAnswered = wasAnswered || call.status === 'completed';
+
+                  let badgeClass = 'badge-error text-white';
+                  let badgeText = 'No Answer';
+
+                  if (isOngoing) {
+                    badgeClass = 'badge-info text-white animate-pulse';
+                    badgeText = 'Ongoing';
+                  } else if (isAnswered) {
+                    badgeClass = 'badge-success text-white';
+                    badgeText = 'Answered';
+                  }
+
                   return (
-                    <div key={call.id} className={`p-4 rounded-xl border-2 transition-all hover:shadow-md ${wasAnswered ? 'bg-emerald-50/50 border-emerald-200' : 'bg-red-50/50 border-red-200'}`}>
+                    <div key={call.id} className={`p-4 rounded-xl border-2 transition-all hover:shadow-md ${isAnswered ? 'bg-emerald-50/50 border-emerald-200' : isOngoing ? 'bg-blue-50/50 border-blue-200' : 'bg-red-50/50 border-red-200'}`}>
                       <div className="flex justify-between items-start mb-3">
                         <Link href={`/calls/${call.id}`} className="group cursor-pointer flex-1">
                           <div className="text-xs font-semibold uppercase text-[var(--cy-text-muted)] tracking-wide">
@@ -820,13 +837,13 @@ export default function LeadDetailPage() {
                           </div>
                         </Link>
                         <div className="flex gap-2 items-center">
-                          {!wasAnswered && (
+                          {!isAnswered && !isOngoing && (
                             <button onClick={(e) => { e.stopPropagation(); handleFetchData(call.id); }} disabled={isFetching} className="btn btn-xs btn-ghost text-[var(--cy-primary)]">
                               {isFetching ? <span className="loading loading-spinner loading-xs"></span> : "Fetch Data"}
                             </button>
                           )}
-                          <span className={`badge ${wasAnswered ? 'badge-success text-white' : 'badge-error text-white'}`}>
-                            {wasAnswered ? 'Answered' : 'No Answer'}
+                          <span className={`badge ${badgeClass}`}>
+                            {badgeText}
                           </span>
                         </div>
                       </div>
@@ -839,7 +856,14 @@ export default function LeadDetailPage() {
                       {hasTranscript && (
                         <div className="mt-3 p-3 bg-white/80 rounded-lg border border-emerald-200">
                           <label className="text-xs font-bold uppercase text-emerald-700 tracking-wider mb-2 block">Transcript Preview</label>
-                          <div className="text-sm text-[var(--cy-text-secondary)] leading-relaxed max-h-24 overflow-hidden">{transcript.transcript_text}</div>
+                          <div className="text-sm text-[var(--cy-text-secondary)] leading-relaxed max-h-24 overflow-hidden">
+                            {callTranscripts.slice(0, 3).map((t: any, i: number) => (
+                              <p key={i} className="mb-1">
+                                <span className="font-medium">{t.metadata?.speaker === 'agent' ? 'AI: ' : 'User: '}</span>
+                                {t.transcript_text?.substring(0, 100)}{t.transcript_text?.length > 100 ? '...' : ''}
+                              </p>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
