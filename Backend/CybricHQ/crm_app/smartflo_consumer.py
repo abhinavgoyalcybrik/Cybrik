@@ -478,6 +478,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         from crm_app.models import CallRecord, FollowUp
         from django.utils import timezone
         from datetime import timedelta
+        # Import task for fetching data
+        from crm_app.tasks import fetch_and_store_conversation_task
         
         try:
             call = CallRecord.objects.filter(id=call_record_id).first()
@@ -506,6 +508,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 
             call.save()
             logger.info(f"Updated CallRecord {call.id} status to {status}")
+
+            # NEW: Trigger data fetch if call was successful/connected and we have conversation_id
+            if conversation_id and status == 'completed':
+                 logger.info(f"Triggering background fetch for conversation {conversation_id}")
+                 fetch_and_store_conversation_task.delay(call.id, conversation_id)
             
             # Auto-reschedule logic for unsuccessful calls
             if status in ['no-answer', 'busy', 'failed']:
@@ -534,6 +541,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
 
         except Exception as e:
             logger.error(f"Error in process_call_completion: {e}")
+
 
     async def handle_stop(self, message):
         """Handle call end - update CallRecord with final status"""
