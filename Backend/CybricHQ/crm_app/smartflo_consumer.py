@@ -190,6 +190,12 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Flag to track when ElevenLabs is ready to receive audio
         self.elevenlabs_ready = False
         
+        # Output Audio Buffer (ElevenLabs -> Smartflo)
+        # Smartflo requires audio payloads to be 160 bytes or multiples (160, 320, 480, 800, etc.)
+        # Using 800 bytes (100ms) for smooth playback
+        self.output_audio_buffer = bytearray()
+        self.OUTPUT_CHUNK_SIZE = 800  # 100ms of 8kHz mulaw = 800 bytes
+        self.media_chunk_number = 0  # Required 'chunk' field for Smartflo media messages
 
         # Input Jitter Buffer (User -> ElevenLabs)
         # Buffer incoming audio to send larger chunks (smooths out jitter)
@@ -486,6 +492,12 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         reason = stop_data.get('reason', 'Unknown')
         logger.info(f"Call ended: {reason}")
         
+        # First flush any remaining audio in the output buffer
+        try:
+            await self.flush_audio_buffer()
+        except Exception as e:
+            logger.error(f"Error flushing audio buffer: {e}")
+        
         # Update CallRecord with completed status
         try:
             call_record_id = self.lead_context.get('call_record_id')
@@ -737,18 +749,72 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             logger.error(f"[ELEVENLABS] Agent listening error: {e}")
             
     async def send_audio_to_smartflo(self, audio_data: bytes):
-        """Send raw mulaw bytes directly to Smartflo as one chunk"""
+        """Buffer and send audio to Smartflo in proper 160-byte aligned chunks.
+        
+        Per Smartflo docs: 'the payload of media received from the vendor should 
+        at least be of 160 bytes or a multiple of 160 bytes. In case the payload 
+        is not a multiple of 160 bytes, audio gaps might occur.'
+        
+        We buffer to 800 bytes (100ms) for smooth playback.
+        """
         if not audio_data:
             return
+        
+        # Add to output buffer
+        self.output_audio_buffer.extend(audio_data)
+        
+        # Send when we have enough data (800 bytes = 100ms)
+        while len(self.output_audio_buffer) >= self.OUTPUT_CHUNK_SIZE:
+            chunk = bytes(self.output_audio_buffer[:self.OUTPUT_CHUNK_SIZE])
+            self.output_audio_buffer = self.output_audio_buffer[self.OUTPUT_CHUNK_SIZE:]
             
-        message = {
-            "event": "media",
-            "streamSid": self.stream_sid,
-            "media": {
-                "payload": base64.b64encode(audio_data).decode('utf-8')
+            self.media_chunk_number += 1
+            
+            # Smartflo requires 'chunk' field in media messages
+            message = {
+                "event": "media",
+                "streamSid": self.stream_sid,
+                "media": {
+                    "payload": base64.b64encode(chunk).decode('utf-8'),
+                    "chunk": self.media_chunk_number  # Required by Smartflo!
+                }
             }
-        }
-        await self.send(text_data=json.dumps(message))
+            await self.send(text_data=json.dumps(message))
+            
+            if self.media_chunk_number <= 5:
+                logger.info(f"[SMARTFLO] Sent media chunk #{self.media_chunk_number}: {len(chunk)} bytes")
+            elif self.media_chunk_number % 50 == 0:
+                logger.info(f"[SMARTFLO] Sent {self.media_chunk_number} media chunks")
+    
+    async def flush_audio_buffer(self):
+        """Flush any remaining audio in output buffer (call on disconnect).
+        
+        Pads to 160-byte alignment if needed to avoid audio gaps.
+        """
+        if not self.output_audio_buffer:
+            return
+            
+        remaining = bytes(self.output_audio_buffer)
+        self.output_audio_buffer.clear()
+        
+        # Pad to 160-byte alignment if needed
+        if len(remaining) % 160 != 0:
+            padding_needed = 160 - (len(remaining) % 160)
+            # Pad with silence (0x7F in mulaw = near-zero amplitude)
+            remaining = remaining + bytes([0x7F] * padding_needed)
+        
+        if remaining:
+            self.media_chunk_number += 1
+            message = {
+                "event": "media",
+                "streamSid": self.stream_sid,
+                "media": {
+                    "payload": base64.b64encode(remaining).decode('utf-8'),
+                    "chunk": self.media_chunk_number
+                }
+            }
+            await self.send(text_data=json.dumps(message))
+            logger.info(f"[SMARTFLO] Flushed final audio chunk #{self.media_chunk_number}: {len(remaining)} bytes")
         
     async def send_mark(self, name: str):
         """Send mark event to Smartflo"""
