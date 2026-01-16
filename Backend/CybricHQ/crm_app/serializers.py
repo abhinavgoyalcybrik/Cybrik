@@ -548,12 +548,22 @@ class FollowUpSerializer(serializers.ModelSerializer):
 
 class ScheduleAICallSerializer(serializers.Serializer):
     """Serializer for scheduling AI calls."""
-    applicant_id = serializers.IntegerField(required=False, help_text="ID of the applicant to call")
-    lead_id = serializers.IntegerField(required=False, help_text="ID of the CRM lead to call")
+    # lead_id is the primary identifier, but we also support applicant_id for backwards compatibility
+    lead_id = serializers.IntegerField(required=False, help_text="ID of the CRM lead to call (primary)")
     crm_lead_id = serializers.IntegerField(required=False, help_text="Alias for lead_id")
+    applicant_id = serializers.IntegerField(required=False, help_text="Deprecated: Use lead_id instead")
     scheduled_time = serializers.DateTimeField(required=True, help_text="When to make the call (ISO format)")
     notes = serializers.CharField(required=False, allow_blank=True, help_text="Notes/context for the AI")
     call_context = serializers.DictField(required=False, help_text="Additional context to pass to AI agent")
+
+    def validate(self, attrs):
+        """Ensure at least one of lead_id, crm_lead_id, or applicant_id is provided."""
+        lead_id = attrs.get('lead_id') or attrs.get('crm_lead_id') or attrs.get('applicant_id')
+        if not lead_id:
+            raise serializers.ValidationError({"lead_id": "lead_id (or crm_lead_id/applicant_id) is required"})
+        # Normalize to lead_id for downstream use
+        attrs['lead_id'] = lead_id
+        return attrs
 
 
 
