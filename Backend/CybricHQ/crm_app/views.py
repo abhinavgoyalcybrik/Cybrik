@@ -427,14 +427,18 @@ class DocumentViewSet(viewsets.ModelViewSet):
             
         instance = serializer.save()
         
-        # TODO: Trigger real AI document extraction via Celery task
-        # For now, mark as pending validation
+        instance = serializer.save()
+        
+        # Trigger real AI document extraction via Celery task
         try:
+            from .tasks import verify_document_task
+            verify_document_task.delay(instance.id)
+            
             instance.validation_status = "pending"
             instance.save(update_fields=['validation_status'])
-            logger.info(f"Document {instance.id} uploaded, pending AI extraction")
+            logger.info(f"Document {instance.id} uploaded, triggered verify_document_task")
         except Exception as e:
-            logger.error(f"Failed to update document status: {e}")
+            logger.error(f"Failed to trigger document verification: {e}")
 
 
 class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):

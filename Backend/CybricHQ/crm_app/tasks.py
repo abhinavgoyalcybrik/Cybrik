@@ -1130,3 +1130,79 @@ def sync_all_elevenlabs_conversations(hours_back=24):
     except Exception as e:
         logger.exception(f"Error syncing ElevenLabs conversations: {e}")
         return {"ok": False, "error": str(e)}
+
+
+@shared_task
+def verify_document_task(document_id):
+    """
+    Background task to verify uploaded documents using AI
+    """
+    try:
+        from .models import Document
+        from .services.ai_analyzer import DocumentVerifier
+        import os
+        
+        try:
+            document = Document.objects.get(id=document_id)
+        except Document.DoesNotExist:
+            logger.error(f"Document {document_id} not found for verification")
+            return
+            
+        if not document.file:
+            logger.error(f"Document {document_id} has no file")
+            return
+            
+        # Check file existence
+        if not os.path.exists(document.file.path):
+            logger.error(f"File not found at {document.file.path}")
+            return
+            
+        # Prepare Applicant Data for matching
+        applicant = document.applicant
+        applicant_data = {}
+        if applicant:
+            applicant_data = {
+                "first_name": applicant.first_name,
+                "last_name": applicant.last_name,
+                "dob": str(applicant.dob) if applicant.dob else None,
+                "passport_number": applicant.passport_number,
+                "email": applicant.email,
+                "phone": applicant.phone
+            }
+        elif document.lead:
+             # Fallback to lead data if no applicant yet
+             lead = document.lead
+             applicant_data = {
+                "name": lead.name,
+                "email": lead.email,
+                "phone": lead.phone
+             }
+            
+        logger.info(f"Starting AI verification for Document {document_id} ({document.document_type})")
+        
+        verifier = DocumentVerifier()
+        result = verifier.verify_and_match(document.file.path, applicant_data)
+        
+        # Update Document
+        if "error" not in result:
+            document.extraction_data = result
+            
+            # Map AI status to DB status
+            ai_status = result.get("verification_status") # valid, suspicious, invalid
+            if ai_status == "valid":
+                document.validation_status = "valid"
+                document.status = "verified"
+            elif ai_status == "suspicious":
+                document.validation_status = "unclear"
+                document.status = "pending" # Keep pending for manual review
+            elif ai_status == "invalid":
+                document.validation_status = "invalid"
+                document.status = "rejected"
+                
+            document.save()
+            logger.info(f"Document {document_id} verification complete: {document.validation_status}")
+        else:
+            logger.error(f"AI Verification failed: {result.get('error')}")
+            
+    except Exception as e:
+        logger.error(f"Error in verify_document_task: {str(e)}")
