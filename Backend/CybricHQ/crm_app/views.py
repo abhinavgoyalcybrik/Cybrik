@@ -772,6 +772,23 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             analysis = analyzer.analyze_transcript(full_transcript, metadata={"lead_id": lead.id, "name": lead.first_name or lead.name})
             logger.debug(f"AI Analysis Result: {analysis}")
             
+            # ====== AI AUTO-STATUS UPDATE ======
+            # Update lead status based on AI analysis
+            interest_level = analysis.get('interest_level', 'medium')
+            old_status = lead.status
+            
+            if interest_level == 'high':
+                lead.status = 'qualified'
+            elif interest_level == 'low' or analysis.get('sentiment') == 'negative':
+                lead.status = 'lost'
+            else:
+                # At least mark as contacted since we have transcripts
+                lead.status = 'contacted'
+            
+            if old_status != lead.status:
+                lead.save(update_fields=['status'])
+                logger.info(f"AI auto-updated lead {lead.id} status: {old_status} -> {lead.status}")
+            
             created_tasks = []
             if analysis.get('follow_up', {}).get('needed'):
                 priority = 'HIGH' if analysis.get('interest_level') == 'high' else 'MEDIUM'
@@ -779,6 +796,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 # Create FollowUp linked to Lead
                 task = FollowUp.objects.create(
                     lead=None,  # FollowUp.lead points to Applicant, not Lead - we need to handle this
+                    crm_lead=lead,  # Link via crm_lead field instead
                     channel='phone' if analysis.get('interest_level') == 'high' else 'email',
                     notes=f"AI Recommendation: {analysis.get('follow_up', {}).get('reason', 'Follow-up needed')}",
                     due_at=calculate_follow_up_time(analysis.get('follow_up', {}).get('timing', '2 days')),
@@ -789,7 +807,8 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             return Response({
                 "message": "Analysis complete", 
                 "tasks_created": len(created_tasks),
-                "analysis": analysis
+                "analysis": analysis,
+                "status_updated": lead.status
             })
         except Exception as e:
             logger.exception(f"Error generating follow-ups: {e}")

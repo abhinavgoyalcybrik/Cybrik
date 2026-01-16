@@ -87,6 +87,20 @@ export default function LeadsPage() {
     }
   }
 
+  async function handleStatusChange(id: number | string, newStatus: string) {
+    try {
+      await apiFetch(`/api/leads/${id}/`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus }),
+      });
+      setLeads((prev) =>
+        prev.map((l) => (l.id === id ? { ...l, status: newStatus } : l))
+      );
+    } catch (err: any) {
+      alert("Failed to update status: " + err.message);
+    }
+  }
+
   const getStatusBadgeClass = (status: string) => {
     const s = (status || "new").toLowerCase();
     switch (s) {
@@ -161,14 +175,20 @@ export default function LeadsPage() {
       accessorKey: "id" as keyof Lead,
       className: "text-right",
       cell: (lead: Lead) => (
-        <div className="flex items-center justify-end gap-3">
-          <Link
-            href={`/applications/new?leadId=${lead.id}`}
-            className="text-xs font-medium text-[var(--cy-navy)] hover:text-[var(--cy-lime)] transition-colors"
-            title="Convert to Application"
+        <div className="flex items-center justify-end gap-2">
+          <select
+            value={lead.status || "new"}
+            onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+            className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[var(--cy-lime)] focus:border-transparent cursor-pointer"
+            title="Change Status"
           >
-            Convert
-          </Link>
+            <option value="new">New</option>
+            <option value="contacted">Contacted</option>
+            <option value="qualified">Qualified</option>
+            <option value="converted">Converted</option>
+            <option value="junk">Junk</option>
+            <option value="lost">Lost</option>
+          </select>
           <Link
             href={`/leads/${lead.id}`}
             className="text-xs font-medium text-[var(--cy-lime-hover)] hover:text-[var(--cy-lime)] transition-colors"

@@ -540,6 +540,15 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             call.save()
             logger.info(f"Updated CallRecord {call.id} status to {status}")
 
+            # ====== AUTO-UPDATE LEAD STATUS ======
+            # If call was successful, update lead status to 'contacted'
+            if status == 'completed':
+                from crm_app.models import Lead
+                if call.lead and call.lead.status in ['new', 'received', None]:
+                    call.lead.status = 'contacted'
+                    call.lead.save(update_fields=['status'])
+                    logger.info(f"Auto-updated Lead {call.lead.id} status to 'contacted' after successful call")
+
             # NEW: Trigger data fetch if call was successful/connected and we have conversation_id
             if conversation_id and status == 'completed':
                  logger.info(f"Triggering background fetch for conversation {conversation_id}")
