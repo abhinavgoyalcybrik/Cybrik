@@ -223,6 +223,18 @@ const nextConfig = {
           source: '/api/notifications/mark_all_read/',
           destination: 'http://127.0.0.1:8000/api/notifications/mark_all_read/',
         },
+        {
+          source: '/api/public/upload/',
+          destination: 'http://127.0.0.1:8000/api/public/upload/',
+        },
+        {
+          source: '/api/public/upload',
+          destination: 'http://127.0.0.1:8000/api/public/upload/',
+        },
+        {
+          source: '/api/generate-upload-link/',
+          destination: 'http://127.0.0.1:8000/api/generate-upload-link/',
+        },
       ],
       afterFiles: [],
       fallback: [],
