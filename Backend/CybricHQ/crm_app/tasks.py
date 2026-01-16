@@ -794,6 +794,35 @@ def fetch_and_store_conversation_task(call_record_id, conversation_id):
             # Trigger AI analysis if status is completed/done
             if data.get("status") in ["done", "completed"]:
                 analyze_call_transcript.delay(call_record_id)
+                
+            # --- Fetch Audio Recording ---
+            try:
+                audio_url = f"https://api.elevenlabs.io/v1/convai/conversations/{conversation_id}/audio"
+                audio_resp = requests.get(audio_url, headers={"xi-api-key": xi_key}, timeout=60)
+                
+                if audio_resp.status_code == 200:
+                    from django.core.files.base import ContentFile
+                    from django.core.files.storage import default_storage
+                    
+                    file_name = f"conversations/{conversation_id}.mp3"
+                    # Check if file already exists to avoid overwriting or duplication logic if needed
+                    if not default_storage.exists(file_name):
+                        file_path = default_storage.save(file_name, ContentFile(audio_resp.content))
+                        # Construct URL manually or use storage.url if available
+                        # explicit /media/ prefix as per settings.py MEDIA_URL
+                        call_record.recording_url = f"/media/{file_name}"
+                        call_record.save()
+                        logger.info(f"Saved audio recording to {call_record.recording_url}")
+                    else:
+                        # If existing, just ensure URL is set
+                        call_record.recording_url = f"/media/{file_name}"
+                        call_record.save()
+                        logger.info(f"Audio recording already exists at {file_name}")
+                else:
+                    logger.warning(f"Failed to fetch audio for {conversation_id}: {audio_resp.status_code}")
+            except Exception as e:
+                logger.error(f"Error fetching audio recording: {e}")
+
         else:
             logger.error(f"Failed to fetch conversation {conversation_id}: {resp.status_code}")
             
