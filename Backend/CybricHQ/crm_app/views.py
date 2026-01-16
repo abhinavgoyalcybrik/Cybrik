@@ -1210,27 +1210,36 @@ class ScheduleAICallView(APIView):
     def post(self, request):
         from .serializers import ScheduleAICallSerializer
         
-        serializer = ScheduleAICallSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # We handle data manually since Serializer might still expect applicant_id
+        # ideally we should update the serializer too, but for now we'll handle it here
+        scheduled_time = request.data.get('scheduled_time')
+        notes = request.data.get('notes', '')
+        call_context = request.data.get('call_context', {})
         
-        applicant_id = serializer.validated_data['applicant_id']
-        scheduled_time = serializer.validated_data['scheduled_time']
-        notes = serializer.validated_data.get('notes', '')
-        call_context = serializer.validated_data.get('call_context', {})
+        # We support lead_id or crm_lead_id (or even applicant_id if the frontend was sending that for leads)
+        # But we treat it as a Lead ID.
+        lead_id = request.data.get('lead_id') or request.data.get('crm_lead_id') or request.data.get('applicant_id')
         
-        # Validate applicant exists
+        if not lead_id:
+            return Response({"error": "lead_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if not scheduled_time:
+            return Response({"error": "scheduled_time is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate CRM lead exists
         try:
-            applicant = Applicant.objects.get(id=applicant_id)
-        except Applicant.DoesNotExist:
-            return Response({"error": "Applicant not found"}, status=status.HTTP_404_NOT_FOUND)
+            crm_lead = Lead.objects.get(id=lead_id)
+            phone = crm_lead.phone
+            name = crm_lead.first_name or crm_lead.name or f"Lead #{crm_lead.id}"
+        except (Lead.DoesNotExist, ValueError):
+            return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        if not applicant.phone:
-            return Response({"error": "Applicant has no phone number"}, status=status.HTTP_400_BAD_REQUEST)
+        if not phone:
+            return Response({"error": "Lead has no phone number"}, status=status.HTTP_400_BAD_REQUEST)
         
         # Create the scheduled follow-up task
         task = FollowUp.objects.create(
-            lead=applicant,
+            crm_lead=crm_lead,
             channel="ai_call",
             status="scheduled",
             due_at=scheduled_time,
@@ -1245,11 +1254,11 @@ class ScheduleAICallView(APIView):
         
         return Response({
             "ok": True,
-            "message": f"AI call scheduled for {scheduled_time.isoformat()}",
+            "message": f"AI call scheduled for {scheduled_time}",
             "task_id": task.id,
-            "applicant_name": f"{applicant.first_name} {applicant.last_name}",
-            "phone": applicant.phone,
-            "scheduled_time": scheduled_time.isoformat(),
+            "applicant_name": name,
+            "phone": phone,
+            "scheduled_time": scheduled_time,
             "status": "scheduled",
             "call_record": None,
             "call_record_id": None

@@ -32,7 +32,7 @@ interface Task {
     call_record_id?: number | null;
 }
 
-interface Applicant {
+interface LeadOption {
     id: number;
     first_name: string;
     last_name: string;
@@ -44,8 +44,8 @@ export default function TasksPage() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [applicants, setApplicants] = useState<Applicant[]>([]);
-    const [loadingApplicants, setLoadingApplicants] = useState(false);
+    const [leadsOptions, setLeadsOptions] = useState<LeadOption[]>([]);
+    const [loadingLeads, setLoadingLeads] = useState(false);
 
     // New Task Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,7 +53,7 @@ export default function TasksPage() {
         due_at: '',
         channel: 'ai_call',
         notes: '',
-        applicant_id: null as number | null,
+        lead_id: null as number | null,
     });
     const [processingDue, setProcessingDue] = useState(false);
     const [processResult, setProcessResult] = useState<string | null>(null);
@@ -66,7 +66,7 @@ export default function TasksPage() {
         due_at: '',
         channel: '',
         notes: '',
-        applicant_id: null as number | null,
+        lead_id: null as number | null,
         trigger_now: false,
     });
     const [updating, setUpdating] = useState(false);
@@ -89,18 +89,18 @@ export default function TasksPage() {
         }
     };
 
-    const fetchApplicants = async () => {
-        if (applicants.length > 0) return;
+    const fetchLeads = async () => {
+        if (leadsOptions.length > 0) return;
         try {
-            setLoadingApplicants(true);
-            // Fetch leads with phone numbers (applicants have been merged into leads)
+            setLoadingLeads(true);
+            // Fetch leads with phone numbers
             const data = await apiFetch('/api/leads/?limit=200');
             const leads = (data.results || data || []).filter((l: any) => l.phone);
-            setApplicants(leads);
+            setLeadsOptions(leads);
         } catch (err) {
             console.error('Failed to load leads', err);
         } finally {
-            setLoadingApplicants(false);
+            setLoadingLeads(false);
         }
     };
 
@@ -146,8 +146,8 @@ export default function TasksPage() {
             let response;
 
             if (newTask.channel === 'ai_call') {
-                if (!newTask.applicant_id) {
-                    alert('Please select an applicant for AI call scheduling');
+                if (!newTask.lead_id) {
+                    alert('Please select a lead for AI call scheduling');
                     setCreating(false);
                     return;
                 }
@@ -159,7 +159,7 @@ export default function TasksPage() {
                 response = await apiFetch('/api/ai-calls/schedule/', {
                     method: 'POST',
                     body: JSON.stringify({
-                        applicant_id: newTask.applicant_id,
+                        lead_id: newTask.lead_id,
                         scheduled_time: new Date(newTask.due_at).toISOString(),
                         notes: newTask.notes,
                     })
@@ -192,7 +192,7 @@ export default function TasksPage() {
             }
 
             setIsModalOpen(false);
-            setNewTask({ due_at: '', channel: 'email', notes: '', applicant_id: null });
+            setNewTask({ due_at: '', channel: 'email', notes: '', lead_id: null });
         } catch (err: any) {
             alert(err.message || "Failed to create task");
         } finally {
@@ -235,12 +235,12 @@ export default function TasksPage() {
             due_at: dueDate,
             channel: task.channel,
             notes: task.notes,
-            applicant_id: task.lead,
+            lead_id: task.lead || task.crm_lead || null,
             trigger_now: false,
         });
         setAiActions([]);
         if (task.channel === 'ai_call') {
-            fetchApplicants();
+            fetchLeads();
         }
         setIsEditModalOpen(true);
     };
@@ -259,7 +259,7 @@ export default function TasksPage() {
                     due_at: editForm.due_at ? new Date(editForm.due_at).toISOString() : null,
                     channel: editForm.channel,
                     notes: editForm.notes,
-                    applicant_id: editForm.applicant_id,
+                    lead_id: editForm.lead_id,
                     trigger_now: editForm.trigger_now,
                 })
             });
@@ -510,9 +510,9 @@ export default function TasksPage() {
                                             value={newTask.channel}
                                             onChange={e => {
                                                 const channel = e.target.value;
-                                                setNewTask({ ...newTask, channel, applicant_id: channel !== 'ai_call' ? null : newTask.applicant_id });
+                                                setNewTask({ ...newTask, channel, lead_id: channel !== 'ai_call' ? null : newTask.lead_id });
                                                 if (channel === 'ai_call') {
-                                                    fetchApplicants();
+                                                    fetchLeads();
                                                 }
                                             }}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
@@ -530,20 +530,20 @@ export default function TasksPage() {
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                                 Select Lead <span className="text-red-500">*</span>
                                             </label>
-                                            {loadingApplicants ? (
+                                            {loadingLeads ? (
                                                 <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
                                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--cy-navy)]"></div>
-                                                    Loading applicants...
+                                                    Loading leads...
                                                 </div>
                                             ) : (
                                                 <select
                                                     required
-                                                    value={newTask.applicant_id || ''}
-                                                    onChange={e => setNewTask({ ...newTask, applicant_id: Number(e.target.value) || null })}
+                                                    value={newTask.lead_id || ''}
+                                                    onChange={e => setNewTask({ ...newTask, lead_id: Number(e.target.value) || null })}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
                                                 >
                                                     <option value="">Select a lead...</option>
-                                                    {applicants.filter(a => a.phone).map(lead => (
+                                                    {leadsOptions.filter(a => a.phone).map(lead => (
                                                         <option key={lead.id} value={lead.id}>
                                                             {lead.first_name || lead.name || 'Lead'} {lead.last_name} ({lead.phone})
                                                         </option>
@@ -636,9 +636,9 @@ export default function TasksPage() {
                                             value={editForm.channel}
                                             onChange={e => {
                                                 const channel = e.target.value;
-                                                setEditForm({ ...editForm, channel, applicant_id: channel !== 'ai_call' ? null : editForm.applicant_id });
+                                                setEditForm({ ...editForm, channel, lead_id: channel !== 'ai_call' ? null : editForm.lead_id });
                                                 if (channel === 'ai_call') {
-                                                    fetchApplicants();
+                                                    fetchLeads();
                                                 }
                                             }}
                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
@@ -654,7 +654,7 @@ export default function TasksPage() {
                                     {editForm.channel === 'ai_call' && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Select Applicant / Lead
+                                                Select Lead
                                             </label>
                                             {/* If it's a CRM Lead, we currently just show it read-only or handle differently as we don't have a full lead dropdown yet */}
                                             {editingTask.crm_lead ? (
@@ -663,21 +663,21 @@ export default function TasksPage() {
                                                 </div>
                                             ) : (
                                                 <>
-                                                    {loadingApplicants ? (
+                                                    {loadingLeads ? (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
                                                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--cy-navy)]"></div>
-                                                            Loading applicants...
+                                                            Loading leads...
                                                         </div>
                                                     ) : (
                                                         <select
-                                                            value={editForm.applicant_id || ''}
-                                                            onChange={e => setEditForm({ ...editForm, applicant_id: Number(e.target.value) || null })}
+                                                            value={editForm.lead_id || ''}
+                                                            onChange={e => setEditForm({ ...editForm, lead_id: Number(e.target.value) || null })}
                                                             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
                                                         >
-                                                            <option value="">Select an applicant...</option>
-                                                            {applicants.filter(a => a.phone).map(applicant => (
-                                                                <option key={applicant.id} value={applicant.id}>
-                                                                    {applicant.first_name} {applicant.last_name} ({applicant.phone})
+                                                            <option value="">Select a lead...</option>
+                                                            {leadsOptions.filter(a => a.phone).map(lead => (
+                                                                <option key={lead.id} value={lead.id}>
+                                                                    {lead.first_name || lead.name || 'Lead'} {lead.last_name} ({lead.phone})
                                                                 </option>
                                                             ))}
                                                         </select>
