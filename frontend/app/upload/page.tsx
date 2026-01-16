@@ -28,7 +28,8 @@ function UploadContent() {
         }
 
         // Verify token and get lead name
-        fetch(`/api/public/upload/?token=${token}`)
+        // Encode token to safely include special characters
+        fetch(`/api/public/upload/?token=${encodeURIComponent(token)}`)
             .then(async (res) => {
                 if (!res.ok) {
                     const text = await res.text();
