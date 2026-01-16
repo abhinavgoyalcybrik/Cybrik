@@ -336,7 +336,7 @@ class ApplicantViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         
         # Gather all transcripts
         # Check calls linked directly to applicant OR linked to the original lead
-        from .models import CallRecord
+        from .models import CallRecord, FollowUp
         calls = CallRecord.objects.filter(
             Q(applicant=applicant) | 
             Q(lead__applicants=applicant) # If lead is linked to applicant
@@ -711,7 +711,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         lead = self.get_object()
         
         # Gather all transcripts from calls linked to this lead
-        from .models import CallRecord
+        from .models import CallRecord, FollowUp
         calls = CallRecord.objects.filter(lead=lead).order_by("-created_at")
         
         full_transcript = ""
@@ -729,7 +729,6 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         
         if not full_transcript:
             # If no transcript, assume call failed/unattended and schedule retry
-            from .models import FollowUp
             from django.utils import timezone
             from datetime import timedelta
             
