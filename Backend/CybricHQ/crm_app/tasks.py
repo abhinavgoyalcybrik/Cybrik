@@ -961,7 +961,7 @@ def sync_all_elevenlabs_conversations(hours_back=24):
     # Build request URL with filters
     url = "https://api.elevenlabs.io/v1/convai/conversations"
     params = {
-        "call_successful": "true",  # Only successful calls
+        "call_successful": "success",  # Only successful calls
     }
     if agent_id:
         params["agent_id"] = agent_id
