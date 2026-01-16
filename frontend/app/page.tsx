@@ -232,19 +232,20 @@ export default function LandingPage() {
                   </span>
                 </motion.button>
               </Link>
-              <motion.button
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-[#0B1F3A] border-2 border-[#E6ECF4] rounded-lg hover:border-[#6FB63A] transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Hear the AI in Action
-                </span>
-              </motion.button>
+              <Link href="https://crm.cybriksolutions.com/contact/">
+                <motion.button
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-sm font-semibold text-[#0B1F3A] border-2 border-[#E6ECF4] rounded-lg hover:border-[#6FB63A] transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Contact Sales
+                  </span>
+                </motion.button>
+              </Link>
             </motion.div>
 
             <motion.div
