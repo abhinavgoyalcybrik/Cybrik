@@ -777,11 +777,19 @@ class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         if lead_id:
             lead_id = lead_id.strip("/")
             from django.db.models import Q
-            qs = qs.filter(
-                Q(lead_id=lead_id) | 
-                Q(metadata__lead_id=str(lead_id)) |
-                Q(metadata__lead_id=int(lead_id))
-            )
+            try:
+                # Safely handle both integer ID and string ID searches
+                lead_id_int = int(lead_id)
+                qs = qs.filter(
+                    Q(lead_id=lead_id) | 
+                    Q(metadata__lead_id=str(lead_id)) |
+                    Q(metadata__lead_id=lead_id_int)
+                )
+            except (ValueError, TypeError):
+                # If cannot convert to int, search only string fields (e.g. external_id)
+                qs = qs.filter(
+                    Q(metadata__lead_id=str(lead_id))
+                )
             
         applicant_id = self.request.query_params.get("applicant_id")
         if applicant_id:
