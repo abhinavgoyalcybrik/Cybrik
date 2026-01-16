@@ -415,11 +415,13 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     pass
             # Also copy raw values
             lead_context[k] = v
-            
-        # 2. Fetch from DB using phone number (Most reliable)
-        # Smartflo sends 'to' as the customer number in outbound calls
-        # Note: In inbound calls 'from' is customer number. 
-        # But this is outbound logic mainly. 
+        
+        # CRITICAL: Preserve call_record_id before merging - it must not be overwritten!
+        preserved_call_record_id = lead_context.get('call_record_id')
+        preserved_lead_id = lead_context.get('lead_id')
+        preserved_entity_type = lead_context.get('entity_type')
+        
+        # 2. Fetch from DB using phone number (Most reliable for lead data)
         customer_number = self.caller_to
         
         # If it looks like a short code or agent number, try 'from' (in case of inbound)
@@ -430,17 +432,24 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         
         if db_context:
             logger.info("[SMARTFLO] Merging DB context over custom params")
-            # Update lead_context with DB data, but allow some overrides if needed
-            # Actually, DB data should generally win for core fields
             lead_context.update(db_context)
         else:
             logger.info("[SMARTFLO] Using fallback/defaults (No DB match)")
+        
+        # CRITICAL: Restore preserved values that must not be overwritten by DB lookup
+        if preserved_call_record_id:
+            lead_context['call_record_id'] = preserved_call_record_id
+        if preserved_lead_id:
+            lead_context['lead_id'] = preserved_lead_id
+        if preserved_entity_type:
+            lead_context['entity_type'] = preserved_entity_type
             
         self.lead_context = lead_context
         
         lead_name = lead_context.get('name', 'Unknown')
         logger.info(f"Call started: {self.caller_from} -> {self.caller_to}")
         logger.info(f"Final Lead Context: {self.lead_context}")
+        logger.info(f"[SMARTFLO] call_record_id preserved: {lead_context.get('call_record_id')}")
         
         # Connect to ElevenLabs Conversational AI Agent
         await self.connect_elevenlabs_agent()
