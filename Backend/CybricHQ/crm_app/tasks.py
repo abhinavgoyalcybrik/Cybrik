@@ -208,6 +208,23 @@ def check_and_initiate_followups():
         task.status = "in_progress"
         task.save(update_fields=['status'])
         
+        # Fetch previous call summary for context
+        previous_call_summary = "No previous calls"
+        try:
+            if is_applicant and task.lead:
+                last_call = CallRecord.objects.filter(applicant=task.lead).order_by('-created_at').first()
+            elif task.crm_lead:
+                last_call = CallRecord.objects.filter(lead=task.crm_lead).order_by('-created_at').first()
+            else:
+                last_call = None
+                
+            if last_call and last_call.transcript:
+                previous_call_summary = last_call.ai_analysis.get('summary', '') if last_call.ai_analysis else ''
+                if not previous_call_summary and last_call.transcript:
+                    previous_call_summary = last_call.transcript[:500] + "..." if len(last_call.transcript) > 500 else last_call.transcript
+        except Exception as e:
+            logger.warning(f"Could not fetch previous call summary: {e}")
+        
         context = {}
         if task.metadata and task.metadata.get('call_context'):
             context = task.metadata['call_context'].copy()
@@ -225,6 +242,10 @@ def check_and_initiate_followups():
             )
             context['task_id'] = str(task.id)
         
+        # Add follow-up specific context (required by follow-up agent)
+        context['followUpReason'] = task.notes or context.get('followUpReason', 'Scheduled follow-up call')
+        context['callObjective'] = context.get('callObjective', task.notes or 'Follow up with student regarding their inquiry')
+        context['previousCallSummary'] = previous_call_summary
         context['task_notes'] = task.notes or "Follow up call as scheduled."
         
         # Initiate Call
@@ -293,6 +314,24 @@ def trigger_scheduled_ai_call(followup_id):
         task.status = "in_progress"
         task.save(update_fields=['status'])
         
+        # Fetch previous call summary for context
+        previous_call_summary = "No previous calls"
+        try:
+            if is_applicant and task.lead:
+                last_call = CallRecord.objects.filter(applicant=task.lead).order_by('-created_at').first()
+            elif task.crm_lead:
+                last_call = CallRecord.objects.filter(lead=task.crm_lead).order_by('-created_at').first()
+            else:
+                last_call = None
+                
+            if last_call and last_call.transcript:
+                # Get a summary of the last call (first 500 chars of transcript or AI summary)
+                previous_call_summary = last_call.ai_analysis.get('summary', '') if last_call.ai_analysis else ''
+                if not previous_call_summary and last_call.transcript:
+                    previous_call_summary = last_call.transcript[:500] + "..." if len(last_call.transcript) > 500 else last_call.transcript
+        except Exception as e:
+            logger.warning(f"Could not fetch previous call summary: {e}")
+        
         context = {}
         if task.metadata and task.metadata.get('call_context'):
             context = task.metadata['call_context'].copy()
@@ -308,6 +347,10 @@ def trigger_scheduled_ai_call(followup_id):
             )
             context['task_id'] = str(task.id)
         
+        # Add follow-up specific context (required by follow-up agent)
+        context['followUpReason'] = task.notes or context.get('followUpReason', 'Scheduled follow-up call')
+        context['callObjective'] = context.get('callObjective', task.notes or 'Follow up with student regarding their inquiry')
+        context['previousCallSummary'] = previous_call_summary
         context['task_notes'] = task.notes or "Follow up call."
         
         res = schedule_elevenlabs_call(

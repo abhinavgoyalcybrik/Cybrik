@@ -758,12 +758,17 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 if k not in dynamic_vars and isinstance(v, (str, int, float, bool)):
                     dynamic_vars[k] = v
             
-            # Remove internal flags
-            dynamic_vars.pop('is_followup', None)
-            dynamic_vars.pop('call_record_id', None)
-            dynamic_vars.pop('lead_id', None)
-            dynamic_vars.pop('extra_context', None)
-            dynamic_vars.pop('user_id', None)
+            # Remove internal flags and raw custom_field duplicates
+            keys_to_remove = [
+                'is_followup', 'call_record_id', 'lead_id', 'extra_context', 'user_id',
+                'entity_type', 'caller_name',
+                # Remove raw custom_field_X entries (they're duplicates)
+                'custom_field_1', 'custom_field_2', 'custom_field_3', 'custom_field_4', 
+                'custom_field_5', 'custom_field_6', 'custom_field_7', 'custom_field_8',
+                'custom_field_9', 'custom_field_10',
+            ]
+            for key in keys_to_remove:
+                dynamic_vars.pop(key, None)
             
             # ====== DEBUG: Log all dynamic variables ======
             print(f"[DEBUG] ====== DYNAMIC VARIABLES ======")
