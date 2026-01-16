@@ -641,19 +641,13 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             
             # Send conversation initiation with dynamic variables and audio format configs
             # CRITICAL: We must specify BOTH input AND output formats!
-            # - user_input_audio_format: what WE send to ElevenLabs (from Smartflo)
-            # - conversation_config.agent.tts.output_format: what ElevenLabs sends to US
+            # - user_input_audio_format: what WE send to ElevenLabs (from Smartflo) 
+            # - audio_output_format: what ElevenLabs sends to US (must be ulaw_8000 for Smartflo!)
             init_message = {
                 "type": "conversation_initiation_client_data",
                 "dynamic_variables": dynamic_vars,
                 "user_input_audio_format": "ulaw_8000",
-                "conversation_config_override": {
-                    "agent": {
-                        "tts": {
-                            "output_format": "ulaw_8000"  # CRITICAL: Must match Smartflo expected format!
-                        }
-                    }
-                }
+                "audio_output_format": "ulaw_8000"  # Direct field, NOT nested!
             }
             
             print(f"[DEBUG] Sending init message: {json.dumps(init_message, indent=2)}")
