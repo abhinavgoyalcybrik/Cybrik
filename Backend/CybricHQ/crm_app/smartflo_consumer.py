@@ -388,6 +388,36 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         logger.warning("[SMARTFLO] No Lead found in DB for number")
         return None
 
+    @database_sync_to_async
+    def get_call_record_context(self, call_record_id):
+        """
+        Fetch additional context from CallRecord metadata.
+        This bypasses Smartflo's custom field limits by reading directly from DB.
+        """
+        if not call_record_id:
+            return {}
+            
+        from crm_app.models import CallRecord
+        try:
+            call = CallRecord.objects.filter(id=call_record_id).first()
+            if call and call.metadata:
+                extra = call.metadata.get('extra_context', {}) or {}
+                # Also check dynamic_variables_sent just in case
+                sent_vars = call.metadata.get('dynamic_variables_sent', {}) or {}
+                
+                # Merge: prefer extra_context, then sent_vars
+                merged = {**sent_vars, **extra}
+                
+                # Ensure is_followup is captured if present in extra_context
+                if 'followUpReason' in merged or 'reason' in merged:
+                    merged['is_followup'] = True
+                    
+                logger.info(f"[SMARTFLO] Loaded {len(merged)} variables from CallRecord {call.id}")
+                return merged
+        except Exception as e:
+            logger.error(f"[SMARTFLO] Error fetching CallRecord context: {e}")
+            return {}
+
     async def handle_start(self, message):
         """Handle stream start with metadata"""
         start_data = message.get('start', {})
@@ -436,6 +466,16 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         else:
             logger.info("[SMARTFLO] Using fallback/defaults (No DB match)")
         
+        # 3. Fetch comprehensive context from CallRecord (Most reliable for call-specific data)
+        # This fixes the missing variable issue for follow-up calls
+        if preserved_call_record_id:
+            call_record_context = await self.get_call_record_context(preserved_call_record_id)
+            if call_record_context:
+                logger.info("[SMARTFLO] Merging CallRecord context (Follow-up details)")
+                # Merge logic: CallRecord context wins over DB defaults but maybe not over explicit custom params?
+                # Actually, CallRecord context is the most "intentful" for this specific call, so it should win.
+                lead_context.update(call_record_context)
+
         # CRITICAL: Restore preserved values that must not be overwritten by DB lookup
         if preserved_call_record_id:
             lead_context['call_record_id'] = preserved_call_record_id
@@ -619,6 +659,20 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         
         # ====== DEBUG: Log configuration ======
         print(f"[DEBUG] ====== ELEVENLABS CONNECTION START ======")
+        
+        # Determine which Agent ID to use
+        is_followup = self.lead_context.get('is_followup') == 'True' or self.lead_context.get('is_followup') is True
+        # Also auto-detect if followUpReason is present
+        if not is_followup and self.lead_context.get('followUpReason'):
+            is_followup = True
+            
+        if is_followup and getattr(settings, 'ELEVENLABS_FOLLOWUP_AGENT_ID', None):
+            agent_id = settings.ELEVENLABS_FOLLOWUP_AGENT_ID
+            logger.info("Using FOLLOW-UP Agent ID")
+        else:
+            agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
+            logger.info("Using DEFAULT Agent ID")
+
         print(f"[DEBUG] Agent ID: {agent_id}")
         print(f"[DEBUG] API Key present: {bool(api_key)}")
         print(f"[DEBUG] Lead context keys: {list(self.lead_context.keys())}")
@@ -654,6 +708,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 print(f"[DEBUG] WebSocket connected (using extra_headers)")
             
             # Build dynamic variables - must match ElevenLabs agent config exactly
+            # Start with explicit mappings for safety/defaults
             dynamic_vars = {
                 "counsellorName": self.lead_context.get('counsellor_name', 'Jess'),
                 "name": self.lead_context.get('name', 'Harpreet Singh'),
@@ -663,7 +718,21 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 "marksHighestQualification": self.lead_context.get('qualification_marks', '82%'),
                 "yearCompletion": self.lead_context.get('year_completion', 'not specified'),
                 "ieltsPteScores": self.lead_context.get('english_test_scores', 'IELTS 7.0 Overall'),
+                "callScript": self.lead_context.get('callScript', ''),
             }
+            
+            # Merge all lead_context variables that might be relevant for follow-up agent
+            # This ensures followUpReason, callObjective, etc are included if present
+            for k, v in self.lead_context.items():
+                if k not in dynamic_vars and isinstance(v, (str, int, float, bool)):
+                    dynamic_vars[k] = v
+            
+            # Remove internal flags
+            dynamic_vars.pop('is_followup', None)
+            dynamic_vars.pop('call_record_id', None)
+            dynamic_vars.pop('lead_id', None)
+            dynamic_vars.pop('extra_context', None)
+            dynamic_vars.pop('user_id', None)
             
             # ====== DEBUG: Log all dynamic variables ======
             print(f"[DEBUG] ====== DYNAMIC VARIABLES ======")

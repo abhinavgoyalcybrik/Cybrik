@@ -132,6 +132,7 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
             'lead_id': str(entity.id),
             'entity_type': entity_type,
             'call_record_id': str(call_record.id),
+            'is_followup': 'True' if extra_context and (extra_context.get('followUpReason') or extra_context.get('reason')) else 'False',
             **dynamic_vars  # Include all the ElevenLabs dynamic variables
         }
         
