@@ -583,13 +583,21 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 print(f"[DEBUG]   {key}: {value}")
             logger.info(f"[ELEVENLABS] Dynamic variables: {dynamic_vars}")
             
-            # Send conversation initiation with dynamic variables and INPUT format
-            # We must tell ElevenLabs what format we're sending!
-            # Output format is controlled by dashboard (μ-law 8000 Hz)
+            # Send conversation initiation with dynamic variables and audio format configs
+            # CRITICAL: We must specify BOTH input AND output formats!
+            # - user_input_audio_format: what WE send to ElevenLabs (from Smartflo)
+            # - conversation_config.agent.tts.output_format: what ElevenLabs sends to US
             init_message = {
                 "type": "conversation_initiation_client_data",
                 "dynamic_variables": dynamic_vars,
-                "user_input_audio_format": "ulaw_8000"
+                "user_input_audio_format": "ulaw_8000",
+                "conversation_config_override": {
+                    "agent": {
+                        "tts": {
+                            "output_format": "ulaw_8000"  # CRITICAL: Must match Smartflo expected format!
+                        }
+                    }
+                }
             }
             
             print(f"[DEBUG] Sending init message: {json.dumps(init_message, indent=2)}")
@@ -670,7 +678,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         logger.info(f"[ELEVENLABS] Server handshake complete - conversation_id: {self.elevenlabs_conversation_id}")
                         # Log server's expected audio format
                         input_format = data.get('user_input_audio_format', 'unknown')
-                        logger.info(f"[ELEVENLABS] Expected input format: {input_format}")
+                        # Also log the output format from the metadata event
+                        metadata_event = data.get('conversation_initiation_metadata_event', {})
+                        output_format = metadata_event.get('agent_output_audio_format', 'unknown')
+                        logger.info(f"[ELEVENLABS] Audio formats - INPUT: {input_format}, OUTPUT: {output_format}")
+                        print(f"[DEBUG] ElevenLabs Audio: input={input_format}, output={output_format}")
                     
                     elif msg_type == 'audio':
                         # ElevenLabs dashboard is set to μ-law 8000 Hz
