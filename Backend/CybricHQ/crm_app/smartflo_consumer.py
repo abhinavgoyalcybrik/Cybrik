@@ -473,6 +473,68 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         digit = dtmf.get('digit')
         logger.info(f"DTMF pressed: {digit}")
         
+    @database_sync_to_async
+    def process_call_completion(self, call_record_id, reason, conversation_id=None):
+        from crm_app.models import CallRecord, FollowUp
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        try:
+            call = CallRecord.objects.filter(id=call_record_id).first()
+            if not call:
+                logger.error(f"CallRecord {call_record_id} not found for completion processing")
+                return
+
+            status_map = {
+                'completed': 'completed',
+                'no-answer': 'no-answer',
+                'busy': 'busy',
+                'failed': 'failed',
+                'canceled': 'failed'
+            }
+            # Normalize reason to lowercase for mapping
+            normalized_reason = reason.lower() if reason else 'completed'
+            status = status_map.get(normalized_reason, 'completed')
+            
+            call.status = status
+            
+            # Store conversation_id if available
+            if conversation_id:
+                call.metadata = call.metadata or {}
+                call.metadata['conversation_id'] = conversation_id
+                call.external_call_id = conversation_id
+                
+            call.save()
+            logger.info(f"Updated CallRecord {call.id} status to {status}")
+            
+            # Auto-reschedule logic for unsuccessful calls
+            if status in ['no-answer', 'busy', 'failed']:
+                 
+                 due_time = timezone.now() + timedelta(hours=2)
+                 
+                 target_lead = call.applicant or call.lead
+                 
+                 if target_lead:
+                     FollowUp.objects.create(
+                         lead=call.applicant, 
+                         crm_lead=call.lead,
+                         channel='ai_call',
+                         status='pending',
+                         due_at=due_time,
+                         notes=f"Auto-retry: Call was {status}.",
+                         metadata={
+                             "retry_from_call_id": call.id,
+                             "reason": status,
+                             "auto_generated": True
+                         }
+                     )
+                     logger.info(f"Scheduled retry for call {call.id} in 2 hours for {'Applicant' if call.applicant else 'Lead'} {target_lead.id}")
+                 else:
+                     logger.warning(f"Could not schedule retry for call {call.id}: No linked Lead/Applicant")
+
+        except Exception as e:
+            logger.error(f"Error in process_call_completion: {e}")
+
     async def handle_stop(self, message):
         """Handle call end - update CallRecord with final status"""
         stop_data = message.get('stop', {})
@@ -480,29 +542,15 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         logger.info(f"Call ended: {reason}")
         
         # Update CallRecord with completed status
-        try:
-            call_record_id = self.lead_context.get('call_record_id')
-            if call_record_id:
-                from crm_app.models import CallRecord
-                from django.db import close_old_connections
-                close_old_connections()
-                
-                call_record = CallRecord.objects.filter(id=call_record_id).first()
-                if call_record:
-                    call_record.status = 'completed'
-                    # Store conversation_id if we got one from ElevenLabs
-                    if hasattr(self, 'elevenlabs_conversation_id') and self.elevenlabs_conversation_id:
-                        call_record.metadata = call_record.metadata or {}
-                        call_record.metadata['conversation_id'] = self.elevenlabs_conversation_id
-                        call_record.external_call_id = self.elevenlabs_conversation_id
-                    call_record.save()
-                    logger.info(f"Updated CallRecord {call_record_id} to completed status")
-        except Exception as e:
-            logger.error(f"Error updating CallRecord on call end: {e}")
+        call_record_id = self.lead_context.get('call_record_id')
+        conversation_id = getattr(self, 'elevenlabs_conversation_id', None)
+        
+        if call_record_id:
+            await self.process_call_completion(call_record_id, reason, conversation_id)
         
         if self.elevenlabs_ws:
             await self.elevenlabs_ws.close()
-            
+    
     async def handle_mark(self, message):
         """Handle mark event (audio playback complete)"""
         mark = message.get('mark', {})
