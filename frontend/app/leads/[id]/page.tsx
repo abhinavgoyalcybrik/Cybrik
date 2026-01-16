@@ -942,7 +942,7 @@ export default function LeadDetailPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
           </Link>
-          <div className="text-sm text-[var(--cy-text-muted)]">← Back to Leads</div>
+          <div className="text-sm text-[var(--cy-text-muted)]">Back to Leads</div>
         </div>
 
         {/* Profile Header Card */}
