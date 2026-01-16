@@ -58,16 +58,59 @@ class FollowUpGenerator:
         """
         Flatten context to ElevenLabs-compatible format.
         ElevenLabs only accepts string, number, boolean values.
+        
+        Variable naming follows ElevenLabs follow-up agent configuration:
+        - Call Context: followUpReason, callObjective, previousCallSummary
+        - Student Info: name, preferredCountry, highestQualification, marksHighestQualification, 
+                       yearCompletion, ieltsPteStatus, studentInterestLevel
+        - Documents: documentStatus, missingDocuments
+        - Discussion: keyTopics, previousDiscussionPoints, studentConcerns, callScript
         """
         flat = {}
         
+        # === Student Information Variables ===
         student_name = str(context.get("student_name", "Student"))
         flat["name"] = student_name
         flat["student_name"] = student_name
         flat["phone"] = str(context.get("phone", ""))
         flat["email"] = str(context.get("email", ""))
-        flat["call_reason"] = str(context.get("call_reason", "general_followup"))
-        flat["call_notes"] = str(context.get("call_notes", ""))
+        
+        # Preferred country (camelCase for ElevenLabs)
+        flat["preferredCountry"] = str(context.get("preferred_country", "") or context.get("target_countries", [""])[0] if context.get("target_countries") else "Not specified")
+        
+        # Qualification details
+        flat["highestQualification"] = str(context.get("highest_qualification", "Unknown"))
+        flat["marksHighestQualification"] = str(context.get("qualification_marks", "") or context.get("qualification_score", ""))
+        flat["yearCompletion"] = str(context.get("year_completion", ""))
+        flat["ieltsPteStatus"] = str(context.get("english_proficiency", "") or context.get("english_test_scores", "Unknown"))
+        flat["studentInterestLevel"] = str(context.get("overall_interest_level", "unknown"))
+        
+        # === Call Context Variables ===
+        flat["followUpReason"] = str(context.get("call_reason", "") or context.get("followUpReason", "general_followup"))
+        flat["callObjective"] = str(context.get("call_notes", "") or context.get("callObjective", "Follow up with student"))
+        flat["previousCallSummary"] = str(context.get("last_call_summary", "") or context.get("previousCallSummary", "No previous calls"))
+        
+        # === Documents Status Variables ===
+        flat["documentStatus"] = str(context.get("document_status", "unknown"))
+        flat["missingDocuments"] = ", ".join(context.get("missing_documents", [])) or "None identified"
+        
+        # === Discussion & Conversation Flow Variables ===
+        talking_points = context.get("talking_points", [])
+        flat["keyTopics"] = " | ".join(talking_points) if talking_points else str(context.get("keyTopics", "General follow-up"))
+        
+        if context.get("previous_discussion_points"):
+            flat["previousDiscussionPoints"] = "; ".join(context["previous_discussion_points"][:5])
+        else:
+            flat["previousDiscussionPoints"] = "None"
+        
+        concerns = context.get("concerns", []) or context.get("student_concerns", [])
+        flat["studentConcerns"] = " | ".join(concerns) if concerns else "None raised"
+        
+        flat["callScript"] = str(context.get("call_script", "") or context.get("callScript", ""))
+        
+        # === Legacy/Additional Variables (backwards compatibility) ===
+        flat["call_reason"] = flat["followUpReason"]
+        flat["call_notes"] = flat["callObjective"]
         
         flat["has_applications"] = "yes" if context.get("has_applications") else "no"
         flat["application_count"] = str(context.get("application_count", 0))
@@ -86,8 +129,8 @@ class FollowUpGenerator:
         flat["target_universities"] = ", ".join(context.get("target_universities", [])) or "Not specified"
         flat["latest_application_status"] = str(context.get("latest_application_status", "none"))
         
-        flat["document_status"] = str(context.get("document_status", "unknown"))
-        flat["missing_documents"] = ", ".join(context.get("missing_documents", [])) or "None identified"
+        flat["document_status"] = flat["documentStatus"]
+        flat["missing_documents"] = flat["missingDocuments"]
         flat["submitted_documents"] = ", ".join(context.get("submitted_documents", [])) or "None yet"
         
         records = context.get("academic_records", [])
@@ -100,19 +143,16 @@ class FollowUpGenerator:
         else:
             flat["academic_summary"] = "No academic records"
         
-        flat["highest_qualification"] = str(context.get("highest_qualification", "Unknown"))
-        flat["english_proficiency"] = str(context.get("english_proficiency", "Unknown"))
+        flat["highest_qualification"] = flat["highestQualification"]
+        flat["english_proficiency"] = flat["ieltsPteStatus"]
         
         flat["previous_calls_count"] = str(context.get("previous_calls_count", 0))
         flat["last_call_date"] = str(context.get("last_call_date", "Never"))
-        flat["last_call_summary"] = str(context.get("last_call_summary", "No previous calls"))
-        flat["overall_interest_level"] = str(context.get("overall_interest_level", "unknown"))
+        flat["last_call_summary"] = flat["previousCallSummary"]
+        flat["overall_interest_level"] = flat["studentInterestLevel"]
         flat["qualification_score"] = str(context.get("qualification_score", 0))
         
-        if context.get("previous_discussion_points"):
-            flat["previous_discussion_points"] = "; ".join(context["previous_discussion_points"][:3])
-        else:
-            flat["previous_discussion_points"] = "None"
+        flat["previous_discussion_points"] = flat["previousDiscussionPoints"]
         
         flat["pending_tasks_count"] = str(context.get("pending_tasks_count", 0))
         pending = context.get("pending_tasks", [])
@@ -126,13 +166,9 @@ class FollowUpGenerator:
         flat["counseling_notes"] = notes[:500] if notes else "No notes"
         
         flat["special_requirements"] = ", ".join(context.get("special_requirements", [])) or "None"
-        flat["preferred_country"] = str(context.get("preferred_country", "Not specified"))
+        flat["preferred_country"] = flat["preferredCountry"]
         
-        talking_points = context.get("talking_points", [])
-        if talking_points:
-            flat["talking_points"] = " | ".join(talking_points)
-        else:
-            flat["talking_points"] = "General follow-up conversation"
+        flat["talking_points"] = flat["keyTopics"]
         
         return flat
     

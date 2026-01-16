@@ -21,6 +21,7 @@ ELEVEN_API_KEY = getattr(settings, "ELEVENLABS_API_KEY", os.environ.get("ELEVENL
 ELEVEN_POSTCALL_WEBHOOK = getattr(settings, "ELEVENLABS_POSTCALL_WEBHOOK", os.environ.get("ELEVENLABS_POSTCALL_WEBHOOK", ""))
 ELEVEN_DEFAULT_AGENT_ID = getattr(settings, "ELEVENLABS_AGENT_ID", os.environ.get("ELEVENLABS_AGENT_ID", None))
 ELEVEN_DEFAULT_PHONE_ID = getattr(settings, "ELEVENLABS_PHONE_ID", os.environ.get("ELEVENLABS_PHONE_ID", None))
+ELEVEN_FOLLOWUP_AGENT_ID = getattr(settings, "ELEVENLABS_FOLLOWUP_AGENT_ID", os.environ.get("ELEVENLABS_FOLLOWUP_AGENT_ID", None))
 
 
 def _headers() -> Dict[str, str]:
@@ -62,12 +63,15 @@ def create_outbound_call(
     post_call_webhook: Optional[str] = None,
     post_call_extraction: bool = False,
     extraction_spec: Optional[Dict[str, Any]] = None,
+    is_followup: bool = False,
 ) -> Dict[str, Any]:
     """
     Instruct ElevenLabs to place an outbound Twilio call.
 
     IMPORTANT: ElevenLabs requires 'agent_id' and 'agent_phone_number_id' for the outbound endpoint.
     This function will use provided arguments, or fall back to ELEVENLABS_AGENT_ID and ELEVENLABS_PHONE_ID from settings/env.
+    
+    When is_followup=True, uses ELEVENLABS_FOLLOWUP_AGENT_ID for dedicated follow-up conversations.
 
     Returns a serializable dict with 'ok' and diagnostics.
     """
@@ -78,7 +82,12 @@ def create_outbound_call(
         return {"ok": False, "error": "eleven_outbound_path_not_configured"}
 
     # Resolve agent + phone id: prefer explicit args, then settings
-    agent_id = agent_id or ELEVEN_DEFAULT_AGENT_ID
+    # Use follow-up agent for scheduled follow-up calls
+    if is_followup and ELEVEN_FOLLOWUP_AGENT_ID:
+        agent_id = agent_id or ELEVEN_FOLLOWUP_AGENT_ID
+        logger.info("Using follow-up agent ID for scheduled call")
+    else:
+        agent_id = agent_id or ELEVEN_DEFAULT_AGENT_ID
     agent_phone_number_id = agent_phone_number_id or ELEVEN_DEFAULT_PHONE_ID
 
     if not agent_id or not agent_phone_number_id:

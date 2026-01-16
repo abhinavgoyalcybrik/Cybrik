@@ -69,6 +69,7 @@ def process_due_calls():
             result = create_outbound_call(
                 to_number=phone,
                 metadata=call_context,
+                is_followup=True,  # Use dedicated follow-up agent
                 extra_payload={
                     "conversation_initiation_client_data": {
                         "dynamic_variables": call_context
