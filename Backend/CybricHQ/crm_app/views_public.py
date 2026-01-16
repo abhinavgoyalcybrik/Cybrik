@@ -25,14 +25,10 @@ class GenerateUploadLinkView(views.APIView):
             # Sign the lead ID to create a token
             token = signer.sign(str(lead.id))
             
-            # Construct URL (assuming frontend is on same domain or configured)
-            # In production, this should probably use a frontend URL setting
-            base_url = request.build_absolute_uri('/')[:-1] # Get base domain
-            # Adjust if frontend is on different port (e.g. localhost:3000 vs 8000)
-            # For now, let's assume standard structure or return relative path
-            
+            # Construct URL using configured FRONTEND_URL
+            frontend_url = getattr(settings, 'FRONTEND_URL', 'https://cybriksolutions.com')
             upload_link = f"/upload?token={token}"
-            full_link = f"{base_url.replace(':8000', ':3000')}/upload?token={token}" # Hacky dev fix, better to have settings.FRONTEND_URL
+            full_link = f"{frontend_url.rstrip('/')}/upload?token={token}"
             
             return Response({
                 "link": full_link,
