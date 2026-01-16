@@ -1057,7 +1057,10 @@ class FollowUpViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 if task.due_at != parsed_time:
                     task.due_at = parsed_time
                     time_changed = True
-                    actions_taken.append(f"Rescheduled to {parsed_time.strftime('%Y-%m-%d %H:%M')}")
+                    import pytz
+                    ist = pytz.timezone('Asia/Kolkata')
+                    local_time = parsed_time.astimezone(ist)
+                    actions_taken.append(f"Rescheduled to {local_time.strftime('%Y-%m-%d %H:%M')}")
                     ai_analysis.append({
                         "change": "schedule_time",
                         "old": old_data["due_at"],
@@ -1102,7 +1105,10 @@ class FollowUpViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 if notes_analysis['auto_schedule_at'] and not parsed_time:
                     task.due_at = notes_analysis['auto_schedule_at']
                     time_changed = True
-                    actions_taken.append(f"AI auto-scheduled for {notes_analysis['auto_schedule_at'].strftime('%Y-%m-%d %H:%M')}")
+                    import pytz
+                    ist = pytz.timezone('Asia/Kolkata')
+                    local_auto = notes_analysis['auto_schedule_at'].astimezone(ist)
+                    actions_taken.append(f"AI auto-scheduled for {local_auto.strftime('%Y-%m-%d %H:%M')}")
         
         if new_applicant_id and new_applicant_id != task.lead_id:
             try:
