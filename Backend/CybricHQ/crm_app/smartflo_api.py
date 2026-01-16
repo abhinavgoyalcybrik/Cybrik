@@ -312,6 +312,13 @@ def initiate_smartflo_call(destination_number: str, websocket_url: str = None, c
     
     # Payload for Click to Call Support API
     # The API key goes in the body, not the Authorization header
+    # Clean phone number (strip +, spaces, dashes)
+    destination_number = str(destination_number).strip().replace(' ', '').replace('-', '').replace('+', '')
+    
+    # If 10 digits, add 91 prefix (Smartflo usually expects country code)
+    if len(destination_number) == 10:
+        destination_number = '91' + destination_number
+
     payload = {
         'customer_number': destination_number,
         'api_key': api_key,
