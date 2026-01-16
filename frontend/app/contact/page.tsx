@@ -64,7 +64,14 @@ export default function ContactPage() {
 
             <header className="relative z-10 w-full p-6 flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="text-3xl">✈️</div>
+                    <Image
+                        src="/cybrik-logo.png"
+                        alt="Cybrik Solutions"
+                        width={180}
+                        height={50}
+                        className="h-8 sm:h-10 w-auto"
+                        priority
+                    />
                 </Link>
                 <Link href="/crm/login" className="text-sm font-medium text-[var(--cy-navy)] hover:text-[var(--cy-lime)] transition-colors">
                     Sign In
