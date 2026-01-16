@@ -680,35 +680,44 @@ def get_transcript_for_call(call_record):
 
 def calculate_follow_up_time(timing_str):
     """Calculate follow-up datetime from string like '5 minutes', '2 hours', '2 days' or '1 week'"""
-    now = timezone.now()
-    timing_lower = timing_str.lower().strip()
+    try:
+        now = timezone.now()
+        timing_lower = str(timing_str).lower().strip()
+        logger.info(f"Calculating follow-up time for: '{timing_str}' (lower: '{timing_lower}')")
+        
+        # Handle immediate / ASAP requests
+        if any(word in timing_lower for word in ['now', 'immediate', 'asap', 'right away', 'soon']):
+            logger.info("Matched IMMEDIATE/ASAP -> 5 minutes")
+            return now + timedelta(minutes=5)  # 5 minutes from now
+        
+        # Handle minutes
+        if 'minute' in timing_lower or 'min' in timing_lower:
+            minutes = int(''.join(filter(str.isdigit, timing_lower)) or 5)
+            logger.info(f"Matched matching MINUTES -> {minutes} minutes")
+            return now + timedelta(minutes=minutes)
+        
+        # Handle hours
+        if 'hour' in timing_lower:
+            hours = int(''.join(filter(str.isdigit, timing_lower)) or 1)
+            logger.info(f"Matched matching HOURS -> {hours} hours")
+            return now + timedelta(hours=hours)
     
-    # Handle immediate / ASAP requests
-    if any(word in timing_lower for word in ['now', 'immediate', 'asap', 'right away', 'soon']):
-        return now + timedelta(minutes=5)  # 5 minutes from now
-    
-    # Handle minutes
-    if 'minute' in timing_lower or 'min' in timing_lower:
-        minutes = int(''.join(filter(str.isdigit, timing_lower)) or 5)
-        return now + timedelta(minutes=minutes)
-    
-    # Handle hours
-    if 'hour' in timing_lower:
-        hours = int(''.join(filter(str.isdigit, timing_lower)) or 1)
-        return now + timedelta(hours=hours)
-    
-    # Handle days
-    if 'day' in timing_lower:
-        days = int(''.join(filter(str.isdigit, timing_lower)) or 2)
-        return now + timedelta(days=days)
-    
-    # Handle weeks
-    if 'week' in timing_lower:
-        weeks = int(''.join(filter(str.isdigit, timing_lower)) or 1)
-        return now + timedelta(weeks=weeks)
-    
-    # Default: 2 hours (more reasonable than 2 days for callbacks)
-    return now + timedelta(hours=2)
+        # Handle days
+        if 'day' in timing_lower:
+            days = int(''.join(filter(str.isdigit, timing_lower)) or 2)
+            return now + timedelta(days=days)
+        
+        # Handle weeks
+        if 'week' in timing_lower:
+            weeks = int(''.join(filter(str.isdigit, timing_lower)) or 1)
+            return now + timedelta(weeks=weeks)
+        
+        # Default: 2 hours (more reasonable than 2 days for callbacks)
+        return now + timedelta(hours=2)
+        
+    except Exception as e:
+        logger.error(f"Error calculating follow-up time for '{timing_str}': {e}")
+        return timezone.now() + timedelta(hours=2)  # Safe fallback
 
 
 @shared_task
