@@ -51,6 +51,7 @@ class PublicUploadView(views.APIView):
     """
     Public endpoint to upload documents using a signed token.
     """
+    authentication_classes = []  # Bypass global auth (don't fail on bad cookies)
     permission_classes = [permissions.AllowAny]
 
     def _validate_token(self, token):
