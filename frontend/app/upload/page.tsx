@@ -30,7 +30,15 @@ function UploadContent() {
         // Verify token and get lead name
         fetch(`/api/public/upload/?token=${token}`)
             .then(async (res) => {
-                if (!res.ok) throw new Error("Invalid or expired link");
+                if (!res.ok) {
+                    const text = await res.text();
+                    try {
+                        const json = JSON.parse(text);
+                        throw new Error(json.error || `Error ${res.status}: ${res.statusText}`);
+                    } catch (e) {
+                        throw new Error(`Error ${res.status}: ${text.substring(0, 50)}...`);
+                    }
+                }
                 const data = await res.json();
                 setLeadName(data.lead_name);
             })
@@ -49,7 +57,7 @@ function UploadContent() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('token', token);
-        formData.append('document_type', 'other'); // Could add a selector for this
+        formData.append('document_type', 'other');
 
         try {
             const res = await fetch('/api/public/upload/', {
@@ -58,10 +66,16 @@ function UploadContent() {
             });
 
             if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.error || "Upload failed");
+                const text = await res.text();
+                try {
+                    const data = JSON.parse(text);
+                    throw new Error(data.error || `Upload failed: ${res.status}`);
+                } catch {
+                    throw new Error(`Upload failed: ${res.status} ${res.statusText}`);
+                }
             }
 
+            const newDoc = await res.json();
             setSuccess(true);
         } catch (err: any) {
             setError(err.message);
