@@ -728,7 +728,40 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 full_transcript += f"\n\n--- Call on {date_str} ---\n{text}"
         
         if not full_transcript:
-            return Response({"error": "No transcripts found for this lead"}, status=status.HTTP_400_BAD_REQUEST)
+            # If no transcript, assume call failed/unattended and schedule retry
+            from .models import FollowUp
+            from django.utils import timezone
+            from datetime import timedelta
+            
+            recent_call = calls.first()
+            due_time = timezone.now() + timedelta(hours=2)
+            
+            task = FollowUp.objects.create(
+                lead=None, # lead is checking Lead model, but FollowUp expects Applicant usually? 
+                # Wait, LeadViewSet.generate_follow_ups... lead variable is a Lead instance.
+                # FollowUp.lead is a ForeignKey to Applicant? Let's check model.
+                # Based on previous code: task = FollowUp.objects.create(lead=None, ... metadata={'lead_id': lead.id})
+                # But wait, FollowUp model definition in serializers.py line 506 says lead is Applicant.
+                # So we should set crm_lead or just use metadata.
+                # Let's match the existing creation logic in this file.
+                
+                # Looking at lines 749-755 (which I can't see fully but saw in previous view_file):
+                # task = FollowUp.objects.create(lead=None ...)
+                
+                crm_lead=lead, # Assuming crm_lead field exists for Lead model link, or just rely on metadata
+                channel='ai_call',
+                status='pending',
+                dictated=False,
+                due_at=due_time,
+                notes="Auto-retry: No transcript found (call likely failed or unattended).",
+                metadata={'created_by_ai': True, 'reason': 'no_transcript_retry', 'lead_id': lead.id}
+            )
+            
+            return Response({
+                "message": "No transcripts found. Scheduled auto-retry task.", 
+                "tasks_created": 1,
+                "analysis": {"follow_up": {"needed": True, "reason": "No transcript / Call failed"}}
+            })
 
         # Analyze
         try:

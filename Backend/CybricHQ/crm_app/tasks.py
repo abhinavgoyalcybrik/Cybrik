@@ -761,6 +761,13 @@ def fetch_and_store_conversation_task(call_record_id, conversation_id):
             
             # Extract and create Transcript if available
             raw_transcript = data.get("transcript")
+            logger.info(f"ElevenLabs Data Keys: {list(data.keys())}")
+            logger.info(f"Raw Transcript present: {bool(raw_transcript)}")
+            if raw_transcript:
+                 logger.info(f"Raw Transcript type: {type(raw_transcript)}")
+                 if isinstance(raw_transcript, list) and len(raw_transcript) > 0:
+                      logger.info(f"First turn keys: {list(raw_transcript[0].keys())}")
+            
             if raw_transcript and not Transcript.objects.filter(call=call_record).exists():
                 # Format transcript into clean, readable text
                 formatted_messages = []
