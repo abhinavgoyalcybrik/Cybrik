@@ -160,6 +160,62 @@ def pcm_to_mulaw(pcm_bytes: bytes) -> bytes:
     return bytes(mulaw_bytes)
 
 
+def pcm16000_to_mulaw8000(pcm_bytes: bytes) -> bytes:
+    """Convert 16-bit PCM at 16000Hz to μ-law at 8000Hz.
+    
+    Steps:
+    1. Downsample from 16000Hz to 8000Hz (take every other sample)
+    2. Convert from 16-bit PCM to 8-bit μ-law
+    
+    Args:
+        pcm_bytes: Raw PCM audio, 16-bit signed, 16000Hz mono
+        
+    Returns:
+        μ-law encoded audio at 8000Hz
+    """
+    if len(pcm_bytes) < 4:
+        return b''
+    
+    # Each sample is 2 bytes (16-bit), ensure even length
+    if len(pcm_bytes) % 2 != 0:
+        pcm_bytes = pcm_bytes[:-1]
+    
+    # Unpack all 16-bit samples
+    num_samples = len(pcm_bytes) // 2
+    samples = struct.unpack(f'<{num_samples}h', pcm_bytes)
+    
+    # Downsample: take every other sample (16000 -> 8000 Hz)
+    downsampled = samples[::2]
+    
+    # Convert each sample to μ-law
+    mulaw_bytes = []
+    for sample in downsampled:
+        # Clip the sample
+        sign = 0x80 if sample < 0 else 0x00
+        sample = min(abs(sample), MULAW_CLIP)
+        
+        # Add bias
+        sample = sample + MULAW_BIAS
+        
+        # Find the exponent (segment)
+        exponent = 7
+        exp_mask = 0x4000
+        for exp in range(8):
+            if sample & exp_mask:
+                exponent = 7 - exp
+                break
+            exp_mask >>= 1
+        
+        # Extract the mantissa (4 bits)
+        mantissa = (sample >> (exponent + 3)) & 0x0F
+        
+        # Combine and complement
+        mulaw_byte = ~(sign | (exponent << 4) | mantissa) & 0xFF
+        mulaw_bytes.append(mulaw_byte)
+    
+    return bytes(mulaw_bytes)
+
+
 class SmartfloAudioConsumer(AsyncWebsocketConsumer):
     """
     WebSocket consumer that bridges Smartflo telephony to ElevenLabs Conversational AI Agent.
@@ -699,18 +755,26 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                             audio_base64 = data['data']
                         
                         if audio_base64:
-                            # Direct pass-through - both sides use μ-law 8000
-                            raw_ulaw = base64.b64decode(audio_base64)
+                            # ElevenLabs outputs PCM 16000Hz, Smartflo expects μ-law 8000Hz
+                            # We MUST convert the audio format!
+                            raw_pcm = base64.b64decode(audio_base64)
                             
                             self.output_chunk_number += 1
                             if self.output_chunk_number <= 5:
-                                logger.info(f"[ELEVENLABS] Audio chunk {self.output_chunk_number}: {len(raw_ulaw)} bytes")
+                                logger.info(f"[ELEVENLABS] PCM chunk {self.output_chunk_number}: {len(raw_pcm)} bytes (16kHz)")
                             
-                            # Send directly to Smartflo
-                            await self.send_audio_to_smartflo(raw_ulaw)
+                            # Convert PCM 16000Hz -> μ-law 8000Hz
+                            mulaw_audio = pcm16000_to_mulaw8000(raw_pcm)
+                            
+                            if self.output_chunk_number <= 5:
+                                logger.info(f"[ELEVENLABS] Converted to μ-law: {len(mulaw_audio)} bytes (8kHz)")
+                            
+                            # Send converted audio to Smartflo
+                            if mulaw_audio:
+                                await self.send_audio_to_smartflo(mulaw_audio)
                             
                             if self.output_chunk_number % 100 == 0:
-                                logger.info(f"[ELEVENLABS] Forwarded {self.output_chunk_number} chunks")
+                                logger.info(f"[ELEVENLABS] Converted and sent {self.output_chunk_number} chunks")
                         else:
                             logger.warning(f"[ELEVENLABS] audio message but no data: {list(data.keys())}")
                     
