@@ -327,9 +327,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 # Reset buffer immediately
                 self.input_audio_buffer = bytearray()
                 
-                # Convert: Mulaw 8k -> PCM 16k
+                # Convert: Mulaw 8k -> PCM 16k -> Amplify for clarity
                 pcm_8k = mulaw_to_pcm(chunk_to_process)
                 pcm_16k = upsample_8k_to_16k(pcm_8k)
+                # Amplify input audio for better recognition (phone audio is often quiet)
+                pcm_16k = amplify_pcm(pcm_16k, gain=3.0)
                 
                 await self.elevenlabs_ws.send(json.dumps({
                     "user_audio_chunk": base64.b64encode(pcm_16k).decode('utf-8')
@@ -573,9 +575,21 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 print(f"[DEBUG]   {key}: {value}")
             logger.info(f"[ELEVENLABS] Dynamic variables: {dynamic_vars}")
             
-            # Send conversation initiation with dynamic variables
+            # Send conversation initiation with dynamic variables and audio formats
             init_message = {
                 "type": "conversation_initiation_client_data",
+                "conversation_config_override": {
+                    "agent": {
+                        "language": "en"
+                    },
+                    "asr": {
+                        "quality": "high",
+                        "experimental": {
+                            "input_audio_noise_suppression": True
+                        }
+                    }
+                },
+                "audio_input_format": "pcm_16000",
                 "dynamic_variables": dynamic_vars
             }
             
