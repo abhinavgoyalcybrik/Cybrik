@@ -731,6 +731,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         # Also log the output format from the metadata event
                         metadata_event = data.get('conversation_initiation_metadata_event', {})
                         output_format = metadata_event.get('agent_output_audio_format', 'unknown')
+                        # Store the output format to know if we need to convert
+                        self.elevenlabs_output_format = output_format
                         logger.info(f"[ELEVENLABS] Audio formats - INPUT: {input_format}, OUTPUT: {output_format}")
                         print(f"[DEBUG] ElevenLabs Audio: input={input_format}, output={output_format}")
                     
@@ -749,26 +751,33 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                             audio_base64 = data['data']
                         
                         if audio_base64:
-                            # ElevenLabs outputs PCM 16000Hz, Smartflo expects μ-law 8000Hz
-                            # We MUST convert the audio format!
-                            raw_pcm = base64.b64decode(audio_base64)
-                            
+                            raw_audio = base64.b64decode(audio_base64)
                             self.output_chunk_number += 1
-                            if self.output_chunk_number <= 5:
-                                logger.info(f"[ELEVENLABS] PCM chunk {self.output_chunk_number}: {len(raw_pcm)} bytes (16kHz)")
                             
-                            # Convert PCM 16000Hz -> μ-law 8000Hz
-                            mulaw_audio = pcm16000_to_mulaw8000(raw_pcm)
+                            # Check if we need to convert based on actual output format
+                            output_fmt = getattr(self, 'elevenlabs_output_format', 'pcm_16000')
                             
-                            if self.output_chunk_number <= 5:
-                                logger.info(f"[ELEVENLABS] Converted to μ-law: {len(mulaw_audio)} bytes (8kHz)")
-                            
-                            # Send converted audio to Smartflo
-                            if mulaw_audio:
-                                await self.send_audio_to_smartflo(mulaw_audio)
+                            if 'ulaw' in output_fmt.lower() or 'mulaw' in output_fmt.lower():
+                                # Already μ-law - pass through directly!
+                                if self.output_chunk_number <= 5:
+                                    logger.info(f"[ELEVENLABS] μ-law chunk {self.output_chunk_number}: {len(raw_audio)} bytes (pass-through)")
+                                await self.send_audio_to_smartflo(raw_audio)
+                            else:
+                                # PCM format - need to convert!
+                                if self.output_chunk_number <= 5:
+                                    logger.info(f"[ELEVENLABS] PCM chunk {self.output_chunk_number}: {len(raw_audio)} bytes (16kHz)")
+                                
+                                # Convert PCM 16000Hz -> μ-law 8000Hz
+                                mulaw_audio = pcm16000_to_mulaw8000(raw_audio)
+                                
+                                if self.output_chunk_number <= 5:
+                                    logger.info(f"[ELEVENLABS] Converted to μ-law: {len(mulaw_audio)} bytes (8kHz)")
+                                
+                                if mulaw_audio:
+                                    await self.send_audio_to_smartflo(mulaw_audio)
                             
                             if self.output_chunk_number % 100 == 0:
-                                logger.info(f"[ELEVENLABS] Converted and sent {self.output_chunk_number} chunks")
+                                logger.info(f"[ELEVENLABS] Processed {self.output_chunk_number} chunks")
                         else:
                             logger.warning(f"[ELEVENLABS] audio message but no data: {list(data.keys())}")
                     
@@ -833,7 +842,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Add to output buffer
         self.output_audio_buffer.extend(audio_data)
         
-        # Send when we have enough data (800 bytes = 100ms)
+        # Send when we have enough data (800 bytes = 100ms of 8kHz mulaw)
         while len(self.output_audio_buffer) >= self.OUTPUT_CHUNK_SIZE:
             chunk = bytes(self.output_audio_buffer[:self.OUTPUT_CHUNK_SIZE])
             self.output_audio_buffer = self.output_audio_buffer[self.OUTPUT_CHUNK_SIZE:]
@@ -855,6 +864,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 logger.info(f"[SMARTFLO] Sent media chunk #{self.media_chunk_number}: {len(chunk)} bytes")
             elif self.media_chunk_number % 50 == 0:
                 logger.info(f"[SMARTFLO] Sent {self.media_chunk_number} media chunks")
+            
+            # Note: We do NOT add sleep here because:
+            # 1. It would block incoming audio processing
+            # 2. Smartflo should handle buffering on their end
+            # If buffering persists, the issue is likely audio FORMAT, not pacing
     
     async def flush_audio_buffer(self):
         """Flush any remaining audio in output buffer (call on disconnect).
