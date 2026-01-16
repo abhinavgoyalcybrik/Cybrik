@@ -474,6 +474,28 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         logger.info(f"DTMF pressed: {digit}")
         
     @database_sync_to_async
+    def save_conversation_id(self, call_record_id, conversation_id):
+        """
+        Save the ElevenLabs conversation ID to the CallRecord immediately.
+        This ensures webhooks can find the correct record even if the call is still ongoing.
+        """
+        from crm_app.models import CallRecord
+        try:
+            call = CallRecord.objects.filter(id=call_record_id).first()
+            if call:
+                call.metadata = call.metadata or {}
+                call.metadata['conversation_id'] = conversation_id
+                # Also save as external_call_id if not already set (or overwrite if improved)
+                # But careful not to overwrite Smartflo SID if heavily used.
+                # However, views.py looks for conversation_id in metadata, so that's enough.
+                call.save(update_fields=['metadata'])
+                logger.info(f"Saved conversation_id {conversation_id} to CallRecord {call.id}")
+            else:
+                logger.warning(f"CallRecord {call_record_id} not found to save conversation_id")
+        except Exception as e:
+            logger.error(f"Error saving conversation_id: {e}")
+
+    @database_sync_to_async
     def process_call_completion(self, call_record_id, reason, conversation_id=None):
         from crm_app.models import CallRecord, FollowUp
         from django.utils import timezone
@@ -720,6 +742,13 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         # Extract conversation_id for later CallRecord update
                         self.elevenlabs_conversation_id = data.get('conversation_id')
                         logger.info(f"[ELEVENLABS] Server handshake complete - conversation_id: {self.elevenlabs_conversation_id}")
+                        
+                        # Save it immediately to DB so webhook can match it!
+                        call_record_id = self.lead_context.get('call_record_id')
+                        if call_record_id and self.elevenlabs_conversation_id:
+                            # Run async task to save without blocking
+                            asyncio.create_task(self.save_conversation_id(call_record_id, self.elevenlabs_conversation_id))
+
                         # Log server's expected audio format
                         input_format = data.get('user_input_audio_format', 'unknown')
                         logger.info(f"[ELEVENLABS] Expected input format: {input_format}")
