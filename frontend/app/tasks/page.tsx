@@ -36,6 +36,7 @@ interface Applicant {
     id: number;
     first_name: string;
     last_name: string;
+    name?: string; // For leads that use 'name' instead of first_name
     phone: string;
 }
 
@@ -92,10 +93,12 @@ export default function TasksPage() {
         if (applicants.length > 0) return;
         try {
             setLoadingApplicants(true);
-            const data = await apiFetch('/api/applicants/?limit=100');
-            setApplicants(data.results || data);
+            // Fetch leads with phone numbers (applicants have been merged into leads)
+            const data = await apiFetch('/api/leads/?limit=200');
+            const leads = (data.results || data || []).filter((l: any) => l.phone);
+            setApplicants(leads);
         } catch (err) {
-            console.error('Failed to load applicants', err);
+            console.error('Failed to load leads', err);
         } finally {
             setLoadingApplicants(false);
         }
@@ -525,7 +528,7 @@ export default function TasksPage() {
                                     {newTask.channel === 'ai_call' && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Select Applicant <span className="text-red-500">*</span>
+                                                Select Lead <span className="text-red-500">*</span>
                                             </label>
                                             {loadingApplicants ? (
                                                 <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
@@ -539,16 +542,16 @@ export default function TasksPage() {
                                                     onChange={e => setNewTask({ ...newTask, applicant_id: Number(e.target.value) || null })}
                                                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
                                                 >
-                                                    <option value="">Select an applicant...</option>
-                                                    {applicants.filter(a => a.phone).map(applicant => (
-                                                        <option key={applicant.id} value={applicant.id}>
-                                                            {applicant.first_name} {applicant.last_name} ({applicant.phone})
+                                                    <option value="">Select a lead...</option>
+                                                    {applicants.filter(a => a.phone).map(lead => (
+                                                        <option key={lead.id} value={lead.id}>
+                                                            {lead.first_name || lead.name || 'Lead'} {lead.last_name} ({lead.phone})
                                                         </option>
                                                     ))}
                                                 </select>
                                             )}
                                             <p className="text-xs text-gray-500 mt-1">
-                                                Only applicants with phone numbers are shown
+                                                Only leads with phone numbers are shown
                                             </p>
                                         </div>
                                     )}
