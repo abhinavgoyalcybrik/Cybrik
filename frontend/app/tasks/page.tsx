@@ -642,26 +642,35 @@ export default function TasksPage() {
                                     {editForm.channel === 'ai_call' && (
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Select Applicant
+                                                Select Applicant / Lead
                                             </label>
-                                            {loadingApplicants ? (
-                                                <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
-                                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--cy-navy)]"></div>
-                                                    Loading applicants...
+                                            {/* If it's a CRM Lead, we currently just show it read-only or handle differently as we don't have a full lead dropdown yet */}
+                                            {editingTask.crm_lead ? (
+                                                <div className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                                                    {editingTask.crm_lead_name || `Lead #${editingTask.crm_lead}`} (Lead)
                                                 </div>
                                             ) : (
-                                                <select
-                                                    value={editForm.applicant_id || ''}
-                                                    onChange={e => setEditForm({ ...editForm, applicant_id: Number(e.target.value) || null })}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
-                                                >
-                                                    <option value="">Select an applicant...</option>
-                                                    {applicants.filter(a => a.phone).map(applicant => (
-                                                        <option key={applicant.id} value={applicant.id}>
-                                                            {applicant.first_name} {applicant.last_name} ({applicant.phone})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                <>
+                                                    {loadingApplicants ? (
+                                                        <div className="flex items-center gap-2 text-sm text-gray-500 py-2">
+                                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[var(--cy-navy)]"></div>
+                                                            Loading applicants...
+                                                        </div>
+                                                    ) : (
+                                                        <select
+                                                            value={editForm.applicant_id || ''}
+                                                            onChange={e => setEditForm({ ...editForm, applicant_id: Number(e.target.value) || null })}
+                                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
+                                                        >
+                                                            <option value="">Select an applicant...</option>
+                                                            {applicants.filter(a => a.phone).map(applicant => (
+                                                                <option key={applicant.id} value={applicant.id}>
+                                                                    {applicant.first_name} {applicant.last_name} ({applicant.phone})
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
                                     )}
