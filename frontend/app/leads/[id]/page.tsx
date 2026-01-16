@@ -2,9 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import apiFetch from "@/lib/api";
 import DashboardLayout from "@/components/DashboardLayout";
-import Link from "next/link";
+import { ArrowLeft, Edit, Trash, Plus, FileText, Phone, Calendar, Mail, MessageSquare, CheckCircle, XCircle, AlertCircle, Link as LinkIcon, Download } from "lucide-react";
+
+// ... existing code ...
+
+
 import EditLeadModal from "@/components/leads/EditLeadModal";
 
 type Lead = {
@@ -72,6 +77,30 @@ export default function LeadDetailPage() {
     channel: "other"
   });
   const [taskCreating, setTaskCreating] = useState(false);
+
+  const [generatingLink, setGeneratingLink] = useState(false);
+
+  const generateUploadLink = async () => {
+    if (!lead?.id) return;
+    setGeneratingLink(true);
+    try {
+      const res = await apiFetch('/api/generate-upload-link/', {
+        method: 'POST',
+        body: JSON.stringify({ lead_id: lead.id })
+      });
+
+      if (res.link) {
+        await navigator.clipboard.writeText(res.link);
+        alert("Upload Link Copied to Clipboard!\n\n" + res.link);
+      } else {
+        alert("Failed to generate link.");
+      }
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setGeneratingLink(false);
+    }
+  };
 
   // Document Upload State
   const [selectedEnglishTest, setSelectedEnglishTest] = useState("IELTS");
@@ -962,6 +991,18 @@ export default function LeadDetailPage() {
           </div>
           {/* Action Buttons */}
           <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/10">
+            <button
+              onClick={generateUploadLink}
+              disabled={generatingLink}
+              className="btn btn-sm bg-white text-[var(--cy-navy)] hover:bg-gray-100 border-none flex items-center gap-2"
+            >
+              {generatingLink ? (
+                <span className="loading loading-spinner loading-xs"></span>
+              ) : (
+                <LinkIcon className="w-4 h-4" />
+              )}
+              Get Upload Link
+            </button>
             <button onClick={() => setIsEditModalOpen(true)} className="btn btn-sm bg-white/10 hover:bg-white/20 text-white border-none">
               Edit Lead
             </button>
