@@ -728,14 +728,20 @@ def fetch_and_store_conversation_task(call_record_id, conversation_id):
             # Extract duration from nested metadata
             duration = el_metadata.get("call_duration_secs") or data.get("call_duration_secs") or data.get("call_length")
             if duration:
-                call_record.duration_seconds = int(duration)
+                try:
+                    call_record.duration_seconds = int(float(duration))
+                except (ValueError, TypeError):
+                    logger.warning(f"Could not parse duration: {duration}")
             
             # Extract actual LLM cost in dollars from charging object
             # Note: metadata.cost is credits, not dollars - we need charging.llm_price
             charging = el_metadata.get("charging", {}) or {}
             llm_cost = charging.get("llm_price")  # Actual dollar cost
             if llm_cost:
-                call_record.cost = float(llm_cost)
+                try:
+                    call_record.cost = float(llm_cost)
+                except (ValueError, TypeError):
+                    logger.warning(f"Could not parse llm_cost: {llm_cost}")
             else:
                 # Fallback: try analysis.cost if llm_price not available
                 if "analysis" in data and isinstance(data["analysis"], dict):
@@ -966,8 +972,9 @@ def sync_all_elevenlabs_conversations(hours_back=24):
         resp = requests.get(url, headers=headers, params=params, timeout=30)
         
         if resp.status_code != 200:
-            logger.error(f"Failed to list ElevenLabs conversations: {resp.status_code} - {resp.text}")
-            return {"ok": False, "error": f"API error: {resp.status_code}"}
+            error_msg = f"Failed to list ElevenLabs conversations: {resp.status_code} - {resp.text}"
+            logger.error(error_msg)
+            return {"ok": False, "error": error_msg}
         
         data = resp.json()
         conversations = data.get("conversations", [])
