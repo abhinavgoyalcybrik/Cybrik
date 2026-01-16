@@ -661,17 +661,48 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         print(f"[DEBUG] ====== ELEVENLABS CONNECTION START ======")
         
         # Determine which Agent ID to use
-        is_followup = self.lead_context.get('is_followup') == 'True' or self.lead_context.get('is_followup') is True
-        # Also auto-detect if followUpReason is present
-        if not is_followup and self.lead_context.get('followUpReason'):
+        is_followup_str = self.lead_context.get('is_followup')
+        followup_reason = self.lead_context.get('followUpReason')
+        reason = self.lead_context.get('reason')
+        
+        # Log all relevant values for debugging
+        print(f"[DEBUG] is_followup raw value: {is_followup_str} (type: {type(is_followup_str).__name__})")
+        print(f"[DEBUG] followUpReason: {followup_reason}")
+        print(f"[DEBUG] reason: {reason}")
+        logger.info(f"[AGENT-SELECT] is_followup={is_followup_str}, followUpReason={followup_reason}, reason={reason}")
+        
+        # Check multiple ways is_followup could be set
+        is_followup = (
+            is_followup_str == 'True' or 
+            is_followup_str == 'true' or 
+            is_followup_str is True or
+            str(is_followup_str).lower() == 'true'
+        )
+        
+        # Also auto-detect if followUpReason or reason is present
+        if not is_followup and (followup_reason or reason):
             is_followup = True
+            print(f"[DEBUG] Auto-detected as follow-up from followUpReason/reason")
+        
+        # Get follow-up agent ID
+        followup_agent_id = getattr(settings, 'ELEVENLABS_FOLLOWUP_AGENT_ID', None) or ''
+        default_agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
+        
+        print(f"[DEBUG] ELEVENLABS_FOLLOWUP_AGENT_ID configured: {bool(followup_agent_id)} (value: {followup_agent_id[:10]}...)" if followup_agent_id else "[DEBUG] ELEVENLABS_FOLLOWUP_AGENT_ID: NOT SET")
+        print(f"[DEBUG] ELEVENLABS_AGENT_ID: {default_agent_id[:10]}..." if default_agent_id else "[DEBUG] ELEVENLABS_AGENT_ID: NOT SET")
+        print(f"[DEBUG] is_followup final: {is_followup}")
             
-        if is_followup and getattr(settings, 'ELEVENLABS_FOLLOWUP_AGENT_ID', None):
-            agent_id = settings.ELEVENLABS_FOLLOWUP_AGENT_ID
-            logger.info("Using FOLLOW-UP Agent ID")
+        if is_followup and followup_agent_id:
+            agent_id = followup_agent_id
+            logger.info(f"[AGENT-SELECT] *** USING FOLLOW-UP AGENT ID: {agent_id[:15]}... ***")
+            print(f"[DEBUG] *** SELECTED: FOLLOW-UP AGENT ***")
         else:
-            agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
-            logger.info("Using DEFAULT Agent ID")
+            agent_id = default_agent_id
+            logger.info(f"[AGENT-SELECT] Using DEFAULT Agent ID: {agent_id[:15] if agent_id else 'None'}...")
+            print(f"[DEBUG] *** SELECTED: DEFAULT AGENT ***")
+            if is_followup and not followup_agent_id:
+                print(f"[DEBUG] WARNING: is_followup=True but ELEVENLABS_FOLLOWUP_AGENT_ID is not set!")
+                logger.warning("[AGENT-SELECT] is_followup=True but ELEVENLABS_FOLLOWUP_AGENT_ID is not configured!")
 
         print(f"[DEBUG] Agent ID: {agent_id}")
         print(f"[DEBUG] API Key present: {bool(api_key)}")
