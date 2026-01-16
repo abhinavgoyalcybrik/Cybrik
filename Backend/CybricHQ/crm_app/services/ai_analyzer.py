@@ -61,11 +61,14 @@ class CallAnalyzer:
                         "content": """You are an AI assistant analyzing university admission counseling calls.
                         Your PRIMARY GOAL is to determine if the student has submitted their documents (Passport, Marksheets, IELTS/TOEFL, etc.).
                         If documents are missing, you MUST recommend a follow-up to collect them.
-                        Also extract detailed applicant information including personal details, academic history, and english proficiency scores.
                         
-                        TASK VERIFICATION:
-                        If pending tasks are provided, analyze the conversation to see if they were completed.
-                        Mark a task as completed ONLY if there is clear evidence in the transcript.
+                        FOLLOW-UP HANDLING:
+                        - If the user explicitly asks for a callback (e.g., "call me in 10 mins", "busy now"), scheduled a 'phone' follow-up with 'high' priority.
+                        - If the user is interested but busy, schedule a 'phone' follow-up.
+                        - If the user asks for information, schedule an 'email' or 'whatsapp' follow-up.
+                        - Be precise with timing (e.g. "5 minutes", "2 hours", "Tomorrow at 10am").
+                        
+                        Also extract detailed applicant information including personal details, academic history, and english proficiency scores.
                         """
                     },
                     {
@@ -162,17 +165,23 @@ class CallAnalyzer:
                                 "type": "object",
                                 "properties": {
                                     "needed": {"type": "boolean", "description": "Whether follow-up is recommended"},
-                                    "timing": {"type": "string", "description": "When to follow up (e.g., '2 days', '1 week')"},
+                                    "channel": {
+                                        "type": "string", 
+                                        "enum": ["phone", "email", "whatsapp", "ai_call"], 
+                                        "description": "Preferred channel for follow-up. Use 'phone' or 'ai_call' for callbacks."
+                                    },
+                                    "priority": {"type": "string", "enum": ["HIGH", "MEDIUM", "LOW"], "description": "Priority of the task"},
+                                    "timing": {"type": "string", "description": "When to follow up (e.g., '5 minutes', '2 days')"},
                                     "reason": {"type": "string", "description": "Why follow-up is needed"},
                                     "suggested_action": {"type": "string", "description": "Recommended next action"},
-                                    "call_script": {"type": "string", "description": "Suggested opening line for the follow-up call, referencing previous conversation"},
+                                    "call_script": {"type": "string", "description": "Suggested opening line for the follow-up call"},
                                     "key_topics": {
                                         "type": "array", 
                                         "items": {"type": "string"},
-                                        "description": "List of specific topics to discuss in the follow-up (max 5)"
+                                        "description": "List of specific topics to discuss in the follow-up"
                                     },
-                                    "call_objective": {"type": "string", "description": "Main goal for the follow-up call (e.g., 'Get commitment on document submission date')"},
-                                    "previous_call_summary": {"type": "string", "description": "Brief summary of what was discussed in this call for future reference"}
+                                    "call_objective": {"type": "string", "description": "Main goal for the follow-up call"},
+                                    "previous_call_summary": {"type": "string", "description": "Brief summary of what was discussed"}
                                 },
                                 "required": ["needed"]
                             },

@@ -790,17 +790,40 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 logger.info(f"AI auto-updated lead {lead.id} status: {old_status} -> {lead.status}")
             
             created_tasks = []
-            if analysis.get('follow_up', {}).get('needed'):
-                priority = 'HIGH' if analysis.get('interest_level') == 'high' else 'MEDIUM'
+            analysis_follow_up = analysis.get('follow_up', {})
+            
+            if analysis_follow_up.get('needed'):
+                priority = analysis.get('interest_level') == 'high' and 'HIGH' or 'MEDIUM'
+                
+                # Get channel directly from AI analysis, fallback to logic if missing
+                ai_channel = analysis_follow_up.get('channel')
+                
+                # Map 'phone' to 'ai_call' effectively for automated calls
+                if ai_channel in ['phone', 'ai_call']:
+                    channel = 'ai_call'
+                elif ai_channel:
+                    channel = ai_channel
+                # Fallback logic if AI didn't specify channel
+                elif analysis.get('interest_level') == 'high':
+                    channel = 'ai_call'
+                else:
+                    channel = 'email'
                 
                 # Create FollowUp linked to Lead
                 task = FollowUp.objects.create(
-                    lead=None,  # FollowUp.lead points to Applicant, not Lead - we need to handle this
-                    crm_lead=lead,  # Link via crm_lead field instead
-                    channel='phone' if analysis.get('interest_level') == 'high' else 'email',
-                    notes=f"AI Recommendation: {analysis.get('follow_up', {}).get('reason', 'Follow-up needed')}",
-                    due_at=calculate_follow_up_time(analysis.get('follow_up', {}).get('timing', '2 days')),
-                    metadata={'created_by_ai': True, 'analysis': analysis, 'priority': priority, 'lead_id': lead.id}
+                    lead=None,
+                    crm_lead=lead,
+                    channel=channel,
+                    notes=f"AI Recommendation: {analysis_follow_up.get('reason', 'Follow-up needed')}",
+                    due_at=calculate_follow_up_time(analysis_follow_up.get('timing', '2 hours')),
+                    metadata={
+                        'created_by_ai': True, 
+                        'analysis': analysis, 
+                        'priority': priority, 
+                        'lead_id': lead.id,
+                        'call_script': analysis_follow_up.get('call_script'),
+                        'call_objective': analysis_follow_up.get('call_objective')
+                    }
                 )
                 created_tasks.append(task)
                 

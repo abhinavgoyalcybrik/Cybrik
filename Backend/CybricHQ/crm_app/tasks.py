@@ -679,21 +679,36 @@ def get_transcript_for_call(call_record):
 
 
 def calculate_follow_up_time(timing_str):
-    """Calculate follow-up datetime from string like '2 days' or '1 week'"""
+    """Calculate follow-up datetime from string like '5 minutes', '2 hours', '2 days' or '1 week'"""
     now = timezone.now()
-    timing_lower = timing_str.lower()
+    timing_lower = timing_str.lower().strip()
     
+    # Handle immediate / ASAP requests
+    if any(word in timing_lower for word in ['now', 'immediate', 'asap', 'right away', 'soon']):
+        return now + timedelta(minutes=5)  # 5 minutes from now
+    
+    # Handle minutes
+    if 'minute' in timing_lower or 'min' in timing_lower:
+        minutes = int(''.join(filter(str.isdigit, timing_lower)) or 5)
+        return now + timedelta(minutes=minutes)
+    
+    # Handle hours
     if 'hour' in timing_lower:
         hours = int(''.join(filter(str.isdigit, timing_lower)) or 1)
         return now + timedelta(hours=hours)
-    elif 'day' in timing_lower:
+    
+    # Handle days
+    if 'day' in timing_lower:
         days = int(''.join(filter(str.isdigit, timing_lower)) or 2)
         return now + timedelta(days=days)
-    elif 'week' in timing_lower:
+    
+    # Handle weeks
+    if 'week' in timing_lower:
         weeks = int(''.join(filter(str.isdigit, timing_lower)) or 1)
         return now + timedelta(weeks=weeks)
-    else:
-        return now + timedelta(days=2)  # Default: 2 days
+    
+    # Default: 2 hours (more reasonable than 2 days for callbacks)
+    return now + timedelta(hours=2)
 
 
 @shared_task
