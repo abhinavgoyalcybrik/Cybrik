@@ -26,7 +26,7 @@ class GenerateUploadLinkView(views.APIView):
             token = signer.sign(str(lead.id))
             
             # Construct URL using configured FRONTEND_URL
-            frontend_url = getattr(settings, 'FRONTEND_URL', 'https://cybriksolutions.com')
+            frontend_url = getattr(settings, 'FRONTEND_URL', 'https://crm.cybriksolutions.com')
             upload_link = f"/upload?token={token}"
             full_link = f"{frontend_url.rstrip('/')}/upload?token={token}"
             
