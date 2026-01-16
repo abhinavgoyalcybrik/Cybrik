@@ -13,10 +13,11 @@ logger = logging.getLogger(__name__)
 UPLOAD_TOKEN_SALT = "cybrik-public-upload-v1"
 UPLOAD_LINK_MAX_AGE_SECONDS = 30 * 24 * 60 * 60  # 30 days in seconds
 
-# New signer with timestamp for expiry
+# New signer with timestamp for expiry (salted)
 signer = TimestampSigner(salt=UPLOAD_TOKEN_SALT)
-# Legacy signer for backward compatibility with old tokens
-legacy_signer = Signer()
+# Legacy signers for backward compatibility with old tokens
+legacy_timestamp_signer = TimestampSigner()  # unsalted TimestampSigner
+legacy_signer = Signer()  # basic Signer (no timestamp)
 
 class GenerateUploadLinkView(views.APIView):
     """
@@ -54,33 +55,50 @@ class PublicUploadView(views.APIView):
 
     def _validate_token(self, token):
         """
-        Validate token using TimestampSigner with fallback to legacy Signer.
+        Validate token using TimestampSigner with fallback to legacy signers.
         Returns (lead_id, error_response) - if error_response is not None, return it.
         """
-        # Try new TimestampSigner first
+        token_preview = token[:20] if len(token) > 20 else token
+        
+        # Try 1: New salted TimestampSigner
         try:
             lead_id = signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
-            logger.info(f"Token validated successfully (new format) for lead_id: {lead_id}")
+            logger.info(f"Token validated successfully (new salted format) for lead_id: {lead_id}")
             return lead_id, None
         except SignatureExpired:
-            logger.warning(f"Token expired: {token[:20]}...")
+            logger.warning(f"Token expired (new format): {token_preview}...")
             return None, Response(
                 {"error": "This upload link has expired. Please request a new one."},
                 status=status.HTTP_403_FORBIDDEN
             )
         except BadSignature:
-            # Try legacy signer for backward compatibility
-            logger.debug(f"New signer failed, trying legacy signer...")
-            try:
-                lead_id = legacy_signer.unsign(token)
-                logger.info(f"Token validated successfully (legacy format) for lead_id: {lead_id}")
-                return lead_id, None
-            except BadSignature:
-                logger.warning(f"Token validation failed (both signers): {token[:20]}...")
-                return None, Response(
-                    {"error": "Invalid or expired link. Please request a new one."},
-                    status=status.HTTP_403_FORBIDDEN
-                )
+            logger.debug(f"New salted signer failed, trying legacy unsalted TimestampSigner...")
+        
+        # Try 2: Legacy unsalted TimestampSigner (for tokens generated before salt was added)
+        try:
+            lead_id = legacy_timestamp_signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
+            logger.info(f"Token validated successfully (legacy timestamp format) for lead_id: {lead_id}")
+            return lead_id, None
+        except SignatureExpired:
+            logger.warning(f"Token expired (legacy timestamp): {token_preview}...")
+            return None, Response(
+                {"error": "This upload link has expired. Please request a new one."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        except BadSignature:
+            logger.debug(f"Legacy TimestampSigner failed, trying basic Signer...")
+        
+        # Try 3: Basic Signer (for very old tokens without timestamp)
+        try:
+            lead_id = legacy_signer.unsign(token)
+            logger.info(f"Token validated successfully (basic signer format) for lead_id: {lead_id}")
+            return lead_id, None
+        except BadSignature:
+            logger.warning(f"Token validation failed (all signers): {token_preview}...")
+            return None, Response(
+                {"error": "Invalid or expired link. Please request a new one."},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
     def get(self, request):
         """Validate token and return lead name"""
