@@ -751,7 +751,6 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 crm_lead=lead, # Assuming crm_lead field exists for Lead model link, or just rely on metadata
                 channel='ai_call',
                 status='pending',
-                dictated=False,
                 due_at=due_time,
                 notes="Auto-retry: No transcript found (call likely failed or unattended).",
                 metadata={'created_by_ai': True, 'reason': 'no_transcript_retry', 'lead_id': lead.id}
