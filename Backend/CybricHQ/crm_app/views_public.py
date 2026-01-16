@@ -52,11 +52,15 @@ class PublicUploadView(views.APIView):
         try:
             lead_id = signer.unsign(token)
             lead = Lead.objects.get(pk=lead_id)
-            return Response({"valid": True, "lead_name": lead.name, "lead_id": lead.id})
+            # Use str(lead) to get best available name (first_name, name, or ID)
+            return Response({"valid": True, "lead_name": str(lead), "lead_id": lead.id})
         except BadSignature:
-            return Response({"error": "Invalid or expired link"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Invalid or expired link. Please request a new one."}, status=status.HTTP_403_FORBIDDEN)
         except Lead.DoesNotExist:
-            return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Lead not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Token validation failed: {e}")
+            return Response({"error": f"Server Error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
         token = request.data.get("token")
