@@ -26,6 +26,8 @@ interface Task {
     application: number | null;
     lead: number | null;
     applicant_name?: string;
+    crm_lead?: number | null;
+    crm_lead_name?: string;
     call_record?: any | null;
     call_record_id?: number | null;
 }
@@ -342,8 +344,8 @@ export default function TasksPage() {
 
                 {processResult && (
                     <div className={`p-3 rounded-lg text-sm ${processResult.startsWith('Error')
-                            ? 'bg-red-50 text-red-600 border border-red-200'
-                            : 'bg-green-50 text-green-600 border border-green-200'
+                        ? 'bg-red-50 text-red-600 border border-red-200'
+                        : 'bg-green-50 text-green-600 border border-green-200'
                         }`}>
                         {processResult}
                     </div>
@@ -394,17 +396,17 @@ export default function TasksPage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`uppercase text-xs font-bold tracking-wider ${task.channel === 'ai_call'
-                                                    ? 'text-purple-600'
-                                                    : 'text-[var(--cy-text-muted)]'
+                                                ? 'text-purple-600'
+                                                : 'text-[var(--cy-text-muted)]'
                                                 }`}>
                                                 {task.channel === 'ai_call' ? 'AI Call' : task.channel}
                                             </span>
                                             {task.channel === 'ai_call' && task.status && (
                                                 <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${task.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
-                                                        task.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
-                                                            task.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                                                task.status === 'failed' ? 'bg-red-100 text-red-700' :
-                                                                    'bg-gray-100 text-gray-700'
+                                                    task.status === 'in_progress' ? 'bg-yellow-100 text-yellow-700' :
+                                                        task.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                                            task.status === 'failed' ? 'bg-red-100 text-red-700' :
+                                                                'bg-gray-100 text-gray-700'
                                                     }`}>
                                                     {task.status}
                                                 </span>
@@ -421,6 +423,10 @@ export default function TasksPage() {
                                             ) : task.lead ? (
                                                 <Link href={`/applicants/${task.lead}`} className="text-[var(--cy-lime-hover)] hover:underline">
                                                     {task.applicant_name || `Applicant #${task.lead}`}
+                                                </Link>
+                                            ) : task.crm_lead ? (
+                                                <Link href={`/leads/${task.crm_lead}`} className="text-[var(--cy-lime-hover)] hover:underline">
+                                                    {task.crm_lead_name || `Lead #${task.crm_lead}`}
                                                 </Link>
                                             ) : '-'}
                                         </td>

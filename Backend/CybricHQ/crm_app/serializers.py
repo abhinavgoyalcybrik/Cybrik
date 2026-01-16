@@ -506,6 +506,8 @@ class FollowUpSerializer(serializers.ModelSerializer):
     lead = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
     assigned_to = serializers.PrimaryKeyRelatedField(read_only=True)
     applicant_name = serializers.SerializerMethodField()
+    crm_lead = serializers.PrimaryKeyRelatedField(read_only=True)
+    crm_lead_name = serializers.SerializerMethodField()
     call_record = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -515,6 +517,8 @@ class FollowUpSerializer(serializers.ModelSerializer):
             "application",
             "lead",
             "applicant_name",
+            "crm_lead",
+            "crm_lead_name",
             "assigned_to",
             "due_at",
             "channel",
@@ -530,6 +534,15 @@ class FollowUpSerializer(serializers.ModelSerializer):
     def get_applicant_name(self, obj):
         if obj.lead:
             return f"{obj.lead.first_name} {obj.lead.last_name}".strip()
+        return None
+        
+    def get_crm_lead_name(self, obj):
+        if obj.crm_lead:
+            # Prefer first/last name if available, else name field
+            name = f"{obj.crm_lead.first_name or ''} {obj.crm_lead.last_name or ''}".strip()
+            if not name:
+                name = obj.crm_lead.name or f"Lead #{obj.crm_lead.id}"
+            return name
         return None
 
 
