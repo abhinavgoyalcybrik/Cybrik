@@ -760,18 +760,25 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     # Handle server handshake - must receive this before sending audio
                     if msg_type == 'conversation_initiation_metadata':
                         self.elevenlabs_ready = True
-                        # Extract conversation_id for later CallRecord update
-                        self.elevenlabs_conversation_id = data.get('conversation_id')
+                        
+                        # Extract conversation_id - it's NESTED inside conversation_initiation_metadata_event!
+                        metadata_event = data.get('conversation_initiation_metadata_event', {})
+                        self.elevenlabs_conversation_id = metadata_event.get('conversation_id')
+                        
                         logger.info(f"[ELEVENLABS] Server handshake complete - conversation_id: {self.elevenlabs_conversation_id}")
+                        logger.info(f"[ELEVENLABS] Full metadata_event: {metadata_event}")
                         
                         # Save it immediately to DB so webhook can match it!
                         call_record_id = self.lead_context.get('call_record_id')
                         if call_record_id and self.elevenlabs_conversation_id:
                             # Run async task to save without blocking
                             asyncio.create_task(self.save_conversation_id(call_record_id, self.elevenlabs_conversation_id))
+                            logger.info(f"[ELEVENLABS] Triggered save_conversation_id for CallRecord {call_record_id}")
+                        else:
+                            logger.warning(f"[ELEVENLABS] Missing call_record_id ({call_record_id}) or conversation_id ({self.elevenlabs_conversation_id})")
 
                         # Log server's expected audio format
-                        input_format = data.get('user_input_audio_format', 'unknown')
+                        input_format = metadata_event.get('user_input_audio_format', 'unknown')
                         logger.info(f"[ELEVENLABS] Expected input format: {input_format}")
                     
                     elif msg_type == 'audio':
