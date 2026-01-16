@@ -58,46 +58,54 @@ class PublicUploadView(views.APIView):
         Validate token using TimestampSigner with fallback to legacy signers.
         Returns (lead_id, error_response) - if error_response is not None, return it.
         """
-        token_preview = token[:20] if len(token) > 20 else token
-        
-        # Try 1: New salted TimestampSigner
         try:
-            lead_id = signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
-            logger.info(f"Token validated successfully (new salted format) for lead_id: {lead_id}")
-            return lead_id, None
-        except SignatureExpired:
-            logger.warning(f"Token expired (new format): {token_preview}...")
+            token_preview = token[:20] if len(token) > 20 else token
+            
+            # Try 1: New salted TimestampSigner
+            try:
+                lead_id = signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
+                logger.info(f"Token validated successfully (new salted format) for lead_id: {lead_id}")
+                return lead_id, None
+            except SignatureExpired:
+                logger.warning(f"Token expired (new format): {token_preview}...")
+                return None, Response(
+                    {"error": "This upload link has expired. Please request a new one."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            except BadSignature:
+                logger.debug(f"New salted signer failed, trying legacy unsalted TimestampSigner...")
+            
+            # Try 2: Legacy unsalted TimestampSigner (for tokens generated before salt was added)
+            try:
+                lead_id = legacy_timestamp_signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
+                logger.info(f"Token validated successfully (legacy timestamp format) for lead_id: {lead_id}")
+                return lead_id, None
+            except SignatureExpired:
+                logger.warning(f"Token expired (legacy timestamp): {token_preview}...")
+                return None, Response(
+                    {"error": "This upload link has expired. Please request a new one."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            except BadSignature:
+                logger.debug(f"Legacy TimestampSigner failed, trying basic Signer...")
+            
+            # Try 3: Basic Signer (for very old tokens without timestamp)
+            try:
+                lead_id = legacy_signer.unsign(token)
+                logger.info(f"Token validated successfully (basic signer format) for lead_id: {lead_id}")
+                return lead_id, None
+            except BadSignature as e:
+                logger.warning(f"Token validation failed (all signers): {token_preview}... Error: {e}")
+                return None, Response(
+                    {"error": f"Invalid link. Debug: {str(e)}"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        except Exception as e:
+            import traceback
+            logger.error(f"CRITICAL ERROR in _validate_token: {e}\n{traceback.format_exc()}")
             return None, Response(
-                {"error": "This upload link has expired. Please request a new one."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        except BadSignature:
-            logger.debug(f"New salted signer failed, trying legacy unsalted TimestampSigner...")
-        
-        # Try 2: Legacy unsalted TimestampSigner (for tokens generated before salt was added)
-        try:
-            lead_id = legacy_timestamp_signer.unsign(token, max_age=UPLOAD_LINK_MAX_AGE_SECONDS)
-            logger.info(f"Token validated successfully (legacy timestamp format) for lead_id: {lead_id}")
-            return lead_id, None
-        except SignatureExpired:
-            logger.warning(f"Token expired (legacy timestamp): {token_preview}...")
-            return None, Response(
-                {"error": "This upload link has expired. Please request a new one."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        except BadSignature:
-            logger.debug(f"Legacy TimestampSigner failed, trying basic Signer...")
-        
-        # Try 3: Basic Signer (for very old tokens without timestamp)
-        try:
-            lead_id = legacy_signer.unsign(token)
-            logger.info(f"Token validated successfully (basic signer format) for lead_id: {lead_id}")
-            return lead_id, None
-        except BadSignature:
-            logger.warning(f"Token validation failed (all signers): {token_preview}...")
-            return None, Response(
-                {"error": "Invalid or expired link. Please request a new one."},
-                status=status.HTTP_403_FORBIDDEN
+                {"error": f"Server Logic Error: {str(e)}", "trace": traceback.format_exc()},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
     def get(self, request):

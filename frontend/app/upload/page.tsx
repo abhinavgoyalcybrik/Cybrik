@@ -103,7 +103,7 @@ function UploadContent() {
                             <CardTitle>Link Expired or Invalid</CardTitle>
                         </div>
                         <CardDescription>
-                            This upload link is no longer valid. Please request a new one.
+                            {error || "This upload link is no longer valid. Please request a new one."}
                         </CardDescription>
                     </CardHeader>
                 </Card>
