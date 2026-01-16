@@ -218,7 +218,16 @@ export default function TasksPage() {
 
     const openEditModal = (task: Task) => {
         setEditingTask(task);
-        const dueDate = task.due_at ? new Date(task.due_at).toISOString().slice(0, 16) : '';
+
+        let dueDate = '';
+        if (task.due_at) {
+            // Convert UTC to local datetime string for input[type="datetime-local"]
+            const date = new Date(task.due_at);
+            const offsetMs = date.getTimezoneOffset() * 60 * 1000;
+            const localDate = new Date(date.getTime() - offsetMs);
+            dueDate = localDate.toISOString().slice(0, 16);
+        }
+
         setEditForm({
             due_at: dueDate,
             channel: task.channel,
@@ -392,7 +401,7 @@ export default function TasksPage() {
                                             </button>
                                         </td>
                                         <td className="px-6 py-4 text-[var(--cy-navy)]">
-                                            {task.due_at ? new Date(task.due_at).toLocaleDateString() : '-'}
+                                            {task.due_at ? new Date(task.due_at).toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-'}
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`uppercase text-xs font-bold tracking-wider ${task.channel === 'ai_call'
