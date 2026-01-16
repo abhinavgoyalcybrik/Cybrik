@@ -744,15 +744,18 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         """
         Listen for responses from ElevenLabs Agent and forward audio to Smartflo.
         """
+        logger.info("[ELEVENLABS-LISTENER] ====== LISTENER TASK STARTED ======")
         try:
             async for message in self.elevenlabs_ws:
                 try:
                     data = json.loads(message)
                     msg_type = data.get('type', '')
                     
-                    # Debug: log all message types received
-                    if msg_type != 'audio':
-                        logger.info(f"[ELEVENLABS] Received type: {msg_type}")
+                    # DEBUG: Log ALL message types (including audio count for tracking)
+                    if msg_type == 'audio':
+                        pass  # Don't spam logs with audio
+                    else:
+                        logger.info(f"[ELEVENLABS-LISTENER] Received type: {msg_type} - Keys: {list(data.keys())}")
                     
                     # Handle server handshake - must receive this before sending audio
                     if msg_type == 'conversation_initiation_metadata':
