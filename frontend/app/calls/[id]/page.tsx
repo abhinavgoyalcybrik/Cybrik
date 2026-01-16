@@ -22,6 +22,8 @@ type CallRecord = {
     ai_quality_score: number | null;
     applicant: number | null;
     lead: number | null;
+    external_call_id?: string;
+    conversation_id?: string;
 };
 
 export default function CallDetailPage() {
@@ -259,7 +261,7 @@ export default function CallDetailPage() {
                                 <div className="pt-2">
                                     <span className="text-[var(--cy-text-muted)] block mb-1">Call ID</span>
                                     <code className="text-xs bg-gray-100 p-1 rounded block break-all">
-                                        {call.metadata?.conversation_id || call.metadata?.external_call_id || "N/A"}
+                                        {call.conversation_id || call.external_call_id || call.metadata?.conversation_id || call.metadata?.external_call_id || "N/A"}
                                     </code>
                                 </div>
                             </div>
