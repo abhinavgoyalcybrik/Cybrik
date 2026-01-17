@@ -165,7 +165,9 @@ export default function Dashboard() {
     localStorage.removeItem('ielts_user');
     localStorage.removeItem('ielts_token');
     // Use AuthContext logout for complete cleanup
-    logout();
+    await logout();
+    // Redirect to login page
+    router.push('/login');
   };
 
   if (isLoading) {

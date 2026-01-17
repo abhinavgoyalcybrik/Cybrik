@@ -196,10 +196,12 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                     const passageHighlights: any[] = [];
                                     passage.groups?.forEach((g: any) => {
                                         g.items?.forEach((item: any) => {
-                                            if (item.answer.start_index !== undefined && item.answer.end_index !== undefined) {
+                                            const startIdx = item.answer.start_index;
+                                            const endIdx = item.answer.end_index || item.answer.stop_index;
+                                            if (startIdx !== undefined && endIdx !== undefined) {
                                                 passageHighlights.push({
-                                                    start: item.answer.start_index,
-                                                    end: item.answer.end_index,
+                                                    start: startIdx,
+                                                    end: endIdx,
                                                     questionNumber: item.number,
                                                     answer: item.answer.value
                                                 });

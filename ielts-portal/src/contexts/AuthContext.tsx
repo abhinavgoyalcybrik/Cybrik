@@ -232,6 +232,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(null);
             localStorage.removeItem('ielts_user');
             localStorage.removeItem('ielts_token');
+            // Redirect to login page
+            if (typeof window !== 'undefined') {
+                window.location.href = '/login';
+            }
         }
     };
 
