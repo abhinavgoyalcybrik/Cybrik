@@ -1,7 +1,10 @@
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
-from .models import Applicant, AcademicRecord, Document, Application, FollowUp, AuditLog
+from .models import Applicant, AcademicRecord, Document, Application, FollowUp, AuditLog, Lead
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_changes(instance, created):
     """
@@ -26,6 +29,74 @@ def capture_applicant_old_state(sender, instance, **kwargs):
             instance._old_state = None
     else:
         instance._old_state = None
+
+@receiver(post_save, sender=Lead)
+def create_application_on_lead_conversion(sender, instance, created, **kwargs):
+    """
+    When a Lead is converted:
+    1. Ensure an Applicant profile exists.
+    2. Create an Application if one doesn't exist.
+    """
+    if instance.status != 'converted':
+        return
+        
+    # Check if application already exists for this lead to prevent duplicates
+    if Application.objects.filter(lead=instance).exists():
+        return
+        
+    try:
+        # 1. Resolve Applicant
+        applicant = instance.applicants.first()
+        
+        if not applicant:
+            # Create new Applicant based on Lead data
+            applicant = Applicant.objects.create(
+                tenant=instance.tenant,
+                lead=instance,
+                first_name=instance.first_name or instance.name or "Unknown",
+                last_name=instance.last_name or "",
+                email=instance.email,
+                phone=instance.phone,
+                preferred_country=instance.preferred_country or instance.country,
+                counseling_notes=instance.counseling_notes,
+                stage="new",
+                metadata={"source_lead_id": instance.id}
+            )
+            # Log the auto-creation
+            AuditLog.objects.create(
+                actor="System (Auto-Convert)",
+                action="Created",
+                target_type="Applicant",
+                target_id=str(applicant.id),
+                applicant=applicant,
+                notes="Auto-created applicant from converted lead"
+            )
+
+        # 2. Create Application
+        app = Application.objects.create(
+            tenant=instance.tenant,
+            applicant=applicant,
+            lead=instance,
+            program=instance.interested_service or "General Application",
+            status="pending",
+            assigned_to=instance.assigned_to,
+            metadata={"source": "auto_conversion"}
+        )
+        
+        # Log the application creation
+        AuditLog.objects.create(
+            actor="System (Auto-Convert)",
+            action="Created",
+            target_type="Application",
+            target_id=str(app.id),
+            applicant=applicant,
+            data={"program": app.program},
+            notes=f"Auto-created application for {app.program}"
+        )
+        
+    except Exception as e:
+        # Log error but don't blocking the save
+        logger.error(f"Failed to auto-create application for converted lead {instance.id}: {e}")
 
 @receiver(post_save, sender=Applicant)
 def log_applicant_save(sender, instance, created, **kwargs):
