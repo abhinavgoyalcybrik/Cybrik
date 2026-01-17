@@ -225,7 +225,7 @@ export default function DashboardPage() {
         return (
           <CostChart
             data={analyticsData.costSeries || []}
-            title="Daily AI Cost"
+            title="Daily AI Call Duration"
           />
         );
       default:
@@ -383,7 +383,7 @@ export default function DashboardPage() {
               <div className="h-96">
                 <CostChart
                   data={analyticsData.costSeries || []}
-                  title="Daily AI Cost Trend"
+                  title="Daily AI Call Duration"
                 />
               </div>
               <div className="h-96 md:col-span-2">
