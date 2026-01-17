@@ -170,11 +170,8 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-USE_TZ = True
 DEV_FRONTEND_LAN = "http://192.168.1.72:5000"
-FRONTEND_URL = os.getenv("FRONTEND_URL", os.getenv("APP_URL", "https://crm.cybriksolutions.com"))
-if DEBUG:
-    FRONTEND_URL = "http://localhost:3000"
+# FRONTEND_URL is set at line 30 (moved there for clarity)
 
 
 # --- Static & Media (local) ---
@@ -275,7 +272,7 @@ ELEVENLABS_OUTBOUND_PATH = os.environ.get("ELEVENLABS_OUTBOUND_PATH", "/v1/conva
 ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 ELEVENLABS_AGENT_ID = os.environ.get("ELEVENLABS_AGENT_ID", "")
 ELEVENLABS_FOLLOWUP_AGENT_ID = os.environ.get("ELEVENLABS_FOLLOWUP_AGENT_ID", "")
-ELEVENLABS_POSTCALL_WEBHOOK = "https://sauciest-westin-noniridescently.ngrok-free.dev/api/webhooks/elevenlabs/postcall/" # os.environ.get("ELEVENLABS_POSTCALL_WEBHOOK", "")
+ELEVENLABS_POSTCALL_WEBHOOK = os.environ.get("ELEVENLABS_POSTCALL_WEBHOOK", f"https://{NGROK_HOST}/api/webhooks/elevenlabs/postcall/") # os.environ.get("ELEVENLABS_POSTCALL_WEBHOOK", "")
 ELEVENLABS_PHONE_ID = os.getenv("ELEVENLABS_PHONE_ID")
 ELEVENLABS_WEBHOOK_SECRET = os.getenv("ELEVENLABS_WEBHOOK_SECRET", "")
 ELEVENLABS_VOICE_ID = os.getenv("ELEVENLABS_VOICE_ID", "")  # Default: Sarah

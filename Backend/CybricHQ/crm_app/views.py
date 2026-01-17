@@ -427,8 +427,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
             
         instance = serializer.save()
         
-        instance = serializer.save()
-        
         # Trigger real AI document extraction via Celery task
         try:
             from .tasks import verify_document_task
