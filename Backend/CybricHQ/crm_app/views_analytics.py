@@ -132,7 +132,8 @@ def analytics_funnel(request):
 @permission_classes([IsAuthenticated])
 def analytics_llm_usage(request):
     """
-    Returns aggregated LLM usage stats from CallRecords (ElevenLabs).
+    Returns aggregated AI call usage stats from CallRecords.
+    Includes all providers (ElevenLabs, SmartFlo, etc.)
     Supports ?start=YYYY-MM-DD&end=YYYY-MM-DD
     """
     tenant = _get_tenant(request)
@@ -140,7 +141,8 @@ def analytics_llm_usage(request):
     start_str = request.query_params.get("start")
     end_str = request.query_params.get("end")
     
-    filters = {"provider": "elevenlabs"}
+    # Include all AI call providers (remove elevenlabs-only filter)
+    filters = {}
     if start_str:
         start = parse_date(start_str)
         if start:
