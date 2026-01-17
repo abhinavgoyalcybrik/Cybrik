@@ -100,12 +100,16 @@ export default function TasksPage() {
         if (!force && leadsOptions.length > 0) return;
         try {
             setLoadingLeads(true);
+            console.log('[fetchLeads] Fetching leads...');
             // Fetch leads with phone numbers
             const data = await apiFetch('/api/leads/?limit=200');
+            console.log('[fetchLeads] Raw API response:', data);
             const leads = (data.results || data || []).filter((l: any) => l.phone);
+            console.log('[fetchLeads] Filtered leads with phone:', leads);
             setLeadsOptions(leads);
+            console.log('[fetchLeads] Set leads options, count:', leads.length);
         } catch (err) {
-            console.error('Failed to load leads', err);
+            console.error('[fetchLeads] Failed to load leads:', err);
         } finally {
             setLoadingLeads(false);
         }
@@ -547,19 +551,22 @@ export default function TasksPage() {
                                                     Loading leads...
                                                 </div>
                                             ) : (
-                                                <select
-                                                    required
-                                                    value={newTask.lead_id || ''}
-                                                    onChange={e => setNewTask({ ...newTask, lead_id: Number(e.target.value) || null })}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
-                                                >
-                                                    <option value="">Select a lead...</option>
-                                                    {leadsOptions.filter(a => a.phone).map(lead => (
-                                                        <option key={lead.id} value={lead.id}>
-                                                            {lead.first_name || lead.name || 'Lead'} {lead.last_name} ({lead.phone})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                <>
+                                                    {console.log('[Dropdown Render] leadsOptions:', leadsOptions, 'filtered count:', leadsOptions.filter(a => a.phone).length)}
+                                                    <select
+                                                        required
+                                                        value={newTask.lead_id || ''}
+                                                        onChange={e => setNewTask({ ...newTask, lead_id: Number(e.target.value) || null })}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-lime)] outline-none"
+                                                    >
+                                                        <option value="">Select a lead...</option>
+                                                        {leadsOptions.filter(a => a.phone).map(lead => (
+                                                            <option key={lead.id} value={lead.id}>
+                                                                {lead.first_name || lead.name || 'Lead'} {lead.last_name} ({lead.phone})
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </>
                                             )}
                                             <p className="text-xs text-gray-500 mt-1">
                                                 Only leads with phone numbers are shown
