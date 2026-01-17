@@ -89,8 +89,8 @@ export default function TasksPage() {
         }
     };
 
-    const fetchLeads = async () => {
-        if (leadsOptions.length > 0) return;
+    const fetchLeads = async (force = false) => {
+        if (!force && leadsOptions.length > 0) return;
         try {
             setLoadingLeads(true);
             // Fetch leads with phone numbers
@@ -343,7 +343,11 @@ export default function TasksPage() {
                                 )}
                             </button>
                             <button
-                                onClick={() => setIsModalOpen(true)}
+                                onClick={() => {
+                                    setIsModalOpen(true);
+                                    // Force refresh leads when opening modal
+                                    fetchLeads(true);
+                                }}
                                 className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2"
                             >
                                 + New Task
