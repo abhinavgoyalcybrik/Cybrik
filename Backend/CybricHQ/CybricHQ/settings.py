@@ -167,7 +167,7 @@ SIMPLE_JWT = {
 
 # --- I18n & timezone ---
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 DEV_FRONTEND_LAN = "http://192.168.1.72:5000"
@@ -326,7 +326,7 @@ CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:63
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = "UTC"
+CELERY_TIMEZONE = "Asia/Kolkata"
 
 # Celery Beat schedule for billing tasks
 CELERY_BEAT_SCHEDULE = {
