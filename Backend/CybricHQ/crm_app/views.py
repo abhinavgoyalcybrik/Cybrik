@@ -443,13 +443,51 @@ class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = Application.objects.all().order_by("-created_at")
     serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
+    filterset_fields = ("status", "stage", "priority")
+
+    def get_queryset(self):
+        """Filter by stage if provided in query params."""
+        qs = super().get_queryset()
+        stage = self.request.query_params.get("stage")
+        if stage:
+            qs = qs.filter(stage=stage)
+        return qs
 
     def perform_create(self, serializer):
-        application = serializer.save()
+        """Create application and convert lead status."""
+        tenant = getattr(self.request, 'tenant', None)
+        if tenant:
+            application = serializer.save(tenant=tenant)
+        else:
+            application = serializer.save()
         if application.lead:
             application.lead.status = 'converted'
             application.lead.save(update_fields=['status'])
             logging.info(f"Lead {application.lead.id} converted to application {application.id}")
+
+    @action(detail=True, methods=["post"], url_path="change-stage")
+    def change_stage(self, request, pk=None):
+        """
+        Change the stage of an application (for Kanban drag-and-drop).
+        Expects: { "stage": "<new_stage_key>" }
+        """
+        app = self.get_object()
+        new_stage = request.data.get("stage")
+        
+        valid_stages = [key for key, _ in Application.STAGE_CHOICES]
+        if new_stage not in valid_stages:
+            return Response(
+                {"error": f"Invalid stage. Valid stages are: {valid_stages}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        old_stage = app.stage
+        app.stage = new_stage
+        app.save(update_fields=["stage", "updated_at"])
+        logging.info(f"Application {app.id} stage changed from {old_stage} to {new_stage}")
+        
+        serializer = self.get_serializer(app)
+        return Response(serializer.data)
 
     @action(detail=True, methods=["post"], url_path="start-voice-call")
     def start_voice_call(self, request, pk=None):
@@ -551,28 +589,40 @@ class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def stages(self, request):
         """
-        Return available application stages/statuses for Kanban columns.
+        Return available application stages/statuses for Kanban columns with counts.
+        Returns format: {stage_key: {code: str, name: str, count: int}, ...}
         """
-        stages = [
-            {"id": key, "title": label} 
-            for key, label in Application.STATUS_CHOICES
-        ]
-        return Response(stages)
+        qs = self.get_queryset()
+        stage_counts = {}
+        
+        for key, label in Application.STAGE_CHOICES:
+            count = qs.filter(stage=key).count()
+            stage_counts[key] = {
+                "code": key,
+                "name": label,
+                "count": count
+            }
+            
+        return Response(stage_counts)
 
     @action(detail=False, methods=["get"])
     def kanban(self, request):
         """
         Return applications grouped by stage for Kanban board.
+        Returns format: {stage_key: {name: str, applications: [...]}, ...}
         """
         qs = self.get_queryset()
         
-        # Group by status
+        # Group by stage
         kanban_data = {}
-        for key, label in Application.STATUS_CHOICES:
+        for key, label in Application.STAGE_CHOICES:
             # Filter applications for this stage
-            apps = qs.filter(status=key)
+            apps = qs.filter(stage=key)
             serializer = self.get_serializer(apps, many=True)
-            kanban_data[key] = serializer.data
+            kanban_data[key] = {
+                "name": label,
+                "applications": serializer.data
+            }
             
         return Response(kanban_data)
 
@@ -715,6 +765,37 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 
             except Exception as e:
                 logger.exception(f"Failed to initiate SmartFlow call for lead {lead.id}: {e}")
+
+    def perform_update(self, serializer):
+        """
+        Override to auto-create Application when lead status changes to 'converted'.
+        """
+        # Get old status before update
+        old_status = serializer.instance.status if serializer.instance else None
+        
+        # Perform the update
+        lead = serializer.save()
+        
+        # Check if status changed to 'converted'
+        if lead.status == 'converted' and old_status != 'converted':
+            # Check if an Application already exists for this lead
+            existing_app = Application.objects.filter(lead=lead).first()
+            if not existing_app:
+                # Create a new Application for this converted lead
+                tenant = getattr(self.request, 'tenant', None) or lead.tenant
+                application = Application.objects.create(
+                    lead=lead,
+                    tenant=tenant,
+                    program=lead.interested_service or "General",
+                    stage="inquiry",  # Start at inquiry stage
+                    status="pending",
+                    metadata={
+                        "converted_from_lead": True,
+                        "lead_source": lead.source,
+                        "original_lead_id": lead.id,
+                    }
+                )
+                logger.info(f"Auto-created Application {application.id} for converted Lead {lead.id}")
 
     @action(detail=True, methods=["get"], url_path="activity")
     def activity(self, request, pk=None):

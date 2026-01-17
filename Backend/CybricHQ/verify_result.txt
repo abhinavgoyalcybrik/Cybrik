@@ -1,0 +1,8 @@
+--- Starting Lead Conversion Verification ---
+Tenant: 458371e7-663f-4c6c-ad3d-6e8c9918fc68
+Lead Created: 2 - Status: new
+converting lead...
+Lead saved with status 'converted'.
+SUCCESS: Applicant Created: 1
+SUCCESS: Application Created: 1
+Test data cleaned up.

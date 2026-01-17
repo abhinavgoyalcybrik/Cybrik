@@ -277,6 +277,30 @@ class Application(models.Model):
         ("accepted", "Accepted"),
         ("rejected", "Rejected"),
     ]
+    
+    # Application workflow stages for Kanban board
+    STAGE_CHOICES = [
+        ("inquiry", "Inquiry"),
+        ("documents_pending", "Documents Pending"),
+        ("application_submitted", "Application Submitted"),
+        ("offer_received", "Offer Received"),
+        ("fee_paid", "Fee Paid"),
+        ("i20_cas_received", "I-20/CAS Received"),
+        ("visa_applied", "Visa Applied"),
+        ("visa_interview", "Visa Interview"),
+        ("visa_approved", "Visa Approved"),
+        ("pre_departure", "Pre-Departure"),
+        ("enrolled", "Enrolled"),
+        ("rejected", "Rejected"),
+        ("withdrawn", "Withdrawn"),
+    ]
+    
+    PRIORITY_CHOICES = [
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("urgent", "Urgent"),
+    ]
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
     lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
@@ -291,6 +315,13 @@ class Application(models.Model):
     
     program = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=32, choices=STATUS_CHOICES, default="pending")
+    stage = models.CharField(max_length=32, choices=STAGE_CHOICES, default="inquiry")
+    priority = models.CharField(max_length=16, choices=PRIORITY_CHOICES, default="medium")
+    
+    # Additional fields for full application workflow
+    university_name = models.CharField(max_length=255, blank=True, null=True)
+    intake = models.CharField(max_length=64, blank=True, null=True, help_text="e.g., Fall 2025, Spring 2026")
+    visa_interview_date = models.DateField(blank=True, null=True)
     metadata = JSONField(blank=True, null=True)
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     submission_date = models.DateTimeField(blank=True, null=True)

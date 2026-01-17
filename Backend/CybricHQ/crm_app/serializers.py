@@ -231,6 +231,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
     applicant_id = serializers.PrimaryKeyRelatedField(
         source="applicant", queryset=Applicant.objects.all(), write_only=True, required=False
     )
+    # Display fields for frontend
+    applicant_name = serializers.SerializerMethodField()
+    applicant_email = serializers.SerializerMethodField()
+    stage_display = serializers.SerializerMethodField()
+    priority_display = serializers.SerializerMethodField()
+    assigned_to_name = serializers.SerializerMethodField()
+    documents_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Application
@@ -238,14 +245,58 @@ class ApplicationSerializer(serializers.ModelSerializer):
             "id",
             "applicant",
             "applicant_id",
+            "applicant_name",
+            "applicant_email",
+            "lead",
             "program",
             "status",
+            "stage",
+            "stage_display",
+            "priority",
+            "priority_display",
+            "university_name",
+            "intake",
+            "visa_interview_date",
             "metadata",
             "assigned_to",
+            "assigned_to_name",
+            "documents_count",
             "created_at",
             "updated_at",
         ]
         read_only_fields = ("created_at", "updated_at")
+
+    def get_applicant_name(self, obj):
+        if obj.applicant:
+            return f"{obj.applicant.first_name} {obj.applicant.last_name or ''}".strip()
+        elif obj.lead:
+            return f"{obj.lead.first_name or obj.lead.name or ''} {obj.lead.last_name or ''}".strip()
+        return "Unknown"
+
+    def get_applicant_email(self, obj):
+        if obj.applicant:
+            return obj.applicant.email
+        elif obj.lead:
+            return obj.lead.email
+        return None
+
+    def get_stage_display(self, obj):
+        return obj.get_stage_display() if hasattr(obj, 'get_stage_display') else obj.stage
+
+    def get_priority_display(self, obj):
+        return obj.get_priority_display() if hasattr(obj, 'get_priority_display') else obj.priority
+
+    def get_assigned_to_name(self, obj):
+        if obj.assigned_to:
+            return f"{obj.assigned_to.first_name} {obj.assigned_to.last_name}".strip() or obj.assigned_to.username
+        return None
+
+    def get_documents_count(self, obj):
+        if obj.applicant:
+            return obj.applicant.documents.count()
+        elif obj.lead:
+            return obj.lead.documents.count()
+        return 0
 
 
 class TranscriptSerializer(serializers.ModelSerializer):
