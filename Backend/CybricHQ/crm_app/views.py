@@ -782,31 +782,40 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             existing_app = Application.objects.filter(lead=lead).first()
             if not existing_app:
                 # Create a new Application for this converted lead
-                # Include all required NOT NULL fields from production database
+                # Use raw SQL because production DB has extra NOT NULL fields not in Django model
+                from django.db import connection
+                import json
+                
                 tenant = getattr(self.request, 'tenant', None) or lead.tenant
-                application = Application.objects.create(
-                    lead=lead,
-                    tenant=tenant,
-                    program=lead.interested_service or "General",
-                    stage="inquiry",  # Start at inquiry stage
-                    status="pending",
-                    priority="medium",
-                    # Boolean fields with NOT NULL constraints
-                    accommodation_arranged=False,
-                    deposit_paid=False,
-                    flight_booked=False,
-                    full_fee_paid=False,
-                    visa_approved=False,
-                    # Other required fields
-                    fee_currency="USD",
-                    stage_history=[{"stage": "inquiry", "timestamp": str(timezone.now())}],
-                    metadata={
-                        "converted_from_lead": True,
-                        "lead_source": lead.source,
-                        "original_lead_id": lead.id,
-                    }
-                )
-                logger.info(f"Auto-created Application {application.id} for converted Lead {lead.id}")
+                tenant_id = str(tenant.id) if tenant else None
+                metadata_json = json.dumps({
+                    "converted_from_lead": True,
+                    "lead_source": lead.source,
+                    "original_lead_id": lead.id,
+                })
+                stage_history_json = json.dumps([{"stage": "inquiry", "timestamp": str(timezone.now())}])
+                
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        INSERT INTO crm_app_application (
+                            lead_id, tenant_id, program, stage, status, priority,
+                            accommodation_arranged, deposit_paid, flight_booked, 
+                            full_fee_paid, visa_approved, fee_currency, stage_history,
+                            metadata, created_at, updated_at
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s,
+                            %s, NOW(), NOW()
+                        ) RETURNING id
+                    """, [
+                        lead.id, tenant_id, lead.interested_service or "General",
+                        "inquiry", "pending", "medium",
+                        False, False, False, False, False, "USD", stage_history_json,
+                        metadata_json
+                    ])
+                    app_id = cursor.fetchone()[0]
+                    
+                logger.info(f"Auto-created Application {app_id} for converted Lead {lead.id}")
 
     @action(detail=True, methods=["get"], url_path="activity")
     def activity(self, request, pk=None):
