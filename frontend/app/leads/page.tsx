@@ -179,35 +179,47 @@ export default function LeadsPage() {
       header: "Actions",
       accessorKey: "id" as keyof Lead,
       className: "text-right",
-      cell: (lead: Lead) => (
-        <div className="flex items-center justify-end gap-2">
-          <select
-            value={lead.status || "new"}
-            onChange={(e) => handleStatusChange(lead.id, e.target.value)}
-            className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[var(--cy-lime)] focus:border-transparent cursor-pointer"
-            title="Change Status"
-          >
-            <option value="new">New</option>
-            <option value="contacted">Contacted</option>
-            <option value="qualified">Qualified</option>
-            <option value="converted">Converted</option>
-            <option value="junk">Junk</option>
-            <option value="lost">Lost</option>
-          </select>
-          <Link
-            href={`/leads/${lead.id}`}
-            className="text-xs font-medium text-[var(--cy-lime-hover)] hover:text-[var(--cy-lime)] transition-colors"
-          >
-            View
-          </Link>
-          <button
-            onClick={() => handleDelete(lead.id)}
-            className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
-          >
-            Delete
-          </button>
-        </div>
-      ),
+      cell: (lead: Lead) => {
+        const isConverted = (lead.status || "").toLowerCase() === "converted";
+        return (
+          <div className="flex items-center justify-end gap-2">
+            {isConverted ? (
+              // Converted leads show a locked badge instead of dropdown
+              <span className="text-xs px-3 py-1.5 rounded-lg bg-green-100 text-green-700 font-semibold flex items-center gap-1">
+                ✓ Converted
+              </span>
+            ) : (
+              <select
+                value={lead.status || "new"}
+                onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[var(--cy-lime)] focus:border-transparent cursor-pointer"
+                title="Change Status"
+              >
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="qualified">Qualified</option>
+                <option value="converted">Converted</option>
+                <option value="junk">Junk</option>
+                <option value="lost">Lost</option>
+              </select>
+            )}
+            <Link
+              href={`/leads/${lead.id}`}
+              className="text-xs font-medium text-[var(--cy-lime-hover)] hover:text-[var(--cy-lime)] transition-colors"
+            >
+              View
+            </Link>
+            {!isConverted && (
+              <button
+                onClick={() => handleDelete(lead.id)}
+                className="text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        )
+      },
     },
   ];
 

@@ -769,9 +769,18 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         """
         Override to auto-create Application when lead status changes to 'converted'.
+        Converted leads cannot have their status changed back.
         """
         # Get old status before update
         old_status = serializer.instance.status if serializer.instance else None
+        new_status = serializer.validated_data.get('status', old_status)
+        
+        # Prevent status changes for converted leads
+        if old_status == 'converted' and new_status != 'converted':
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({
+                "status": "Converted leads cannot have their status changed. Manage this lead in the Applications section."
+            })
         
         # Perform the update
         lead = serializer.save()

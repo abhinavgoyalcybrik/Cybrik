@@ -37,7 +37,7 @@ export default function ApplicationsChart({ data, title }: ApplicationsChartProp
                                 fill="#8884d8"
                                 paddingAngle={5}
                                 dataKey="count"
-                                nameKey="status"
+                                nameKey="stage"
                                 cornerRadius={6}
                             >
                                 {data.map((entry, index) => (

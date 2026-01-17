@@ -174,7 +174,7 @@ def analytics_llm_usage(request):
 @permission_classes([IsAuthenticated])
 def analytics_applications_status(request):
     """
-    Returns distribution of application statuses.
+    Returns distribution of application stages (workflow progress).
     Supports ?start=YYYY-MM-DD&end=YYYY-MM-DD
     """
     tenant = _get_tenant(request)
@@ -193,8 +193,10 @@ def analytics_applications_status(request):
 
     # Apply tenant filtering
     applications_qs = _apply_tenant_filter(Application.objects.all(), tenant, request.user)
-    status_counts = applications_qs.filter(**filters).values('status').annotate(count=Count('id')).order_by('-count')
-    return Response(list(status_counts))
+    
+    # Group by stage instead of status for more meaningful workflow data
+    stage_counts = applications_qs.filter(**filters).values('stage').annotate(count=Count('id')).order_by('-count')
+    return Response(list(stage_counts))
 
 
 @api_view(["GET"])
