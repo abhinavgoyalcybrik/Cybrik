@@ -548,6 +548,34 @@ class ApplicationViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             logger.exception("run_ai failed for app=%s", app.id)
             return Response({"error": "run_ai_failed", "exc": str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(detail=False, methods=["get"])
+    def stages(self, request):
+        """
+        Return available application stages/statuses for Kanban columns.
+        """
+        stages = [
+            {"id": key, "title": label} 
+            for key, label in Application.STATUS_CHOICES
+        ]
+        return Response(stages)
+
+    @action(detail=False, methods=["get"])
+    def kanban(self, request):
+        """
+        Return applications grouped by stage for Kanban board.
+        """
+        qs = self.get_queryset()
+        
+        # Group by status
+        kanban_data = {}
+        for key, label in Application.STATUS_CHOICES:
+            # Filter applications for this stage
+            apps = qs.filter(status=key)
+            serializer = self.get_serializer(apps, many=True)
+            kanban_data[key] = serializer.data
+            
+        return Response(kanban_data)
+
     @action(detail=True, methods=["get"])
     def ai_result(self, request, pk=None):
         app = self.get_object()
