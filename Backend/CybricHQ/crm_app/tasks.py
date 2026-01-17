@@ -172,41 +172,91 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
 @shared_task
 def check_and_initiate_followups():
     """
-    Periodic task to check for due follow-ups and initiate AI calls.
-    Runs every minute to check for scheduled AI calls that are due.
+    Periodic task (Beat) to check for due follow-ups.
+    Dispatch-only: Enqueues tasks and exits immediately.
     """
     now = timezone.now()
     
-    # Find due AI call follow-ups (ai_call channel, pending/scheduled status)
-    due_ai_calls = FollowUp.objects.filter(
+    # 1. Query for due, pending AI calls
+    # We use select_for_update or just rely on the worker to handle state
+    # Ideally, we grab IDs and let the worker lock the row.
+    
+    due_tasks = FollowUp.objects.filter(
         due_at__lte=now,
         completed=False,
         channel__in=['ai_call', 'phone'],
         status__in=['pending', 'scheduled']
-    ).select_related('lead', 'crm_lead')
+    ).values_list('id', flat=True)
     
     count = 0
-    failed = 0
-    
-    for task in due_ai_calls:
-        target_id = None
-        is_applicant = False
+    for task_id in due_tasks:
+        # Enqueue the heavy lifting
+        execute_single_ai_call_task.delay(task_id)
+        count += 1
         
-        if task.lead:
-            target_id = task.lead.id
-            is_applicant = True
-        elif task.crm_lead:
-            target_id = task.crm_lead.id
+    return f"Queued {count} AI calls for execution"
+
+
+@shared_task(
+    bind=True,
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3, 'countdown': 60},
+    retry_backoff=True
+)
+def execute_single_ai_call_task(self, followup_id):
+    """
+    Worker task to execute a single AI call.
+    Handles locking, API calling, and status updates.
+    """
+    try:
+        # Lock the row to prevent race conditions
+        with django.db.transaction.atomic():
+            # select_for_update(skip_locked=True) is safer for high concurrency 
+            # but standard select_for_update is fine for this scale
+            try:
+                task = FollowUp.objects.select_for_update(nowait=True).get(id=followup_id)
+            except django.db.OperationalError:
+                # Row is locked by another worker (or manual trigger), skip this run
+                logger.info(f"Skipping task {followup_id} - locked by another transaction")
+                return "locked"
+                
+            # Double check status inside the lock
+            if task.completed or task.status not in ['pending', 'scheduled']:
+                logger.info(f"Task {followup_id} already processed or invalid status: {task.status}")
+                return "skipped_status"
+
+            # Check due date again just to be safe (though query handles it)
+            if task.due_at and task.due_at > timezone.now():
+                logger.info(f"Task {followup_id} is not due yet (future due_at)")
+                return "not_due"
+
+            # Determine Target
+            target_id = None
             is_applicant = False
-        else:
-            logger.warning(f"FollowUp {task.id} has no lead/applicant, skipping")
-            continue
             
-        logger.info(f"Processing scheduled AI call {task.id} for {'Applicant' if is_applicant else 'Lead'} {target_id}")
-        
-        # Update status to in_progress
-        task.status = "in_progress"
-        task.save(update_fields=['status'])
+            if task.lead:
+                target_id = task.lead.id
+                is_applicant = True
+            elif task.crm_lead:
+                target_id = task.crm_lead.id
+                is_applicant = False
+            else:
+                logger.warning(f"FollowUp {task.id} has no lead/applicant, skipping")
+                task.status = "failed"
+                task.metadata = task.metadata or {}
+                task.metadata["error"] = "No linked lead/applicant"
+                task.save()
+                return "failed_no_user"
+
+            logger.info(f"Processing AI call {task.id} for {'Applicant' if is_applicant else 'Lead'} {target_id}")
+            
+            # Update status to keep invalid other workers from picking it up?
+            # Actually, `in_progress` is good.
+            task.status = "in_progress"
+            task.save(update_fields=['status'])
+
+        # --- OUTSIDE ATOMIC BLOCK (Network Calls) ---
+        # We changed status to in_progress, so other workers won't pick it up via filter
         
         # Fetch previous call summary for context
         previous_call_summary = "No previous calls"
@@ -232,8 +282,6 @@ def check_and_initiate_followups():
             context['reason'] = 'scheduled_follow_up'
         else:
             from .services.followup_generator import followup_generator
-            # Fallback generator currently expects Applicant, might need update if we pass Lead
-            # For now passing None if it's a lead, relying on metadata context mostly
             context = followup_generator.generate_call_context(
                 applicant=task.lead if is_applicant else None,
                 reason='scheduled_follow_up',
@@ -242,27 +290,27 @@ def check_and_initiate_followups():
             )
             context['task_id'] = str(task.id)
         
-        # Add follow-up specific context (required by follow-up agent)
+        # Add follow-up specific context
         context['followUpReason'] = task.notes or context.get('followUpReason', 'Scheduled follow-up call')
         context['callObjective'] = context.get('callObjective', task.notes or 'Follow up with student regarding their inquiry')
         context['previousCallSummary'] = previous_call_summary
         context['task_notes'] = task.notes or "Follow up call as scheduled."
         
-        # Initiate Call
+        # Initiate Call (BLOCKING)
         res = schedule_elevenlabs_call(
             applicant_id=target_id if is_applicant else None,
             lead_id=target_id if not is_applicant else None,
             extra_context=context
         )
         
+        # Update Task based on result
         if res.get("ok"):
             task.status = "completed"
             task.completed = True
             task.metadata = task.metadata or {}
             task.metadata["automated_call_triggered"] = True
-            task.metadata["triggered_at"] = now.isoformat()
+            task.metadata["triggered_at"] = timezone.now().isoformat()
             
-            # Link the call record if available
             if res.get("call_record_id"):
                 try:
                     task.call_record_id = res["call_record_id"]
@@ -270,18 +318,22 @@ def check_and_initiate_followups():
                     pass
             
             task.save()
-            count += 1
             logger.info(f"Successfully triggered AI call for FollowUp {task.id}")
+            return "success"
         else:
             task.status = "failed"
             task.metadata = task.metadata or {}
             task.metadata["error"] = res.get("error", "unknown")
-            task.metadata["failed_at"] = now.isoformat()
+            task.metadata["failed_at"] = timezone.now().isoformat()
             task.save()
-            failed += 1
             logger.error(f"Failed to trigger AI call for FollowUp {task.id}: {res.get('error')}")
-            
-    return f"Triggered {count} AI calls, {failed} failed"
+            # Raising exception triggers retry if configured
+            raise Exception(f"Call initiation failed: {res.get('error')}")
+
+    except Exception as e:
+        logger.exception(f"Error executing AI call task {followup_id}: {e}")
+        # Re-raise to let Celery handle retry
+        raise e
 
 
 def trigger_scheduled_ai_call(followup_id):
