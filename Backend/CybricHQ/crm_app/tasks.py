@@ -1344,3 +1344,37 @@ def verify_document_task(document_id):
             
     except Exception as e:
         logger.error(f"Error in verify_document_task: {str(e)}")
+
+
+def calculate_follow_up_time(timing_str):
+    """
+    Parse a timing string (e.g., '2 days', '1 week', 'tomorrow') and return a datetime.
+    """
+    from django.utils import timezone
+    from datetime import timedelta
+    import re
+    
+    now = timezone.now()
+    if not timing_str:
+        return now + timedelta(days=2)
+        
+    timing_str = str(timing_str).lower().strip()
+    
+    try:
+        nums = re.findall(r'\d+', timing_str)
+        val = int(nums[0]) if nums else 1
+        
+        if 'hour' in timing_str:
+            return now + timedelta(hours=val)
+        elif 'day' in timing_str:
+            return now + timedelta(days=val)
+        elif 'week' in timing_str:
+            return now + timedelta(weeks=val)
+        elif 'month' in timing_str:
+            return now + timedelta(days=val*30)
+        elif 'tomorrow' in timing_str:
+            return now + timedelta(days=1)
+            
+        return now + timedelta(days=2)
+    except Exception:
+        return now + timedelta(days=2)
