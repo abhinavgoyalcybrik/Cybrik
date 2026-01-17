@@ -77,6 +77,13 @@ export default function TasksPage() {
         fetchTasks();
     }, []);
 
+    // Auto-fetch leads when modal opens with AI Voice Call selected
+    useEffect(() => {
+        if (isModalOpen && newTask.channel === 'ai_call') {
+            fetchLeads(true);
+        }
+    }, [isModalOpen]);
+
     const fetchTasks = async () => {
         try {
             setLoading(true);
@@ -343,10 +350,10 @@ export default function TasksPage() {
                                 )}
                             </button>
                             <button
-                                onClick={() => {
+                                onClick={async () => {
+                                    // Force refresh leads BEFORE opening modal
+                                    await fetchLeads(true);
                                     setIsModalOpen(true);
-                                    // Force refresh leads when opening modal
-                                    fetchLeads(true);
                                 }}
                                 className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2"
                             >
