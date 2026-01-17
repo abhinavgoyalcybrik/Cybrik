@@ -42,11 +42,12 @@ export default function LeadsPage() {
 
   async function loadLeads() {
     setLoading(true);
+    setError(null);
     try {
       const data = await apiFetch("/api/leads/");
       setLeads(Array.isArray(data) ? data : data.results ?? []);
     } catch (err: any) {
-      console.error(err);
+      console.error("Failed to load leads:", err);
       setError(err.message ?? "Failed to load leads");
     } finally {
       setLoading(false);
@@ -54,8 +55,12 @@ export default function LeadsPage() {
   }
 
   useEffect(() => {
-    loadLeads();
-  }, []);
+    // Small delay to ensure auth is ready
+    const timer = setTimeout(() => {
+      loadLeads();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [router]);
 
   // Filter leads by selected status
   const filteredLeads = useMemo(() => {
@@ -233,15 +238,28 @@ export default function LeadsPage() {
                 Track and manage incoming leads from all sources.
               </p>
             </div>
-            <button
-              onClick={() => setShowCaptureModal(true)}
-              className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Capture New Lead
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={loadLeads}
+                disabled={loading}
+                className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-all flex items-center gap-2 disabled:opacity-50"
+                title="Refresh Leads"
+              >
+                <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Refresh
+              </button>
+              <button
+                onClick={() => setShowCaptureModal(true)}
+                className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Capture New Lead
+              </button>
+            </div>
           </div>
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-[var(--cy-lime)] rounded-full blur-3xl opacity-10"></div>
           <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-64 h-64 bg-cyan-500 rounded-full blur-3xl opacity-10"></div>
