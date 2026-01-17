@@ -201,7 +201,7 @@ def analytics_applications_status(request):
 @permission_classes([IsAuthenticated])
 def analytics_cost_time_series(request):
     """
-    Returns daily estimated cost for ElevenLabs calls.
+    Returns daily estimated cost for AI calls (all providers).
     Supports ?start=YYYY-MM-DD&end=YYYY-MM-DD
     """
     tenant = _get_tenant(request)
@@ -212,8 +212,8 @@ def analytics_cost_time_series(request):
     # Apply tenant filtering
     calls_qs = _apply_tenant_filter(CallRecord.objects.all(), tenant, request.user)
     
+    # Include all providers (removed elevenlabs-only filter)
     daily_usage = calls_qs.filter(
-        provider="elevenlabs", 
         created_at__date__range=[start_date, end_date]
     ).annotate(date=TruncDate('created_at'))\
      .values('date')\
