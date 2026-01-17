@@ -1159,11 +1159,12 @@ class FollowUpViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         task.save()
         
         if should_trigger_call:
-            if not task.lead:
-                trigger_error = "No applicant linked to this task"
+            target_entity = task.lead or task.crm_lead
+            if not target_entity:
+                trigger_error = "No applicant or lead linked to this task"
                 actions_taken.append(f"AI call trigger skipped: {trigger_error}")
-            elif not task.lead.phone:
-                trigger_error = "Applicant has no phone number"
+            elif not getattr(target_entity, 'phone', None):
+                trigger_error = "Lead/Applicant has no phone number"
                 actions_taken.append(f"AI call trigger skipped: {trigger_error}")
             else:
                 ai_action_result = trigger_scheduled_ai_call(task.id)
