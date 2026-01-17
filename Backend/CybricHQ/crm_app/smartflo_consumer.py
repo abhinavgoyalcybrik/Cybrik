@@ -593,6 +593,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             if conversation_id and status == 'completed':
                  logger.info(f"Triggering background fetch for conversation {conversation_id}")
                  fetch_and_store_conversation_task.delay(call.id, conversation_id)
+            elif status == 'completed':
+                 # Even without conversation_id, trigger analysis if we have transcript
+                 from crm_app.tasks import analyze_call_transcript
+                 logger.info(f"Triggering direct AI analysis for completed call {call.id}")
+                 analyze_call_transcript.delay(call.id)
             
             # Auto-reschedule logic for unsuccessful calls
             if status in ['no-answer', 'busy', 'failed']:
