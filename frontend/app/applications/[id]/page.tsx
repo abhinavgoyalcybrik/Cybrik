@@ -30,7 +30,9 @@ type Application = {
         last_name: string;
         email: string;
         phone: string;
-    };
+    } | null;
+    applicant_name?: string;
+    applicant_email?: string;
     university: {
         id: number;
         name: string;
@@ -177,7 +179,7 @@ export default function ApplicationDetailPage() {
                         </Link>
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900">
-                                {application.applicant.first_name} {application.applicant.last_name}
+                                {application.applicant_name || application.applicant?.first_name && `${application.applicant.first_name} ${application.applicant.last_name || ""}`.trim() || "Unknown Applicant"}
                             </h1>
                             <p className="text-gray-500">
                                 {application.university?.name || "No University"} • {application.program || "No Program"}
@@ -266,9 +268,9 @@ export default function ApplicationDetailPage() {
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <h2 className="font-bold text-lg text-gray-800 mb-4">Applicant Information</h2>
                             <div className="grid grid-cols-2 gap-4">
-                                <InfoItem label="Name" value={`${application.applicant.first_name} ${application.applicant.last_name}`} />
-                                <InfoItem label="Email" value={application.applicant.email} />
-                                <InfoItem label="Phone" value={application.applicant.phone || "N/A"} />
+                                <InfoItem label="Name" value={application.applicant_name || (application.applicant ? `${application.applicant.first_name} ${application.applicant.last_name || ""}`.trim() : "N/A")} />
+                                <InfoItem label="Email" value={application.applicant_email || application.applicant?.email || "N/A"} />
+                                <InfoItem label="Phone" value={application.applicant?.phone || "N/A"} />
                                 <InfoItem label="Assigned To" value={application.assigned_to_name || "Unassigned"} />
                             </div>
                         </div>
@@ -326,7 +328,7 @@ export default function ApplicationDetailPage() {
                         {/* Document Checklist */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <h2 className="font-bold text-lg text-gray-800 mb-4">Documents</h2>
-                            {application.documents.length === 0 ? (
+                            {(!application.documents || application.documents.length === 0) ? (
                                 <div className="text-center text-gray-500 py-4">
                                     No documents yet
                                 </div>
@@ -339,9 +341,9 @@ export default function ApplicationDetailPage() {
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white ${doc.status === "verified" ? "bg-green-500" :
-                                                        doc.status === "rejected" ? "bg-red-500" :
-                                                            doc.status === "uploaded" ? "bg-blue-500" :
-                                                                "bg-gray-400"
+                                                    doc.status === "rejected" ? "bg-red-500" :
+                                                        doc.status === "uploaded" ? "bg-blue-500" :
+                                                            "bg-gray-400"
                                                     }`}>
                                                     {doc.status === "verified" ? "✓" :
                                                         doc.status === "rejected" ? "✗" :
@@ -371,7 +373,7 @@ export default function ApplicationDetailPage() {
                         {/* Stage History / Timeline */}
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                             <h2 className="font-bold text-lg text-gray-800 mb-4">Activity Timeline</h2>
-                            {application.stage_history.length === 0 ? (
+                            {(!application.stage_history || application.stage_history.length === 0) ? (
                                 <div className="text-center text-gray-500 py-4">
                                     No stage changes yet
                                 </div>
