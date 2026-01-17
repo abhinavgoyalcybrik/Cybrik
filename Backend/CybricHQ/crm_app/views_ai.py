@@ -85,14 +85,17 @@ class DocumentVerificationViewSet(viewsets.ViewSet):
             
         # Prepare Applicant Data
         applicant = document.applicant
+        if not applicant:
+            return Response({"error": "No applicant associated with this document"}, status=status.HTTP_400_BAD_REQUEST)
+            
         applicant_data = {
-            "first_name": applicant.first_name,
-            "last_name": applicant.last_name,
+            "first_name": applicant.first_name or "",
+            "last_name": applicant.last_name or "",
             "dob": str(applicant.dob) if applicant.dob else None,
-            "passport_number": applicant.passport_number,
-            "email": applicant.email,
-            "phone": applicant.phone,
-            "address": applicant.address
+            "passport_number": applicant.passport_number or "",
+            "email": applicant.email or "",
+            "phone": applicant.phone or "",
+            "address": applicant.address or ""
         }
         
         # Get absolute file path
