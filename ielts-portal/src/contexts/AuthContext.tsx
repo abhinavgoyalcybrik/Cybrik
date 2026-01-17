@@ -29,6 +29,7 @@ interface AuthContextType {
     isLoading: boolean;
     login: (username: string, password: string, role: 'student' | 'admin') => Promise<boolean>;
     logout: () => Promise<void>;
+    refreshUser: () => Promise<void>;
     isAuthenticated: boolean;
     isAdmin: boolean;
     token: string | null;
@@ -184,6 +185,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false;
     };
 
+    const refreshUser = async (): Promise<void> => {
+        try {
+            const res = await fetch('/api/ielts/auth/me/', {
+                credentials: 'include',
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.user) {
+                    // Merge fresh data with existing user, preserving role info
+                    const updatedUser: User = {
+                        ...user,
+                        ...data.user,
+                        role: user?.role || 'student',
+                        is_staff: user?.is_staff || false,
+                    };
+                    setUser(updatedUser);
+                    localStorage.setItem('ielts_user', JSON.stringify(updatedUser));
+                }
+            }
+        } catch (error) {
+            console.error('Failed to refresh user data:', error);
+        }
+    };
+
     const logout = async () => {
         try {
             // Try Django logout if we were using Django auth
@@ -216,6 +242,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 isLoading,
                 login,
                 logout,
+                refreshUser,
                 isAuthenticated: !!user,
                 isAdmin: user?.role === 'admin' || user?.is_staff === true,
                 token,

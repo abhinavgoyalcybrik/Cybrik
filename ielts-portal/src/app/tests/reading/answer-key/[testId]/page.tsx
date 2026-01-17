@@ -7,6 +7,8 @@ import {
     CheckCircle,
     BookOpen,
     ArrowLeft,
+    ChevronRight,
+    XCircle,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext'; // Updated import for username
 
@@ -161,6 +163,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
     const [test, setTest] = useState<ReadingTest | null>(null);
     const [loading, setLoading] = useState(true);
     const [currentPartIndex, setCurrentPartIndex] = useState(0);
+    const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
 
     const passagePanelRef = React.useRef<HTMLDivElement>(null);
     const questionsPanelRef = React.useRef<HTMLDivElement>(null);
@@ -244,6 +247,28 @@ export default function AnswerKeyPage({ params }: PageProps) {
         if (testId) fetchTest();
     }, [testId]);
 
+    // Fetch user's submitted answers for this test
+    useEffect(() => {
+        const fetchUserAnswers = async () => {
+            try {
+                const res = await fetch('/api/ielts/sessions/', { credentials: 'include' });
+                if (res.ok) {
+                    const sessions = await res.json();
+                    // Find the session matching this test (reading module)
+                    const matchingSession = sessions.find((s: any) =>
+                        s.module_type === 'reading' && String(s.test_id) === String(testId)
+                    );
+                    if (matchingSession?.answers) {
+                        setUserAnswers(matchingSession.answers);
+                    }
+                }
+            } catch (e) {
+                console.log('Failed to load user answers:', e);
+            }
+        };
+        if (testId) fetchUserAnswers();
+    }, [testId]);
+
     const getReadingModule = () => test?.modules.find(m => m.module_type === 'reading');
 
     const getParts = () => {
@@ -280,6 +305,75 @@ export default function AnswerKeyPage({ params }: PageProps) {
         return val;
     };
 
+    // Render word bank
+    const renderWordBank = (options: OptionItem[]) => {
+        if (!options || options.length === 0) return null;
+
+        return (
+            <div className="mt-6 border border-slate-200 rounded-lg p-4 bg-slate-50">
+                <h4 className="font-bold text-slate-900 text-center mb-3">List of Words</h4>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                    {options.map((opt, idx) => (
+                        <span key={idx} className="text-slate-700 py-1">
+                            {safeRender(opt.text) || safeRender(opt.key)}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    // Render rich text container with inline filled answers
+    const renderRichTextContainer = (container: Container, questions: Question[]) => {
+        if (!container?.rich) return null;
+
+        return (
+            <div className="text-slate-800 text-lg leading-loose font-medium">
+                {container.rich.map((element, idx) => {
+                    if (element.t === 'text') {
+                        const text = element.v?.replace(/\n+/g, ' ') || '';
+                        return <span key={idx}>{text}</span>;
+                    } else if (element.t === 'slot' && element.slot_id) {
+                        const question = getQuestionBySlotId(element.slot_id, questions);
+                        if (!question) return null;
+
+                        const userAnswer = userAnswers[question.id] || '';
+                        const correctAnswer = question.correct_answer || '';
+                        const isUserCorrect = userAnswer.trim().toUpperCase() === correctAnswer.trim().toUpperCase();
+
+                        return (
+                            <span key={idx} className="inline-flex items-center mx-1 relative group cursor-help">
+                                <span className="text-xs text-slate-400 mr-1 select-none">({question.order})</span>
+                                {/* Show user's answer if they provided one */}
+                                {userAnswer ? (
+                                    <span className={`px-2 py-0.5 border-b-2 font-bold rounded-t mx-0.5 ${isUserCorrect ? 'bg-emerald-100 border-emerald-500 text-emerald-900' : 'bg-red-100 border-red-500 text-red-900'}`}>
+                                        {userAnswer}
+                                        {isUserCorrect ? (
+                                            <CheckCircle className="w-3 h-3 ml-1 inline text-emerald-600" />
+                                        ) : (
+                                            <XCircle className="w-3 h-3 ml-1 inline text-red-600" />
+                                        )}
+                                    </span>
+                                ) : (
+                                    <span className="px-2 py-0.5 bg-slate-100 border-b-2 border-slate-300 text-slate-400 font-bold rounded-t mx-0.5 italic">
+                                        (no answer)
+                                    </span>
+                                )}
+                                {/* Tooltip showing correct answer if user was wrong */}
+                                {(!isUserCorrect || !userAnswer) && (
+                                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-emerald-700 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 whitespace-nowrap">
+                                        Correct: <b>{correctAnswer}</b>
+                                    </span>
+                                )}
+                            </span>
+                        );
+                    }
+                    return null;
+                })}
+            </div>
+        );
+    };
+
     const renderCellContent = (rich: RichTextElement[], questions: Question[]) => {
         return rich.map((element, idx) => {
             if (element.t === 'text') return <span key={idx}>{element.v}</span>;
@@ -300,46 +394,102 @@ export default function AnswerKeyPage({ params }: PageProps) {
     };
 
     const renderQuestionGroupContent = (group: QuestionGroup) => {
-        // 1. Boolean / Choice
-        if (['true_false', 'yes_no', 'true_false_not_given', 'yes_no_not_given'].includes(group.group_type) || ['TRUE_FALSE_NOT_GIVEN', 'YES_NO_NOT_GIVEN'].includes(group.questions[0]?.question_type)) {
+        // 1. Summary/Sentence Completion (Rich Text)
+        if ((group.group_type === 'summary_completion' || group.group_type === 'sentence_completion') && group.container?.rich) {
             return (
-                <div className="space-y-4">
-                    {group.questions.map((question) => (
-                        <div key={question.id} className="mb-6 pl-2 border-l-4 border-emerald-100">
-                            <div className="flex gap-4">
-                                <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-emerald-100 text-emerald-700 font-bold text-sm">
-                                    {question.order}
-                                </span>
-                                <div className="flex-1">
-                                    <p className="mb-3 text-lg font-medium text-slate-800 leading-relaxed">{question.question_text}</p>
-                                    <div className="flex gap-4">
-                                        {question.options.map((option, optIdx) => {
-                                            const optKey = option.key;
-                                            const optText = option.text;
-                                            const isCorrect =
-                                                question.correct_answer === optKey ||
-                                                question.correct_answer === optText ||
-                                                (question.correct_answer?.toUpperCase() === optKey?.toUpperCase()) ||
-                                                (question.correct_answer?.toUpperCase().startsWith(optKey?.charAt(0).toUpperCase()) && ['TRUE', 'FALSE', 'YES', 'NO'].includes(optKey?.toUpperCase()));
-
-                                            return (
-                                                <div key={optIdx} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-400 opacity-60'}`}>
-                                                    <span className="text-sm font-bold">{optText}</span>
-                                                    {isCorrect && <CheckCircle className="w-3 h-3 text-white" />}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                    <div className="mt-2 text-xs font-bold text-emerald-600">Answer: {question.correct_answer}</div>
-                                </div>
-                            </div>
+                <div className="bg-white border border-emerald-100 rounded-2xl p-6 shadow-sm">
+                    {/* Example box if likely present */}
+                    {group.container.rich[0]?.v?.includes('EARLY') && (
+                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-6 text-sm text-slate-600">
+                            <span className="font-bold text-slate-800">Example:</span> ... <span className="font-mono text-emerald-600">heavenly</span> ...
                         </div>
-                    ))}
+                    )}
+
+                    {renderRichTextContainer(group.container, group.questions)}
+                    {renderWordBank(group.options)}
                 </div>
             );
         }
 
-        // 2. Multiple Choice & Matching Features
+        // 2. Boolean / Choice
+        if (['true_false', 'yes_no', 'true_false_not_given', 'yes_no_not_given'].includes(group.group_type) || ['TRUE_FALSE_NOT_GIVEN', 'YES_NO_NOT_GIVEN'].includes(group.questions[0]?.question_type)) {
+            return (
+                <div className="space-y-4">
+                    {group.questions.map((question) => {
+                        const userAnswer = userAnswers[question.id]?.toUpperCase() || '';
+                        const correctAnswer = question.correct_answer?.toUpperCase() || '';
+                        const isUserCorrect = userAnswer === correctAnswer ||
+                            (userAnswer === 'YES' && correctAnswer === 'TRUE') ||
+                            (userAnswer === 'TRUE' && correctAnswer === 'YES') ||
+                            (userAnswer === 'NO' && correctAnswer === 'FALSE') ||
+                            (userAnswer === 'FALSE' && correctAnswer === 'NO');
+
+                        return (
+                            <div key={question.id} className={`mb-6 pl-2 border-l-4 ${isUserCorrect ? 'border-emerald-400' : userAnswer ? 'border-red-400' : 'border-slate-200'}`}>
+                                <div className="flex gap-4">
+                                    <span className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg font-bold text-sm ${isUserCorrect ? 'bg-emerald-100 text-emerald-700' : userAnswer ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
+                                        {question.order}
+                                    </span>
+                                    <div className="flex-1">
+                                        <p className="mb-3 text-lg font-medium text-slate-800 leading-relaxed">{question.question_text}</p>
+                                        <div className="flex gap-3 flex-wrap">
+                                            {question.options.map((option, optIdx) => {
+                                                let optKey = option.key;
+                                                let optText = option.text;
+
+                                                // Dynamic label fix
+                                                const isYesNoGroup = group.group_type.includes('yes_no') || correctAnswer === 'YES' || correctAnswer === 'NO';
+                                                if (isYesNoGroup) {
+                                                    if (optKey === 'TRUE') { optKey = 'YES'; optText = 'YES'; }
+                                                    if (optKey === 'FALSE') { optKey = 'NO'; optText = 'NO'; }
+                                                }
+
+                                                const k = optKey?.toUpperCase() || '';
+                                                const isCorrectOption = correctAnswer === k ||
+                                                    (correctAnswer === 'NOT GIVEN' && k === 'NOT GIVEN') ||
+                                                    ((correctAnswer === 'YES' || correctAnswer === 'TRUE') && (k === 'YES' || k === 'TRUE')) ||
+                                                    ((correctAnswer === 'NO' || correctAnswer === 'FALSE') && (k === 'NO' || k === 'FALSE'));
+
+                                                const isUserChoice = userAnswer === k ||
+                                                    ((userAnswer === 'YES' || userAnswer === 'TRUE') && (k === 'YES' || k === 'TRUE')) ||
+                                                    ((userAnswer === 'NO' || userAnswer === 'FALSE') && (k === 'NO' || k === 'FALSE')) ||
+                                                    (userAnswer === 'NOT GIVEN' && k === 'NOT GIVEN');
+
+                                                const isWrongChoice = isUserChoice && !isCorrectOption;
+
+                                                let bgClass = 'bg-slate-50 border-slate-200 text-slate-400 opacity-60';
+                                                if (isCorrectOption) {
+                                                    bgClass = 'bg-emerald-500 border-emerald-500 text-white shadow-md';
+                                                } else if (isWrongChoice) {
+                                                    bgClass = 'bg-red-500 border-red-500 text-white shadow-md';
+                                                }
+
+                                                return (
+                                                    <div key={optIdx} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${bgClass}`}>
+                                                        <span className="text-sm font-bold">{optText}</span>
+                                                        {isCorrectOption && <CheckCircle className="w-3 h-3 text-white" />}
+                                                        {isWrongChoice && <XCircle className="w-3 h-3 text-white" />}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                        <div className="mt-2 flex gap-4 text-xs font-bold">
+                                            <span className="text-emerald-600">Correct: {question.correct_answer}</span>
+                                            {userAnswer && !isUserCorrect && (
+                                                <span className="text-red-600">Your Answer: {userAnswers[question.id]}</span>
+                                            )}
+                                            {isUserCorrect && <span className="text-emerald-600">✓ You got it right!</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        // 3. Multiple Choice & Matching Features
         if (group.group_type === 'multiple_choice' || group.group_type === 'matching_features' || group.questions[0]?.question_type === 'MULTIPLE_CHOICE') {
             const isChooseN = group.options && group.options.length > 0 && group.questions.some(q => !q.question_text || q.question_text.startsWith('Question') || group.group_type === 'matching_features');
 
@@ -410,7 +560,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
             }
         }
 
-        // 3. Table
+        // 4. Table
         if (group.group_type === 'table_completion' && group.container?.kind === 'table') {
             return (
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm overflow-hidden">
@@ -438,7 +588,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
             );
         }
 
-        // 4. Default Text
+        // 5. Default Text
         return (
             <div className="space-y-6">
                 {group.questions.map((question) => (
@@ -500,13 +650,33 @@ export default function AnswerKeyPage({ params }: PageProps) {
                     <span className="text-sm font-medium text-slate-600">{currentPart?.title}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    {parts.map((p, idx) => (
+                    <div className="flex items-center gap-3">
                         <button
-                            key={idx}
-                            onClick={() => setCurrentPartIndex(idx)}
-                            className={`h-2 w-12 rounded-full transition-all ${currentPartIndex === idx ? 'bg-emerald-500' : 'bg-slate-200 hover:bg-slate-300'}`}
-                        />
-                    ))}
+                            onClick={() => setCurrentPartIndex(Math.max(0, currentPartIndex - 1))}
+                            disabled={currentPartIndex === 0}
+                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+                            aria-label="Previous Passage"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
+
+                        <span className="text-xs font-bold text-slate-300 tracking-wider">
+                            PASSAGE {currentPartIndex + 1} OF {parts.length}
+                        </span>
+
+                        <button
+                            onClick={() => {
+                                if (currentPartIndex < parts.length - 1) {
+                                    setCurrentPartIndex(currentPartIndex + 1);
+                                }
+                            }}
+                            disabled={currentPartIndex === parts.length - 1}
+                            className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-bold rounded-lg shadow-sm transition-all"
+                        >
+                            Next Passage
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
             </div>
 

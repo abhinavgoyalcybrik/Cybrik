@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export default function ProfilePage() {
-    const { user, isLoading: authLoading } = useAuth();
+    const { user, isLoading: authLoading, refreshUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
@@ -72,9 +72,10 @@ export default function ProfilePage() {
 
             if (!res.ok) throw new Error('Failed to update profile');
 
+            // Refresh user data in AuthContext so dashboard shows updated data
+            await refreshUser();
+
             setSuccess('Profile updated successfully!');
-            // Reload page to reflect changes in auth context if needed? 
-            // Better to update local state or re-fetch me
 
         } catch (err) {
             setError('Failed to update profile. Please try again.');
