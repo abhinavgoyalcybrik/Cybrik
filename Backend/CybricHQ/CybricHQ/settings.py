@@ -284,6 +284,12 @@ SMARTFLO_CALLER_ID = os.getenv("SMARTFLO_CALLER_ID", "")  # Your Smartflo DID nu
 SMARTFLO_AGENT_ID = os.getenv("SMARTFLO_AGENT_ID", "")  # Your Smartflo agent/extension ID
 SMARTFLO_VOICEBOT_API_KEY = os.getenv("SMARTFLO_VOICEBOT_API_KEY", "")  # Voice Bot API key for AI outbound
 
+# ====== WhatsApp Business API Configuration ======
+WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "")
+WHATSAPP_ACCESS_TOKEN = os.getenv("WHATSAPP_ACCESS_TOKEN", "")
+WHATSAPP_BUSINESS_ACCOUNT_ID = os.getenv("WHATSAPP_BUSINESS_ACCOUNT_ID", "")
+WHATSAPP_VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN", "cybrik_wa_verify")  # Webhook verification
+
 
 EXTERNAL_BASE_URL = os.getenv("EXTERNAL_BASE_URL", "http://localhost:8000")
 ASR_PROVIDER = os.getenv("ASR_PROVIDER", "mock")

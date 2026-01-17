@@ -8,22 +8,47 @@ logger = logging.getLogger(__name__)
 
 def send_welcome_message(lead_id, phone, source):
     """
-    Mock function to send welcome message via WhatsApp/SMS.
-    In production, integrate with Twilio/Meta API.
+    Send welcome message via WhatsApp after first contact.
+    Uses Meta WhatsApp Business API.
     """
     try:
-        lead = Lead.objects.get(id=lead_id)
-        message = ""
-        if source == "PORTAL":
-            message = f"Hi {lead.name}, thanks for your inquiry at CybricHQ! We will call you shortly for verification."
-        elif source == "WALK_IN":
-            message = f"Welcome to CybricHQ, {lead.name}! We have registered your visit. You can reply here with documents."
+        from .services.whatsapp_client import send_welcome_message as wa_send_welcome
+        from .models import Lead, WhatsAppMessage
         
-        # Note: In production, integrate with Twilio/Meta API
-        logger.info(f"[MOCK SMS] To: {phone} | Body: {message}")
+        lead = Lead.objects.get(id=lead_id)
+        name = lead.name or "there"
+        
+        # Send via WhatsApp API
+        result = wa_send_welcome(phone, name)
+        
+        # Log the message
+        WhatsAppMessage.objects.create(
+            lead=lead,
+            tenant=lead.tenant,
+            direction="outbound",
+            message_type="template",
+            template_name="welcome_after_call",
+            from_phone="",  # Will be filled by config
+            to_phone=phone,
+            message_body=f"Welcome message sent to {name}",
+            message_id=result.get("message_id"),
+            status="sent" if result.get("success") else "failed",
+            error_message=result.get("error") if not result.get("success") else None,
+        )
+        
+        if result.get("success"):
+            logger.info(f"WhatsApp welcome sent to {phone} for lead {lead_id}")
+        else:
+            logger.error(f"WhatsApp welcome failed for {phone}: {result.get('error')}")
+        
+        return result
         
     except Lead.DoesNotExist:
         logger.error(f"Lead {lead_id} not found for welcome message.")
+        return {"success": False, "error": "Lead not found"}
+    except Exception as e:
+        logger.exception(f"Error sending WhatsApp welcome: {e}")
+        return {"success": False, "error": str(e)}
 
 def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None):
     """

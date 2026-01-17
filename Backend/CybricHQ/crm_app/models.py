@@ -412,6 +412,7 @@ class FollowUp(models.Model):
         ("sms", "SMS"),
         ("phone", "Phone"),
         ("ai_call", "AI Call"),
+        ("whatsapp", "WhatsApp"),
         ("in_app", "In App"),
         ("other", "Other"),
     ]
@@ -822,3 +823,76 @@ class AdCampaign(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.integration.get_platform_display()})"
+
+
+class WhatsAppMessage(models.Model):
+    """Track WhatsApp messages sent/received via Meta Business API."""
+    
+    DIRECTION_CHOICES = [
+        ("outbound", "Outbound"),
+        ("inbound", "Inbound"),
+    ]
+    
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("sent", "Sent"),
+        ("delivered", "Delivered"),
+        ("read", "Read"),
+        ("failed", "Failed"),
+    ]
+    
+    MESSAGE_TYPE_CHOICES = [
+        ("template", "Template"),
+        ("text", "Text"),
+        ("image", "Image"),
+        ("document", "Document"),
+        ("interactive", "Interactive"),
+    ]
+    
+    # Links to lead/applicant
+    lead = models.ForeignKey(
+        'Lead', on_delete=models.CASCADE, 
+        related_name="whatsapp_messages",
+        null=True, blank=True
+    )
+    applicant = models.ForeignKey(
+        Applicant, on_delete=models.CASCADE,
+        related_name="whatsapp_messages", 
+        null=True, blank=True
+    )
+    tenant = models.ForeignKey(
+        Tenant, on_delete=models.CASCADE,
+        related_name="whatsapp_messages",
+        null=True, blank=True
+    )
+    
+    # Message details
+    direction = models.CharField(max_length=10, choices=DIRECTION_CHOICES)
+    message_type = models.CharField(max_length=20, choices=MESSAGE_TYPE_CHOICES, default="template")
+    template_name = models.CharField(max_length=100, blank=True, null=True)
+    
+    # Phone numbers
+    from_phone = models.CharField(max_length=20)
+    to_phone = models.CharField(max_length=20)
+    
+    # Content
+    message_body = models.TextField(blank=True, null=True)
+    
+    # Meta API response
+    message_id = models.CharField(max_length=255, blank=True, null=True)  # wamid from Meta
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    error_message = models.TextField(blank=True, null=True)
+    
+    # Extra data
+    metadata = JSONField(blank=True, null=True)
+    
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ("-created_at",)
+        verbose_name = "WhatsApp Message"
+        verbose_name_plural = "WhatsApp Messages"
+    
+    def __str__(self):
+        return f"{self.direction}: {self.to_phone} ({self.status})"

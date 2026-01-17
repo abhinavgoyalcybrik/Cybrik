@@ -121,6 +121,12 @@ urlpatterns = [
     # Public Uploads
     path("public/upload/", __import__('crm_app.views_public', fromlist=['PublicUploadView']).PublicUploadView.as_view(), name="public-upload"),
     path("generate-upload-link/", __import__('crm_app.views_public', fromlist=['GenerateUploadLinkView']).GenerateUploadLinkView.as_view(), name="generate-upload-link"),
+    
+    # WhatsApp Business API
+    path("whatsapp/webhook/", __import__('crm_app.views_whatsapp', fromlist=['whatsapp_webhook']).whatsapp_webhook, name="whatsapp-webhook"),
+    path("whatsapp/send/", __import__('crm_app.views_whatsapp', fromlist=['send_whatsapp_message']).send_whatsapp_message, name="whatsapp-send"),
+    path("whatsapp/send-document-request/", __import__('crm_app.views_whatsapp', fromlist=['send_document_upload_request']).send_document_upload_request, name="whatsapp-document-request"),
+    path("whatsapp/config-status/", __import__('crm_app.views_whatsapp', fromlist=['whatsapp_config_status']).whatsapp_config_status, name="whatsapp-config-status"),
 ]
 
 urlpatterns += router.urls
