@@ -782,6 +782,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             existing_app = Application.objects.filter(lead=lead).first()
             if not existing_app:
                 # Create a new Application for this converted lead
+                # Include all required NOT NULL fields from production database
                 tenant = getattr(self.request, 'tenant', None) or lead.tenant
                 application = Application.objects.create(
                     lead=lead,
@@ -789,6 +790,16 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     program=lead.interested_service or "General",
                     stage="inquiry",  # Start at inquiry stage
                     status="pending",
+                    priority="medium",
+                    # Boolean fields with NOT NULL constraints
+                    accommodation_arranged=False,
+                    deposit_paid=False,
+                    flight_booked=False,
+                    full_fee_paid=False,
+                    visa_approved=False,
+                    # Other required fields
+                    fee_currency="USD",
+                    stage_history=[{"stage": "inquiry", "timestamp": str(timezone.now())}],
                     metadata={
                         "converted_from_lead": True,
                         "lead_source": lead.source,
