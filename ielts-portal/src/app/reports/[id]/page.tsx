@@ -134,8 +134,8 @@ export default function ReportDetailPage() {
             if (!id || !user) return;
 
             try {
-                // Fetch session data from the existing sessions endpoint
-                const response = await fetch(`${API_BASE}/api/ielts/sessions/${id}/`, {
+                // Use relative path to go through Next.js proxy (ensures cookies are sent)
+                const response = await fetch(`/api/ielts/sessions/${id}/`, {
                     credentials: 'include',
                 });
 
