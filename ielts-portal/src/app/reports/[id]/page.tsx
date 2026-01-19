@@ -134,89 +134,58 @@ export default function ReportDetailPage() {
             if (!id || !user) return;
 
             try {
-                // Determine if ID is session ID or module attempt ID
-                // For now, let's assume we fetch a module attempt directly or session
-                // We might need a specific endpoint like `/api/ielts/results/${id}/`
-                const response = await fetch(`${API_BASE}/api/ielts/results/${id}/`, {
+                // Fetch session data from the existing sessions endpoint
+                const response = await fetch(`${API_BASE}/api/ielts/sessions/${id}/`, {
                     credentials: 'include',
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to load report details');
+                    if (response.status === 404) {
+                        setError('Test session not found');
+                    } else if (response.status === 403) {
+                        setError('Please log in to view this report');
+                    } else {
+                        setError('Failed to load report details');
+                    }
+                    setLoading(false);
+                    return;
                 }
 
-                const data = await response.json();
+                const session = await response.json();
 
-                // Transform backend data to FE model
-                // This is mock logic until the exact endpoint structure is confirmed
-                // Assuming data returns { module_type, band_score, feedback, answers: [] }
+                // Find the first module attempt (the test data)
+                const attempt = session.module_attempts?.[0];
+                if (!attempt) {
+                    setError('No test data found for this session');
+                    setLoading(false);
+                    return;
+                }
+
+                // Map session data to report format
+                const moduleType = attempt.module_type || 'reading';
+                const feedback = attempt.feedback || {};
+
                 setReport({
-                    id: data.id,
-                    testName: data.test_title || 'IELTS Test',
-                    testType: data.module_type || 'reading',
-                    dateTaken: data.created_at,
-                    timeTaken: '45 min', // Placeholder or calc
-                    bandScore: data.band_score || 0,
-                    feedback: data.feedback || "Great effort! Focus on cohesion in your next attempt.",
-                    questionBreakdown: data.answers || [], // If available
-                    transcript: data.transcript,
-                    audioUrl: data.audio_url
+                    id: session.id,
+                    testName: session.test_title || `${moduleType.charAt(0).toUpperCase() + moduleType.slice(1)} Test`,
+                    testType: moduleType,
+                    dateTaken: session.created_at || session.start_time,
+                    timeTaken: attempt.duration_minutes ? `${attempt.duration_minutes} min` : '0 min',
+                    bandScore: attempt.band_score || feedback.overall_band || 0,
+                    feedback: typeof feedback === 'string' ? feedback : feedback.summary || feedback.feedback || '',
+                    questionBreakdown: attempt.answers?.map((ans: any, idx: number) => ({
+                        question_number: idx + 1,
+                        user_answer: ans.user_answer || ans.answer_text || '-',
+                        correct_answer: ans.correct_answer || '-',
+                        is_correct: ans.is_correct ?? false,
+                    })) || [],
+                    transcript: feedback.transcript,
+                    audioUrl: attempt.audio_url
                 });
 
             } catch (err) {
-                console.error(err);
-                // Fallback Mock Data for Demo if API fails (since endpoint might not exist yet)
-                const mockPassageText = "The control of fire was the first and perhaps greatest of humanity's steps towards a life-enhancing technology. To early man, fire was a divine gift randomly delivered in the form of lightning, forest fire or burning lava. Unable to make flame for themselves, the earliest peoples probably stored fire by keeping slow burning logs alight or by carrying charcoal in pots. How and where man learnt how to produce flame at will is unknown. It was probably a secondary invention, accidentally made during tool-making operations with wood or stone. Studies of primitive societies suggest that the earliest method of making fire was through friction.";
-
-                setReport({
-                    id: id as string,
-                    testName: 'Mock IELTS Reading Test',
-                    testType: 'reading',
-                    dateTaken: new Date().toISOString(),
-                    timeTaken: '58 min',
-                    bandScore: 7.5,
-                    feedback: 'Strong performance in factual recall. Be careful with True/False/Not Given distinctions.',
-                    questionBreakdown: Array.from({ length: 40 }).map((_, i) => ({
-                        question_number: i + 1,
-                        user_answer: i % 5 === 0 ? 'Wrong Answer' : 'Correct Answer',
-                        correct_answer: 'Correct Answer',
-                        is_correct: i % 5 !== 0
-                    })),
-                    answerHighlights: [
-                        {
-                            questionNumber: 1,
-                            passageText: mockPassageText,
-                            startIndex: 218,
-                            endIndex: 268,
-                            passageTitle: 'A spark, a flint: How fire leapt to life',
-                            isCorrect: true
-                        },
-                        {
-                            questionNumber: 2,
-                            passageText: mockPassageText,
-                            startIndex: 158,
-                            endIndex: 195,
-                            passageTitle: 'A spark, a flint: How fire leapt to life',
-                            isCorrect: true
-                        },
-                        {
-                            questionNumber: 3,
-                            passageText: mockPassageText,
-                            startIndex: 339,
-                            endIndex: 405,
-                            passageTitle: 'A spark, a flint: How fire leapt to life',
-                            isCorrect: true
-                        },
-                        {
-                            questionNumber: 5,
-                            passageText: mockPassageText,
-                            startIndex: 507,
-                            endIndex: 560,
-                            passageTitle: 'A spark, a flint: How fire leapt to life',
-                            isCorrect: false
-                        },
-                    ]
-                });
+                console.error('Error loading report:', err);
+                setError('Failed to load report details');
             } finally {
                 setLoading(false);
             }
