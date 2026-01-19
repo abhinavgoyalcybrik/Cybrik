@@ -29,6 +29,7 @@ urlpatterns = [
     path('speaking/evaluate-part/', views.evaluate_speaking_part, name='evaluate-speaking-part'),
     path('speaking/save-results/', views.save_speaking_results, name='save-speaking-results'),
     path('speaking/recordings/upload/', views.upload_speaking_recording, name='upload-speaking-recording'),
+    path('evaluator-health/', views.check_evaluator_health, name='evaluator-health'),
     
     # Test completion check (for blocking repeat attempts)
     path('check-completion/<str:module_type>/<str:test_id>/', views.check_test_completion, name='check-test-completion'),

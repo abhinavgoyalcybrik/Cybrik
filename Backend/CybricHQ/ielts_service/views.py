@@ -826,3 +826,42 @@ def upload_speaking_recording(request):
     except Exception as e:
         logger.error(f"Error archiving recording: {e}")
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def check_evaluator_health(request):
+    """
+    Check if the local AI Evaluator service is running.
+    Proxies request to localhost:8001/health
+    """
+    import requests
+    import os
+    
+    evaluator_url = os.getenv('EVALUATOR_API_URL', 'http://localhost:8001')
+    
+    try:
+        response = requests.get(f"{evaluator_url}/health", timeout=2)
+        if response.ok:
+            return Response({
+                "status": "online",
+                "service": "IELTS AI Evaluator",
+                "details": response.json()
+            })
+        else:
+            return Response({
+                "status": "error",
+                "code": response.status_code,
+                "details": response.text
+            }, status=status.HTTP_502_BAD_GATEWAY)
+            
+    except requests.exceptions.ConnectionError:
+        return Response({
+            "status": "offline",
+            "message": f"Could not connect to evaluator at {evaluator_url}. Service might be down."
+        }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    except Exception as e:
+        return Response({
+            "status": "error",
+            "message": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
