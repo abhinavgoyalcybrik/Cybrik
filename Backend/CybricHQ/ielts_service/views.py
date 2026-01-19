@@ -579,13 +579,16 @@ def evaluate_speaking_part(request):
         evaluator_url = os.getenv('EVALUATOR_API_URL', 'http://localhost:8001')
         
         # Forward to the AI evaluator service
+        # External evaluator expects: POST /speaking/part/{part}/audio
+        # Form data: file (audio), attempt_id (optional)
+        
         files = {'file': (audio_file.name, audio_file.read(), audio_file.content_type)}
-        data = {'part': part}
+        data = {}
         if attempt_id:
             data['attempt_id'] = attempt_id
         
         response = requests.post(
-            f"{evaluator_url}/speaking/evaluate",
+            f"{evaluator_url}/speaking/part/{part}/audio",
             files=files,
             data=data,
             timeout=120  # 2 minute timeout for AI evaluation
@@ -593,15 +596,11 @@ def evaluate_speaking_part(request):
         
         if response.ok:
             result = response.json()
-            return Response({
-                "attempt_id": attempt_id or f"part_{part}",
-                "part": int(part),
-                "result": result
-            })
+            return Response(result)
         else:
             logger.error(f"Evaluator error: {response.text}")
             return Response(
-                {"error": "AI evaluation failed"},
+                {"error": f"AI evaluation failed: {response.text}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
             
@@ -779,3 +778,51 @@ def check_test_completion(request, module_type, test_id):
             "is_completed": False,
             "error": str(e)
         })
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def upload_speaking_recording(request):
+    """
+    Upload and archive a speaking recording chunk.
+    This is for record-keeping, separate from evaluation.
+    
+    Expects multipart form data:
+    - audio: The audio file
+    - test_id: Test ID
+    - session_id: Session ID
+    - label: Recording label (e.g., "Part 1")
+    """
+    try:
+        if 'audio' not in request.FILES:
+            return Response({"error": "No audio file provided"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        audio_file = request.FILES['audio']
+        test_id = request.data.get('test_id')
+        session_id = request.data.get('session_id')
+        label = request.data.get('label', 'unknown')
+        
+        # In a real user-session scenarios, we would link this to a UserTestSession
+        # For now, we'll just save it to a media directory organized by session
+        
+        # save path: media/speaking_recordings/{session_id}/{label}.webm
+        import os
+        from django.conf import settings
+        
+        save_dir = os.path.join(settings.MEDIA_ROOT, 'speaking_recordings', str(session_id))
+        os.makedirs(save_dir, exist_ok=True)
+        
+        # Sanitize filename
+        filename = f"{label}.webm".replace(" ", "_").replace("/", "-")
+        file_path = os.path.join(save_dir, filename)
+        
+        with open(file_path, 'wb+') as destination:
+            for chunk in audio_file.chunks():
+                destination.write(chunk)
+                
+        logger.info(f"Archived speaking recording: {file_path}")
+        
+        return Response({"success": True, "path": file_path})
+        
+    except Exception as e:
+        logger.error(f"Error archiving recording: {e}")
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
