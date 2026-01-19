@@ -418,6 +418,53 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             logger.error(f"[SMARTFLO] Error fetching CallRecord context: {e}")
             return {}
 
+    @database_sync_to_async
+    def create_inbound_call_record(self, caller_phone, call_sid):
+        """
+        Create a CallRecord for inbound calls so they get tracked.
+        Try to link to an existing Lead if the phone number matches.
+        """
+        from crm_app.models import CallRecord, Lead
+        
+        try:
+            # Try to find existing lead with this phone number
+            lead = None
+            if caller_phone:
+                cleaned = caller_phone.replace('+', '').replace('-', '').strip()
+                candidates = [caller_phone, cleaned]
+                if len(cleaned) == 12 and cleaned.startswith('91'):
+                    candidates.append(cleaned[2:])
+                if len(cleaned) == 10:
+                    candidates.append('91' + cleaned)
+                    candidates.append('+91' + cleaned)
+                
+                for candidate in candidates:
+                    lead = Lead.objects.filter(phone=candidate).first()
+                    if lead:
+                        break
+            
+            # Create CallRecord
+            call = CallRecord.objects.create(
+                lead=lead,
+                applicant=None,
+                provider='smartflo',
+                status='in_progress',
+                direction='inbound',
+                external_call_id=call_sid or '',
+                metadata={
+                    'caller_phone': caller_phone,
+                    'inbound': True,
+                    'smartflo_call_sid': call_sid,
+                }
+            )
+            
+            logger.info(f"[SMARTFLO] Created inbound CallRecord {call.id} for phone {caller_phone}, Lead: {lead.id if lead else 'None'}")
+            return str(call.id)
+            
+        except Exception as e:
+            logger.error(f"[SMARTFLO] Error creating inbound CallRecord: {e}")
+            return None
+
     async def handle_start(self, message):
         """Handle stream start with metadata"""
         start_data = message.get('start', {})
@@ -452,11 +499,19 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         preserved_entity_type = lead_context.get('entity_type')
         
         # 2. Fetch from DB using phone number (Most reliable for lead data)
-        customer_number = self.caller_to
+        # Detect inbound vs outbound:
+        # - Outbound: We initiate call, so call_record_id is always present
+        # - Inbound: Customer calls us, no call_record_id, customer phone is in 'from'
+        is_inbound_call = not preserved_call_record_id
         
-        # If it looks like a short code or agent number, try 'from' (in case of inbound)
-        if len(str(customer_number)) < 6:
-             customer_number = self.caller_from
+        if is_inbound_call:
+            # Inbound: Customer's phone is in 'from', our DID is in 'to'
+            customer_number = self.caller_from
+            logger.info(f"[SMARTFLO] Detected INBOUND call from {customer_number}")
+        else:
+            # Outbound: Customer's phone is in 'to', our system number is in 'from'
+            customer_number = self.caller_to
+            logger.info(f"[SMARTFLO] Detected OUTBOUND call to {customer_number}")
              
         db_context = await self.get_lead_from_db(customer_number)
         
@@ -483,13 +538,20 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             lead_context['lead_id'] = preserved_lead_id
         if preserved_entity_type:
             lead_context['entity_type'] = preserved_entity_type
+        
+        # For INBOUND calls: Create a CallRecord so they get tracked
+        if is_inbound_call and not preserved_call_record_id:
+            call_record_id = await self.create_inbound_call_record(customer_number, self.call_sid)
+            if call_record_id:
+                lead_context['call_record_id'] = call_record_id
+                logger.info(f"[SMARTFLO] Created CallRecord {call_record_id} for inbound call")
             
         self.lead_context = lead_context
         
         lead_name = lead_context.get('name', 'Unknown')
         logger.info(f"Call started: {self.caller_from} -> {self.caller_to}")
         logger.info(f"Final Lead Context: {self.lead_context}")
-        logger.info(f"[SMARTFLO] call_record_id preserved: {lead_context.get('call_record_id')}")
+        logger.info(f"[SMARTFLO] call_record_id: {lead_context.get('call_record_id')}")
         
         # Connect to ElevenLabs Conversational AI Agent
         await self.connect_elevenlabs_agent()
