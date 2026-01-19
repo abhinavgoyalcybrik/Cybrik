@@ -446,7 +446,8 @@ export default function DashboardAnalytics() {
         // Map and sort based on standard order
         return order.map(subject => {
             const data = criteria[subject];
-            const avg = data ? (data.total / data.count) : 0;
+            const rawAvg = data ? (data.total / data.count) : 0;
+            const avg = typeof rawAvg === 'number' && !isNaN(rawAvg) ? rawAvg : 0;
             return {
                 subject,
                 A: Number(avg.toFixed(1)),

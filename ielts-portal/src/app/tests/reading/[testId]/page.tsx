@@ -768,7 +768,8 @@ export default function ReadingTestPage({ params }: PageProps) {
     }
 
     if (testCompleted) {
-        const bandScore = evaluationResult?.overall_band || 0;
+        const rawBandScore = evaluationResult?.overall_band;
+        const bandScore = typeof rawBandScore === 'number' ? rawBandScore : Number(rawBandScore) || 0;
 
         const getBandColor = (band: number) => {
             if (band >= 7) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
