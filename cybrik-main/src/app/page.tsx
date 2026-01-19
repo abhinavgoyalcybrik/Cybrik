@@ -737,9 +737,9 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </a>
-            <button className="btn-secondary px-10 py-4 rounded-full text-lg font-bold">
+            <Link href="/contact" className="btn-secondary px-10 py-4 rounded-full text-lg font-bold">
               Contact Sales
-            </button>
+            </Link>
           </div>
 
           {/* Stats */}
