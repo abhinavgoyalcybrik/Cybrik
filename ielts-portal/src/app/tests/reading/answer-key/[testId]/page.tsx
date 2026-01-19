@@ -180,7 +180,10 @@ export default function AnswerKeyPage({ params }: PageProps) {
                 const localRes = await fetch('/data/reading_tests.json');
                 const localData = await localRes.json();
                 if (localData.tests && localData.tests.length > 0) {
-                    const foundTest = localData.tests.find((t: any) => String(t.id) === String(testId));
+                    const foundTest = localData.tests.find((t: any) =>
+                        String(t.id) === String(testId) ||
+                        String(t.test_id) === String(testId)
+                    );
                     if (foundTest) {
                         const transformedTest: ReadingTest = {
                             id: String(foundTest.id),
