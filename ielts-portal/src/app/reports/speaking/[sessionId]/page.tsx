@@ -108,6 +108,15 @@ export default function SpeakingReportPage({ params }: PageProps) {
     // Fetch saved session data instead of re-evaluating
     useEffect(() => {
         const fetchSession = async () => {
+            // Check if session ID looks valid (UUID format)
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(sessionId) && !sessionId.match(/^\d+$/)) {
+                // Frontend-generated ID like "session-1234567" - not a database session
+                setError('This is not a valid saved session. Please complete a speaking test first to view reports.');
+                setStatus('error');
+                return;
+            }
+
             // Simulate progress for UX
             const progressInterval = setInterval(() => {
                 setProgress(prev => {
@@ -123,6 +132,18 @@ export default function SpeakingReportPage({ params }: PageProps) {
 
                 clearInterval(progressInterval);
                 setProgress(100);
+
+                if (response.status === 403) {
+                    setError('Please log in to view your test results.');
+                    setStatus('error');
+                    return;
+                }
+
+                if (response.status === 404) {
+                    setError('Session not found. The test may not have been saved properly.');
+                    setStatus('error');
+                    return;
+                }
 
                 if (response.ok) {
                     const session = await response.json();
@@ -160,7 +181,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
                     }
                 } else {
                     const errorData = await response.json().catch(() => ({}));
-                    setError(errorData.error || 'Session not found');
+                    setError(errorData.error || 'Failed to load session');
                     setStatus('error');
                 }
             } catch (err) {
