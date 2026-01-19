@@ -249,7 +249,7 @@ export default function Dashboard() {
               <span className="text-sm font-medium text-slate-500">Reading</span>
             </div>
             <p className="mt-4 text-3xl font-bold text-slate-900">
-              {completedCounts.reading} <span className="text-base text-slate-400 font-normal">/ {testCounts.reading}</span>
+              {completedCounts.reading} <span className="text-base text-slate-400 font-normal">/ 12</span>
             </p>
           </div>
         </Link>
