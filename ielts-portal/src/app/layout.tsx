@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "Cybrik IELTS - AI-Powered IELTS Preparation",
   description: "Know your IELTS score before test day. Get instant AI feedback on Writing and Speaking with real band score estimates.",
   keywords: "IELTS, IELTS preparation, IELTS practice, IELTS writing, IELTS speaking, AI feedback",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
