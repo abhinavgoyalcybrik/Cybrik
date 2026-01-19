@@ -105,46 +105,72 @@ export default function SpeakingReportPage({ params }: PageProps) {
     const [activeQuestion, setActiveQuestion] = useState(0);
     const [playingAudio, setPlayingAudio] = useState<number | null>(null);
 
-    // Simulate or fetch evaluation
+    // Fetch saved session data instead of re-evaluating
     useEffect(() => {
-        const evaluate = async () => {
-            // Simulate progress
+        const fetchSession = async () => {
+            // Simulate progress for UX
             const progressInterval = setInterval(() => {
                 setProgress(prev => {
                     if (prev >= 95) return prev;
-                    return prev + Math.random() * 15;
+                    return prev + Math.random() * 25;
                 });
-            }, 500);
+            }, 200);
 
             try {
-                const response = await fetch('/api/ielts/speaking/evaluate/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const response = await fetch(`/api/ielts/sessions/${sessionId}/`, {
                     credentials: 'include',
-                    body: JSON.stringify({ session_id: sessionId }),
                 });
 
                 clearInterval(progressInterval);
                 setProgress(100);
 
                 if (response.ok) {
-                    const data = await response.json();
-                    await new Promise(r => setTimeout(r, 500)); // Brief pause before showing results
-                    setResult(data);
-                    setStatus('ready');
+                    const session = await response.json();
+                    const speakingAttempt = session.module_attempts?.find(
+                        (a: any) => a.module_type === 'speaking'
+                    );
+
+                    if (speakingAttempt && speakingAttempt.feedback) {
+                        const feedback = speakingAttempt.feedback;
+                        // Map the saved feedback to the expected format
+                        const mappedResult: EvaluationResult = {
+                            success: true,
+                            session_id: sessionId,
+                            test_id: session.test_id || '',
+                            overall_band: feedback.overall_band || speakingAttempt.band_score || 0,
+                            criterion_scores: {
+                                fluency_coherence: feedback.fluency || 0,
+                                lexical_resource: feedback.lexical || 0,
+                                grammatical_range: feedback.grammar || 0,
+                                pronunciation: feedback.pronunciation || 0,
+                            },
+                            detailed_results: feedback.parts?.map((p: any) => ({
+                                label: `Part ${p.part}`,
+                                transcript: '',
+                                evaluation: p.score,
+                            })) || [],
+                            total_evaluated: feedback.parts?.length || 0,
+                        };
+                        await new Promise(r => setTimeout(r, 300));
+                        setResult(mappedResult);
+                        setStatus('ready');
+                    } else {
+                        setError('Speaking evaluation not found for this session');
+                        setStatus('error');
+                    }
                 } else {
-                    const errorData = await response.json();
-                    setError(errorData.error || 'Evaluation failed');
+                    const errorData = await response.json().catch(() => ({}));
+                    setError(errorData.error || 'Session not found');
                     setStatus('error');
                 }
             } catch (err) {
                 clearInterval(progressInterval);
-                setError('Failed to connect to evaluation service');
+                setError('Failed to load session data');
                 setStatus('error');
             }
         };
 
-        evaluate();
+        fetchSession();
     }, [sessionId]);
 
     // Processing State
@@ -331,8 +357,8 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                         key={idx}
                                         onClick={() => setActiveQuestion(idx)}
                                         className={`px-6 py-2 rounded-lg font-medium transition-colors ${activeQuestion === idx
-                                                ? 'bg-purple-600 text-white'
-                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                            ? 'bg-purple-600 text-white'
+                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                             }`}
                                     >
                                         Q {idx + 1}
