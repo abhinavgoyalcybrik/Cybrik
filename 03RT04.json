@@ -1,0 +1,614 @@
+{
+    "passages": [
+        {
+            "passage_id": "P1",
+            "title": "Air Pollution in Cities",
+            "text": "Part One\n\nA Air pollution is increasingly becoming the focus of government and citizen concern around the globe. From Mexico City and New York, to Singapore and Tokyo, new solutions to this old problem are being proposed, trialled and implemented with ever increasing speed. It is feared that unless pollution reduction measures are able to keep pace with the continued pressures of urban growth, air quality in many of the world's major cities will deteriorate beyond reason.\n\nB Action is being taken along several fronts:  through new legislation, improved enforcement and innovative technology. In Los Angeles, state regulations are forcing manufacturers to try to sell ever cleaner cars:  their first of the cleanest, titled \"Zero Emission Vehicles\", have to be available soon, since they are intended to make up 2 per cent of sales in 1997. Local authorities in London are campaigning to be allowed to enforce anti-pollution laws themselves; at present only the police have the power to do so, but they tend to be busy elsewhere.  In Singapore, renting out road space to users is the way of the future.\n\nC When Britain's Royal Automobile Club monitored the exhausts of 60,000 vehicles, it found that 12 per cent of them produced more than half the total pollution.  Older cars were the worst offenders; though a sizeable number of quite new cars were also identified as gross polluters, they were simply badly tuned.  California has developed a scheme to get these gross polluters off the streets:  they offer a flat $700 for any old, run-down vehicle driven in by its owner.  The aim is to remove the heaviest-polluting, most decrepit vehicles from the roads.\n\nD As part of a European Union environmental programme, a London council is testing an infra-red spectrometer from the University of Denver in Colorado.  It gauges the pollution from a passing vehicle - more useful than the annual stationary test that is the British standard today - by bouncing a beam through the exhaust and measuring what gets blocked. The council's next step may be to link the system to a computerised video camera able to read number plates automatically.\n\nE The effort to clean up cars may do little to cut pollution if nothing is done about the tendency to drive them more.  Los Angeles has some of the world's cleanest cars - far better than those of Europe - but the total number of miles those cars drive continues to grow. One solution is car-pooling, an arrangement in which a number of people who share the same destination share the use of one car. However, the average number of people in a car on the freeway in Los Angeles, which is 1.0, has been falling steadily.  Increasing it would be an effective way of reducing emissions as well as easing congestion.  The trouble is, Los Angelenos seem to like being alone in their cars.\n\nF Singapore has for a while had a scheme that forces drivers to buy a badge if they wish to visit a certain part of the city. Electronic innovations make possible increasing sophistication:  rates can vary according to road conditions, time of day and so on. Singapore is advancing in this direction, with a city-wide network of transmitters to collect information and charge drivers as they pass certain points. Such road-pricing, however, can be controversial.  When the local government in Cambridge, England, considered introducing Singaporean techniques, it faced vocal and ultimately successful opposition.\n\nPart Two\n\nThe scope of the problem facing the world's cities is immense. In 1992, the United Nations Environmental Programme and the World Health Organisation (WHO) concluded that all of a sample of twenty megacities - places likely to have more than ten million inhabitants in the year 2000 - already exceeded the level the WHO deems healthy in at least one major pollutant. Two-thirds of them exceeded the guidelines for two, seven for three or more.\n\nOf the six pollutants monitored by the WHO - carbon dioxide, nitrogen dioxide, ozone, sulphur dioxide, lead and particulate matter - it is this last category that is attracting the most attention from health researchers. PM10, a sub-category of particulate matter measuring ten-millionths of a metre across, has been implicated in thousands of deaths a year in Britain alone. Research being conducted in two counties of Southern California is reaching similarly disturbing conclusions concerning this little-understood pollutant.\n\nA world-wide rise in allergies, particularly asthma, over the past four decades is now said to be linked with increased air pollution. The lungs and brains of children who grow up in polluted air offer further evidence of its destructive power. The old and ill, however, are the most vulnerable to the acute effects of heavily polluted stagnant air. It can actually hasten death, as it did in December 1991 when a cloud of exhaust fumes lingered over the city of London for over a week.\n\nThe United Nations has estimated that in the year 2000 there will be twenty-four mega-cities and a further eighty-five cities of more than three million people.  The pressure on public officials, corporations and urban citizens to reverse established trends in air pollution is likely to grow in proportion with the growth of cities themselves. Progress is being made.  The question, though, remains the same: 'Will change happen quickly enough? '",
+            "groups": [
+                {
+                    "group_id": "P1-G1",
+                    "type": "MATCHING_FEATURES",
+                    "instructions": "Look at the following solutions (Questions 1-5) and locations.\n\nMatch each solution with one location.\n\nWrite the appropriate locations in boxes 1-5 on your answer sheet.\n\nNB You may use any location more than once.\n\nLOCATIONS\n\nSingapore\nTokyo\nLondon\nNew York\nMexico City\nCambridge\nLos Angeles",
+                    "items": [
+                        {
+                            "item_id": "P1-G1-Q1",
+                            "number": 1,
+                            "prompt": "Manufacturers must sell cleaner cars.",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "Los Angeles","start_index":420,"stop_index":540
+                            }
+                        },
+                        {
+                            "item_id": "P1-G1-Q2",
+                            "number": 2,
+                            "prompt": "Authorities want to have power to enforce anti-pollution laws.",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "London","start_index":560,"stop_index":705
+                            }
+                        },
+                        {
+                            "item_id": "P1-G1-Q3",
+                            "number": 3,
+                            "prompt": "Drivers will be charged according to the roads they use.",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "Singapore","start_index":706,"stop_index":860
+                            }
+                        },
+                        {
+                            "item_id": "P1-G1-Q4",
+                            "number": 4,
+                            "prompt": "Moving vehicles will be monitored for their exhaust emissions.",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "London","start_index":1080,"stop_index":1290
+                            }
+                        },
+                        {
+                            "item_id": "P1-G1-Q5",
+                            "number": 5,
+                            "prompt": "Commuters are encouraged to share their vehicles with others.",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "Los Angeles","start_index":1460,"stop_index":1760
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P1-G2",
+                    "type": "YES_NO_NOT_GIVEN",
+                    "instructions": "Do the following statements reflect the claims of the writer in Reading Passage 1?\n\nIn boxes 6-10 on your answer sheet write\n\nYES if the statement reflects the claims of the writer\nNO if the statement contradicts the claims of the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+                    "items": [
+                        {
+                            "item_id": "P1-G2-Q6",
+                            "number": 6,
+                            "prompt": "According to British research, a mere twelve per cent of vehicles tested produced over fifty per cent of total pollution produced by the sample group.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "YES","start_index":930,"stop_index":1080
+                            }
+                        },
+                        {
+                            "item_id": "P1-G2-Q7",
+                            "number": 7,
+                            "prompt": "It is currently possible to measure the pollution coming from individual vehicles whilst they are moving.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "YES","start_index":1100,"stop_index":1320
+                            }
+                        },
+                        {
+                            "item_id": "P1-G2-Q8",
+                            "number": 8,
+                            "prompt": "Residents of Los Angeles are now tending to reduce the yearly distances they travel by car.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":1410,"stop_index":1550
+                            }
+                        },
+                        {
+                            "item_id": "P1-G2-Q9",
+                            "number": 9,
+                            "prompt": "Car-pooling has steadily become more popular in Los Angeles in recent years.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":1550,"stop_index":1700
+                            }
+                        },
+                        {
+                            "item_id": "P1-G2-Q10",
+                            "number": 10,
+                            "prompt": "Charging drivers for entering certain parts of the city has been successfully done in Cambridge, England.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":1820,"stop_index":1980
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P1-G3",
+                    "type": "MULTIPLE_CHOICE",
+                    "instructions": "Choose the appropriate letters A-D and write them in boxes 11-13 on your answer sheet.",
+                    "items": [
+                        {
+                            "item_id": "P1-G3-Q11",
+                            "number": 11,
+                            "prompt": "How many pollutants currently exceed WHO guidelines in all megacities studied?",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "one"
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "two"
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "three"
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "seven"
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "A","start_index":2080,"stop_index":2260
+                            }
+                        },
+                        {
+                            "item_id": "P1-G3-Q12",
+                            "number": 12,
+                            "prompt": "Which pollutant is currently the subject of urgent research? ",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "nitrogen dioxide"
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "ozone"
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "lead"
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "particulate matter"
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "D","start_index":2320,"stop_index":2600
+                            }
+                        },
+                        {
+                            "item_id": "P1-G3-Q13",
+                            "number": 13,
+                            "prompt": "Which of the following groups of people are the most severely affected by intense air pollution?",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "allergy sufferers"
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "children"
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "the old and ill"
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "asthma sufferers"
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "C","start_index":2740,"stop_index":2940
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "passage_id": "P2",
+            "title": "The Suffragette Movement",
+            "text": "The suffragette movement, which campaigned for votes for women in the early twentieth century, is most commonly associated with the Pankhurst family and militant acts of varying degrees of violence. The Museum of London has drawn on its archive collection to convey a fresh picture with its exhibition The Purple, White and Green: Suffragettes in London 1906-14.\n\nThe name is a reference to the colour scheme that the Women's Social and Political Union (WSPU) created to give the movement a uniform, nationwide image. By doing so, it became one of the first groups to project a corporate identity, and it is this advanced marketing strategy, along with the other organisational and commercial achievements of the WSPU, to which the exhibition is devoted.\n\nFormed in 1903 by the political campaigner Mrs Emmeline Pankhurst and her daughters Christabel and Sylvia, the WSPU began an educated campaign to put women's suffrage on the political agenda. New Zealand, Australia and parts of the United States had already enfranchised women, and growing numbers of their British counterparts wanted the same opportunity.\n\nWith their slogan 'Deeds not words', and the introduction of the colour scheme, the WSPU soon brought the movement the cohesion and focus it had previously lacked.  Membership grew rapidly as women deserted the many other, less directed, groups and joined it. By 1906 the WSPU headquarters, called the Women's Press Shop, had been established in Charing Cross Road and in spite of limited communications (no radio or television, and minimal use of the telephone) the message had spread around the country, with members and branch officers stretching to as far away as Scotland.\n\nThe newspapers produced by the WSPU, first Votes for Women and later The Suffragette, played a vital role in this communication.  Both were sold throughout the country and proved an invaluable way of informing members of meetings, marches, fund-raising events and the latest news and views on the movement.\n\nEqually importantly for a rising political group, the newspaper returned a profit.  This was partly because advertising space was bought in the paper by large department stores such as Selfridges, and jewellers such as Mappin & Webb.  These two, together with other like-minded commercial enterprises sympathetic to the cause, had quickly identified a direct way to reach a huge market of women, many with money to spend.\n\nThe creation of the colour scheme provided another money-making opportunity which the WSPU was quick to exploit. The group began to sell playing cards, board games, Christmas and greeting cards, and countless other goods, all in the purple, white and green colours. In 1906 such merchandising of a corporate identity was a new marketing concept.\n\nBut the paper and merchandising activities alone did not provide sufficient funds for the WSPU to meet organisational costs, so numerous other fund-raising activities combined to fill the coffers of the 'war chest'. The most notable of these was the Woman's Exhibition, which took place in 1909 in a Knightsbridge ice-skating rink, and in 10 days raised the equivalent of £250,000 today.\n\nThe Museum of London's exhibition is largely visual, with a huge number of items on show.  Against a quiet background hum of street sounds, copies of The Suffragette, campaign banners and photographs are all on display, together with one of Mrs Pankhurst's shoes and a number of purple, white and green trinkets.\n\nPhotographs depict vivid scenes of a suffragette's life:  WSPU members on a self-proclaimed 'monster' march, wearing their official uniforms of a white frock decorated with purple, white and green accessories; women selling The Suffragette at street corners, or chalking up pavements with details of a forthcoming meeting.  Windows display postcards and greeting cards designed by women artists for the movement, and the quality of the artwork indicates the wealth of resources the WSPU could call on from its talented members.\n\nVisitors can watch a short film made up of old newsreels and cinema material which clearly reveals the political mood of the day towards the suffragettes. The programme begins with a short film devised by the 'antis' - those opposed to women having the vote - depicting a suffragette as a fierce harridan bullying her poor, abused husband.\n\nOriginal newsreel footage shows the suffragette Emily Wilding Davison throwing herself under King George V's horse at a famous race.\n\nAlthough the exhibition officially charts the years 1906 to 1914, graphic display boards outlining the bills of enfranchisement of 1918 and 1928, which gave the adult female populace of Britain the vote, show what was achieved.  It demonstrates how advanced the suffragettes were in their thinking, in the marketing of their campaign, and in their work as shrewd and skilful image-builders.  It also conveys a sense of the energy and ability the suffragettes brought to their fight for freedom and equality.  And it illustrates the intelligence employed by women who were at that time deemed by several politicians to have 'brains too small to know how to vote'.",
+            "groups": [
+                {
+                    "group_id": "P2-G1",
+                    "type": "MULTIPLE_CHOICE",
+                    "instructions": "Choose the appropriate letters A-D and write them in boxes 14 and 15 on your answer sheet.",
+                    "items": [
+                        {
+                            "item_id": "P2-G1-Q14",
+                            "number": 14,
+                            "prompt": "What is the main aspect of the suffragette movement's work to which the exhibition at the Museum of London is devoted?",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "the role of the Pankhurst family in the suffrage movement"
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "the violence of the movement's political campaign"
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "the success of the movement's corporate image"
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "the movement's co-operation with suffrage groups overseas"
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "C","start_index":240,"stop_index":520
+                            }
+                        },
+                        {
+                            "item_id": "P2-G1-Q15",
+                            "number": 15,
+                            "prompt": "Why was the WSPU more successful than other suffrage groups? ",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "Its leaders were much better educated."
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "It received funding from movements abroad."
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "It had access to new technology."
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "It had a clear purpose and direction."
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "D","start_index":620,"stop_index":900
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P2-G2",
+                    "type": "MULTIPLE_CHOICE",
+                    "instructions": "Choose TWO letters A-E and write them in box 16 on your answer sheet.\n\nIn which TWO of the following years were laws passed allowing British women to vote?",
+                    "items": [
+                        {
+                            "item_id": "P2-G2-Q16",
+                            "number": 16,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "D","start_index":2380,"stop_index":2520
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P2-G3",
+                    "type": "SHORT_ANSWER",
+                    "instructions": "Complete the notes below.\n\nChoose NO MORE THAN THREE WORDS from Reading Passage 2 for each answer.\n\nWrite your answers in boxes 17-19 on your answer sheet.\n\nThree ways in which the WSPU raised money:\n\n• the newspapers:  mainly through selling ... 17.. .\n• merchandising activities: selling a large variety of goods produced in their ...18.. .\n• additional fund-raising activities: for example, ...19.. .",
+                    "items": [
+                        {
+                            "item_id": "P2-G3-Q17",
+                            "number": 17,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "(selling) advertising (space)","start_index":1120,"stop_index":1240
+                            }
+                        },
+                        {
+                            "item_id": "P2-G3-Q18",
+                            "number": 18,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "colour scheme","start_index":1290,"stop_index":1360
+                            }
+                        },
+                        {
+                            "item_id": "P2-G3-Q19",
+                            "number": 19,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "(the) Woman's Exhibition","start_index":1460,"stop_index":1550
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P2-G4",
+                    "type": "YES_NO_NOT_GIVEN",
+                    "instructions": "Do the following statements reflect the situation as described by the writer in Reading Passage 2?\n\nIn boxes 20-26 on your answer sheet write\n\nYES if the statement reflects the situation as described by the writer\nNO if the statement contradicts the writer\nNOT GIVEN if it is impossible to know what the situation is from the passage",
+                    "items": [
+                        {
+                            "item_id": "P2-G4-Q20",
+                            "number": 20,
+                            "prompt": "In 1903 women in Australia were still not allowed to vote.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":520,"stop_index":620
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q21",
+                            "number": 21,
+                            "prompt": "The main organs of communication for the WSPU were its two newspapers.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "YES","start_index":860,"stop_index":1100
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q22",
+                            "number": 22,
+                            "prompt": "The work of the WSPU was mainly confined to London and the south.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":740,"stop_index":860
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q23",
+                            "number": 23,
+                            "prompt": "The WSPU's newspapers were mainly devoted to society news and gossip.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NO","start_index":980,"stop_index":1120
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q24",
+                            "number": 24,
+                            "prompt": "The Woman's Exhibition in 1909 met with great opposition from Parliament.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "NOT GIVEN","start_index":0,"stop_index":120
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q25",
+                            "number": 25,
+                            "prompt": "The Museum of London exhibition includes some of the goods sold by the movement.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "YES","start_index":1580,"stop_index":1760
+                            }
+                        },
+                        {
+                            "item_id": "P2-G4-Q26",
+                            "number": 26,
+                            "prompt": "The opponents of the suffragettes made films opposing the movement.",
+                            "answer": {
+                                "type": "ENUM",
+                                "value": "YES","start_index":1960,"stop_index":2120
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P2-G5",
+                    "type": "MULTIPLE_CHOICE",
+                    "instructions": "Choose the appropriate letter A-D and write it in box 27 on your answer sheet.",
+                    "items": [
+                        {
+                            "item_id": "P2-G5-Q27",
+                            "number": 27,
+                            "prompt": "The writer of the article finds the exhibition to be",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "misleading."
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "exceptional."
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "disappointing."
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "informative."
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "D","start_index":2320,"stop_index":2620
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "passage_id": "P3",
+            "title": "Measuring Organisational Performance",
+            "text": "There is clear-cut evidence that, for a period of at least one year, supervision which increases the direct pressure for productivity can achieve significant increases in production. However, such short-term increases are obtained only at a substantial and serious cost to the organisation.\n\nTo what extent can a manager make an impressive earnings record over a short period of one to three years by exploiting the company's investment in the human organisation in his plant or division?  To what extent will the quality of his organisation suffer if he does so?  The following is a description of an important study conducted by the Institute for Social Research designed to answer these questions.\n\nThe study covered 500 clerical employees in four parallel divisions.  Each division was organised in exactly the same way, used the same technology, did exactly the same kind of work, and had employees of comparable aptitudes.\n\nProductivity in all four of the divisions depended on the number of clerks involved.  The work entailed the processing of accounts and generating of invoices. Although the volume of work was considerable, the nature of the business was such that it could only be processed as it came along.  Consequently, the only way in which productivity could be increased was to change the size of the workgroup.\n\nThe four divisions were assigned to two experimental programmes on a random basis. Each programme was assigned at random a division that had been historically high in productivity and a division that had been below average in productivity. No attempt was made to place a division in the programme that would best fit its habitual methods of supervision used by the manager, assistant managers, supervisors and assistant supervisors.\n\nThe experiment at the clerical level lasted for one year.  Beforehand, several months were devoted to planning, and there was also a training period of approximately six months.  Productivity was measured continuously and computed weekly throughout the year. The attitudes of employees and supervisory staff towards their work were measured just before and after the period.\n\nTurning now to the heart of the study, in two divisions an attempt was made to change the supervision so that the decision levels were pushed down and detailed supervision of the workers reduced. More general supervision of the clerks and their supervisors was introduced. In addition, the managers, assistant managers, supervisors and assistant supervisors of these two divisions were trained in group methods of leadership, which they endeavoured to use as much as their skill would permit during the experimental year.  For easy reference, the experimental changes in these two divisions will be labelled the 'participative programme'.\n\nIn the other two divisions, by contrast, the programme called for modifying the supervision so as to increase the closeness of supervision and move the decision levels upwards. This will be labelled the 'hierarchically controlled programme'.  These changes were accomplished by a further extension of the scientific management approach.  For example, one of the major changes made was to have the jobs timed and to have standard times computed.  This showed that these divisions were overstaffed by about 30%.  The general manager then ordered the managers of these two divisions to cut staff by 25%.  This was done by transfers without replacing the persons who left; no one was to be dismissed.\n\nResults of the Experiment\n\nChanges in Productivity\n\nFigure 1 shows the changes in salary costs per unit of work, which reflect the change in productivity that occurred in the divisions.  As will be observed, the hierarchically controlled programmes increased productivity by about 25%.  This was a result of the direct orders from the general manager to reduce staff by that amount. Direct pressure produced a substantial increase in production.\n\nA significant increase in productivity of 20% was also achieved in the participative programme, but this was not as great an increase as in the hierarchically controlled programme. To bring about this improvement, the clerks themselves participated in the decision to reduce the size of the work group. (They were aware of course that productivity increases were sought by management in conducting these experiments.) Obviously, deciding to reduce the size of a work group by eliminating some of its members is probably one of the most difficult decisions for a work group to make. Yet the clerks made it.  In fact, one division in the participative programme increased its productivity by about the same amount as each of the two divisions in the hierarchically controlled programme.  The other participative division, which historically had been the poorest of all the divisions, did not do so well and increased productivity by only 15%.\n\nChanges in Attitudes\n\nAlthough both programmes had similar effects on productivity, they had significantly different results in other respects. The productivity increases in the hierarchically controlled programme were accompanied by shifts in an adverse direction in such factors as loyalty, attitudes, interest, and involvement in the work. But just the opposite was true in the participative programme.\n\nFor example, Figure 2 shows that when more general supervision and increased participation were provided, the employees' feeling of responsibility to see that the work got done increased. Again, when the supervisor was away, they kept on working. In the hierarchically controlled programme, however, the feeling of responsibility decreased, and when the supervisor was absent, work tended to stop.\n\nAs Figure 3 shows, the employees in the participative programme at the end of the year felt that their manager and assistant manager were 'closer to them' than at the beginning of the year. The opposite was true in the hierarchical programme. Moreover, as Figure 4 shows, employees in the participative programme felt that their supervisors were more likely to 'pull' for them, or for the company and them, and not be solely interested in the company, while in the hierarchically controlled programme, the opposite trend occurred.",
+            "groups": [
+                {
+                    "group_id": "P3-G1",
+                    "type": "MULTIPLE_CHOICE",
+                    "instructions": "Choose the appropriate letters A-D and write them in boxes 28-30 on your answer sheet.",
+                    "items": [
+                        {
+                            "item_id": "P3-G1-Q28",
+                            "number": 28,
+                            "prompt": "The experiment was designed to",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "establish whether increased productivity should be sought at any cost."
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "show that four divisions could use the same technology."
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "perfect a system for processing accounts."
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "exploit the human organisation of a company in order to increase profits."
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "A","start_index":180,"stop_index":420
+                            }
+                        },
+                        {
+                            "item_id": "P3-G1-Q29",
+                            "number": 29,
+                            "prompt": "The four divisions",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "each employed a staff of 500 clerks."
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "each had equal levels of productivity."
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "had identical patterns of organisation."
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "were randomly chosen for the experiment."
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "C","start_index":520,"stop_index":720
+                            }
+                        },
+                        {
+                            "item_id": "P3-G1-Q30",
+                            "number": 30,
+                            "prompt": "Before the experiment",
+                            "options": [
+                                {
+                                    "key": "A",
+                                    "text": "the four divisions were carefully selected to suit a specific programme."
+                                },
+                                {
+                                    "key": "B",
+                                    "text": "each division was told to reduce its level of productivity."
+                                },
+                                {
+                                    "key": "C",
+                                    "text": "the staff involved spent a number of months preparing for the study."
+                                },
+                                {
+                                    "key": "D",
+                                    "text": "the employees were questioned about their feelings towards the study."
+                                }
+                            ],
+                            "answer": {
+                                "type": "OPTION",
+                                "value": "C","start_index":840,"stop_index":1020
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P3-G2",
+                    "type": "SUMMARY_COMPLETION",
+                    "instructions": "Complete the summary below.  Choose ONE word from Reading Passage 3 for each answer.\n\nWrite your answers in boxes 31-36 on your answer sheet.\n\nThis experiment involved an organisation comprising four divisions, which were divided into two programmes:  the hierarchically controlled programme and the participative programme. For a period of one year a different method of ... 31... was used in each programme.  Throughout this time ... 32... was calculated on a weekly basis. During the course of the experiment the following changes were made in an attempt to improve performance.\n\nIn the participative programme:\n• supervision of all workers was ... 33.. .\n• supervisory staff were given training in ... 34...\n\nIn the hierarchically controlled programme:\n• supervision of all workers was increased.\n• work groups were found to be ...35...  by 30%.\n• the work force was ... 36... by 25%.",
+                    "items": [
+                        {
+                            "item_id": "P3-G2-Q31",
+                            "number": 31,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "supervision","start_index":1180,"stop_index":1240
+                            }
+                        },
+                        {
+                            "item_id": "P3-G2-Q32",
+                            "number": 32,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "productivity","start_index":1040,"stop_index":1120
+                            }
+                        },
+                        {
+                            "item_id": "P3-G2-Q33",
+                            "number": 33,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "reduced","start_index":1280,"stop_index":1350
+                            }
+                        },
+                        {
+                            "item_id": "P3-G2-Q34",
+                            "number": 34,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "leadership","start_index":1360,"stop_index":1440
+                            }
+                        },
+                        {
+                            "item_id": "P3-G2-Q35",
+                            "number": 35,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "overstaffed","start_index":1520,"stop_index":1600
+                            }
+                        },
+                        {
+                            "item_id": "P3-G2-Q36",
+                            "number": 36,
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "reduced","start_index":1600,"stop_index":1680
+                            }
+                        }
+                    ]
+                },
+                {
+                    "group_id": "P3-G3",
+                    "type": "MATCHING_FEATURES",
+                    "instructions": "Look at Figures 1, 2, 3 and 4 in Reading Passage 3.\n\nChoose the most appropriate label, A-I, for each Figure from the box below.\n\nWrite your answers in boxes 37-40 on your answer sheet.\n\nA Employees' interest in the company\nB Cost increases for the company\nC Changes in productivity\nD Employees' feelings of responsibility towards completion of work\nE Changes in productivity when supervisor was absent\nF Employees' opinion as to extent of personal support from management\nG Employees feel closer to their supervisors\nH Employees' feelings towards increased supervision\nI Supervisors' opinion as to closeness of work group",
+                    "items": [
+                        {
+                            "item_id": "P3-G3-Q37",
+                            "number": 37,
+                            "prompt": "Fig 1",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "C","start_index":1740,"stop_index":1880
+                            }
+                        },
+                        {
+                            "item_id": "P3-G3-Q38",
+                            "number": 38,
+                            "prompt": "Fig 2",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "D","start_index":1940,"stop_index":2140
+                            }
+                        },
+                        {
+                            "item_id": "P3-G3-Q39",
+                            "number": 39,
+                            "prompt": "Fig 3",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "G","start_index":2140,"stop_index":2320
+                            }
+                        },
+                        {
+                            "item_id": "P3-G3-Q40",
+                            "number": 40,
+                            "prompt": "Fig 4",
+                            "answer": {
+                                "type": "TEXT",
+                                "value": "F","start_index":2320,"stop_index":2540
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
