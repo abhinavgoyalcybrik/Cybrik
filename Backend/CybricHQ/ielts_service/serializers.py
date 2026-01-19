@@ -112,3 +112,50 @@ class SimpleSpeakingTestSerializer(serializers.Serializer):
     part_1 = serializers.JSONField()
     part_2 = serializers.JSONField()
     part_3 = serializers.JSONField()
+
+# --- Admin Student Serializer ---
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+class AdminStudentSerializer(serializers.ModelSerializer):
+    account_type = serializers.CharField(source='ielts_profile.account_type', read_only=True, default='crm')
+    subscription_status = serializers.CharField(source='ielts_profile.subscription_status', read_only=True, default='free')
+    password = serializers.CharField(write_only=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'account_type', 'subscription_status', 'password', 'is_active', 'date_joined']
+        read_only_fields = ['id', 'date_joined']
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = User.objects.create_user(**validated_data)
+        if password:
+            user.set_password(password)
+        else:
+            # Generate random password if not provided (for CRM creation usually)
+            import secrets
+            import string
+            alphabet = string.ascii_letters + string.digits
+            password = ''.join(secrets.choice(alphabet) for i in range(12))
+            user.set_password(password)
+            # We want to return this password so the admin can give it to the student
+            # But create_user hashes it. We can attach it to the instance temporarily?
+            user._plain_password = password
+            
+        user.save()
+        
+        # Ensure IELTS Profile exists?
+        from .models import IELTSUserProfile
+        IELTSUserProfile.objects.get_or_create(user=user)
+        
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+        if password:
+            user.set_password(password)
+            user.save()
+        return user

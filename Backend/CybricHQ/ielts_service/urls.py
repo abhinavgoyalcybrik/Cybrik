@@ -14,6 +14,7 @@ admin_router.register(r'tests', views.AdminIELTSTestViewSet, basename='admin-tes
 admin_router.register(r'modules', views.AdminTestModuleViewSet, basename='admin-module')
 admin_router.register(r'question-groups', views.AdminQuestionGroupViewSet, basename='admin-question-group')
 admin_router.register(r'questions', views.AdminQuestionViewSet, basename='admin-question')
+admin_router.register(r'students', views.AdminStudentViewSet, basename='admin-student')
 
 urlpatterns = [
     # IELTS Auth endpoints

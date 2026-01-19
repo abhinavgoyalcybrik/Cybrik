@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 interface User {
     id: number;
@@ -221,10 +221,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
             // Also clear IELTS student session cookies to prevent auto-login
             // when switching between admin and student panels
-            await fetch(`/api/ielts/auth/logout/`, {
-                method: 'POST',
-                credentials: 'include',
-            });
+            try {
+                await fetch(`/api/ielts/auth/logout/`, {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+            } catch (e) {
+                // Ignore 404s if endpoint doesn't exist
+            }
+
+            // Sign out from NextAuth if session exists
+            if (session) {
+                await signOut({ redirect: false });
+            }
         } catch (error) {
             console.error('Logout error:', error);
         } finally {

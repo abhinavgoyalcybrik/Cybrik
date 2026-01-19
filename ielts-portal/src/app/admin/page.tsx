@@ -70,8 +70,8 @@ export default function AdminDashboard() {
             fetch('/data/speaking_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
             fetch('/api/ielts/tests/?module_type=listening').then(r => r.json()).catch(() => []),
             fetch('/api/ielts/tests/?module_type=reading').then(r => r.json()).catch(() => []),
-            fetch('/data/users.json').then(r => r.json()).catch(() => ({ students: [] })),
-        ]).then(([writing, speaking, listening, reading, users]) => {
+            fetch('/api/ielts/admin/students/count/').then(r => r.json()).catch(() => ({ count: 0 })),
+        ]).then(([writing, speaking, listening, reading, studentsData]) => {
             const listeningCount = Array.isArray(listening) ? listening.length : (listening.results?.length || listening.length || 0);
             const readingCount = Array.isArray(reading) ? reading.length : (reading.results?.length || reading.length || 0);
 
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
                 speaking: speaking.tests?.length || 0,
                 listening: listeningCount,
                 reading: readingCount,
-                students: users.students?.length || 0,
+                students: studentsData.count || 0,
             });
         });
     }, []);

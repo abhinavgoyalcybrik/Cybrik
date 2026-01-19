@@ -9,7 +9,8 @@ from .serializers import (
     IELTSTestListSerializer, IELTSTestDetailSerializer, 
     UserTestSessionSerializer, UserAnswerSerializer,
     AdminIELTSTestSerializer, AdminTestModuleSerializer,
-    AdminQuestionGroupSerializer, AdminQuestionSerializer
+    AdminQuestionGroupSerializer, AdminQuestionSerializer,
+    AdminStudentSerializer
 )
 
 class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
@@ -329,6 +330,36 @@ class AdminQuestionViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(group_id=group_id)
             
         return queryset
+
+
+class AdminStudentViewSet(viewsets.ModelViewSet):
+    """Admin CRUD for Students"""
+    from django.contrib.auth import get_user_model
+    queryset = get_user_model().objects.all()
+    serializer_class = AdminStudentSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        # Only show students (non-staff) or all?
+        # Typically admin wants to see students.
+        # Let's filter out superusers to avoid messing them up?
+        return self.queryset.filter(is_superuser=False, is_staff=False).order_by('-date_joined')
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        # Helper to return the plain password if generated
+        response_data = serializer.data
+        if hasattr(user, '_plain_password'):
+            response_data['password'] = user._plain_password
+            
+        return Response(response_data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'])
+    def count(self):
+        return Response({'count': self.get_queryset().count()})
 
 
 from rest_framework.decorators import api_view, permission_classes
