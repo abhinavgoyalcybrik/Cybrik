@@ -2203,7 +2203,8 @@
         "40": [
           "C"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/03LT01.mp3"
     },
     {
       "id": 6,
@@ -2619,7 +2620,8 @@
         "40": [
           "A"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/03LT02.mp3"
     },
     {
       "id": 7,
@@ -3013,7 +3015,8 @@
         "40": [
           "B"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/03LT03.mp3"
     },
     {
       "id": 8,
@@ -3468,7 +3471,8 @@
         "40": [
           "C"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/03LT04.mp3"
     },
     {
       "id": 9,
