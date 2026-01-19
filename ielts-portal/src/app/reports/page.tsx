@@ -532,7 +532,7 @@ function ReportsContent() {
 
                                         {/* View Details Button */}
                                         <button
-                                            onClick={() => router.push(`/tests/${report.testType}/${report.testId}?view=result&sessionId=${report.sessionId}&attemptId=${report.id}`)}
+                                            onClick={() => router.push(`/reports/${report.sessionId}`)}
                                             className="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 text-sm font-medium transition-colors"
                                         >
                                             View Details
