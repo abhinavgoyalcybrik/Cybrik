@@ -463,39 +463,48 @@ def get_call_status(request, call_sid):
 @permission_classes([])  # Public endpoint for webhook
 def dialplan_webhook(request):
     """
-    Handle Smartflo API Dialplan Webhook.
+    Handle Smartflo API Dialplan Webhook for INBOUND calls.
     
-    When a call is initiated (or received), Smartflo hits this endpoint to ask for instructions.
-    Values passed by Smartflo:
-    - uuid, call_to_number, caller_id_number, start_stamp, etc.
+    When a call is received, Smartflo hits this endpoint to ask for instructions.
+    We return the WSS URL so Smartflo knows where to stream audio.
     """
     try:
         data = request.data
-        logger.info(f"Smartflo Dialplan Webhook received: {data}")
+        logger.info(f"[DIALPLAN] Smartflo Webhook received: {data}")
         
-        # Determine the WebSocket URL for audio streaming
-        ws_url = get_websocket_url(request)
+        # Extract call details
+        caller_number = data.get('caller_id_number') or data.get('from') or data.get('caller')
+        called_number = data.get('call_to_number') or data.get('to') or data.get('destination')
+        call_uuid = data.get('uuid') or data.get('call_uuid') or data.get('callSid')
         
-        # Connect instruction
-        # Based on "Dynamic Endpoint" documentation, we need to return the WSS URL.
-        # Smartflo expects a JSON with the URL to connect to.
-        # Format often used: { "url": "wss://..." } or just the fields if it's a variable replacement.
-        # However, for Dynamic Endpoint in Voice Bot, it expects the URL in the response.
+        logger.info(f"[DIALPLAN] Inbound call: {caller_number} -> {called_number}, UUID: {call_uuid}")
         
-        # Connect instruction
-        # Since Tata support is configuring the WSS URL internally (Static Endpoint),
-        # this webhook primarily serves as a status/logging endpoint for the call start.
-        # We return a 200 OK to acknowledge the call event.
+        # Build the WSS URL for Smartflo to connect to
+        # Use the production domain
+        ws_url = "wss://api.cybriksolutions.com/ws/smartflo/audio/"
         
+        # Response format for Smartflo Dynamic Endpoint
+        # Smartflo may expect different formats - try common ones
         response_payload = {
             "status": "success",
-            "message": "Webhook received"
+            "action": "connect",
+            "url": ws_url,
+            "websocket_url": ws_url,
+            "endpoint": ws_url,
+            "stream_url": ws_url,
+            # Include call context
+            "customParameters": {
+                "caller": caller_number,
+                "called": called_number,
+                "uuid": call_uuid,
+                "direction": "inbound"
+            }
         }
         
-        logger.info(f"Responding to Smartflo Dialplan with: {response_payload}")
+        logger.info(f"[DIALPLAN] Responding with WSS URL: {ws_url}")
         return Response(response_payload, status=status.HTTP_200_OK)
         
     except Exception as e:
-        logger.error(f"Error handling dialplan webhook: {e}")
+        logger.error(f"[DIALPLAN] Error: {e}")
         return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
