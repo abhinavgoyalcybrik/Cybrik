@@ -89,11 +89,23 @@ export default function SpeakingTestPage({ params }: PageProps) {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
     const [isEvaluating, setIsEvaluating] = useState(false);
+    const [savedSessionId, setSavedSessionId] = useState<string | null>(null); // Database session ID for report
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const recordingStreamRef = useRef<MediaStream | null>(null);
     const recordingMimeTypeRef = useRef<string>('audio/webm');
     const sessionIdRef = useRef<string>(`session-${Date.now()}`);
+
+    // Navigate to report page
+    const viewReport = () => {
+        if (savedSessionId) {
+            router.push(`/reports/speaking/${savedSessionId}`);
+        } else {
+            console.error('No session ID available for report');
+            // Fallback to reports page
+            router.push('/reports');
+        }
+    };
 
     // Upload recordings to backend
     const uploadRecordingsToBackend = async (recordingsToUpload: Array<{ label: string; blob: Blob }>) => {
@@ -108,7 +120,10 @@ export default function SpeakingTestPage({ params }: PageProps) {
                 formData.append('session_id', sessionIdRef.current);
                 formData.append('label', rec.label);
 
-                const response = await fetch('/api/ielts/speaking/recordings/upload/', {
+                const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+                // Use absolute URL to hit Django directly, bypassing Next.js API routes if they are missing
+                const response = await fetch(`${API_BASE}/api/ielts/speaking/recordings/upload/`, {
                     method: 'POST',
                     body: formData,
                 });
@@ -739,7 +754,13 @@ export default function SpeakingTestPage({ params }: PageProps) {
                         });
 
                         if (saveRes.ok) {
-                            console.log('Report result saved successfully');
+                            const sessionData = await saveRes.json();
+                            console.log('Report result saved successfully', sessionData);
+                            // Capture the real database session ID for report navigation
+                            if (sessionData?.id) {
+                                setSavedSessionId(sessionData.id);
+                                sessionIdRef.current = sessionData.id; // Update ref too for consistency
+                            }
                         } else {
                             console.warn('Failed to save report result:', await saveRes.text());
                         }
