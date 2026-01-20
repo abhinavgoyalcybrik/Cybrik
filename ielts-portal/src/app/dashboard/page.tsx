@@ -46,11 +46,20 @@ export default function Dashboard() {
 
   useEffect(() => {
     const verifySession = async () => {
-      // If user is already set, check onboarding status
+      // Check localStorage first for onboarding status (client-side source of truth)
+      const localUserStr = localStorage.getItem('ielts_user');
+      const localOnboardingCompleted = localStorage.getItem('ielts_onboarding_completed') === 'true';
+      let localUser = null;
+      try {
+        if (localUserStr) localUser = JSON.parse(localUserStr);
+      } catch (e) { /* ignore */ }
+
+      // If user is already set in context, check onboarding status
       if (user) {
         setAuthVerified(true);
-        // Redirect to onboarding if not completed
-        if (user.onboarding_completed === false) {
+        // Check BOTH context and localStorage - if either says completed, don't redirect
+        const isCompleted = user.onboarding_completed === true || localOnboardingCompleted || localUser?.onboarding_completed === true;
+        if (!isCompleted) {
           router.push('/onboarding');
           return;
         }
@@ -73,11 +82,15 @@ export default function Dashboard() {
         if (res.ok) {
           const data = await res.json();
           if (data.user) {
-            // User is authenticated via cookie, update localStorage
-            localStorage.setItem('ielts_user', JSON.stringify(data.user));
+            // Merge backend user with local onboarding status (localStorage is source of truth for onboarding)
+            const mergedUser = {
+              ...data.user,
+              onboarding_completed: data.user.onboarding_completed === true || localOnboardingCompleted || localUser?.onboarding_completed === true
+            };
+            localStorage.setItem('ielts_user', JSON.stringify(mergedUser));
 
-            // Check onboarding status before redirecting
-            if (data.user.onboarding_completed === false) {
+            // Check onboarding status - only redirect if NOT completed
+            if (!mergedUser.onboarding_completed) {
               router.push('/onboarding');
               return;
             }

@@ -54,9 +54,15 @@ export default function OnboardingPage() {
         }
     }, [router]);
 
-    // Check if onboarding already completed
+    // Check if onboarding already completed - use state to prevent re-renders
+    const [redirectChecked, setRedirectChecked] = useState(false);
+
     useEffect(() => {
+        // Only check once to prevent redirect loops
+        if (redirectChecked) return;
+
         const savedUserStr = localStorage.getItem('ielts_user');
+        const localOnboardingFlag = localStorage.getItem('ielts_onboarding_completed') === 'true';
 
         let userCompleted = false;
         if (savedUserStr) {
@@ -68,11 +74,14 @@ export default function OnboardingPage() {
             }
         }
 
-        // Only redirect if explicitly true in user object (source of truth)
-        if (userCompleted) {
+        // Mark as checked to prevent future runs
+        setRedirectChecked(true);
+
+        // Redirect if EITHER source says completed
+        if (userCompleted || localOnboardingFlag) {
             router.push('/dashboard');
         }
-    }, [router]);
+    }, [router, redirectChecked]);
 
     const handleNext = async () => {
         if (currentStep < TOTAL_STEPS) {
