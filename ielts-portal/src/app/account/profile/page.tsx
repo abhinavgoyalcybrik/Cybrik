@@ -26,25 +26,50 @@ export default function ProfilePage() {
         purpose: 'study_abroad',
     });
 
-    // Load data from Auth Context or fetch fresh
+    // Load data from Auth Context, localStorage, or fetch fresh
     useEffect(() => {
         const fetchProfile = async () => {
+            // First, check localStorage for onboarding data
+            let localOnboardingData = null;
+            let localUser = null;
+            try {
+                const onboardingStr = localStorage.getItem('ielts_onboarding_data');
+                if (onboardingStr) localOnboardingData = JSON.parse(onboardingStr);
+
+                const userStr = localStorage.getItem('ielts_user');
+                if (userStr) localUser = JSON.parse(userStr);
+            } catch (e) {
+                // ignore parse errors
+            }
+
             try {
                 const res = await fetch('/api/ielts/auth/me/', { credentials: 'include' });
                 if (res.ok) {
                     const data = await res.json();
                     // Profile fields are directly in user object (flat structure)
                     if (data.user) {
+                        // Merge backend data with localStorage data (localStorage takes priority if backend is empty)
                         setFormData({
-                            target_score: data.user.target_score?.toString() || '',
-                            exam_date: data.user.exam_date || '',
-                            test_type: data.user.test_type || 'academic',
-                            purpose: data.user.purpose || 'study_abroad',
+                            target_score: data.user.target_score?.toString() || localOnboardingData?.targetScore?.toString() || localUser?.target_score?.toString() || '',
+                            exam_date: data.user.exam_date || localOnboardingData?.examDate || localUser?.exam_date || '',
+                            test_type: data.user.test_type || localOnboardingData?.testType || localUser?.test_type || 'academic',
+                            purpose: data.user.purpose || localOnboardingData?.purpose || localUser?.purpose || 'study_abroad',
                         });
+                        return;
                     }
                 }
             } catch (e) {
-                console.error("Failed to load profile", e);
+                console.error("Failed to load profile from backend", e);
+            }
+
+            // Fallback to localStorage only
+            if (localOnboardingData || localUser) {
+                setFormData({
+                    target_score: localOnboardingData?.targetScore?.toString() || localUser?.target_score?.toString() || '',
+                    exam_date: localOnboardingData?.examDate || localUser?.exam_date || '',
+                    test_type: localOnboardingData?.testType || localUser?.test_type || 'academic',
+                    purpose: localOnboardingData?.purpose || localUser?.purpose || 'study_abroad',
+                });
             }
         };
         fetchProfile();
