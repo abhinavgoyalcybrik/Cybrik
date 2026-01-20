@@ -209,7 +209,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.1.72:5000",
     "https://api.cybriksolutions.com",
     "https://crm.cybriksolutions.com",
+    "https://ielts.cybriksolutions.com",  # Added for IELTS portal authentication
 ]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [

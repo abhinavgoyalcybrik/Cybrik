@@ -119,6 +119,14 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
             "feedback": {...}  // Optional - AI evaluation feedback
         }
         """
+        # DEBUG: Log authentication details
+        logger.info(f"=== save_module_result DEBUG ===")
+        logger.info(f"User authenticated: {request.user.is_authenticated}")
+        logger.info(f"User: {request.user}")
+        logger.info(f"Origin: {request.headers.get('Origin', 'No Origin header')}")
+        logger.info(f"Cookies: {list(request.COOKIES.keys())}")
+        logger.info(f"Request method: {request.method}")
+        
         user = request.user
         data = request.data
         test_id = data.get('test_id')
