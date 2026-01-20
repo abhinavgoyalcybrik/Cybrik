@@ -223,7 +223,10 @@ CSRF_TRUSTED_ORIGINS = [
     "https://cybrik-hq.vercel.app",
     "https://*.vercel.app",
     "https://api.cybriksolutions.com",
+    "https://crm.cybriksolutions.com",
+    "https://ielts.cybriksolutions.com",
 ]
+
 
 USE_HTTPS_FOR_DEMO = os.environ.get("DJANGO_USE_HTTPS_DEMO", "1") == "1"
 if USE_HTTPS_FOR_DEMO:

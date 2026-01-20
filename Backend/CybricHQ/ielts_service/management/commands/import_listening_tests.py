@@ -171,8 +171,19 @@ class Command(BaseCommand):
                 q_num = q_data.get('q', 0)
                 q_type = q_data.get('type', 'text')
                 
+                # Parse question number - handle ranges like '18-20' or '31-32'
+                q_order = 0
+                if isinstance(q_num, int):
+                    q_order = q_num
+                elif isinstance(q_num, str):
+                    # Extract first number from range (e.g., '18-20' -> 18)
+                    import re
+                    match = re.match(r'^(\d+)', str(q_num))
+                    if match:
+                        q_order = int(match.group(1))
+                
                 # Map type to model type
-                if q_type == 'mcq':
+                if q_type == 'mcq' or q_type == 'mcq_multi':
                     question_type = 'multiple_choice'
                 else:
                     question_type = 'text_input'
@@ -195,7 +206,7 @@ class Command(BaseCommand):
                     question_type=question_type,
                     options=options,
                     correct_answer=correct_answer,
-                    order=q_num
+                    order=q_order
                 )
         
         return True
