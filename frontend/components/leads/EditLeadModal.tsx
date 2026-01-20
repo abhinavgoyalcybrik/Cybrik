@@ -9,6 +9,7 @@ type Lead = {
     phone?: string;
     email?: string;
     source?: string;
+    preferred_country?: string;
     notes?: string;
     status?: string;
 };
@@ -33,6 +34,7 @@ export default function EditLeadModal({ lead, isOpen, onClose, onSuccess }: Edit
                 phone: lead.phone || "",
                 status: lead.status || "received",
                 source: lead.source || "",
+                preferred_country: lead.preferred_country || "",
                 notes: lead.notes || "",
             });
         }
@@ -140,6 +142,29 @@ export default function EditLeadModal({ lead, isOpen, onClose, onSuccess }: Edit
                                     placeholder="Source (e.g. Website)"
                                 />
                             </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                            <label className="label">Preferred Country</label>
+                            <select
+                                value={formData.preferred_country}
+                                onChange={(e) => setFormData({ ...formData, preferred_country: e.target.value })}
+                                className="input w-full"
+                            >
+                                <option value="">Select preferred country</option>
+                                <option value="USA">USA</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="France">France</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="Dubai">Dubai (UAE)</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
 
                         <div>
