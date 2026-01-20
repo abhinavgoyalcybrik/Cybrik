@@ -46,9 +46,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     const verifySession = async () => {
-      // If user is already set, we're good
+      // If user is already set, check onboarding status
       if (user) {
         setAuthVerified(true);
+        // Redirect to onboarding if not completed
+        if (user.onboarding_completed === false) {
+          router.push('/onboarding');
+          return;
+        }
         return;
       }
 
@@ -70,7 +75,14 @@ export default function Dashboard() {
           if (data.user) {
             // User is authenticated via cookie, update localStorage
             localStorage.setItem('ielts_user', JSON.stringify(data.user));
-            // Use router.refresh() instead of window.location.reload()
+
+            // Check onboarding status before redirecting
+            if (data.user.onboarding_completed === false) {
+              router.push('/onboarding');
+              return;
+            }
+
+            // Reload to update user context
             window.location.href = '/dashboard';
             return;
           }
