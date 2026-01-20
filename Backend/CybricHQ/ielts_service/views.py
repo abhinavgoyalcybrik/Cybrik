@@ -256,7 +256,8 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     """
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
-    permission_classes = [permissions.AllowAny]  # Temporarily allow all for testing
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []  # Disable CSRF enforcement from SessionAuthentication
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
