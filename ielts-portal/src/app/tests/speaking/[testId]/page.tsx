@@ -456,6 +456,9 @@ export default function SpeakingTestPage({ params }: PageProps) {
     const pauseRecording = () => {
         const recorder = mediaRecorderRef.current;
         if (recorder && recorder.state === 'recording') {
+            // CRITICAL: Request any pending data before pausing
+            // This ensures we capture audio even if paused before the timeslice (100ms)
+            recorder.requestData();
             recorder.pause();
             setIsRecording(false);
             console.log('Recording paused, chunks so far:', audioChunksRef.current.length);
