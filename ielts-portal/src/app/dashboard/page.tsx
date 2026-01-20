@@ -159,15 +159,8 @@ export default function Dashboard() {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      await fetch('/api/ielts/auth/logout/', { method: 'POST', credentials: 'include' });
-    } catch (e) { }
-    localStorage.removeItem('ielts_user');
-    localStorage.removeItem('ielts_token');
-    // Use AuthContext logout for complete cleanup
+    // Use AuthContext logout for complete cleanup (API call, localStorage, redirect)
     await logout();
-    // Redirect to login page
-    router.push('/login');
   };
 
   if (isLoading) {

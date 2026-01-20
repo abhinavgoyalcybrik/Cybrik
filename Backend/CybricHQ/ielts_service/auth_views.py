@@ -41,6 +41,7 @@ def set_auth_cookies(response, user):
         httponly=True,
         secure=COOKIE_SECURE,
         samesite=COOKIE_SAMESITE,
+        path='/',  # Explicit path for consistent deletion
     )
     
     # Refresh token cookie (longer lived)
@@ -51,6 +52,7 @@ def set_auth_cookies(response, user):
         httponly=True,
         secure=COOKIE_SECURE,
         samesite=COOKIE_SAMESITE,
+        path='/',  # Explicit path for consistent deletion
     )
     
     return response
@@ -145,9 +147,10 @@ def ielts_login(request):
 def ielts_logout(request):
     """Logout by clearing auth cookies."""
     response = Response({"success": True, "message": "Logged out successfully"})
-    # Delete cookies with same settings used when setting them
-    response.delete_cookie(ACCESS_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE, secure=COOKIE_SECURE)
-    response.delete_cookie(REFRESH_COOKIE_NAME, path='/', samesite=COOKIE_SAMESITE, secure=COOKIE_SECURE)
+    # Delete cookies - must match path used when setting them
+    # Note: delete_cookie only uses key, path, domain - not samesite/secure
+    response.delete_cookie(ACCESS_COOKIE_NAME, path='/')
+    response.delete_cookie(REFRESH_COOKIE_NAME, path='/')
     return response
 
 

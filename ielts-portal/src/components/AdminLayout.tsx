@@ -50,9 +50,9 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
     const router = useRouter();
     const pathname = usePathname();
 
-    const handleLogout = () => {
-        logout();
-        router.push('/login');
+    const handleLogout = async () => {
+        // AuthContext logout handles API call, localStorage cleanup, and redirect
+        await logout();
     };
 
     // Show admin nav only if user is explicitly an admin, otherwise show student nav

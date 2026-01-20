@@ -1,20 +1,30 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { LogIn, User, Lock, ArrowRight, Mail } from 'lucide-react';
 import Link from 'next/link';
 
-export default function LoginPage() {
+function LoginPageContent() {
     const [loginMethod, setLoginMethod] = useState<'google' | 'credentials'>('google');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
 
-    // Check if already logged in
+    // Check if already logged in (skip if just logged out)
     useEffect(() => {
+        const justLoggedOut = searchParams.get('logout') === 'true';
+
+        // Skip auto-login check if user just logged out
+        if (justLoggedOut) {
+            // Clear the logout param from URL without triggering navigation
+            window.history.replaceState({}, '', '/login');
+            return;
+        }
+
         const checkAuth = async () => {
             try {
                 const res = await fetch('/api/ielts/auth/me/', {
@@ -36,7 +46,7 @@ export default function LoginPage() {
             }
         };
         checkAuth();
-    }, [router]);
+    }, [router, searchParams]);
 
     const handleCredentialsSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -282,5 +292,17 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-[#6FB63A] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        }>
+            <LoginPageContent />
+        </Suspense>
     );
 }
