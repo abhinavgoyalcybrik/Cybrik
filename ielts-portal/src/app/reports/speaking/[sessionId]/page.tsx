@@ -35,17 +35,18 @@ interface EvaluationResult {
         label: string;
         transcript: string;
         evaluation?: {
-            fluency_coherence: number;
-            lexical_resource: number;
-            grammatical_range: number;
+            fluency: number;
+            lexical: number;
+            grammar: number;
             pronunciation: number;
+            grammar_analysis?: Array<{ error: string; correction: string; explanation: string; type: string }>;
+            vocabulary_analysis?: Array<{ word: string; cefr: string; enhancement?: string }>;
+            pronunciation_analysis?: Array<{ word: string; status: string; score: number }>;
+            fluency_analysis?: { wpm: number; pauses: Array<{ start: number; end: number; duration: number }>; pause_count: number };
             feedback: {
-                fluency_coherence: string;
-                lexical_resource: string;
-                grammatical_range: string;
-                pronunciation: string;
+                strengths: string;
+                improvements: string;
             };
-            improvement_suggestions: string;
         };
         error?: string;
     }>;
@@ -103,6 +104,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
     const [result, setResult] = useState<EvaluationResult | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [activeQuestion, setActiveQuestion] = useState(0);
+    const [detailTab, setDetailTab] = useState<'fluency' | 'vocabulary' | 'pronunciation' | 'grammar'>('fluency');
     const [playingAudio, setPlayingAudio] = useState<number | null>(null);
 
     // Fetch saved session data instead of re-evaluating
@@ -167,7 +169,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
                             },
                             detailed_results: feedback.parts?.map((p: any) => ({
                                 label: `Part ${p.part}`,
-                                transcript: '',
+                                transcript: p.score.transcript || '',
                                 evaluation: p.score,
                             })) || [],
                             total_evaluated: feedback.parts?.length || 0,
@@ -423,15 +425,174 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                         </div>
                                     </div>
 
-                                    {/* Transcript */}
-                                    {result.detailed_results[activeQuestion].transcript && (
-                                        <div className="bg-white border border-slate-200 rounded-xl p-4">
-                                            <h5 className="font-semibold text-slate-900 mb-2">Transcript</h5>
-                                            <p className="text-slate-600 text-sm">
-                                                {result.detailed_results[activeQuestion].transcript}
-                                            </p>
+                                    {/* Analysis Tabs */}
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {(['fluency', 'vocabulary', 'pronunciation', 'grammar'] as const).map((tab) => (
+                                            <button
+                                                key={tab}
+                                                onClick={() => setDetailTab(tab)}
+                                                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${detailTab === tab
+                                                    ? 'bg-white border-purple-200 text-purple-700 shadow-sm'
+                                                    : 'bg-transparent border-transparent text-slate-500 hover:text-slate-700'
+                                                    }`}
+                                            >
+                                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        {/* Left Panel: Highlighted Transcript */}
+                                        <div className="bg-white border border-slate-200 rounded-xl p-6 min-h-[400px]">
+                                            <div className="flex justify-between items-center mb-6">
+                                                <h5 className="font-semibold text-slate-900">Your Answer</h5>
+                                                {/* Legends */}
+                                                {detailTab === 'pronunciation' && (
+                                                    <div className="flex gap-2 text-xs font-medium">
+                                                        <span className="text-emerald-600 bg-emerald-50 px-2 py-1 rounded">Good {'>'}80%</span>
+                                                        <span className="text-amber-600 bg-amber-50 px-2 py-1 rounded">Fair</span>
+                                                        <span className="text-red-600 bg-red-50 px-2 py-1 rounded">Needs Imp.</span>
+                                                    </div>
+                                                )}
+                                                {detailTab === 'vocabulary' && (
+                                                    <div className="flex gap-1 text-xs font-medium">
+                                                        <span className="w-2 h-2 rounded-full bg-slate-200 inline-block mr-1"></span>A1-A2
+                                                        <span className="w-2 h-2 rounded-full bg-blue-400 inline-block ml-2 mr-1"></span>B1-B2
+                                                        <span className="w-2 h-2 rounded-full bg-orange-400 inline-block ml-2 mr-1"></span>C1-C2
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="text-lg leading-relaxed text-slate-700 font-medium">
+                                                {detailTab === 'pronunciation' && result.detailed_results[activeQuestion].evaluation?.pronunciation_analysis ? (
+                                                    // Reconstruct from pronunciation words
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {result.detailed_results[activeQuestion].evaluation?.pronunciation_analysis?.map((w, i) => {
+                                                            const color = w.status === 'Good' ? 'text-slate-700' :
+                                                                w.status === 'Fair' ? 'text-amber-600 bg-amber-50' : 'text-red-600 bg-red-50';
+                                                            return (
+                                                                <span key={i} className={`px-0.5 rounded ${color}`} title={`${w.status} (${w.score}%)`}>
+                                                                    {w.word}
+                                                                </span>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                ) : detailTab === 'grammar' ? (
+                                                    // Highlight grammar errors
+                                                    <div>
+                                                        {(() => {
+                                                            let text = result.detailed_results[activeQuestion].transcript || '';
+                                                            const errors = result.detailed_results[activeQuestion].evaluation?.grammar_analysis || [];
+                                                            if (errors.length === 0) return text;
+
+                                                            // Very basic replacement (MVP) - loops through errors and highlights first occurrence specific string
+                                                            // In production, we need exact indices from backend
+                                                            const parts: React.ReactNode[] = [];
+                                                            let lastIdx = 0;
+
+                                                            // Sort by appearance? We don't have indices. Use simple replacement or render logic
+                                                            // Fallback: Just display text with list on right for now if no indices
+                                                            return text;
+                                                        })()}
+                                                    </div>
+                                                ) : (
+                                                    // Default text
+                                                    result.detailed_results[activeQuestion].transcript
+                                                )}
+                                            </div>
                                         </div>
-                                    )}
+
+                                        {/* Right Panel: Analysis Details */}
+                                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 h-full overflow-y-auto max-h-[600px]">
+                                            {detailTab === 'fluency' && (
+                                                <div className="space-y-6">
+                                                    <h6 className="font-semibold text-slate-900 border-b pb-2">Fluency Analysis</h6>
+
+                                                    <div className="bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                                        <div className="text-sm text-slate-500 mb-1">Speaking Speed</div>
+                                                        <div className="flex items-baseline gap-2">
+                                                            <span className="text-3xl font-bold text-purple-600">
+                                                                {result.detailed_results[activeQuestion].evaluation?.fluency_analysis?.wpm || 0}
+                                                            </span>
+                                                            <span className="text-slate-600">words/min</span>
+                                                        </div>
+                                                        <div className="w-full bg-slate-100 h-2 mt-3 rounded-full overflow-hidden">
+                                                            <div
+                                                                className="h-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-500"
+                                                                style={{ width: '100%' }} // Gradient bar
+                                                            />
+                                                            {/* Indicator pointer could act here */}
+                                                        </div>
+                                                        <p className="text-xs text-slate-500 mt-2">Target: 120-150 wpm</p>
+                                                    </div>
+
+                                                    <div className="bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                                        <div className="text-sm text-slate-500 mb-1">Pauses</div>
+                                                        <div className="text-xl font-semibold text-slate-800">
+                                                            {result.detailed_results[activeQuestion].evaluation?.fluency_analysis?.pause_count || 0} <span className="text-sm font-normal text-slate-500">detected</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {detailTab === 'pronunciation' && (
+                                                <div className="space-y-4">
+                                                    <h6 className="font-semibold text-slate-900 border-b pb-2">Pronunciation Mistakes</h6>
+                                                    {result.detailed_results[activeQuestion].evaluation?.pronunciation_analysis?.filter(w => w.status !== 'Good').map((w, i) => (
+                                                        <div key={i} className="flex items-center justify-between bg-white p-3 rounded border border-slate-100">
+                                                            <span className="font-medium text-slate-800">{w.word}</span>
+                                                            <span className={`text-xs px-2 py-1 rounded font-medium ${w.status === 'Fair' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
+                                                                {w.status}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                    {result.detailed_results[activeQuestion].evaluation?.pronunciation_analysis?.every(w => w.status === 'Good') && (
+                                                        <div className="text-slate-500 text-center py-8">No significant pronunciation issues detected. Great job!</div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {detailTab === 'grammar' && (
+                                                <div className="space-y-4">
+                                                    <h6 className="font-semibold text-slate-900 border-b pb-2">Grammar & Corrections</h6>
+                                                    {result.detailed_results[activeQuestion].evaluation?.grammar_analysis?.map((item, i) => (
+                                                        <div key={i} className="bg-white p-4 rounded-lg border border-red-50 shadow-sm">
+                                                            <div className="flex gap-2 items-start mb-2">
+                                                                <span className="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded font-bold uppercase shrink-0 mt-0.5">Error</span>
+                                                                <span className="text-red-600 line-through decoration-red-300">{item.error}</span>
+                                                            </div>
+                                                            <div className="flex gap-2 items-start mb-2">
+                                                                <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded font-bold uppercase shrink-0 mt-0.5">Fix</span>
+                                                                <span className="text-emerald-700 font-medium">{item.correction}</span>
+                                                            </div>
+                                                            <p className="text-slate-500 text-xs italic mt-2">{item.explanation}</p>
+                                                        </div>
+                                                    ))}
+                                                    {(!result.detailed_results[activeQuestion].evaluation?.grammar_analysis?.length) && (
+                                                        <div className="text-slate-500 text-center py-8">No grammar errors found.</div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {detailTab === 'vocabulary' && (
+                                                <div className="space-y-4">
+                                                    <h6 className="font-semibold text-slate-900 border-b pb-2">Vocabulary Analysis</h6>
+                                                    {result.detailed_results[activeQuestion].evaluation?.vocabulary_analysis?.map((item, i) => (
+                                                        <div key={i} className="bg-white p-3 rounded-lg border border-slate-100 flex items-center justify-between">
+                                                            <span className="font-medium text-slate-800">{item.word}</span>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-xs text-slate-400 uppercase">{item.cefr}</span>
+                                                                {item.enhancement && <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">Try: {item.enhancement}</span>}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                    {(!result.detailed_results[activeQuestion].evaluation?.vocabulary_analysis?.length) && (
+                                                        <div className="text-slate-500 text-center py-8">Vocabulary analysis unavailable.</div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
