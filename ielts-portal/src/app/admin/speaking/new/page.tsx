@@ -4,33 +4,13 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import AdminLayout from '@/components/AdminLayout';
 import {
-    Shield,
-    PenTool,
-    Mic,
-    Users,
-    Settings,
-    LogOut,
-    Home,
-    ChevronRight,
-    Headphones,
-    BookOpen,
-    ArrowLeft,
     Save,
     Code,
     Copy,
     Check,
 } from 'lucide-react';
-
-const navItems = [
-    { name: 'Dashboard', href: '/admin', icon: Home },
-    { name: 'Writing Tests', href: '/admin/writing', icon: PenTool },
-    { name: 'Speaking Tests', href: '/admin/speaking', icon: Mic },
-    { name: 'Listening Tests', href: '/admin/listening', icon: Headphones },
-    { name: 'Reading Tests', href: '/admin/reading', icon: BookOpen },
-    { name: 'Manage Users', href: '/admin/users', icon: Users },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
-];
 
 const sampleTest = {
     test_id: 49,
@@ -160,155 +140,90 @@ The JSON has been copied to your clipboard!`;
 
     if (authLoading || !isAdmin) {
         return (
-            <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#6FB63A]"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-zinc-900 text-white">
-            {/* Sidebar */}
-            <aside className="fixed left-0 top-0 h-screen w-64 bg-zinc-800 border-r border-zinc-700 flex flex-col">
-                <div className="p-6 border-b border-zinc-700">
-                    <div className="flex items-center gap-3">
-                        <div className="bg-red-600 p-2 rounded-lg">
-                            <Shield className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="font-bold text-lg">Admin Panel</h1>
-                            <p className="text-xs text-zinc-400">IELTS Portal</p>
-                        </div>
-                    </div>
-                </div>
-
-                <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-                    {navItems.map((item) => {
-                        const isActive = item.href === '/admin/speaking';
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                    ? 'bg-red-600 text-white'
-                                    : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
-                                    }`}
+        <AdminLayout
+            title="Add New Speaking Test"
+            subtitle="Upload JSON and Name"
+        >
+            <div className="max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 gap-6">
+                    {/* JSON Editor */}
+                    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                                <Code className="w-5 h-5 text-emerald-500" />
+                                <h3 className="text-lg font-bold text-slate-900">Test JSON</h3>
+                            </div>
+                            <button
+                                onClick={handleCopyJson}
+                                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors"
                             >
-                                <item.icon className="w-5 h-5" />
-                                <span className="font-medium">{item.name}</span>
-                                {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="p-4 border-t border-zinc-700">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-medium text-sm">{user?.name}</p>
-                            <p className="text-xs text-zinc-400">Administrator</p>
+                                {copied ? (
+                                    <>
+                                        <Check className="w-4 h-4 text-green-500" />
+                                        Copied!
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy className="w-4 h-4" />
+                                        Copy
+                                    </>
+                                )}
+                            </button>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
+
+                        <textarea
+                            value={jsonContent}
+                            onChange={(e) => handleJsonChange(e.target.value)}
+                            className="w-full h-[500px] p-4 bg-slate-50 border border-slate-200 rounded-lg text-sm font-mono text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
+                            spellCheck={false}
+                            placeholder="Paste test JSON here..."
+                        />
+
+                        {jsonError && (
+                            <p className="mt-2 text-sm text-red-500">⚠️ {jsonError}</p>
+                        )}
+                    </div>
+
+                    {/* Name Input */}
+                    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                        <label className="block text-sm font-medium text-slate-500 mb-2">
+                            Test Name
+                        </label>
+                        <input
+                            type="text"
+                            value={testName}
+                            onChange={(e) => setTestName(e.target.value)}
+                            placeholder="e.g. Cambridge 18 Test 1"
+                            className="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-900 focus:ring-2 focus:ring-emerald-500 outline-none"
+                        />
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                        <Link
+                            href="/admin/speaking"
+                            className="flex-1 px-4 py-3 text-center bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors"
                         >
-                            <LogOut className="w-5 h-5" />
+                            Cancel
+                        </Link>
+                        <button
+                            onClick={handleSave}
+                            disabled={!!jsonError}
+                            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        >
+                            <Save className="w-5 h-5" />
+                            Save Test
                         </button>
                     </div>
                 </div>
-            </aside>
-
-            {/* Main Content */}
-            <main className="ml-64 p-8">
-                <div className="max-w-4xl">
-                    {/* Header */}
-                    <div className="flex items-center gap-4 mb-8">
-                        <Link
-                            href="/admin/speaking"
-                            className="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
-                        >
-                            <ArrowLeft className="w-5 h-5" />
-                        </Link>
-                        <div>
-                            <h2 className="text-3xl font-bold">Add New Speaking Test</h2>
-                            <p className="text-zinc-400 mt-1">Upload JSON and Name</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-6">
-                        {/* JSON Editor */}
-                        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-2">
-                                    <Code className="w-5 h-5 text-emerald-500" />
-                                    <h3 className="text-lg font-bold">Test JSON</h3>
-                                </div>
-                                <button
-                                    onClick={handleCopyJson}
-                                    className="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
-                                >
-                                    {copied ? (
-                                        <>
-                                            <Check className="w-4 h-4 text-green-400" />
-                                            Copied!
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Copy className="w-4 h-4" />
-                                            Copy
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-
-                            <textarea
-                                value={jsonContent}
-                                onChange={(e) => handleJsonChange(e.target.value)}
-                                className="w-full h-[500px] p-4 bg-zinc-900 border border-zinc-600 rounded-lg text-sm font-mono text-green-400 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
-                                spellCheck={false}
-                                placeholder="Paste test JSON here..."
-                            />
-
-                            {jsonError && (
-                                <p className="mt-2 text-sm text-red-400">⚠️ {jsonError}</p>
-                            )}
-                        </div>
-
-                        {/* Name Input */}
-                        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-                            <label className="block text-sm font-medium text-zinc-400 mb-2">
-                                Test Name
-                            </label>
-                            <input
-                                type="text"
-                                value={testName}
-                                onChange={(e) => setTestName(e.target.value)}
-                                placeholder="e.g. Cambridge 18 Test 1"
-                                className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none"
-                            />
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex gap-3">
-                            <Link
-                                href="/admin/speaking"
-                                className="flex-1 px-4 py-3 text-center bg-zinc-700 hover:bg-zinc-600 rounded-lg font-medium transition-colors"
-                            >
-                                Cancel
-                            </Link>
-                            <button
-                                onClick={handleSave}
-                                disabled={!!jsonError}
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <Save className="w-5 h-5" />
-                                Save Test
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+            </div>
+        </AdminLayout>
     );
 }
-
