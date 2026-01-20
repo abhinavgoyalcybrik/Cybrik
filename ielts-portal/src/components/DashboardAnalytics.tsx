@@ -114,7 +114,7 @@ function SectionCard({ title, bandScore, data, color, bgColor, icon, href, tests
                 </div>
 
                 {/* Radar Chart */}
-                <div className="flex-1 min-h-[220px] w-full relative">
+                <div className="h-[220px] w-full relative">
                     {isEmpty && (
                         <div className="absolute inset-0 flex items-center justify-center z-20 backdrop-blur-[1px]">
                             <div className="bg-white/90 px-4 py-2 rounded-full shadow-sm border border-slate-100 text-sm font-medium text-slate-500">
