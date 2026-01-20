@@ -69,8 +69,8 @@ export default function OnboardingPage() {
             }
         }
 
-        // Only redirect if explicitly true in user object or localStorage (and user exists)
-        if (userCompleted || (localCompleted === 'true' && savedUserStr)) {
+        // Only redirect if explicitly true in user object (source of truth)
+        if (userCompleted) {
             router.push('/dashboard');
         }
     }, [router]);

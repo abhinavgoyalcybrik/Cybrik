@@ -94,6 +94,10 @@ export default function RegisterPage() {
     };
 
     const handleGoogleCallback = async (response: any) => {
+        // Clear any stale onboarding data before processing
+        localStorage.removeItem('ielts_onboarding_completed');
+        localStorage.removeItem('ielts_onboarding_data');
+
         try {
             const res = await fetch('/api/ielts/auth/google/', {
                 method: 'POST',
@@ -124,25 +128,25 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
             {/* Background decorations - Subtle */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-600/10 blur-[100px] rounded-full"></div>
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-50 blur-[100px] rounded-full"></div>
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-50 blur-[100px] rounded-full"></div>
             </div>
 
             <div className="w-full max-w-md relative z-10">
                 {/* Logo & Header */}
                 <div className="text-center mb-8">
                     <Link href="/">
-                        <img src="/logo.png" alt="Cybrik IELTS" className="h-12 w-auto object-contain mx-auto mb-6 opacity-90 hover:opacity-100 transition-opacity" />
+                        <img src="/logo.png" alt="Cybrik IELTS" className="h-12 w-auto object-contain mx-auto mb-6 transition-opacity" />
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Start Your Journey</h1>
-                    <p className="text-slate-400">Join thousands of students achieving their dream score</p>
+                    <h1 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">Start Your Journey</h1>
+                    <p className="text-slate-500">Join thousands of students achieving their dream score</p>
                 </div>
 
                 {/* Form Card */}
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
                     {/* Benefits Banner inside card */}
                     <div className="bg-emerald-50 px-6 py-4 border-b border-emerald-100 flex items-start gap-3">
                         <div className="bg-emerald-100 p-1.5 rounded-full mt-0.5">
@@ -331,7 +335,7 @@ export default function RegisterPage() {
 
                 {/* Back to Home - Outside */}
                 <div className="mt-8 text-center">
-                    <Link href="/" className="text-sm text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-2 group">
+                    <Link href="/" className="text-sm text-slate-500 hover:text-slate-900 transition-colors flex items-center justify-center gap-2 group">
                         <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
                         Back to Home
                     </Link>
