@@ -84,6 +84,7 @@ urlpatterns = [
     path("analytics/cost-time-series/", views_analytics.analytics_cost_time_series, name="analytics-cost-time-series"),
     path("analytics/llm-usage/", views_analytics.analytics_llm_usage, name="analytics-llm-usage"),
     path("dashboard/overview/", views_dashboard.dashboard_overview, name="dashboard-overview"),
+    path("dashboard/country-stats/", views_dashboard.country_wise_stats, name="dashboard-country-stats"),
     path("dashboard/config/", views_dashboard.get_dashboard_config, name="get-dashboard-config"),
     path("dashboard/config/save/", views_dashboard.save_dashboard_config, name="save-dashboard-config"),
     path("dashboard/config/save-role/", views_dashboard.save_role_config, name="save-role-config"),

@@ -11,6 +11,7 @@ import FunnelChart from "@/components/dashboard/charts/FunnelChart";
 import ApplicationsChart from "@/components/dashboard/charts/ApplicationsChart";
 import CostChart from "@/components/dashboard/charts/CostChart";
 import LLMUsageWidget from "@/components/dashboard/LLMUsageWidget";
+import CountryWiseWidget from "@/components/dashboard/CountryWiseWidget";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
@@ -28,7 +29,7 @@ import { addDays, format } from "date-fns";
 
 const DEFAULT_LAYOUT = [
   { i: "stat_leads", x: 0, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
-
+  { i: "stat_country", x: 4, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
   { i: "stat_conversion", x: 8, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
   { i: "trend_chart", x: 0, y: 2, w: 8, h: 4, minW: 2, minH: 3 },
   { i: "funnel_chart", x: 8, y: 2, w: 4, h: 4, minW: 2, minH: 3 },
@@ -48,6 +49,7 @@ export default function DashboardPage() {
     from: addDays(new Date(), -30),
     to: new Date(),
   });
+  const [countryFilter, setCountryFilter] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -61,13 +63,16 @@ export default function DashboardPage() {
           queryParams.append("start", format(dateRange.from, "yyyy-MM-dd"));
         if (dateRange?.to)
           queryParams.append("end", format(dateRange.to, "yyyy-MM-dd"));
+        if (countryFilter)
+          queryParams.append("country", countryFilter);
+
         const qs = queryParams.toString();
 
         const queryString = queryParams.toString();
         const url = queryString
           ? `/api/dashboard/overview/?${queryString}`
           : `/api/dashboard/overview/`;
-        const data = await apiFetch(url);
+
         const [
           configRes,
           timeSeriesRes,
@@ -83,7 +88,7 @@ export default function DashboardPage() {
           apiFetch(`/api/analytics/llm-usage/?${qs}`),
           apiFetch(`/api/analytics/applications-status/?${qs}`),
           apiFetch(`/api/analytics/cost-time-series/?${qs}`),
-          apiFetch(`/api/dashboard/overview/?${qs}`),
+          apiFetch(url),
         ]);
 
         if (
@@ -116,7 +121,7 @@ export default function DashboardPage() {
     }
 
     loadData();
-  }, [userLoading, dateRange]);
+  }, [userLoading, dateRange, countryFilter]);
 
   const handleLayoutChange = (newLayout: any[]) => {
     setLayout(newLayout);
@@ -198,6 +203,15 @@ export default function DashboardPage() {
             </div>
           </Link>
         );
+
+      case "stat_country":
+        return (
+          <CountryWiseWidget
+            onFilterChange={setCountryFilter}
+            className="h-full border border-white/20 shadow-sm rounded-2xl"
+          />
+        );
+
       case "trend_chart":
         return (
           <TrendChart

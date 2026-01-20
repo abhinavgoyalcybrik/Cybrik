@@ -20,6 +20,7 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
         phone: '',
         message: '',
         source: 'meta_ads' as LeadSource,
+        preferred_country: '',
         highest_qualification: '',
         qualification_marks: '',
         english_test_scores: '',
@@ -60,6 +61,7 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
                         phone: '',
                         message: '',
                         source: 'meta_ads',
+                        preferred_country: '',
                         highest_qualification: '',
                         qualification_marks: '',
                         english_test_scores: '',
@@ -190,6 +192,32 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
                                                     <option value="other">Other</option>
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-[var(--cy-navy)]">
+                                                Preferred Country
+                                            </label>
+                                            <select
+                                                name="preferred_country"
+                                                value={formData.preferred_country}
+                                                onChange={handleChange}
+                                                className="input w-full"
+                                            >
+                                                <option value="">Select preferred country</option>
+                                                <option value="USA">USA</option>
+                                                <option value="UK">United Kingdom</option>
+                                                <option value="Canada">Canada</option>
+                                                <option value="Australia">Australia</option>
+                                                <option value="Germany">Germany</option>
+                                                <option value="Ireland">Ireland</option>
+                                                <option value="New Zealand">New Zealand</option>
+                                                <option value="France">France</option>
+                                                <option value="Netherlands">Netherlands</option>
+                                                <option value="Singapore">Singapore</option>
+                                                <option value="Dubai">Dubai (UAE)</option>
+                                                <option value="Other">Other</option>
+                                            </select>
                                         </div>
 
                                         <div className="space-y-1.5">

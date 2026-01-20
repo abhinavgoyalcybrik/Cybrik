@@ -399,3 +399,104 @@ def get_role_config(request):
         pass
     
     return Response(response_data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def country_wise_stats(request):
+    """
+    Returns country-wise lead distribution with conversion funnel.
+    Query params:
+        - country (optional): filter by specific country
+    """
+    from .models import Lead, UserProfile
+    
+    tenant = getattr(request, 'tenant', None)
+    
+    # Get tenant from user profile if not set
+    if not tenant and request.user.is_authenticated:
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(
+                user=request.user
+            ).first()
+            if profile and profile.tenant:
+                tenant = profile.tenant
+        except Exception:
+            pass
+    
+    # Build base queryset
+    if tenant:
+        leads_qs = Lead.objects.filter(tenant=tenant)
+    elif request.user.is_superuser:
+        leads_qs = Lead.objects.all()
+    else:
+        leads_qs = Lead.objects.none()
+    
+    # Optional country filter
+    country_filter = request.query_params.get("country")
+    if country_filter:
+        leads_qs = leads_qs.filter(preferred_country=country_filter)
+    
+    # Country distribution with status breakdown
+    country_stats = leads_qs.exclude(
+        preferred_country__isnull=True
+    ).exclude(
+        preferred_country=""
+    ).values("preferred_country").annotate(
+        total=Count("id"),
+        new=Count("id", filter=Q(status="new")),
+        contacted=Count("id", filter=Q(status="contacted")),
+        qualified=Count("id", filter=Q(status="qualified")),
+        converted=Count("id", filter=Q(status="converted")),
+        junk=Count("id", filter=Q(status="junk")),
+        lost=Count("id", filter=Q(status="lost")),
+    ).order_by("-total")
+    
+    # Build response
+    country_distribution = [
+        {
+            "country": item["preferred_country"],
+            "total": item["total"],
+            "new": item["new"],
+            "contacted": item["contacted"],
+            "qualified": item["qualified"],
+            "converted": item["converted"],
+            "junk": item["junk"],
+            "lost": item["lost"],
+        }
+        for item in country_stats
+    ]
+    
+    # Overall conversion funnel (optionally filtered by country)
+    total = leads_qs.count()
+    funnel = {
+        "total": total,
+        "new": leads_qs.filter(status="new").count(),
+        "contacted": leads_qs.filter(status="contacted").count(),
+        "qualified": leads_qs.filter(status="qualified").count(),
+        "converted": leads_qs.filter(status="converted").count(),
+        "junk": leads_qs.filter(status="junk").count(),
+        "lost": leads_qs.filter(status="lost").count(),
+    }
+    
+    # Calculate conversion rate
+    conversion_rate = round((funnel["converted"] / total * 100) if total > 0 else 0, 2)
+    
+    # Get list of available countries for the filter dropdown
+    available_countries = list(
+        Lead.objects.filter(
+            tenant=tenant if tenant else Q()
+        ).exclude(
+            preferred_country__isnull=True
+        ).exclude(
+            preferred_country=""
+        ).values_list("preferred_country", flat=True).distinct().order_by("preferred_country")
+    )
+    
+    return Response({
+        "country_distribution": country_distribution,
+        "conversion_funnel": funnel,
+        "conversion_rate_percent": conversion_rate,
+        "available_countries": available_countries,
+        "active_filter": country_filter,
+    })

@@ -5,7 +5,9 @@ import DataGrid from "./DataGrid";
 import { BarChart, DonutChart } from "./Charts";
 import { motion } from 'framer-motion';
 
-export default function AdminDashboard({ data }: any) {
+import CountryWiseWidget from "./CountryWiseWidget";
+
+export default function AdminDashboard({ data, onFilterChange }: any) {
   const kpis = [
     {
       title: "Total Users",
@@ -51,36 +53,6 @@ export default function AdminDashboard({ data }: any) {
   const totalUsers = userDistData.reduce((acc: number, curr: any) => acc + curr.value, 0);
   const getPercent = (val: number) => totalUsers > 0 ? Math.round((val / totalUsers) * 100) : 0;
 
-  const applicantColumns = [
-    {
-      header: 'Applicant',
-      cell: (row: any) => (
-        <Link href={`/leads/${row.id}`} className="block hover:bg-gray-50 rounded-lg transition-colors">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[var(--cy-lime-soft)] flex items-center justify-center text-[var(--cy-lime)] text-xs font-bold">
-              {(row.name || "U").charAt(0)}
-            </div>
-            <div>
-              <div className="font-medium text-[var(--cy-navy)] hover:text-[var(--cy-lime)] transition-colors">{row.name}</div>
-              <div className="text-xs text-[var(--cy-text-muted)]">{row.email}</div>
-            </div>
-          </div>
-        </Link>
-      )
-    },
-    {
-      header: 'Date',
-      accessorKey: 'date',
-      cell: (row: any) => new Date(row.date).toLocaleDateString()
-    },
-    {
-      header: 'Status',
-      cell: () => (
-        <span className="badge badge-success">Active</span>
-      )
-    }
-  ];
-
   return (
     <div className="space-y-8">
       {/* Overview Section */}
@@ -90,6 +62,17 @@ export default function AdminDashboard({ data }: any) {
           <button className="btn btn-outline text-xs">Download Report</button>
         </div>
         <KPIGrid kpis={kpis} />
+      </section>
+
+      {/* Country Wise Insights */}
+      <section>
+        <CountryWiseWidget
+          className="shadow-sm border border-gray-100"
+          onFilterChange={(country) => {
+            // Pass filter up to parent to reload dashboard data
+            if (onFilterChange) onFilterChange('country', country);
+          }}
+        />
       </section>
 
       {/* Charts Section */}
@@ -118,8 +101,6 @@ export default function AdminDashboard({ data }: any) {
       </section>
 
       {/* Recent Activity Section */}
-
-
       <section className="grid lg:grid-cols-2 gap-8">
         <div className="card p-6">
           <h3 className="h3 mb-6">Top Counselors</h3>
@@ -131,8 +112,8 @@ export default function AdminDashboard({ data }: any) {
                     {(c.name || "U").charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-[var(--cy-navy)]">{c.name}</div>
-                    <div className="text-xs text-[var(--cy-text-muted)]">{c.value} applicants</div>
+                    <div className="text-sm font-medium text-[var(--cy-navy)]">{c.username || c.name || "Unknown"}</div>
+                    <div className="text-xs text-[var(--cy-text-muted)]">{c.count} applicants</div>
                   </div>
                 </div>
                 <div className="text-[var(--cy-lime)] font-bold text-sm">#{i + 1}</div>
