@@ -80,4 +80,4 @@ cybrik-ec2-key.pem
 *.pem
 
 # Configuration
-Backend/CybricHQ/CybricHQ/settings.py
+.settings.py
