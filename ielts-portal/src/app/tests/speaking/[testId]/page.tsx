@@ -425,12 +425,12 @@ export default function SpeakingTestPage({ params }: PageProps) {
             audioChunksRef.current = [];
 
             mediaRecorder.ondataavailable = (event) => {
+                console.log('ondataavailable fired! data.size:', event.data.size);
                 if (event.data.size > 0) {
                     audioChunksRef.current.push(event.data);
-                    // Log every 10th chunk to avoid console spam
-                    if (audioChunksRef.current.length % 10 === 0) {
-                        console.log(`Recording chunks: ${audioChunksRef.current.length}, latest size: ${event.data.size}`);
-                    }
+                    console.log(`✓ Recording chunks: ${audioChunksRef.current.length}, latest size: ${event.data.size}`);
+                } else {
+                    console.warn('ondataavailable fired but data.size is 0 - microphone might not be capturing audio');
                 }
             };
 
