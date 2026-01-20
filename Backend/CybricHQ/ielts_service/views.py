@@ -13,6 +13,9 @@ from .serializers import (
     AdminStudentSerializer
 )
 
+import logging
+logger = logging.getLogger(__name__)
+
 class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]  # Public access for listing tests
 
