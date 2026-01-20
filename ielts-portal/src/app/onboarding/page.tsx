@@ -57,7 +57,6 @@ export default function OnboardingPage() {
     // Check if onboarding already completed
     useEffect(() => {
         const savedUserStr = localStorage.getItem('ielts_user');
-        const localCompleted = localStorage.getItem('ielts_onboarding_completed');
 
         let userCompleted = false;
         if (savedUserStr) {
@@ -79,7 +78,7 @@ export default function OnboardingPage() {
         if (currentStep < TOTAL_STEPS) {
             setCurrentStep(currentStep + 1);
         } else {
-            // Save data to backend
+            // Save data to backend and update user object
             try {
                 const response = await fetch('/api/ielts/auth/onboarding/', {
                     method: 'POST',
@@ -90,18 +89,33 @@ export default function OnboardingPage() {
                     body: JSON.stringify(data),
                 });
 
-                if (response.ok) {
-                    localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
-                    localStorage.setItem('ielts_onboarding_completed', 'true');
-                    router.push('/dashboard');
-                } else {
-                    // Still proceed but warn
-                    localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
-                    localStorage.setItem('ielts_onboarding_completed', 'true');
-                    router.push('/dashboard');
+                // Update user object in localStorage with onboarding_completed flag
+                const savedUserStr = localStorage.getItem('ielts_user');
+                if (savedUserStr) {
+                    try {
+                        const savedUser = JSON.parse(savedUserStr);
+                        savedUser.onboarding_completed = true;
+                        localStorage.setItem('ielts_user', JSON.stringify(savedUser));
+                    } catch (e) {
+                        // ignore parse errors
+                    }
                 }
+
+                localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
+                localStorage.setItem('ielts_onboarding_completed', 'true');
+                router.push('/dashboard');
             } catch (error) {
-                // Fallback to localStorage only
+                // Fallback - still update localStorage and redirect
+                const savedUserStr = localStorage.getItem('ielts_user');
+                if (savedUserStr) {
+                    try {
+                        const savedUser = JSON.parse(savedUserStr);
+                        savedUser.onboarding_completed = true;
+                        localStorage.setItem('ielts_user', JSON.stringify(savedUser));
+                    } catch (e) {
+                        // ignore parse errors
+                    }
+                }
                 localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
                 localStorage.setItem('ielts_onboarding_completed', 'true');
                 router.push('/dashboard');
@@ -146,11 +160,11 @@ export default function OnboardingPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#16263F] via-[#0B1F3A] to-[#061020] flex flex-col">
+        <div className="min-h-screen bg-[var(--cy-bg-page)] flex flex-col">
             {/* Background decorations */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[#6FB63A]/15 blur-3xl"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-[#16263F]/50 blur-3xl"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-[var(--cy-lime)]/10 blur-3xl"></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-[var(--cy-navy)]/5 blur-3xl"></div>
             </div>
 
             {/* Header with back button and progress */}
@@ -158,27 +172,27 @@ export default function OnboardingPage() {
                 <button
                     onClick={handleBack}
                     disabled={currentStep === 1}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-2 hover:bg-[var(--cy-bg-alt)] rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                    <ChevronLeft className="w-6 h-6 text-white" />
+                    <ChevronLeft className="w-6 h-6 text-[var(--cy-text-primary)]" />
                 </button>
-                <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-[var(--cy-border)] rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-white transition-all duration-300 ease-out rounded-full"
+                        className="h-full bg-[var(--cy-lime)] transition-all duration-300 ease-out rounded-full"
                         style={{ width: `${progressPercentage}%` }}
                     />
                 </div>
-                <span className="text-white/60 text-sm font-medium">{currentStep}/{TOTAL_STEPS}</span>
+                <span className="text-[var(--cy-text-muted)] text-sm font-medium">{currentStep}/{TOTAL_STEPS}</span>
             </div>
 
             {/* Content */}
             <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12 relative z-10">
                 {/* Mascot & Question */}
                 <div className="flex items-start gap-4 mb-10 max-w-xl w-full">
-                    <div className="w-16 h-16 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center flex-shrink-0 border border-white/20">
-                        <Sparkles className="w-8 h-8 text-white" />
+                    <div className="w-16 h-16 bg-[var(--cy-lime-light)] rounded-full flex items-center justify-center flex-shrink-0 border border-[var(--cy-lime)]/20">
+                        <Sparkles className="w-8 h-8 text-[var(--cy-lime)]" />
                     </div>
-                    <div className="bg-white/10 backdrop-blur-xl text-white px-6 py-4 rounded-2xl rounded-tl-sm border border-white/20 flex-1">
+                    <div className="bg-[var(--cy-bg-surface)] shadow-md text-[var(--cy-text-primary)] px-6 py-4 rounded-2xl rounded-tl-sm border border-[var(--cy-border)] flex-1">
                         <p className="font-semibold text-lg">
                             {questions[currentStep - 1]}
                         </p>
@@ -191,24 +205,24 @@ export default function OnboardingPage() {
                     {currentStep === 1 && (
                         <div className="grid grid-cols-2 gap-4">
                             {[
-                                { id: 'study_abroad', label: 'Study abroad', icon: Plane, color: 'text-blue-400' },
-                                { id: 'immigration', label: 'Immigration', icon: Globe, color: 'text-blue-400' },
-                                { id: 'work_abroad', label: 'Work abroad', icon: Briefcase, color: 'text-amber-400' },
-                                { id: 'local_university', label: 'Study at local university', icon: School, color: 'text-orange-400' },
-                                { id: 'other', label: 'Other reasons', icon: MessageCircle, color: 'text-emerald-400' },
-                                { id: 'teacher', label: 'I am an IELTS teacher', icon: UserCheck, color: 'text-rose-400' },
+                                { id: 'study_abroad', label: 'Study abroad', icon: Plane, color: 'text-blue-500' },
+                                { id: 'immigration', label: 'Immigration', icon: Globe, color: 'text-blue-500' },
+                                { id: 'work_abroad', label: 'Work abroad', icon: Briefcase, color: 'text-amber-500' },
+                                { id: 'local_university', label: 'Study at local university', icon: School, color: 'text-orange-500' },
+                                { id: 'other', label: 'Other reasons', icon: MessageCircle, color: 'text-emerald-500' },
+                                { id: 'teacher', label: 'I am an IELTS teacher', icon: UserCheck, color: 'text-rose-500' },
                             ].map((option) => (
                                 <button
                                     key={option.id}
                                     onClick={() => { setData({ ...data, purpose: option.id }); handleNext(); }}
-                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-white/10 backdrop-blur-xl hover:bg-white/20
+                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md
                                         ${data.purpose === option.id
-                                            ? 'border-white bg-white/20'
-                                            : 'border-white/20 hover:border-white/40'
+                                            ? 'border-[var(--cy-lime)] bg-[var(--cy-lime-light)]'
+                                            : 'border-[var(--cy-border)] hover:border-[var(--cy-lime)]'
                                         }`}
                                 >
                                     <option.icon className={`w-5 h-5 ${option.color}`} />
-                                    <span className="font-medium text-white">{option.label}</span>
+                                    <span className="font-medium text-[var(--cy-text-primary)]">{option.label}</span>
                                 </button>
                             ))}
                         </div>
@@ -219,27 +233,27 @@ export default function OnboardingPage() {
                         <div className="grid grid-cols-2 gap-4">
                             <button
                                 onClick={() => { setData({ ...data, testType: 'general' }); handleNext(); }}
-                                className={`p-8 rounded-xl border-2 text-center transition-all bg-white/10 backdrop-blur-xl hover:bg-white/20
+                                className={`p-8 rounded-xl border-2 text-center transition-all bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md
                                     ${data.testType === 'general'
-                                        ? 'border-white bg-white/20'
-                                        : 'border-white/20 hover:border-white/40'
+                                        ? 'border-[var(--cy-lime)] bg-[var(--cy-lime-light)]'
+                                        : 'border-[var(--cy-border)] hover:border-[var(--cy-lime)]'
                                     }`}
                             >
-                                <Users className="w-10 h-10 text-white mx-auto mb-3" />
-                                <span className="font-bold text-white text-lg">General</span>
-                                <p className="text-white/60 text-sm mt-2">For migration & work</p>
+                                <Users className="w-10 h-10 text-[var(--cy-navy)] mx-auto mb-3" />
+                                <span className="font-bold text-[var(--cy-text-primary)] text-lg">General</span>
+                                <p className="text-[var(--cy-text-secondary)] text-sm mt-2">For migration & work</p>
                             </button>
                             <button
                                 onClick={() => { setData({ ...data, testType: 'academic' }); handleNext(); }}
-                                className={`p-8 rounded-xl border-2 text-center transition-all bg-white/10 backdrop-blur-xl hover:bg-white/20
+                                className={`p-8 rounded-xl border-2 text-center transition-all bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md
                                     ${data.testType === 'academic'
-                                        ? 'border-white bg-white/20'
-                                        : 'border-white/20 hover:border-white/40'
+                                        ? 'border-[var(--cy-lime)] bg-[var(--cy-lime-light)]'
+                                        : 'border-[var(--cy-border)] hover:border-[var(--cy-lime)]'
                                     }`}
                             >
-                                <GraduationCap className="w-10 h-10 text-white mx-auto mb-3" />
-                                <span className="font-bold text-white text-lg">Academic</span>
-                                <p className="text-white/60 text-sm mt-2">For university study</p>
+                                <GraduationCap className="w-10 h-10 text-[var(--cy-navy)] mx-auto mb-3" />
+                                <span className="font-bold text-[var(--cy-text-primary)] text-lg">Academic</span>
+                                <p className="text-[var(--cy-text-secondary)] text-sm mt-2">For university study</p>
                             </button>
                         </div>
                     )}
@@ -258,14 +272,14 @@ export default function OnboardingPage() {
                                 <button
                                     key={option.id}
                                     onClick={() => { setData({ ...data, attemptType: option.id }); handleNext(); }}
-                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-white/10 backdrop-blur-xl hover:bg-white/20
+                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md
                                         ${data.attemptType === option.id
-                                            ? 'border-white bg-white/20'
-                                            : 'border-white/20 hover:border-white/40'
+                                            ? 'border-[var(--cy-lime)] bg-[var(--cy-lime-light)]'
+                                            : 'border-[var(--cy-border)] hover:border-[var(--cy-lime)]'
                                         }`}
                                 >
-                                    <option.icon className="w-5 h-5 text-white" />
-                                    <span className="font-medium text-white">{option.label}</span>
+                                    <option.icon className="w-5 h-5 text-[var(--cy-navy)]" />
+                                    <span className="font-medium text-[var(--cy-text-primary)]">{option.label}</span>
                                 </button>
                             ))}
                         </div>
@@ -278,10 +292,10 @@ export default function OnboardingPage() {
                                 <button
                                     key={score}
                                     onClick={() => { setData({ ...data, targetScore: score }); handleNext(); }}
-                                    className={`w-20 h-20 rounded-2xl border-2 font-bold text-2xl transition-all bg-white/10 backdrop-blur-xl hover:bg-white/20 font-score
+                                    className={`w-20 h-20 rounded-2xl border-2 font-bold text-2xl transition-all bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md font-score
                                         ${data.targetScore === score
-                                            ? 'border-white bg-white text-[#1e3a5f]'
-                                            : 'border-white/20 text-white hover:border-white/40'
+                                            ? 'border-[var(--cy-lime)] bg-[var(--cy-lime)] text-white'
+                                            : 'border-[var(--cy-border)] text-[var(--cy-text-primary)] hover:border-[var(--cy-lime)]'
                                         }`}
                                 >
                                     {score}
@@ -292,21 +306,21 @@ export default function OnboardingPage() {
 
                     {/* Step 5: Exam Date */}
                     {currentStep === 5 && (
-                        <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
+                        <div className="bg-[var(--cy-bg-surface)] rounded-2xl p-6 border border-[var(--cy-border)] shadow-md">
                             {/* Month Navigation */}
                             <div className="flex items-center justify-between mb-4">
                                 <button
                                     onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1))}
-                                    className="p-2 hover:bg-white/10 rounded-lg text-white"
+                                    className="p-2 hover:bg-[var(--cy-bg-alt)] rounded-lg text-[var(--cy-text-primary)]"
                                 >
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
-                                <span className="font-semibold text-white">
+                                <span className="font-semibold text-[var(--cy-text-primary)]">
                                     {selectedMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                 </span>
                                 <button
                                     onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1))}
-                                    className="p-2 hover:bg-white/10 rounded-lg text-white"
+                                    className="p-2 hover:bg-[var(--cy-bg-alt)] rounded-lg text-[var(--cy-text-primary)]"
                                 >
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
@@ -315,7 +329,7 @@ export default function OnboardingPage() {
                             {/* Day Headers */}
                             <div className="grid grid-cols-7 gap-1 mb-2">
                                 {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-                                    <div key={day} className="text-center text-sm text-white/40 py-2">{day}</div>
+                                    <div key={day} className="text-center text-sm text-[var(--cy-text-muted)] py-2">{day}</div>
                                 ))}
                             </div>
 
@@ -334,8 +348,8 @@ export default function OnboardingPage() {
                                             disabled={isPast}
                                             onClick={() => { setData({ ...data, examDate: dateStr }); handleNext(); }}
                                             className={`p-2 text-center rounded-lg transition-all
-                                                ${isPast ? 'text-white/20 cursor-not-allowed' : 'text-white hover:bg-white/20'}
-                                                ${data.examDate === dateStr ? 'bg-white text-[#1e3a5f] font-bold' : ''}
+                                                ${isPast ? 'text-[var(--cy-text-muted)]/40 cursor-not-allowed' : 'text-[var(--cy-text-primary)] hover:bg-[var(--cy-bg-alt)]'}
+                                                ${data.examDate === dateStr ? 'bg-[var(--cy-lime)] text-white font-bold' : ''}
                                             `}
                                         >
                                             {day}
@@ -347,7 +361,7 @@ export default function OnboardingPage() {
                             {/* I don't know yet */}
                             <button
                                 onClick={() => { setData({ ...data, examDate: 'unknown' }); handleNext(); }}
-                                className="mt-6 w-full py-3 border-2 border-white/20 rounded-xl text-white hover:border-white/40 hover:bg-white/10 transition-all font-medium"
+                                className="mt-6 w-full py-3 border-2 border-[var(--cy-border)] rounded-xl text-[var(--cy-text-primary)] hover:border-[var(--cy-lime)] hover:bg-[var(--cy-bg-surface-hover)] transition-all font-medium"
                             >
                                 I don't know yet
                             </button>
@@ -369,14 +383,14 @@ export default function OnboardingPage() {
                                 <button
                                     key={option.id}
                                     onClick={() => { setData({ ...data, referralSource: option.id }); handleNext(); }}
-                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-white/10 backdrop-blur-xl hover:bg-white/20
+                                    className={`p-5 rounded-xl border-2 text-left transition-all flex items-center gap-3 bg-[var(--cy-bg-surface)] hover:bg-[var(--cy-bg-surface-hover)] shadow-sm hover:shadow-md
                                         ${data.referralSource === option.id
-                                            ? 'border-white bg-white/20'
-                                            : 'border-white/20 hover:border-white/40'
+                                            ? 'border-[var(--cy-lime)] bg-[var(--cy-lime-light)]'
+                                            : 'border-[var(--cy-border)] hover:border-[var(--cy-lime)]'
                                         }`}
                                 >
                                     <span className="text-2xl">{option.emoji}</span>
-                                    <span className="font-medium text-white">{option.label}</span>
+                                    <span className="font-medium text-[var(--cy-text-primary)]">{option.label}</span>
                                 </button>
                             ))}
                         </div>
