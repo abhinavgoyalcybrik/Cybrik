@@ -140,7 +140,14 @@ export default function NewWritingTestPage() {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    const [testName, setTestName] = useState('');
+
     const handleSave = async () => {
+        if (!testName.trim()) {
+            alert('Please enter a test name');
+            return;
+        }
+
         if (!validateJson(jsonContent)) {
             alert('Please fix the JSON errors before saving');
             return;
@@ -148,6 +155,7 @@ export default function NewWritingTestPage() {
 
         try {
             const parsedTest = JSON.parse(jsonContent);
+            parsedTest.title = testName; // Add title to the test object based on input
 
             // Save to writing_tests.json via API
             const response = await fetch('/api/admin/writing', {
@@ -164,17 +172,18 @@ export default function NewWritingTestPage() {
                 alert(`Error saving: ${error.error || 'Unknown error'}`);
             }
         } catch (error) {
-            // Fallback: copy to clipboard with instructions
+            // Fallback: copy to clipboard
             const instructions = `To add this test:
-
 1. Copy the JSON below
 2. Open: public/data/writing_tests.json
-3. Add this object to the "tests" array
-4. ${selectedImage ? `Image uploaded to: public/images/writing/` : 'No image to upload'}
+3. Add this object to the "tests" array (ensure "title": "${testName}" is included)
+4. ${selectedImage ? `Image uploaded` : 'No image'}
 
 The JSON has been copied to your clipboard!`;
 
-            navigator.clipboard.writeText(jsonContent);
+            const parsedTest = JSON.parse(jsonContent);
+            parsedTest.title = testName;
+            navigator.clipboard.writeText(JSON.stringify(parsedTest, null, 2));
             alert(instructions);
         }
     };
@@ -252,7 +261,7 @@ The JSON has been copied to your clipboard!`;
                         </Link>
                         <div>
                             <h2 className="text-3xl font-bold">Add New Writing Test</h2>
-                            <p className="text-zinc-400 mt-1">Create a new test using JSON format</p>
+                            <p className="text-zinc-400 mt-1">Upload JSON and Image</p>
                         </div>
                     </div>
 
@@ -287,26 +296,31 @@ The JSON has been copied to your clipboard!`;
                                 onChange={(e) => handleJsonChange(e.target.value)}
                                 className="w-full h-96 p-4 bg-zinc-900 border border-zinc-600 rounded-lg text-sm font-mono text-green-400 focus:ring-2 focus:ring-amber-500 outline-none resize-none"
                                 spellCheck={false}
+                                placeholder="Paste test JSON here..."
                             />
 
                             {jsonError && (
                                 <p className="mt-2 text-sm text-red-400">⚠️ {jsonError}</p>
                             )}
-
-                            <div className="mt-4 text-sm text-zinc-400">
-                                <p className="font-medium mb-2">Required fields:</p>
-                                <ul className="list-disc list-inside space-y-1">
-                                    <li><code className="text-amber-400">test_id</code> - Unique number</li>
-                                    <li><code className="text-amber-400">difficulty</code> - easy, medium, hard</li>
-                                    <li><code className="text-amber-400">task_1.type</code> - chart, map, process, table</li>
-                                    <li><code className="text-amber-400">task_1.question</code> - Task 1 prompt</li>
-                                    <li><code className="text-amber-400">task_2.question</code> - Task 2 prompt</li>
-                                </ul>
-                            </div>
                         </div>
 
-                        {/* Image Upload */}
+                        {/* Settings & Upload */}
                         <div className="space-y-6">
+                            {/* Name Input */}
+                            <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+                                <label className="block text-sm font-medium text-zinc-400 mb-2">
+                                    Test Name
+                                </label>
+                                <input
+                                    type="text"
+                                    value={testName}
+                                    onChange={(e) => setTestName(e.target.value)}
+                                    placeholder="e.g. Cambridge 18 Test 1"
+                                    className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                                />
+                            </div>
+
+                            {/* Image Upload */}
                             <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
                                 <div className="flex items-center gap-2 mb-4">
                                     <FileImage className="w-5 h-5 text-blue-500" />
@@ -345,66 +359,10 @@ The JSON has been copied to your clipboard!`;
                                 {selectedImage && (
                                     <div className="mt-4 p-3 bg-green-900/20 border border-green-800 rounded-lg">
                                         <p className="text-sm text-green-400">
-                                            ✅ Image auto-uploaded! The JSON has been updated with the correct path.
+                                            ✅ Image auto-uploaded! JSON updated.
                                         </p>
                                     </div>
                                 )}
-                            </div>
-
-                            {/* Task Type Selection */}
-                            <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-                                <h3 className="text-lg font-bold mb-4">Quick Settings</h3>
-
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-zinc-400 mb-2">
-                                            Task 1 Type
-                                        </label>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {['chart', 'map', 'process', 'table'].map((type) => (
-                                                <button
-                                                    key={type}
-                                                    onClick={() => {
-                                                        try {
-                                                            const parsed = JSON.parse(jsonContent);
-                                                            parsed.task_1.type = type;
-                                                            setJsonContent(JSON.stringify(parsed, null, 2));
-                                                        } catch (e) { }
-                                                    }}
-                                                    className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-sm capitalize transition-colors"
-                                                >
-                                                    {type}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-zinc-400 mb-2">
-                                            Difficulty
-                                        </label>
-                                        <div className="grid grid-cols-3 gap-2">
-                                            {['easy', 'medium', 'hard'].map((diff) => (
-                                                <button
-                                                    key={diff}
-                                                    onClick={() => {
-                                                        try {
-                                                            const parsed = JSON.parse(jsonContent);
-                                                            parsed.difficulty = diff;
-                                                            setJsonContent(JSON.stringify(parsed, null, 2));
-                                                        } catch (e) { }
-                                                    }}
-                                                    className={`px-4 py-2 rounded-lg text-sm capitalize transition-colors ${diff === 'easy' ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' :
-                                                        diff === 'medium' ? 'bg-amber-600/20 text-amber-400 hover:bg-amber-600/30' :
-                                                            'bg-red-600/20 text-red-400 hover:bg-red-600/30'
-                                                        }`}
-                                                >
-                                                    {diff}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             {/* Actions */}
@@ -425,14 +383,6 @@ The JSON has been copied to your clipboard!`;
                                 </button>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Instructions */}
-                    <div className="mt-8 bg-green-900/20 rounded-xl p-6 border border-green-800">
-                        <h3 className="text-lg font-bold mb-4 text-green-400">✅ Auto-Save Enabled</h3>
-                        <p className="text-zinc-300">
-                            Images are automatically uploaded when selected. Click <strong>"Save Test"</strong> to add the test to your database.
-                        </p>
                     </div>
                 </div>
             </main>

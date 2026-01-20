@@ -56,8 +56,21 @@ export default function OnboardingPage() {
 
     // Check if onboarding already completed
     useEffect(() => {
-        const completed = localStorage.getItem('ielts_onboarding_completed');
-        if (completed === 'true') {
+        const savedUserStr = localStorage.getItem('ielts_user');
+        const localCompleted = localStorage.getItem('ielts_onboarding_completed');
+
+        let userCompleted = false;
+        if (savedUserStr) {
+            try {
+                const savedUser = JSON.parse(savedUserStr);
+                userCompleted = savedUser.onboarding_completed === true;
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        // Only redirect if explicitly true in user object or localStorage (and user exists)
+        if (userCompleted || (localCompleted === 'true' && savedUserStr)) {
             router.push('/dashboard');
         }
     }, [router]);

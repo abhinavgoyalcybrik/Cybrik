@@ -241,6 +241,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(null);
             localStorage.removeItem('ielts_user');
             localStorage.removeItem('ielts_token');
+            localStorage.removeItem('ielts_onboarding_completed');
+            localStorage.removeItem('ielts_onboarding_data');
             // Redirect to login page with logout flag to prevent auto-login
             if (typeof window !== 'undefined') {
                 window.location.href = '/login?logout=true';

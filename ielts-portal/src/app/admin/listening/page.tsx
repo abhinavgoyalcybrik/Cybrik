@@ -64,10 +64,13 @@ export default function AdminListeningPage() {
 
     const fetchTests = async () => {
         try {
-            const res = await fetch('/api/ielts/tests/?module_type=listening');
+            const res = await fetch('/api/ielts/admin/tests/?module_type=listening');
             if (!res.ok) throw new Error('Failed to fetch tests');
             const data = await res.json();
-            setTests(data.results || data || []);
+            let loadedTests = data.results || data || [];
+            // Sort by created_at descending (newest first)
+            loadedTests.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+            setTests(loadedTests);
             setLoading(false);
         } catch (err: any) {
             setError(err.message);
@@ -104,8 +107,8 @@ export default function AdminListeningPage() {
                 throw new Error('Failed to delete test');
             }
 
-            // Remove from local state
-            setTests(tests.filter(t => t.id !== testId));
+            // Remove from local state using functional update
+            setTests(prevTests => prevTests.filter(t => t.id !== testId));
         } catch (err: any) {
             alert(`Error deleting test: ${err.message}`);
         }

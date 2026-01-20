@@ -111,22 +111,51 @@ export default function NewSpeakingTestPage() {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const handleSave = () => {
+    const [testName, setTestName] = useState('');
+
+    const handleSave = async () => {
+        if (!testName.trim()) {
+            alert('Please enter a test name');
+            return;
+        }
+
         if (!validateJson(jsonContent)) {
             alert('Please fix the JSON errors before saving');
             return;
         }
 
-        const instructions = `To add this test:
+        try {
+            const parsedTest = JSON.parse(jsonContent);
+            parsedTest.title = testName;
 
+            // Save to speaking_tests.json via API
+            const response = await fetch('/api/admin/speaking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(parsedTest),
+            });
+
+            if (response.ok) {
+                alert('Test saved successfully!');
+                router.push('/admin/speaking');
+            } else {
+                const error = await response.json();
+                alert(`Error saving: ${error.error || 'Unknown error'}`);
+            }
+        } catch (error) {
+            // Fallback: copy to clipboard
+            const instructions = `To add this test:
 1. Copy the JSON below
 2. Open: public/data/speaking_tests.json
-3. Add this object to the "tests" array
+3. Add this object to the "tests" array (ensure "title": "${testName}" is included)
 
 The JSON has been copied to your clipboard!`;
 
-        navigator.clipboard.writeText(jsonContent);
-        alert(instructions);
+            const parsedTest = JSON.parse(jsonContent);
+            parsedTest.title = testName;
+            navigator.clipboard.writeText(JSON.stringify(parsedTest, null, 2));
+            alert(instructions);
+        }
     };
 
     if (authLoading || !isAdmin) {
@@ -161,8 +190,8 @@ The JSON has been copied to your clipboard!`;
                                 key={item.name}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                        ? 'bg-red-600 text-white'
-                                        : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
+                                    ? 'bg-red-600 text-white'
+                                    : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
                                     }`}
                             >
                                 <item.icon className="w-5 h-5" />
@@ -202,105 +231,80 @@ The JSON has been copied to your clipboard!`;
                         </Link>
                         <div>
                             <h2 className="text-3xl font-bold">Add New Speaking Test</h2>
-                            <p className="text-zinc-400 mt-1">Create a new test using JSON format</p>
+                            <p className="text-zinc-400 mt-1">Upload JSON and Name</p>
                         </div>
                     </div>
 
-                    {/* JSON Editor */}
-                    <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700 mb-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                                <Code className="w-5 h-5 text-emerald-500" />
-                                <h3 className="text-lg font-bold">Test JSON</h3>
+                    <div className="grid grid-cols-1 gap-6">
+                        {/* JSON Editor */}
+                        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <Code className="w-5 h-5 text-emerald-500" />
+                                    <h3 className="text-lg font-bold">Test JSON</h3>
+                                </div>
+                                <button
+                                    onClick={handleCopyJson}
+                                    className="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
+                                >
+                                    {copied ? (
+                                        <>
+                                            <Check className="w-4 h-4 text-green-400" />
+                                            Copied!
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Copy className="w-4 h-4" />
+                                            Copy
+                                        </>
+                                    )}
+                                </button>
                             </div>
-                            <button
-                                onClick={handleCopyJson}
-                                className="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-700 hover:bg-zinc-600 rounded-lg transition-colors"
+
+                            <textarea
+                                value={jsonContent}
+                                onChange={(e) => handleJsonChange(e.target.value)}
+                                className="w-full h-[500px] p-4 bg-zinc-900 border border-zinc-600 rounded-lg text-sm font-mono text-green-400 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
+                                spellCheck={false}
+                                placeholder="Paste test JSON here..."
+                            />
+
+                            {jsonError && (
+                                <p className="mt-2 text-sm text-red-400">⚠️ {jsonError}</p>
+                            )}
+                        </div>
+
+                        {/* Name Input */}
+                        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+                            <label className="block text-sm font-medium text-zinc-400 mb-2">
+                                Test Name
+                            </label>
+                            <input
+                                type="text"
+                                value={testName}
+                                onChange={(e) => setTestName(e.target.value)}
+                                placeholder="e.g. Cambridge 18 Test 1"
+                                className="w-full px-4 py-2 bg-zinc-900 border border-zinc-600 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                            />
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3">
+                            <Link
+                                href="/admin/speaking"
+                                className="flex-1 px-4 py-3 text-center bg-zinc-700 hover:bg-zinc-600 rounded-lg font-medium transition-colors"
                             >
-                                {copied ? (
-                                    <>
-                                        <Check className="w-4 h-4 text-green-400" />
-                                        Copied!
-                                    </>
-                                ) : (
-                                    <>
-                                        <Copy className="w-4 h-4" />
-                                        Copy
-                                    </>
-                                )}
+                                Cancel
+                            </Link>
+                            <button
+                                onClick={handleSave}
+                                disabled={!!jsonError}
+                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Save className="w-5 h-5" />
+                                Save Test
                             </button>
                         </div>
-
-                        <textarea
-                            value={jsonContent}
-                            onChange={(e) => handleJsonChange(e.target.value)}
-                            className="w-full h-[500px] p-4 bg-zinc-900 border border-zinc-600 rounded-lg text-sm font-mono text-green-400 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
-                            spellCheck={false}
-                        />
-
-                        {jsonError && (
-                            <p className="mt-2 text-sm text-red-400">⚠️ {jsonError}</p>
-                        )}
-                    </div>
-
-                    {/* Quick Settings */}
-                    <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700 mb-6">
-                        <h3 className="text-lg font-bold mb-4">Quick Settings</h3>
-
-                        <div>
-                            <label className="block text-sm font-medium text-zinc-400 mb-2">
-                                Difficulty
-                            </label>
-                            <div className="grid grid-cols-3 gap-2">
-                                {['easy', 'medium', 'hard'].map((diff) => (
-                                    <button
-                                        key={diff}
-                                        onClick={() => {
-                                            try {
-                                                const parsed = JSON.parse(jsonContent);
-                                                parsed.difficulty = diff;
-                                                setJsonContent(JSON.stringify(parsed, null, 2));
-                                            } catch (e) { }
-                                        }}
-                                        className={`px-4 py-2 rounded-lg text-sm capitalize transition-colors ${diff === 'easy' ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30' :
-                                                diff === 'medium' ? 'bg-amber-600/20 text-amber-400 hover:bg-amber-600/30' :
-                                                    'bg-red-600/20 text-red-400 hover:bg-red-600/30'
-                                            }`}
-                                    >
-                                        {diff}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-3">
-                        <Link
-                            href="/admin/speaking"
-                            className="flex-1 px-4 py-3 text-center bg-zinc-700 hover:bg-zinc-600 rounded-lg font-medium transition-colors"
-                        >
-                            Cancel
-                        </Link>
-                        <button
-                            onClick={handleSave}
-                            disabled={!!jsonError}
-                            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <Save className="w-5 h-5" />
-                            Save & Copy JSON
-                        </button>
-                    </div>
-
-                    {/* Instructions */}
-                    <div className="mt-8 bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-                        <h3 className="text-lg font-bold mb-4">📋 How to Add a New Test</h3>
-                        <ol className="list-decimal list-inside space-y-2 text-zinc-300">
-                            <li>Edit the JSON above with your test content</li>
-                            <li>Click <strong>&quot;Save &amp; Copy JSON&quot;</strong> to copy the test data</li>
-                            <li>Open <code className="bg-zinc-700 px-2 py-0.5 rounded">public/data/speaking_tests.json</code></li>
-                            <li>Add the copied JSON to the <code className="bg-zinc-700 px-2 py-0.5 rounded">&quot;tests&quot;</code> array</li>
-                        </ol>
                     </div>
                 </div>
             </main>

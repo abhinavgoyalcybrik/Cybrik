@@ -88,12 +88,39 @@ class AdminTestModuleSerializer(serializers.ModelSerializer):
 
 class AdminIELTSTestSerializer(serializers.ModelSerializer):
     """Full CRUD serializer for IELTS tests"""
-    modules = AdminTestModuleSerializer(many=True, read_only=True)
+    modules = AdminTestModuleSerializer(many=True, required=False)
     
     class Meta:
         model = IELTSTest
         fields = ['id', 'title', 'description', 'test_type', 'active', 'created_at', 'updated_at', 'modules']
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        modules_data = validated_data.pop('modules', [])
+        test = IELTSTest.objects.create(**validated_data)
+        
+        for module_data in modules_data:
+            # We need to remove nested read-only fields if they exist in data to avoid potential issues,
+            # though usually pop is enough. AdminTestModuleSerializer handles groups too? 
+            # For now, just basic module creation.
+            # Pop nested read-only or complicated fields if necessary
+            module_data.pop('question_groups', None)
+            TestModule.objects.create(test=test, **module_data)
+            
+        return test
+
+    def update(self, instance, validated_data):
+        modules_data = validated_data.pop('modules', [])
+        instance = super().update(instance, validated_data)
+        
+        # For updates, we usually don't wipe out everything.
+        # But if the frontend sends modules, maybe we should sync?
+        # For this specific bug (creation), handling create is enough.
+        # Handling update for modules is complex (sync vs append).
+        # We will assume update only touches test fields for now, as modules are managed separately 
+        # or we rely on the fact that existing modules aren't usually changed this way in this app.
+        
+        return instance
 
 
 # --- Simple Format Serializers (for frontend compatibility) ---

@@ -75,7 +75,7 @@ export default function AdminListeningEditPage({ params }: PageProps) {
 
     const fetchTest = async () => {
         try {
-            const res = await fetch(`${API_URL}/tests/${testId}/`);
+            const res = await fetch(`${API_URL}/admin/tests/${testId}/`);
             if (!res.ok) throw new Error('Failed to fetch test');
             const data = await res.json();
             setTest(data);
