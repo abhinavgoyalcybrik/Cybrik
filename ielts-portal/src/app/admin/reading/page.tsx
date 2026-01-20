@@ -52,7 +52,9 @@ export default function AdminReadingPage() {
 
     const fetchTests = async () => {
         try {
-            const res = await fetch('/api/ielts/admin/tests/?module_type=reading');
+            const res = await fetch('/api/ielts/admin/tests/?module_type=reading', {
+                credentials: 'include',
+            });
             if (!res.ok) throw new Error('Failed to fetch tests');
             const data = await res.json();
             let loadedTests = data.results || data || [];
@@ -74,6 +76,7 @@ export default function AdminReadingPage() {
         try {
             const res = await fetch(`/api/ielts/admin/tests/${testId}/`, {
                 method: 'DELETE',
+                credentials: 'include',
             });
 
             if (!res.ok) {

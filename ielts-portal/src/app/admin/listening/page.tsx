@@ -64,7 +64,9 @@ export default function AdminListeningPage() {
 
     const fetchTests = async () => {
         try {
-            const res = await fetch('/api/ielts/admin/tests/?module_type=listening');
+            const res = await fetch('/api/ielts/admin/tests/?module_type=listening', {
+                credentials: 'include',
+            });
             if (!res.ok) throw new Error('Failed to fetch tests');
             const data = await res.json();
             let loadedTests = data.results || data || [];
@@ -101,6 +103,7 @@ export default function AdminListeningPage() {
         try {
             const res = await fetch(`/api/ielts/admin/tests/${testId}/`, {
                 method: 'DELETE',
+                credentials: 'include',
             });
 
             if (!res.ok) {

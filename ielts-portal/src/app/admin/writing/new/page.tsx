@@ -324,7 +324,7 @@ The JSON has been copied to your clipboard!`;
                             <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
                                 <div className="flex items-center gap-2 mb-4">
                                     <FileImage className="w-5 h-5 text-blue-500" />
-                                    <h3 className="text-lg font-bold">Chart/Image Upload</h3>
+                                    <h3 className="text-lg font-bold">Task 1 Chart/Image</h3>
                                 </div>
 
                                 <div
@@ -359,7 +359,7 @@ The JSON has been copied to your clipboard!`;
                                 {selectedImage && (
                                     <div className="mt-4 p-3 bg-green-900/20 border border-green-800 rounded-lg">
                                         <p className="text-sm text-green-400">
-                                            ✅ Image auto-uploaded! JSON updated.
+                                            ✅ Image uploaded! JSON updated with path.
                                         </p>
                                     </div>
                                 )}
