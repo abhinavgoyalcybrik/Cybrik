@@ -104,8 +104,7 @@ export default function CountryWiseWidget({ onFilterChange, className = "" }: Co
                         <Globe size={18} />
                     </div>
                     <div>
-                        <h3 className="font-bold text-[var(--cy-navy)]">Geographic Insights</h3>
-                        <p className="text-xs text-[var(--cy-text-muted)]">Lead distribution by preferred country</p>
+                        <h3 className="font-bold text-[var(--cy-navy)]">Country Wise Leads</h3>
                     </div>
                 </div>
 
