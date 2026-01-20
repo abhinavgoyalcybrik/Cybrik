@@ -256,7 +256,7 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     """
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
