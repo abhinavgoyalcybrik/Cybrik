@@ -2,10 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import apiFetch from '@/lib/api';
-import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
-    PieChart, Pie, Legend
-} from 'recharts';
 import { Filter, Globe, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface CountryStats {
@@ -33,6 +29,18 @@ interface CountryWiseWidgetProps {
     onFilterChange?: (country: string | null) => void;
     className?: string;
 }
+
+// Helper to get country code for flag CDN
+const getCountryCode = (countryName: string): string => {
+    const map: Record<string, string> = {
+        'usa': 'us', 'united states': 'us', 'us': 'us', 'uk': 'gb', 'united kingdom': 'gb', 'great britain': 'gb',
+        'canada': 'ca', 'australia': 'au', 'germany': 'de', 'ireland': 'ie', 'new zealand': 'nz',
+        'france': 'fr', 'netherlands': 'nl', 'singapore': 'sg', 'uae': 'ae', 'dubai': 'ae',
+        'india': 'in', 'china': 'cn', 'japan': 'jp', 'italy': 'it', 'spain': 'es', 'sweden': 'se',
+        'switzerland': 'ch', 'malaysia': 'my', 'south korea': 'kr', 'vietnam': 'vn'
+    };
+    return map[countryName.toLowerCase()] || 'un'; // 'un' for unknown/united nations generic
+};
 
 export default function CountryWiseWidget({ onFilterChange, className = "" }: CountryWiseWidgetProps) {
     const [loading, setLoading] = useState(true);
@@ -74,28 +82,6 @@ export default function CountryWiseWidget({ onFilterChange, className = "" }: Co
         }
     };
 
-    // Colors for charts
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
-
-    // Custom tooltip for Bar Chart
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            const data = payload[0].payload;
-            return (
-                <div className="bg-white p-3 border border-gray-100 shadow-xl rounded-lg text-sm">
-                    <p className="font-bold text-[var(--cy-navy)] mb-2">{label}</p>
-                    <div className="space-y-1">
-                        <p className="text-gray-600 flex justify-between gap-4"><span>Total Leads:</span> <span className="font-semibold">{data.total}</span></p>
-                        <p className="text-green-600 flex justify-between gap-4"><span>Converted:</span> <span className="font-semibold">{data.converted}</span></p>
-                        <p className="text-blue-600 flex justify-between gap-4"><span>Qualified:</span> <span className="font-semibold">{data.qualified}</span></p>
-                        <p className="text-gray-400 flex justify-between gap-4"><span>Rate:</span> <span className="font-semibold">{data.total > 0 ? Math.round((data.converted / data.total) * 100) : 0}%</span></p>
-                    </div>
-                </div>
-            );
-        }
-        return null;
-    };
-
     if (loading && !data) {
         return (
             <div className={`card p-6 h-[400px] flex items-center justify-center ${className}`}>
@@ -105,6 +91,9 @@ export default function CountryWiseWidget({ onFilterChange, className = "" }: Co
     }
 
     if (!data) return null;
+
+    // Find max total for progress bar calculations
+    const maxTotal = Math.max(...data.country_distribution.map(c => c.total), 1);
 
     return (
         <div className={`card p-0 overflow-hidden ${className}`}>
@@ -146,37 +135,49 @@ export default function CountryWiseWidget({ onFilterChange, className = "" }: Co
 
             {expanded && (
                 <div className="p-6 grid lg:grid-cols-3 gap-8">
-                    {/* Left: Interactive Map / Distribution Chart */}
-                    <div className="lg:col-span-2 space-y-6">
-                        <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-semibold text-[var(--cy-navy)]">Lead Volume by Country</h4>
-                            <span className="text-xs text-gray-500">Top destinations by interest</span>
+                    {/* Left: Country List with Flags */}
+                    <div className="lg:col-span-2 space-y-4">
+                        <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-sm font-semibold text-[var(--cy-navy)]">Top Destinations</h4>
+                            <span className="text-xs text-gray-500">Sorted by lead volume</span>
                         </div>
 
-                        <div className="h-[280px] w-full">
+                        <div className="space-y-3 h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                             {data.country_distribution.length > 0 ? (
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={data.country_distribution} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
-                                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f0f0f0" />
-                                        <XAxis type="number" hide />
-                                        <YAxis
-                                            dataKey="country"
-                                            type="category"
-                                            width={100}
-                                            tick={{ fontSize: 12, fill: '#64748b' }}
-                                            axisLine={false}
-                                            tickLine={false}
-                                        />
-                                        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.03)' }} />
-                                        <Bar dataKey="total" radius={[0, 4, 4, 0]} barSize={20}>
-                                            {data.country_distribution.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                data.country_distribution.map((item, idx) => (
+                                    <div key={idx} className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group">
+                                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white shadow-sm border border-gray-100 overflow-hidden flex items-center justify-center">
+                                            <img
+                                                src={`https://flagcdn.com/w40/${getCountryCode(item.country)}.png`}
+                                                alt={item.country}
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    // Fallback if image fails
+                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-center mb-1.5">
+                                                <span className="font-semibold text-sm text-[var(--cy-navy)]">{item.country || "Unknown"}</span>
+                                                <div className="flex items-center gap-3 text-xs">
+                                                    <span className="text-emerald-600 font-medium">{item.converted} Converted</span>
+                                                    <span className="text-gray-400">|</span>
+                                                    <span className="font-bold text-[var(--cy-navy)]">{item.total} Leads</span>
+                                                </div>
+                                            </div>
+                                            <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-[var(--cy-blue)] rounded-full group-hover:bg-[var(--cy-blue-dark)] transition-colors"
+                                                    style={{ width: `${(item.total / maxTotal) * 100}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
                             ) : (
-                                <div className="h-full flex items-center justify-center text-gray-400 text-sm">
+                                <div className="h-full flex flex-col items-center justify-center text-gray-400 text-sm gap-2">
+                                    <Globe className="w-8 h-8 opacity-20" />
                                     No country data available yet
                                 </div>
                             )}
@@ -184,7 +185,7 @@ export default function CountryWiseWidget({ onFilterChange, className = "" }: Co
                     </div>
 
                     {/* Right: Funnel & Conversion Stats */}
-                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex flex-col justify-between">
+                    <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex flex-col justify-between h-full">
                         <div>
                             <h4 className="text-sm font-semibold text-[var(--cy-navy)] mb-4">Conversion Funnel</h4>
 
