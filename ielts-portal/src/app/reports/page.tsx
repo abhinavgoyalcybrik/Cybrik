@@ -203,6 +203,10 @@ function ReportsContent() {
                             const moduleType = (attempt as any).module_type ||
                                 guessModuleType(session.test_title);
 
+                            const rawScore = attempt.band_score || session.overall_band_score;
+                            const score = rawScore !== null && rawScore !== undefined ? Number(rawScore) : 0;
+                            const safeScore = isNaN(score) ? 0 : score;
+
                             transformedReports.push({
                                 id: attempt.id,
                                 testType: moduleType as 'reading' | 'listening' | 'writing' | 'speaking',
@@ -214,7 +218,7 @@ function ReportsContent() {
                                     attempt.start_time || session.start_time,
                                     attempt.end_time || session.end_time
                                 ),
-                                bandScore: attempt.band_score || session.overall_band_score || 0,
+                                bandScore: safeScore,
                                 maxScore: 9,
                                 status: attempt.is_completed ? 'completed' :
                                     (attempt.band_score === null ? 'pending-review' : 'in-progress'),
@@ -224,6 +228,10 @@ function ReportsContent() {
                         });
                     } else {
                         // Create a single report for the whole session
+                        const rawScore = session.overall_band_score;
+                        const score = rawScore !== null && rawScore !== undefined ? Number(rawScore) : 0;
+                        const safeScore = isNaN(score) ? 0 : score;
+
                         transformedReports.push({
                             id: session.id,
                             testType: guessModuleType(session.test_title),
@@ -232,7 +240,7 @@ function ReportsContent() {
                             testName: session.test_title || 'IELTS Test',
                             dateTaken: session.start_time,
                             timeTaken: calculateTimeTaken(session.start_time, session.end_time),
-                            bandScore: session.overall_band_score || 0,
+                            bandScore: safeScore,
                             maxScore: 9,
                             status: session.is_completed ? 'completed' : 'in-progress',
                         });
