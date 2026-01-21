@@ -4,15 +4,17 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LogIn, User, Lock, ArrowRight, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 function LoginPageContent() {
     const [loginMethod, setLoginMethod] = useState<'google' | 'credentials'>('google');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { user, isAuthenticated, isLoading: authLoading, setAuthState } = useAuth();
 
     // Check if already logged in (skip if just logged out)
     useEffect(() => {
@@ -25,33 +27,20 @@ function LoginPageContent() {
             return;
         }
 
-        const checkAuth = async () => {
-            try {
-                const res = await fetch('/api/ielts/auth/me/', {
-                    credentials: 'include',
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.user) {
-                        localStorage.setItem('ielts_user', JSON.stringify(data.user));
-                        if (data.user.onboarding_completed) {
-                            router.push('/dashboard');
-                        } else {
-                            router.push('/onboarding');
-                        }
-                    }
-                }
-            } catch (err) {
-                // Not authenticated
+        // Redirect if already authenticated and not loading
+        if (!authLoading && isAuthenticated && user) {
+            if (user.onboarding_completed) {
+                router.push('/dashboard');
+            } else {
+                router.push('/onboarding');
             }
-        };
-        checkAuth();
-    }, [router, searchParams]);
+        }
+    }, [isAuthenticated, user, authLoading, router, searchParams]);
 
     const handleCredentialsSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        setIsLoading(true);
+        setIsSubmitting(true);
 
         try {
             const response = await fetch('/api/ielts/auth/login/', {
@@ -65,20 +54,31 @@ function LoginPageContent() {
 
             if (!response.ok) {
                 setError(data.error || 'Login failed');
-                setIsLoading(false);
+                setIsSubmitting(false);
                 return;
             }
 
-            localStorage.setItem('ielts_user', JSON.stringify(data.user));
+            // Update AuthContext with the new user and token
+            // This ensures the rest of the app knows we're logged in immediately
+            if (data.user) {
+                // Assuming the API returns a token if needed, or we rely on the cookie it set.
+                // If it doesn't return a token string, we might use a placeholder or rely on the cookie.
+                // Based on previous code, it set 'ielts_user'. It didn't seem to set 'ielts_token' explicitly from this response
+                // in the previous code, but AuthContext expects one.
+                // Let's check if data.token exists. If not, we might need to rely on the cookie-based flow 
+                // and fetch /api/auth/me or just set 'django-cookie-auth' as the token.
+                const tokenToSet = data.token || 'django-cookie-auth';
+                setAuthState(data.user, tokenToSet);
+            }
 
-            if (data.user.onboarding_completed) {
+            if (data.user?.onboarding_completed) {
                 router.push('/dashboard');
             } else {
                 router.push('/onboarding');
             }
         } catch (err) {
             setError('Network error. Please try again.');
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -133,20 +133,23 @@ function LoginPageContent() {
 
             if (!res.ok) {
                 setError(data.error || 'Google sign-in failed');
-                setIsLoading(false);
+                setIsSubmitting(false);
                 return;
             }
 
-            localStorage.setItem('ielts_user', JSON.stringify(data.user));
+            if (data.user) {
+                const tokenToSet = data.token || 'django-cookie-auth';
+                setAuthState(data.user, tokenToSet);
+            }
 
-            if (data.user.onboarding_completed) {
+            if (data.user?.onboarding_completed) {
                 router.push('/dashboard');
             } else {
                 router.push('/onboarding');
             }
         } catch (err) {
             setError('Google authentication failed');
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -243,10 +246,10 @@ function LoginPageContent() {
 
                                 <button
                                     type="submit"
-                                    disabled={isLoading}
+                                    disabled={isSubmitting}
                                     className="w-full bg-[#6FB63A] hover:bg-[#5FA030] text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
                                 >
-                                    {isLoading ? (
+                                    {isSubmitting ? (
                                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                     ) : (
                                         <>

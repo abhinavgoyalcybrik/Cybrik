@@ -33,6 +33,7 @@ interface AuthContextType {
     isAuthenticated: boolean;
     isAdmin: boolean;
     token: string | null;
+    setAuthState: (user: User, token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -302,6 +303,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const setAuthState = (newUser: User, newToken: string) => {
+        setUser(newUser);
+        setToken(newToken);
+        localStorage.setItem('ielts_user', JSON.stringify(newUser));
+        localStorage.setItem('ielts_token', newToken);
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -313,6 +321,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 isAuthenticated: !!user,
                 isAdmin: user?.role === 'admin' || user?.is_staff === true,
                 token,
+                setAuthState,
             }}
         >
             {children}
