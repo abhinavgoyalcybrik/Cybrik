@@ -12,6 +12,7 @@ from .serializers import (
     AdminQuestionGroupSerializer, AdminQuestionSerializer,
     AdminStudentSerializer
 )
+from crm_app.authentication import JWTAuthFromCookie
 
 import logging
 logger = logging.getLogger(__name__)
@@ -268,7 +269,7 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication, JWTAuthFromCookie]
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
@@ -446,7 +447,7 @@ class AdminStudentViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = AdminStudentSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication, JWTAuthFromCookie]
 
     def get_queryset(self):
         # Multi-tenancy: Filter students by the admin's tenant
