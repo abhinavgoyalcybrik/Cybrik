@@ -149,14 +149,29 @@ class AdminStudentSerializer(serializers.ModelSerializer):
     account_type = serializers.CharField(source='ielts_profile.account_type', read_only=True, default='crm')
     subscription_status = serializers.CharField(source='ielts_profile.subscription_status', read_only=True, default='free')
     password = serializers.CharField(write_only=True, required=False)
+    username = serializers.CharField(required=False, allow_blank=True)
+    full_name = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'account_type', 'subscription_status', 'password', 'is_active', 'date_joined']
+        fields = ['id', 'username', 'email', 'full_name', 'first_name', 'last_name', 'account_type', 'subscription_status', 'password', 'is_active', 'date_joined']
         read_only_fields = ['id', 'date_joined']
 
     def create(self, validated_data):
         password = validated_data.pop('password', None)
+        full_name = validated_data.pop('full_name', '')
+        
+        # Auto-generate username from email if not provided
+        if not validated_data.get('username'):
+            email = validated_data.get('email', '')
+            validated_data['username'] = email.split('@')[0] if email else f"student_{User.objects.count() + 1}"
+        
+        # Split full_name into first/last name
+        if full_name and not (validated_data.get('first_name') or validated_data.get('last_name')):
+            name_parts = full_name.strip().split(' ', 1)
+            validated_data['first_name'] = name_parts[0]
+            validated_data['last_name'] = name_parts[1] if len(name_parts) > 1 else ''
+        
         user = User.objects.create_user(**validated_data)
         if password:
             user.set_password(password)
