@@ -514,80 +514,81 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        {/* Right Column Sidebar */}
-                        <div className="lg:col-span-1 space-y-6">
-                            <AITutorCard type="speaking" overallBand={result.overall_band} />
+                    {/* Right Column Sidebar */}
+                    <div className="lg:col-span-1 space-y-6">
+                        <AITutorCard type="speaking" overallBand={result.overall_band} />
 
-                            {/* Motivation Card */}
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                                <h3 className="font-bold text-slate-800 mb-3">Speaking Tips</h3>
-                                <ul className="text-sm text-slate-500 space-y-3 list-disc pl-4">
-                                    <li>Speak naturally and don't rush.</li>
-                                    <li>Use a range of connecting words.</li>
-                                    <li>Don't worry about accent, focus on clarity.</li>
-                                </ul>
-                            </div>
+                        {/* Motivation Card */}
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                            <h3 className="font-bold text-slate-800 mb-3">Speaking Tips</h3>
+                            <ul className="text-sm text-slate-500 space-y-3 list-disc pl-4">
+                                <li>Speak naturally and don't rush.</li>
+                                <li>Use a range of connecting words.</li>
+                                <li>Don't worry about accent, focus on clarity.</li>
+                            </ul>
                         </div>
                     </div>
-
                 </div>
+
             </div>
-            );
+        </div>
+    );
 }
 
-            // --- Subcomponents ---
+// --- Subcomponents ---
 
-            function CriteriaRow({config, score}: {config: any, score: number }) {
+function CriteriaRow({ config, score }: { config: any, score: number }) {
     const percentage = (score / 9) * 100;
-            return (
-            <div className="flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.iconBg} shadow-sm`}>
-                    <config.icon className="w-5 h-5" />
-                </div>
-                <div className="flex-1">
-                    <div className="flex justify-between mb-2">
-                        <span className="font-bold text-slate-700 text-sm">{config.label}</span>
-                    </div>
-                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div className={`h-full ${config.color} rounded-full transition-all duration-1000`} style={{ width: `${percentage}%` }}></div>
-                    </div>
-                </div>
-                <div className="text-lg font-bold text-slate-900 w-8 text-right">{score.toFixed(1)}</div>
-            </div>
-            );
-}
-
-            function EmptyState({message}: {message ?: string}) {
     return (
-            <div className="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-2xl">
-                    🐶
-                </div>
-                <p className="text-sm font-medium text-slate-500 italic">
-                    {message || "No mistakes found! Your response is too short or clear."}
-                </p>
+        <div className="flex items-center gap-4">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.iconBg} shadow-sm`}>
+                <config.icon className="w-5 h-5" />
             </div>
-            );
+            <div className="flex-1">
+                <div className="flex justify-between mb-2">
+                    <span className="font-bold text-slate-700 text-sm">{config.label}</span>
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className={`h-full ${config.color} rounded-full transition-all duration-1000`} style={{ width: `${percentage}%` }}></div>
+                </div>
+            </div>
+            <div className="text-lg font-bold text-slate-900 w-8 text-right">{score.toFixed(1)}</div>
+        </div>
+    );
 }
 
-            function getCEFRColor(level: string) {
+function EmptyState({ message }: { message?: string }) {
+    return (
+        <div className="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-2xl">
+                🐶
+            </div>
+            <p className="text-sm font-medium text-slate-500 italic">
+                {message || "No mistakes found! Your response is too short or clear."}
+            </p>
+        </div>
+    );
+}
+
+function getCEFRColor(level: string) {
     switch (level) {
         case 'A1': return 'bg-slate-500';
-            case 'A2': return 'bg-emerald-500';
-            case 'B1': return 'bg-blue-500';
-            case 'B2': return 'bg-indigo-500';
-            case 'C1': return 'bg-amber-500';
-            case 'C2': return 'bg-red-500';
-            default: return 'bg-slate-300';
+        case 'A2': return 'bg-emerald-500';
+        case 'B1': return 'bg-blue-500';
+        case 'B2': return 'bg-indigo-500';
+        case 'C1': return 'bg-amber-500';
+        case 'C2': return 'bg-red-500';
+        default: return 'bg-slate-300';
     }
 }
 
-            // Logic to highlight text based on tab
-            function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
+// Logic to highlight text based on tab
+function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
     if (!text) return "No transcript.";
 
-            if (tab === 'grammar' && evaluation?.grammar_analysis) {
+    if (tab === 'grammar' && evaluation?.grammar_analysis) {
         // Simple highlight logic - identifying errors in text is hard without indices.
         // We will try to bold/red highlight words that appear in "error" field.
         // For MVP, just show text. Real impl needs offset indices from backend.
@@ -599,21 +600,21 @@ export default function SpeakingReportPage({ params }: PageProps) {
                     return isError ? <span key={i} className="bg-red-100 text-red-600 px-0.5 rounded mx-0.5 font-medium border-b border-red-200">{word}</span> : word + ' ';
                 })}
             </span>
-            );
+        );
     }
 
-            // Default highlights for vocabulary (randomly assigning colors for demo effect if data missing)
-            return (
-            <span>
-                {text.split(' ').map((word, i) => {
-                    // Random highlighting for demo match
-                    const rnd = Math.random();
-                    let colorClass = "";
-                    if (word.length > 5 && rnd > 0.7) colorClass = "bg-red-100 text-red-600"; // C2
-                    else if (word.length > 4 && rnd > 0.5) colorClass = "bg-amber-100 text-amber-700"; // C1
+    // Default highlights for vocabulary (randomly assigning colors for demo effect if data missing)
+    return (
+        <span>
+            {text.split(' ').map((word, i) => {
+                // Random highlighting for demo match
+                const rnd = Math.random();
+                let colorClass = "";
+                if (word.length > 5 && rnd > 0.7) colorClass = "bg-red-100 text-red-600"; // C2
+                else if (word.length > 4 && rnd > 0.5) colorClass = "bg-amber-100 text-amber-700"; // C1
 
-                    return colorClass !== "" ? <span key={i} className={`rounded px-1 mx-0.5 ${colorClass}`}>{word}</span> : word + ' '
-                })}
-            </span>
-            );
+                return colorClass !== "" ? <span key={i} className={`rounded px-1 mx-0.5 ${colorClass}`}>{word}</span> : word + ' '
+            })}
+        </span>
+    );
 }
