@@ -21,7 +21,9 @@ import {
     BookOpen,
     AlertCircle,
     Mic,
+    Bot
 } from 'lucide-react';
+import AITutorCard from '@/components/AITutorCard';
 
 interface PageProps {
     params: Promise<{ sessionId: string }>;
@@ -224,371 +226,369 @@ export default function SpeakingReportPage({ params }: PageProps) {
                     <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
                 </div>
 
-                {/* 1. Header Card (Matching "5.5/9.0" screenshot) */}
-                <div className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-100">
-                    <div className="flex items-center gap-6">
-                        <div className="text-left">
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-5xl font-bold text-purple-600">{result.overall_band.toFixed(1)}</span>
-                                <span className="text-3xl font-medium text-slate-300">/9.0</span>
-                            </div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Overall Band Score</div>
-                        </div>
-                        <div className="h-12 w-px bg-slate-100 mx-2 hidden md:block" />
-                        <div className="text-left">
-                            <div className="text-3xl font-bold text-purple-600/80">{getCEFRLevel(result.overall_band)}</div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">CEFR Level</div>
-                        </div>
-                    </div>
-                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left Column */}
+                    <div className="lg:col-span-2 space-y-6">
 
-                {/* AI Tutor Banner */}
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white flex flex-col md:flex-row items-center justify-between shadow-lg">
-                    <div className="flex items-center gap-4 mb-4 md:mb-0">
-                        <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm">
-                            <Mic className="w-8 h-8 text-white" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-bold">Personal AI Tutor</h3>
-                            <p className="text-indigo-100 text-sm opacity-90 max-w-xl">
-                                Want to sound more natural? Chat with your AI tutor to practice this topic again, get pronunciation tips, and improve your fluency.
-                            </p>
-                        </div>
-                    </div>
-                    <button
-                        onClick={() => window.dispatchEvent(new CustomEvent('open-ai-chat'))}
-                        className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold shadow-sm hover:bg-indigo-50 transition-colors flex items-center gap-2 whitespace-nowrap"
-                    >
-                        <MessageCircle className="w-5 h-5" />
-                        Chat with Tutor
-                    </button>
-                </div>
-
-                {/* 2. Criteria Breakdown (4 Cards) */}
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                    <h3 className="font-bold text-slate-800 mb-6 text-lg">Criteria Breakdown</h3>
-                    <div className="space-y-6">
-                        {/* Fluency */}
-                        <CriteriaRow
-                            config={criteriaConfig.fluency}
-                            score={result.criterion_scores.fluency_coherence}
-                        />
-                        <div className="h-px bg-slate-50" />
-
-                        {/* Lexical */}
-                        <CriteriaRow
-                            config={criteriaConfig.lexical}
-                            score={result.criterion_scores.lexical_resource}
-                        />
-                        <div className="h-px bg-slate-50" />
-
-                        {/* Grammar */}
-                        <CriteriaRow
-                            config={criteriaConfig.grammar}
-                            score={result.criterion_scores.grammatical_range}
-                        />
-                        <div className="h-px bg-slate-50" />
-
-                        {/* Pronunciation */}
-                        <CriteriaRow
-                            config={criteriaConfig.pronunciation}
-                            score={result.criterion_scores.pronunciation}
-                        />
-                    </div>
-                </div>
-
-                {/* 3. Detailed Feedback Header */}
-                <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="w-5 h-5 text-purple-600" />
-                    <h3 className="text-lg font-bold text-slate-800">Detailed Feedback</h3>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-
-                    <div className="p-6 pb-0">
-                        {/* Speaking Task Label */}
-                        <div className="text-sm font-bold text-slate-900 mb-4">Speaking Task</div>
-
-                        {/* Question Tabs (Q1, Q2...) */}
-                        <div className="flex flex-wrap gap-3 mb-6">
-                            {result.detailed_results.map((item, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => setActiveQuestion(idx)}
-                                    className={`px-6 py-2 rounded-lg font-medium text-sm transition-all border ${activeQuestion === idx
-                                        ? 'bg-white border-purple-500 text-purple-600 shadow-sm'
-                                        : 'bg-white border-slate-200 text-slate-500 hover:border-purple-200'
-                                        }`}
-                                >
-                                    {item.label.replace('Part ', 'Q ')}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Question Prompt Box */}
-                        <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-6">
-                            <p className="text-sm font-medium text-slate-700">
-                                {activeData?.label === 'Part 1' ? "What do you usually do at the weekends?" : "Describe a memorable event in your life."}
-                                {/* ^ Placeholder if prompt is missing from response, ideally fetch from test data */}
-                            </p>
-                        </div>
-
-                        {/* Audio Player Strip */}
-                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-4 mb-8">
-                            <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0 cursor-pointer shadow-lg hover:bg-purple-700 transition" onClick={() => setPlayingAudio(!playingAudio)}>
-                                {playingAudio ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
-                            </div>
-                            <div className="flex-1">
-                                <div className="flex justify-between text-xs font-medium text-slate-500 mb-1">
-                                    <span>My answer</span>
-                                    <span>0:04</span>
+                        {/* 1. Header Card (Matching "5.5/9.0" screenshot) */}
+                        <div className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-100">
+                            <div className="flex items-center gap-6">
+                                <div className="text-left">
+                                    <div className="flex items-baseline gap-2">
+                                        <span className="text-5xl font-bold text-purple-600">{result.overall_band.toFixed(1)}</span>
+                                        <span className="text-3xl font-medium text-slate-300">/9.0</span>
+                                    </div>
+                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Overall Band Score</div>
                                 </div>
-                                <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                    <div className="h-full bg-slate-400 w-1/3 rounded-full" />
+                                <div className="h-12 w-px bg-slate-100 mx-2 hidden md:block" />
+                                <div className="text-left">
+                                    <div className="text-3xl font-bold text-purple-600/80">{getCEFRLevel(result.overall_band)}</div>
+                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">CEFR Level</div>
                                 </div>
                             </div>
-                            <div className="text-xs font-medium text-slate-400">0:00 / 0:04</div>
                         </div>
-                    </div>
 
+                        {/* 2. Criteria Breakdown (4 Cards) */}
+                        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
+                            <h3 className="font-bold text-slate-800 mb-6 text-lg">Criteria Breakdown</h3>
+                            <div className="space-y-6">
+                                {/* Fluency */}
+                                <CriteriaRow
+                                    config={criteriaConfig.fluency}
+                                    score={result.criterion_scores.fluency_coherence}
+                                />
+                                <div className="h-px bg-slate-50" />
 
-                    {/* Two Column Layout: Transcript & Analysis */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 border-t border-slate-100">
-                        {/* LEFT: Transcript */}
-                        <div className="p-6 border-r border-slate-100">
-                            <div className="flex items-center justify-between mb-4">
-                                <h4 className="font-bold text-slate-800">Your Answer</h4>
-                                <div className="bg-slate-100 p-1 rounded-lg flex text-xs font-medium">
-                                    <button
-                                        onClick={() => setTranscriptMode('original')}
-                                        className={`px-3 py-1 rounded-md transition-all ${transcriptMode === 'original' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                                    >
-                                        Original
-                                    </button>
-                                    <button
-                                        onClick={() => setTranscriptMode('feedback')}
-                                        className={`px-3 py-1 rounded-md transition-all ${transcriptMode === 'feedback' ? 'bg-purple-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                                    >
-                                        Feedback
-                                    </button>
+                                {/* Lexical */}
+                                <CriteriaRow
+                                    config={criteriaConfig.lexical}
+                                    score={result.criterion_scores.lexical_resource}
+                                />
+                                <div className="h-px bg-slate-50" />
+
+                                {/* Grammar */}
+                                <CriteriaRow
+                                    config={criteriaConfig.grammar}
+                                    score={result.criterion_scores.grammatical_range}
+                                />
+                                <div className="h-px bg-slate-50" />
+
+                                {/* Pronunciation */}
+                                <CriteriaRow
+                                    config={criteriaConfig.pronunciation}
+                                    score={result.criterion_scores.pronunciation}
+                                />
+                            </div>
+                        </div>
+
+                        {/* 3. Detailed Feedback Header */}
+                        <div className="flex items-center gap-2 mb-2">
+                            <TrendingUp className="w-5 h-5 text-purple-600" />
+                            <h3 className="text-lg font-bold text-slate-800">Detailed Feedback</h3>
+                        </div>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+
+                            <div className="p-6 pb-0">
+                                {/* Speaking Task Label */}
+                                <div className="text-sm font-bold text-slate-900 mb-4">Speaking Task</div>
+
+                                {/* Question Tabs (Q1, Q2...) */}
+                                <div className="flex flex-wrap gap-3 mb-6">
+                                    {result.detailed_results.map((item, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setActiveQuestion(idx)}
+                                            className={`px-6 py-2 rounded-lg font-medium text-sm transition-all border ${activeQuestion === idx
+                                                ? 'bg-white border-purple-500 text-purple-600 shadow-sm'
+                                                : 'bg-white border-slate-200 text-slate-500 hover:border-purple-200'
+                                                }`}
+                                        >
+                                            {item.label.replace('Part ', 'Q ')}
+                                        </button>
+                                    ))}
                                 </div>
-                            </div>
 
-                            {/* Legend for Vocabulary/Grammar */}
-                            <div className="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4">
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-400"></span> A1</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> A2</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500"></span> B1</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500"></span> B2</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500"></span> C1</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> C2</span>
-                            </div>
+                                {/* Question Prompt Box */}
+                                <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-6">
+                                    <p className="text-sm font-medium text-slate-700">
+                                        {activeData?.label === 'Part 1' ? "What do you usually do at the weekends?" : "Describe a memorable event in your life."}
+                                        {/* ^ Placeholder if prompt is missing from response, ideally fetch from test data */}
+                                    </p>
+                                </div>
 
-                            <div className="p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 min-h-[300px]">
-                                <p className="leading-loose text-slate-700 text-lg">
-                                    {transcriptMode === 'original' ? (
-                                        activeData?.transcript || "No transcript available."
-                                    ) : (
-                                        // Feedback View (Highlights)
-                                        renderFeedbackText(activeData?.transcript, evaluation, detailTab)
-                                    )}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* RIGHT: Analysis Tabs */}
-                        <div className="p-6 bg-white">
-                            {/* Tabs Header */}
-                            <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
-                                {(['fluency', 'vocabulary', 'pronunciation', 'grammar'] as const).map(tab => (
-                                    <button
-                                        key={tab}
-                                        onClick={() => setDetailTab(tab)}
-                                        className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide border transition-all whitespace-nowrap ${detailTab === tab
-                                            ? 'border-purple-600 text-purple-700 bg-purple-50'
-                                            : 'border-slate-200 text-slate-500 hover:border-slate-300'
-                                            }`}
-                                    >
-                                        {tab === 'grammar' ? 'Grammar & Corrections' : tab}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Tab Content */}
-                            <div className="min-h-[400px]">
-                                {detailTab === 'fluency' && (
-                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                                        <h5 className="font-bold text-slate-800 flex items-center gap-2">
-                                            <TrendingUp className="w-5 h-5 text-purple-500" /> Fluency Analysis
-                                        </h5>
-
-                                        {/* Speed Card */}
-                                        <div className="bg-purple-50 rounded-xl p-6 border border-purple-100 flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="bg-white p-3 rounded-full shadow-sm">
-                                                    <Zap className="w-6 h-6 text-purple-600" />
-                                                </div>
-                                                <div>
-                                                    <div className="text-sm font-medium text-purple-900">Speaking Speed</div>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <div className="text-3xl font-bold text-purple-700">{evaluation?.fluency_analysis?.wpm || 127}</div>
-                                                <div className="text-xs text-purple-500 font-medium">words/min</div>
-                                            </div>
+                                {/* Audio Player Strip */}
+                                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-4 mb-8">
+                                    <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0 cursor-pointer shadow-lg hover:bg-purple-700 transition" onClick={() => setPlayingAudio(!playingAudio)}>
+                                        {playingAudio ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex justify-between text-xs font-medium text-slate-500 mb-1">
+                                            <span>My answer</span>
+                                            <span>0:04</span>
                                         </div>
-
-                                        {/* Speed Gauge Visualization */}
-                                        <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
-                                            <div className="flex items-center gap-2 mb-4">
-                                                <Clock className="w-4 h-4 text-slate-400" />
-                                                <span className="text-sm font-bold text-slate-700">Speech Pace</span>
-                                            </div>
-                                            <div className="relative h-4 bg-gradient-to-r from-red-400 via-green-400 to-red-400 rounded-full w-full">
-                                                <div className="absolute top-0 bottom-0 w-1 bg-slate-800 -mt-1 -mb-1" style={{ left: '50%' }}></div> {/* Indicator */}
-                                                <div className="absolute -bottom-6 w-full flex justify-between text-[10px] font-bold text-slate-400 uppercase">
-                                                    <span>Too Slow</span>
-                                                    <span>Normal</span>
-                                                    <span>Too Fast</span>
-                                                </div>
-                                            </div>
-                                            <div className="mt-8 bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-xs text-emerald-800 leading-relaxed">
-                                                <span className="font-bold">✨ Great job!</span> Examiners imply most likely enjoy your speaking if you speak around 120-150 words per minute.
-                                            </div>
+                                        <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                            <div className="h-full bg-slate-400 w-1/3 rounded-full" />
                                         </div>
                                     </div>
-                                )}
+                                    <div className="text-xs font-medium text-slate-400">0:00 / 0:04</div>
+                                </div>
+                            </div>
 
-                                {detailTab === 'vocabulary' && (
-                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                                        <h5 className="font-bold text-slate-800 flex items-center gap-2">
-                                            <BookOpen className="w-5 h-5 text-orange-500" /> Vocabulary Mistakes
-                                        </h5>
 
-                                        {/* CEFR Distribution Bars */}
-                                        <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm space-y-3">
-                                            {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((lvl) => (
-                                                <div key={lvl} className="flex items-center gap-3">
-                                                    <div className={`w-8 h-6 rounded flex items-center justify-center text-xs font-bold text-white ${getCEFRColor(lvl)}`}>
-                                                        {lvl}
-                                                    </div>
-                                                    <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                                                        <div className={`h-full ${getCEFRColor(lvl)}`} style={{ width: lvl === 'A1' ? '10%' : '0%' }}></div>
-                                                    </div>
-                                                    <div className="text-xs font-bold text-slate-400 w-8 text-right">{lvl === 'A1' ? '10%' : '0%'}</div>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                                            <h6 className="text-sm font-bold text-amber-800 mb-2">Paraphrasing Tips</h6>
-                                            <p className="text-xs text-amber-700 leading-relaxed">
-                                                Use the recommended words to achieve a higher score. Try replacing basic words with more precise synonyms (e.g., use "challenging" instead of "hard").
-                                            </p>
+                            {/* Two Column Layout: Transcript & Analysis */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 border-t border-slate-100">
+                                {/* LEFT: Transcript */}
+                                <div className="p-6 border-r border-slate-100">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h4 className="font-bold text-slate-800">Your Answer</h4>
+                                        <div className="bg-slate-100 p-1 rounded-lg flex text-xs font-medium">
+                                            <button
+                                                onClick={() => setTranscriptMode('original')}
+                                                className={`px-3 py-1 rounded-md transition-all ${transcriptMode === 'original' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                            >
+                                                Original
+                                            </button>
+                                            <button
+                                                onClick={() => setTranscriptMode('feedback')}
+                                                className={`px-3 py-1 rounded-md transition-all ${transcriptMode === 'feedback' ? 'bg-purple-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                            >
+                                                Feedback
+                                            </button>
                                         </div>
                                     </div>
-                                )}
 
-                                {detailTab === 'grammar' && (
-                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                                        <h5 className="font-bold text-slate-800 flex items-center gap-2">
-                                            <AlertCircle className="w-5 h-5 text-red-500" /> Grammar Mistakes
-                                        </h5>
+                                    {/* Legend for Vocabulary/Grammar */}
+                                    <div className="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4">
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-400"></span> A1</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> A2</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500"></span> B1</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500"></span> B2</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500"></span> C1</span>
+                                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> C2</span>
+                                    </div>
 
-                                        {evaluation?.grammar_analysis?.map((mistake, i) => (
-                                            <div key={i} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm relative overflow-hidden">
-                                                <div className="absolute top-0 left-0 bottom-0 w-1 bg-red-400"></div>
-                                                <div className="pl-3">
-                                                    <div className="flex justify-between items-start mb-1">
-                                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Error #{i + 1}</span>
-                                                    </div>
-                                                    <div className="text-sm line-through text-red-400 mb-1 font-medium">
-                                                        {typeof mistake.error === 'string' ? mistake.error : JSON.stringify(mistake.error)}
-                                                    </div>
-                                                    <div className="text-sm text-emerald-600 font-bold flex items-center gap-1">
-                                                        <ChevronRight className="w-3 h-3" /> {mistake.correction}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )) || (
-                                                <EmptyState />
+                                    <div className="p-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/50 min-h-[300px]">
+                                        <p className="leading-loose text-slate-700 text-lg">
+                                            {transcriptMode === 'original' ? (
+                                                activeData?.transcript || "No transcript available."
+                                            ) : (
+                                                // Feedback View (Highlights)
+                                                renderFeedbackText(activeData?.transcript, evaluation, detailTab)
                                             )}
+                                        </p>
                                     </div>
-                                )}
+                                </div>
 
-                                {detailTab === 'pronunciation' && (
-                                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                                        <h5 className="font-bold text-slate-800 flex items-center gap-2">
-                                            <Mic className="w-5 h-5 text-emerald-500" /> Pronunciation Mistakes
-                                        </h5>
-                                        <div className="text-center py-10">
-                                            <EmptyState message="Your response is too short to generate valuable pronunciation feedback." />
-                                        </div>
+                                {/* RIGHT: Analysis Tabs */}
+                                <div className="p-6 bg-white">
+                                    {/* Tabs Header */}
+                                    <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
+                                        {(['fluency', 'vocabulary', 'pronunciation', 'grammar'] as const).map(tab => (
+                                            <button
+                                                key={tab}
+                                                onClick={() => setDetailTab(tab)}
+                                                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide border transition-all whitespace-nowrap ${detailTab === tab
+                                                    ? 'border-purple-600 text-purple-700 bg-purple-50'
+                                                    : 'border-slate-200 text-slate-500 hover:border-slate-300'
+                                                    }`}
+                                            >
+                                                {tab === 'grammar' ? 'Grammar & Corrections' : tab}
+                                            </button>
+                                        ))}
                                     </div>
-                                )}
+
+                                    {/* Tab Content */}
+                                    <div className="min-h-[400px]">
+                                        {detailTab === 'fluency' && (
+                                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                <h5 className="font-bold text-slate-800 flex items-center gap-2">
+                                                    <TrendingUp className="w-5 h-5 text-purple-500" /> Fluency Analysis
+                                                </h5>
+
+                                                {/* Speed Card */}
+                                                <div className="bg-purple-50 rounded-xl p-6 border border-purple-100 flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="bg-white p-3 rounded-full shadow-sm">
+                                                            <Zap className="w-6 h-6 text-purple-600" />
+                                                        </div>
+                                                        <div>
+                                                            <div className="text-sm font-medium text-purple-900">Speaking Speed</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-3xl font-bold text-purple-700">{evaluation?.fluency_analysis?.wpm || 127}</div>
+                                                        <div className="text-xs text-purple-500 font-medium">words/min</div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Speed Gauge Visualization */}
+                                                <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                                                    <div className="flex items-center gap-2 mb-4">
+                                                        <Clock className="w-4 h-4 text-slate-400" />
+                                                        <span className="text-sm font-bold text-slate-700">Speech Pace</span>
+                                                    </div>
+                                                    <div className="relative h-4 bg-gradient-to-r from-red-400 via-green-400 to-red-400 rounded-full w-full">
+                                                        <div className="absolute top-0 bottom-0 w-1 bg-slate-800 -mt-1 -mb-1" style={{ left: '50%' }}></div> {/* Indicator */}
+                                                        <div className="absolute -bottom-6 w-full flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                                                            <span>Too Slow</span>
+                                                            <span>Normal</span>
+                                                            <span>Too Fast</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-8 bg-emerald-50 border border-emerald-100 rounded-lg p-3 text-xs text-emerald-800 leading-relaxed">
+                                                        <span className="font-bold">✨ Great job!</span> Examiners imply most likely enjoy your speaking if you speak around 120-150 words per minute.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {detailTab === 'vocabulary' && (
+                                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                <h5 className="font-bold text-slate-800 flex items-center gap-2">
+                                                    <BookOpen className="w-5 h-5 text-orange-500" /> Vocabulary Mistakes
+                                                </h5>
+
+                                                {/* CEFR Distribution Bars */}
+                                                <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-sm space-y-3">
+                                                    {['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map((lvl) => (
+                                                        <div key={lvl} className="flex items-center gap-3">
+                                                            <div className={`w-8 h-6 rounded flex items-center justify-center text-xs font-bold text-white ${getCEFRColor(lvl)}`}>
+                                                                {lvl}
+                                                            </div>
+                                                            <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                                <div className={`h-full ${getCEFRColor(lvl)}`} style={{ width: lvl === 'A1' ? '10%' : '0%' }}></div>
+                                                            </div>
+                                                            <div className="text-xs font-bold text-slate-400 w-8 text-right">{lvl === 'A1' ? '10%' : '0%'}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                                                    <h6 className="text-sm font-bold text-amber-800 mb-2">Paraphrasing Tips</h6>
+                                                    <p className="text-xs text-amber-700 leading-relaxed">
+                                                        Use the recommended words to achieve a higher score. Try replacing basic words with more precise synonyms (e.g., use "challenging" instead of "hard").
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {detailTab === 'grammar' && (
+                                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                <h5 className="font-bold text-slate-800 flex items-center gap-2">
+                                                    <AlertCircle className="w-5 h-5 text-red-500" /> Grammar Mistakes
+                                                </h5>
+
+                                                {evaluation?.grammar_analysis?.map((mistake, i) => (
+                                                    <div key={i} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm relative overflow-hidden">
+                                                        <div className="absolute top-0 left-0 bottom-0 w-1 bg-red-400"></div>
+                                                        <div className="pl-3">
+                                                            <div className="flex justify-between items-start mb-1">
+                                                                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Error #{i + 1}</span>
+                                                            </div>
+                                                            <div className="text-sm line-through text-red-400 mb-1 font-medium">
+                                                                {typeof mistake.error === 'string' ? mistake.error : JSON.stringify(mistake.error)}
+                                                            </div>
+                                                            <div className="text-sm text-emerald-600 font-bold flex items-center gap-1">
+                                                                <ChevronRight className="w-3 h-3" /> {mistake.correction}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )) || (
+                                                        <EmptyState />
+                                                    )}
+                                            </div>
+                                        )}
+
+                                        {detailTab === 'pronunciation' && (
+                                            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                                <h5 className="font-bold text-slate-800 flex items-center gap-2">
+                                                    <Mic className="w-5 h-5 text-emerald-500" /> Pronunciation Mistakes
+                                                </h5>
+                                                <div className="text-center py-10">
+                                                    <EmptyState message="Your response is too short to generate valuable pronunciation feedback." />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Column Sidebar */}
+                        <div className="lg:col-span-1 space-y-6">
+                            <AITutorCard type="speaking" overallBand={result.overall_band} />
+
+                            {/* Motivation Card */}
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                <h3 className="font-bold text-slate-800 mb-3">Speaking Tips</h3>
+                                <ul className="text-sm text-slate-500 space-y-3 list-disc pl-4">
+                                    <li>Speak naturally and don't rush.</li>
+                                    <li>Use a range of connecting words.</li>
+                                    <li>Don't worry about accent, focus on clarity.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-    );
+            );
 }
 
-// --- Subcomponents ---
+            // --- Subcomponents ---
 
-function CriteriaRow({ config, score }: { config: any, score: number }) {
+            function CriteriaRow({config, score}: {config: any, score: number }) {
     const percentage = (score / 9) * 100;
-    return (
-        <div className="flex items-center gap-4">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.iconBg} shadow-sm`}>
-                <config.icon className="w-5 h-5" />
-            </div>
-            <div className="flex-1">
-                <div className="flex justify-between mb-2">
-                    <span className="font-bold text-slate-700 text-sm">{config.label}</span>
+            return (
+            <div className="flex items-center gap-4">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.iconBg} shadow-sm`}>
+                    <config.icon className="w-5 h-5" />
                 </div>
-                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                    <div className={`h-full ${config.color} rounded-full transition-all duration-1000`} style={{ width: `${percentage}%` }}></div>
+                <div className="flex-1">
+                    <div className="flex justify-between mb-2">
+                        <span className="font-bold text-slate-700 text-sm">{config.label}</span>
+                    </div>
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div className={`h-full ${config.color} rounded-full transition-all duration-1000`} style={{ width: `${percentage}%` }}></div>
+                    </div>
                 </div>
+                <div className="text-lg font-bold text-slate-900 w-8 text-right">{score.toFixed(1)}</div>
             </div>
-            <div className="text-lg font-bold text-slate-900 w-8 text-right">{score.toFixed(1)}</div>
-        </div>
-    );
+            );
 }
 
-function EmptyState({ message }: { message?: string }) {
+            function EmptyState({message}: {message ?: string}) {
     return (
-        <div className="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-            <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-2xl">
-                🐶
+            <div className="text-center py-8 px-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <div className="bg-white w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm text-2xl">
+                    🐶
+                </div>
+                <p className="text-sm font-medium text-slate-500 italic">
+                    {message || "No mistakes found! Your response is too short or clear."}
+                </p>
             </div>
-            <p className="text-sm font-medium text-slate-500 italic">
-                {message || "No mistakes found! Your response is too short or clear."}
-            </p>
-        </div>
-    );
+            );
 }
 
-function getCEFRColor(level: string) {
+            function getCEFRColor(level: string) {
     switch (level) {
         case 'A1': return 'bg-slate-500';
-        case 'A2': return 'bg-emerald-500';
-        case 'B1': return 'bg-blue-500';
-        case 'B2': return 'bg-indigo-500';
-        case 'C1': return 'bg-amber-500';
-        case 'C2': return 'bg-red-500';
-        default: return 'bg-slate-300';
+            case 'A2': return 'bg-emerald-500';
+            case 'B1': return 'bg-blue-500';
+            case 'B2': return 'bg-indigo-500';
+            case 'C1': return 'bg-amber-500';
+            case 'C2': return 'bg-red-500';
+            default: return 'bg-slate-300';
     }
 }
 
-// Logic to highlight text based on tab
-function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
+            // Logic to highlight text based on tab
+            function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
     if (!text) return "No transcript.";
 
-    if (tab === 'grammar' && evaluation?.grammar_analysis) {
-        // Simple highlight logic - identifying errors in text is hard without indices. 
+            if (tab === 'grammar' && evaluation?.grammar_analysis) {
+        // Simple highlight logic - identifying errors in text is hard without indices.
         // We will try to bold/red highlight words that appear in "error" field.
         // For MVP, just show text. Real impl needs offset indices from backend.
         return (
@@ -599,21 +599,21 @@ function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
                     return isError ? <span key={i} className="bg-red-100 text-red-600 px-0.5 rounded mx-0.5 font-medium border-b border-red-200">{word}</span> : word + ' ';
                 })}
             </span>
-        );
+            );
     }
 
-    // Default highlights for vocabulary (randomly assigning colors for demo effect if data missing)
-    return (
-        <span>
-            {text.split(' ').map((word, i) => {
-                // Random highlighting for demo match
-                const rnd = Math.random();
-                let colorClass = "";
-                if (word.length > 5 && rnd > 0.7) colorClass = "bg-red-100 text-red-600"; // C2
-                else if (word.length > 4 && rnd > 0.5) colorClass = "bg-amber-100 text-amber-700"; // C1
+            // Default highlights for vocabulary (randomly assigning colors for demo effect if data missing)
+            return (
+            <span>
+                {text.split(' ').map((word, i) => {
+                    // Random highlighting for demo match
+                    const rnd = Math.random();
+                    let colorClass = "";
+                    if (word.length > 5 && rnd > 0.7) colorClass = "bg-red-100 text-red-600"; // C2
+                    else if (word.length > 4 && rnd > 0.5) colorClass = "bg-amber-100 text-amber-700"; // C1
 
-                return colorClass !== "" ? <span key={i} className={`rounded px-1 mx-0.5 ${colorClass}`}>{word}</span> : word + ' '
-            })}
-        </span>
-    );
+                    return colorClass !== "" ? <span key={i} className={`rounded px-1 mx-0.5 ${colorClass}`}>{word}</span> : word + ' '
+                })}
+            </span>
+            );
 }
