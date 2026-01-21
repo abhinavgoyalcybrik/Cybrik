@@ -14,6 +14,7 @@ import {
     Lock,
     Loader2,
     CheckCircle,
+    Calendar,
 } from 'lucide-react';
 
 interface PageProps {
@@ -288,26 +289,42 @@ export default function SpeakingReportPage({ params }: PageProps) {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-blue-50">
             <div className="max-w-4xl mx-auto px-4 py-8">
                 {/* Header with Score */}
-                <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-                    <div className="flex items-center justify-between flex-wrap gap-4">
-                        <div className="flex items-center gap-6">
-                            <div>
-                                <div className="text-5xl font-bold text-purple-600">
-                                    {overallBand}<span className="text-slate-300">/9.0</span>
-                                </div>
-                                <div className="text-slate-500 text-sm">Overall Band Score</div>
-                            </div>
-                            <div className="h-16 w-px bg-slate-200" />
-                            <div>
-                                <div className="text-3xl font-bold text-slate-900">{cefrLevel}</div>
-                                <div className="text-slate-500 text-sm">CEFR Level</div>
-                            </div>
+                {/* Header with Score */}
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-purple-100 text-purple-700">
+                                Speaking
+                            </span>
+                            <span className="text-slate-300">|</span>
+                            <span className="text-slate-500 text-sm font-medium flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </span>
                         </div>
-                        <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:opacity-90 transition-opacity">
-                            <MessageCircle className="w-5 h-5" />
-                            Chat with your personal AI tutor
-                        </button>
+                        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Speaking Test Report</h1>
                     </div>
+
+                    <div className="flex items-center gap-8">
+                        <div className="text-right">
+                            <div className="text-5xl font-extrabold text-purple-600">
+                                {overallBand}
+                            </div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1 text-center">Band Score</div>
+                        </div>
+                        <div className="h-12 w-px bg-slate-100 hidden md:block"></div>
+                        <div className="hidden md:block text-right">
+                            <div className="text-3xl font-bold text-slate-800 text-center">{cefrLevel}</div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1 text-center">CEFR Level</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex justify-end mb-6">
+                    <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
+                        <MessageCircle className="w-5 h-5" />
+                        Chat with AI Tutor
+                    </button>
                 </div>
 
                 {/* Free Report Banner */}

@@ -148,12 +148,20 @@ export default function ReportDetailPage() {
                     bandScore: attempt.band_score || feedback.overall_band || 0,
                     feedback: typeof feedback === 'string' ? feedback : feedback.summary || feedback.feedback || '',
                     questionBreakdown: (attempt.answers && Object.keys(attempt.answers).length > 0)
-                        ? (Array.isArray(attempt.answers) ? attempt.answers : []).map((ans: any, idx: number) => ({ // Fallback if object
-                            question_number: ans.question_number || idx + 1,
-                            user_answer: ans.user_answer || '-',
-                            correct_answer: ans.correct_answer || '-',
-                            is_correct: ans.is_correct ?? false,
-                        }))
+                        ? (Array.isArray(attempt.answers)
+                            ? attempt.answers.map((ans: any, idx: number) => ({
+                                question_number: ans.question_number || idx + 1,
+                                user_answer: ans.user_answer || '-',
+                                correct_answer: ans.correct_answer || '-',
+                                is_correct: ans.is_correct ?? false,
+                            }))
+                            : Object.entries(attempt.answers).map(([key, value]: [string, any], idx: number) => ({
+                                question_number: parseInt(key) || idx + 1, // Try to use key as question number
+                                user_answer: typeof value === 'string' ? value : (value?.user_answer || '-'),
+                                correct_answer: value?.correct_answer || '-',
+                                is_correct: value?.is_correct ?? false
+                            }))
+                        )
                         : (feedback.breakdown || []).map((item: any) => ({
                             question_number: item.question_number,
                             user_answer: item.user_answer,
@@ -191,7 +199,7 @@ export default function ReportDetailPage() {
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${report.testType === 'reading' ? 'bg-emerald-100 text-emerald-700' :
-                                    report.testType === 'listening' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                                report.testType === 'listening' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
                                 }`}>{report.testType}</span>
                             <span className="text-slate-300">|</span>
                             <span className="text-slate-500 text-sm font-medium flex items-center gap-1">
