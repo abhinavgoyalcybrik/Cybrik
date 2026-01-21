@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.db import transaction
 
-from .models import IELTSTest, UserTestSession, UserModuleAttempt, UserAnswer, Question, TestModule, QuestionGroup
+from .models import IELTSTest, UserTestSession, UserModuleAttempt, UserAnswer, Question, TestModule, QuestionGroup, IELTSUserProfile
 from .serializers import (
     IELTSTestListSerializer, IELTSTestDetailSerializer, 
     UserTestSessionSerializer, UserAnswerSerializer,
