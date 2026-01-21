@@ -94,18 +94,22 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
                 </nav>
 
                 {/* User Info */}
+                {/* User Info */}
                 <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="font-semibold text-sm text-slate-900">{user?.name}</p>
-                            <p className="text-xs text-slate-500">{roleTitle}</p>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 font-bold shadow-sm shrink-0">
+                            {user?.name?.[0]?.toUpperCase() || 'S'}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm text-slate-900 truncate" title={user?.name}>{user?.name || 'Student'}</p>
+                            <p className="text-xs text-slate-500 truncate" title={user?.email || user?.username}>{user?.email || user?.username || roleTitle}</p>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
                             title="Logout"
                         >
-                            <LogOut className="w-5 h-5" />
+                            <LogOut className="w-4 h-4" />
                         </button>
                     </div>
                 </div>
