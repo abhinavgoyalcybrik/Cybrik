@@ -49,28 +49,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const initAuth = async () => {
             const savedUser = localStorage.getItem('ielts_user');
             const savedToken = localStorage.getItem('ielts_token');
-            const isLoginPage = typeof window !== 'undefined' && window.location.pathname === '/login';
 
             if (savedUser && savedToken) {
                 try {
                     setUser(JSON.parse(savedUser));
                     setToken(savedToken);
 
-                    // Only verify session if we're not on the login page
-                    // (prevents infinite redirect loops if cookies are already gone)
-                    if (!isLoginPage) {
-                        const meResponse = await fetch(`/api/auth/me/`, {
-                            credentials: 'include',
-                        });
+                    // Proactively verify the session with the backend
+                    const meResponse = await fetch(`/api/auth/me/`, {
+                        credentials: 'include',
+                    });
 
-                        if (!meResponse.ok) {
-                            console.warn('Backend session expired on mount, logging out.');
-                            logout();
-                        } else {
-                            // Refresh user data to be sure
-                            const userData = await meResponse.json();
-                            // (Optional: update user state with fresh data here)
-                        }
+                    if (!meResponse.ok) {
+                        // Backend session is invalid, trigger logout
+                        console.warn('Backend session expired on mount, logging out.');
+                        logout();
+                    } else {
+                        // Refresh user data to be sure
+                        const userData = await meResponse.json();
+                        // (Optional: update user state with fresh data here)
                     }
                 } catch (e) {
                     console.error('Auth initialization error:', e);
