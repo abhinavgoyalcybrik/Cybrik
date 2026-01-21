@@ -685,6 +685,77 @@ def analyze_call_transcript(call_record_id):
                         logger.error(f"Error processing task verification: {e}")
             # ---------------------------------
 
+        # --- UPDATE LEAD PROFILE FROM ANALYSIS ---
+        if call.lead:
+            try:
+                lead = call.lead
+                lead_updates = []
+                
+                # 1. Personal Details
+                personal = analysis.get('personal_details', {})
+                if personal:
+                    if personal.get('first_name') and not lead.first_name:
+                        lead.first_name = personal.get('first_name')
+                        lead_updates.append('first_name')
+                    if personal.get('last_name') and not lead.last_name:
+                        lead.last_name = personal.get('last_name')
+                        lead_updates.append('last_name')
+                    if personal.get('dob') and not lead.dob:
+                        lead.dob = personal.get('dob')
+                        lead_updates.append('dob')
+                    if personal.get('passport_number') and not lead.passport_number:
+                        lead.passport_number = personal.get('passport_number')
+                        lead_updates.append('passport_number')
+                    if personal.get('address') and not lead.address:
+                        lead.address = personal.get('address')
+                        lead_updates.append('address')
+                    if personal.get('city') and not lead.city:
+                        lead.city = personal.get('city')
+                        lead_updates.append('city')
+                    if personal.get('country') and not lead.country:
+                        lead.country = personal.get('country')
+                        lead_updates.append('country')
+                    if personal.get('preferred_country') and not lead.preferred_country:
+                        lead.preferred_country = personal.get('preferred_country')
+                        lead_updates.append('preferred_country')
+                
+                # 2. Academic History -> highest_qualification, qualification_marks
+                academic_history = analysis.get('academic_history', [])
+                if academic_history and len(academic_history) > 0:
+                    latest = academic_history[0]
+                    if latest.get('degree') and not lead.highest_qualification:
+                        lead.highest_qualification = latest.get('degree')
+                        lead_updates.append('highest_qualification')
+                    grade = latest.get('grade') or latest.get('score')
+                    if grade and not lead.qualification_marks:
+                        lead.qualification_marks = str(grade)
+                        lead_updates.append('qualification_marks')
+                
+                # 3. English Proficiency
+                english = analysis.get('english_proficiency', {})
+                if english and not lead.english_test_scores:
+                    score_str = f"{english.get('test_type', '')} {english.get('overall_score', '')}".strip()
+                    if score_str:
+                        lead.english_test_scores = score_str
+                        lead_updates.append('english_test_scores')
+                
+                # 4. Store full analysis in metadata for reference
+                if not lead.metadata:
+                    lead.metadata = {}
+                lead.metadata['last_ai_analysis'] = {
+                    'call_record_id': call_record_id,
+                    'qualification_score': analysis.get('qualification_score'),
+                    'interest_level': analysis.get('interest_level'),
+                    'analyzed_at': timezone.now().isoformat(),
+                }
+                lead_updates.append('metadata')
+                
+                if lead_updates:
+                    lead.save(update_fields=list(set(lead_updates)))
+                    logger.info(f"Updated Lead {lead.id} profile from AI analysis: {lead_updates}")
+            except Exception as e:
+                logger.error(f"Error updating Lead profile from analysis: {e}")
+
         # Auto-create follow-up tasks with AI call context
         follow_up = analysis.get('follow_up', {})
         doc_status = analysis.get('document_status', {})
