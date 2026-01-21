@@ -111,13 +111,7 @@ export default function AdminLoginPage() {
                         </Link>
                     </div>
                 </div>
-
-                {/* Demo Credentials */}
-                <div className="mt-8 text-center text-sm text-slate-400">
-                    <p>Demo: <code className="bg-white px-2 py-1 rounded border border-slate-200 text-slate-600 font-mono text-xs shadow-sm">admin</code> / <code className="bg-white px-2 py-1 rounded border border-slate-200 text-slate-600 font-mono text-xs shadow-sm">admin123</code></p>
-                </div>
             </div>
         </div>
     );
 }
-
