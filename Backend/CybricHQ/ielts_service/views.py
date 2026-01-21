@@ -245,6 +245,11 @@ class IsAdminUser(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     """
     Admin CRUD for IELTS Tests.
@@ -257,7 +262,7 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []  # Disable CSRF enforcement from SessionAuthentication
+    authentication_classes = []  # Disable authentication
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
@@ -312,11 +317,13 @@ class AdminTestModuleViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AdminQuestionGroupViewSet(viewsets.ModelViewSet):
     """Admin CRUD for Question Groups"""
     queryset = QuestionGroup.objects.all()
     serializer_class = AdminQuestionGroupSerializer
-    permission_classes = [permissions.AllowAny]  # Allow frontend admin access
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
     
     def get_queryset(self):
         queryset = QuestionGroup.objects.all()
