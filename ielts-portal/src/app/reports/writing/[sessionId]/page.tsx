@@ -110,10 +110,9 @@ export default function WritingReportPage({ params }: PageProps) {
                     <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column: Test Results */}
-                    <div className="lg:col-span-2 space-y-6">
-
+                <div className="space-y-6">
+                    {/* Test Results */}
+                    <div className="space-y-6">
                         {/* Header */}
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center justify-between">
                             <div>
@@ -326,20 +325,6 @@ export default function WritingReportPage({ params }: PageProps) {
                         ) : (
                             <div className="text-center py-20 text-slate-400">Data not available for this task.</div>
                         )}
-                    </div>
-
-                    {/* Right Column: Sidebar */}
-                    <div className="lg:col-span-1 space-y-6 sticky top-24 h-fit">
-                        {/* AITutorCard moved to footer */}
-
-                        {/* Additional Sidebar items could go here */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <h3 className="font-bold text-slate-800 mb-4">Score Distribution</h3>
-                            {/* Keep it simple for now or fetch other stats */}
-                            <div className="text-center text-slate-500 py-4 text-sm">
-                                Complete more tests to see your progress chart!
-                            </div>
-                        </div>
                     </div>
                 </div>
 
