@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.routers import DefaultRouter
 from . import views
 from . import auth_views
@@ -15,6 +16,11 @@ admin_router.register(r'modules', views.AdminTestModuleViewSet, basename='admin-
 admin_router.register(r'question-groups', views.AdminQuestionGroupViewSet, basename='admin-question-group')
 admin_router.register(r'questions', views.AdminQuestionViewSet, basename='admin-question')
 admin_router.register(r'students', views.AdminStudentViewSet, basename='admin-student')
+
+# Helper to wrap all admin router URLs with csrf_exempt
+def csrf_exempt_view(view):
+    """Wrap a view with csrf_exempt"""
+    return csrf_exempt(view)
 
 urlpatterns = [
     # IELTS Auth endpoints
@@ -37,8 +43,13 @@ urlpatterns = [
     # Main IELTS routes
     path('', include(router.urls)),
     path('admin/', include(admin_router.urls)),
-    path('admin/import-test/', views.import_test, name='import-test'),
+    path('admin/import-test/', csrf_exempt(views.import_test), name='import-test'),
     path('analyze-handwriting/', views.analyze_handwriting, name='analyze-handwriting'),
     path('text-to-speech/', views.text_to_speech, name='text-to-speech'),
     path('speech-to-text/', views.speech_to_text, name='speech-to-text'),
 ]
+
+# Apply csrf_exempt to all admin router patterns
+for url in admin_router.urls:
+    url.callback = csrf_exempt(url.callback)
+
