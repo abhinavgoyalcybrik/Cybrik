@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,16 +12,12 @@ import {
     Check,
     AlertCircle,
     Loader2,
+    Clock,
 } from 'lucide-react';
-
-interface PageProps {
-    params: Promise<{ testId: string }>;
-}
 
 const API_URL = '/api/ielts';
 
-export default function AdminReadingEditPage({ params }: PageProps) {
-    const { testId } = use(params);
+export default function AdminListeningNewPage() {
     const { isAdmin, isLoading: authLoading } = useAuth();
     const router = useRouter();
 
@@ -37,13 +33,6 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         }
     }, [authLoading, isAdmin, router]);
 
-    // For editing existing tests, redirect to list (editing is view-only for now)
-    useEffect(() => {
-        if (testId !== 'new') {
-            router.push('/admin/reading');
-        }
-    }, [testId, router]);
-
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -52,7 +41,6 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         reader.onload = (event) => {
             try {
                 const content = event.target?.result as string;
-                // Validate JSON
                 JSON.parse(content);
                 setJsonContent(content);
                 setError(null);
@@ -92,7 +80,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                 credentials: 'include',
                 body: JSON.stringify({
                     title: title.trim(),
-                    module_type: 'reading',
+                    module_type: 'listening',
                     json_data: parsedJson,
                 }),
             });
@@ -103,9 +91,11 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                 throw new Error(data.error || 'Failed to create test');
             }
 
-            setSuccess(`Test "${title}" created successfully!`);
+            setSuccess(`Test "${title}" created! Redirecting to set timestamps...`);
+
+            // Redirect to timestamp editor after creation
             setTimeout(() => {
-                router.push('/admin/reading');
+                router.push(`/admin/listening/${data.test_id}`);
             }, 1500);
         } catch (err: any) {
             setError(err.message);
@@ -124,12 +114,12 @@ export default function AdminReadingEditPage({ params }: PageProps) {
 
     return (
         <AdminLayout
-            title="Create Reading Test"
+            title="Create Listening Test"
             subtitle="Import from JSON"
             actions={
                 <div className="flex items-center gap-3">
                     <Link
-                        href="/admin/reading"
+                        href="/admin/listening"
                         className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors"
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -180,7 +170,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none transition-all"
-                        placeholder="e.g. Cambridge 15 Reading Test 1"
+                        placeholder="e.g. Cambridge 15 Listening Test 1"
                     />
                 </div>
 
@@ -211,7 +201,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                         value={jsonContent}
                         onChange={(e) => setJsonContent(e.target.value)}
                         className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-800 font-mono text-sm h-80 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none resize-none"
-                        placeholder='{"passages": [{"title": "Passage 1", "text": "...", "groups": [...]}]}'
+                        placeholder='{"sections": [{"section": 1, "questions": [...]}], "answer_key": {...}}'
                     />
 
                     {jsonContent && (
@@ -224,27 +214,37 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                     )}
                 </div>
 
+                {/* Timestamp Info */}
+                <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 flex items-start gap-3">
+                    <Clock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                        <h3 className="font-semibold text-amber-800">Timestamps Setup</h3>
+                        <p className="text-sm text-amber-700 mt-1">
+                            After creating the test, you'll be redirected to set audio timestamps for each section.
+                            This allows the audio to auto-switch between Part 1, Part 2, etc.
+                        </p>
+                    </div>
+                </div>
+
                 {/* Help */}
                 <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
                     <h3 className="font-semibold text-blue-800 mb-2">Expected JSON Format</h3>
                     <pre className="text-xs text-blue-700 bg-blue-100/50 p-3 rounded-lg overflow-x-auto">
                         {`{
-  "passages": [
+  "sections": [
     {
-      "title": "Passage Title",
-      "text": "The passage text...",
-      "groups": [
-        {
-          "type": "TRUE_FALSE_NOT_GIVEN",
-          "instructions": "Do the following statements agree...",
-          "items": [
-            {"q": 1, "question": "...", "answer": "TRUE"},
-            {"q": 2, "question": "...", "answer": "FALSE"}
-          ]
-        }
+      "section": 1,
+      "question_type": "Completion",
+      "questions": [
+        {"q": 1, "type": "text", "question": "What is the..."},
+        {"q": 2, "type": "mcq", "question": "...", "options": ["A", "B", "C"]}
       ]
     }
-  ]
+  ],
+  "answer_key": {
+    "1": ["answer1"],
+    "2": ["B"]
+  }
 }`}
                     </pre>
                 </div>

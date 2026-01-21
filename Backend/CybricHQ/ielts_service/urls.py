@@ -37,6 +37,7 @@ urlpatterns = [
     # Main IELTS routes
     path('', include(router.urls)),
     path('admin/', include(admin_router.urls)),
+    path('admin/import-test/', views.import_test, name='import-test'),
     path('analyze-handwriting/', views.analyze_handwriting, name='analyze-handwriting'),
     path('text-to-speech/', views.text_to_speech, name='text-to-speech'),
     path('speech-to-text/', views.speech_to_text, name='speech-to-text'),

@@ -67,6 +67,17 @@ if os.getenv("DATABASE_URL"):
     DATABASES["default"] = dj_database_url.config(
         default=os.getenv("DATABASE_URL")
     )
+# Alternative: Use individual DB_* environment variables (AWS RDS, etc.)
+elif os.getenv("DB_ENGINE"):
+    DATABASES["default"] = {
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.getenv("DB_NAME", "cybrikhq"),
+        "USER": os.getenv("DB_USER", ""),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+    }
+
 
 
 

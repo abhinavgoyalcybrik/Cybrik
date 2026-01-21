@@ -877,3 +877,225 @@ def check_evaluator_health(request):
             "status": "error",
             "message": str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@transaction.atomic
+def import_test(request):
+    """
+    Import a test from JSON data.
+    
+    Expects JSON:
+    - title: Test title (required)
+    - module_type: 'reading' or 'listening' (required)
+    - json_data: The test JSON structure (required)
+    
+    Returns: Created test ID and status
+    """
+    import json as json_module
+    import re
+    
+    try:
+        data = request.data
+        title = data.get('title', '').strip()
+        module_type = data.get('module_type', '').lower()
+        json_data = data.get('json_data', {})
+        
+        if not title:
+            return Response({"error": "title is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if module_type not in ['reading', 'listening']:
+            return Response({"error": "module_type must be 'reading' or 'listening'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not json_data:
+            return Response({"error": "json_data is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if test with this title already exists
+        if IELTSTest.objects.filter(title=title).exists():
+            return Response({"error": f"Test with title '{title}' already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create the IELTSTest
+        test = IELTSTest.objects.create(
+            title=title,
+            description=json_data.get('description', f'Imported {module_type.capitalize()} Test'),
+            test_type='academic',
+            active=True
+        )
+        
+        # Create the module
+        duration = 60 if module_type == 'reading' else 30
+        order = 2 if module_type == 'reading' else 1
+        
+        module = TestModule.objects.create(
+            test=test,
+            module_type=module_type,
+            duration_minutes=duration,
+            order=order
+        )
+        
+        # Process based on module type
+        if module_type == 'reading':
+            _import_reading_content(module, json_data)
+        else:
+            _import_listening_content(module, json_data)
+        
+        logger.info(f"Imported test: {title} ({module_type})")
+        
+        return Response({
+            "success": True,
+            "test_id": str(test.id),
+            "title": title,
+            "module_type": module_type
+        }, status=status.HTTP_201_CREATED)
+        
+    except Exception as e:
+        logger.error(f"Error importing test: {e}")
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def _import_reading_content(module, data):
+    """Import reading test content from JSON."""
+    import json as json_module
+    
+    global_order = 1
+    
+    # Get passages/sections
+    content_sections = data.get('passages', [])
+    if not content_sections:
+        content_sections = data.get('sections', [])
+    
+    for p_idx, content in enumerate(content_sections):
+        section_title = content.get('title', f'Passage {p_idx + 1}')
+        section_text = content.get('text', '')
+        
+        # Get groups within passage
+        groups = content.get('groups', [])
+        if not groups and 'questions' in content:
+            groups = [{
+                'items': content['questions'],
+                'instructions': content.get('question_type', 'Answer the questions')
+            }]
+        
+        for g_idx, group in enumerate(groups):
+            q_group = QuestionGroup.objects.create(
+                module=module,
+                title=f"{section_title} - Group {g_idx + 1}",
+                content=section_text,
+                instructions=group.get('instructions', ''),
+                order=global_order
+            )
+            global_order += 1
+            
+            # Process items (questions)
+            items = group.get('items', [])
+            if not items and 'questions' in group:
+                items = group['questions']
+            
+            for item in items:
+                json_type = group.get('type', 'TEXT')
+                if 'type' in item:
+                    json_type = item['type']
+                
+                db_type = 'text_input'
+                options_list = []
+                
+                if json_type in ['TRUE_FALSE_NOT_GIVEN', 'YES_NO_NOT_GIVEN', 'mcq']:
+                    db_type = 'multiple_choice'
+                    if json_type == 'TRUE_FALSE_NOT_GIVEN':
+                        options_list = ['TRUE', 'FALSE', 'NOT GIVEN']
+                    elif json_type == 'YES_NO_NOT_GIVEN':
+                        options_list = ['YES', 'NO', 'NOT GIVEN']
+                    elif 'options' in item:
+                        options_list = item['options']
+                        if options_list and isinstance(options_list[0], dict):
+                            options_list = [opt.get('value', opt.get('key')) for opt in options_list]
+                
+                elif json_type in ['MATCHING_HEADINGS', 'MULTIPLE_CHOICE']:
+                    db_type = 'multiple_choice'
+                    if 'options' in group:
+                        options_list = [opt.get('key') for opt in group['options']]
+                    elif 'options' in item:
+                        options_list = [opt.get('value') for opt in item['options']]
+                
+                # Construct prompt
+                prompt = item.get('prompt', item.get('question', ''))
+                if not prompt and 'number' in item:
+                    prompt = f"Question {item['number']}"
+                if not prompt and 'q' in item:
+                    prompt = f"Question {item['q']}"
+                
+                # Correct answer
+                correct = ''
+                if 'answer' in item:
+                    if isinstance(item['answer'], dict):
+                        correct = item['answer'].get('value', '')
+                    else:
+                        correct = str(item['answer'])
+                elif 'correct_answer' in item:
+                    correct = item['correct_answer']
+                
+                Question.objects.create(
+                    group=q_group,
+                    question_text=prompt,
+                    question_type=db_type,
+                    options=options_list,
+                    correct_answer=correct,
+                    order=item.get('number', item.get('q', 0))
+                )
+
+
+def _import_listening_content(module, data):
+    """Import listening test content from JSON."""
+    import json as json_module
+    import re
+    
+    answer_key = data.get('answer_key', {})
+    
+    for section_data in data.get('sections', []):
+        section_num = section_data.get('section', 1)
+        
+        question_group = QuestionGroup.objects.create(
+            module=module,
+            title=f"Section {section_num}",
+            instructions=section_data.get('question_type', ''),
+            content='',
+            order=section_num
+        )
+        
+        for q_data in section_data.get('questions', []):
+            q_num = q_data.get('q', 0)
+            q_type = q_data.get('type', 'text')
+            
+            # Parse question number
+            q_order = 0
+            if isinstance(q_num, int):
+                q_order = q_num
+            elif isinstance(q_num, str):
+                match = re.match(r'^(\d+)', str(q_num))
+                if match:
+                    q_order = int(match.group(1))
+            
+            # Map type
+            if q_type in ['mcq', 'mcq_multi']:
+                question_type = 'multiple_choice'
+            else:
+                question_type = 'text_input'
+            
+            options = q_data.get('options', [])
+            
+            # Get correct answer
+            correct_answers = answer_key.get(str(q_num)) or answer_key.get(q_num) or []
+            if isinstance(correct_answers, list):
+                correct_answer = json_module.dumps(correct_answers)
+            else:
+                correct_answer = str(correct_answers)
+            
+            Question.objects.create(
+                group=question_group,
+                question_text=q_data.get('question', f'Question {q_num}'),
+                question_type=question_type,
+                options=options,
+                correct_answer=correct_answer,
+                order=q_order
+            )

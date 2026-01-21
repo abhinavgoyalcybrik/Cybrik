@@ -168,14 +168,15 @@ export default function AdminReadingPage() {
                         </div>
                         <h3 className="text-xl font-bold text-slate-900 mb-2">No Reading Tests Yet</h3>
                         <p className="text-slate-500 max-w-md mx-auto mb-6">
-                            Run the import command to add reading tests from JSON files.
+                            Click "Add New Test" above to import a reading test from JSON.
                         </p>
-                        <div className="bg-slate-50 rounded-xl p-4 text-left max-w-md mx-auto border border-slate-200">
-                            <p className="text-sm text-slate-500 mb-2">To import reading tests:</p>
-                            <code className="text-sm text-blue-600 block bg-white rounded p-3 font-mono border border-slate-200">
-                                py -3 manage.py import_reading_tests
-                            </code>
-                        </div>
+                        <Link
+                            href="/admin/reading/new"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium shadow-sm transition-colors"
+                        >
+                            <Plus className="w-5 h-5" />
+                            Add New Test
+                        </Link>
                     </div>
                 )}
             </div>
