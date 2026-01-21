@@ -161,6 +161,19 @@ export default function ProfilePage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
+                            <label className="text-sm font-semibold text-slate-700">Full Name</label>
+                            <div className="relative">
+                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                <input
+                                    type="text"
+                                    value={user?.name || ''}
+                                    readOnly
+                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
                             <label className="text-sm font-semibold text-slate-700">Target Band Score</label>
                             <div className="relative">
                                 <Target className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
