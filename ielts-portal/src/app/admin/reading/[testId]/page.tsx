@@ -12,7 +12,40 @@ import {
     Check,
     AlertCircle,
     Loader2,
+    BookOpen,
 } from 'lucide-react';
+
+interface Question {
+    id: string;
+    question_text: string;
+    question_type: string;
+    options: string[];
+    correct_answer: string;
+    order: number;
+}
+
+interface QuestionGroup {
+    id: string;
+    title: string;
+    instructions: string;
+    content: string;
+    order: number;
+    questions: Question[];
+}
+
+interface TestModule {
+    id: string;
+    module_type: string;
+    question_groups: QuestionGroup[];
+}
+
+interface ReadingTest {
+    id: string;
+    title: string;
+    description: string;
+    active: boolean;
+    modules: TestModule[];
+}
 
 interface PageProps {
     params: Promise<{ testId: string }>;
@@ -25,9 +58,19 @@ export default function AdminReadingEditPage({ params }: PageProps) {
     const { isAdmin, isLoading: authLoading } = useAuth();
     const router = useRouter();
 
+    const isNew = testId === 'new';
+
+    // States for new test creation
     const [title, setTitle] = useState('');
     const [jsonContent, setJsonContent] = useState('');
-    const [loading, setLoading] = useState(false);
+
+    // States for existing test view
+    const [test, setTest] = useState<ReadingTest | null>(null);
+    const [groups, setGroups] = useState<QuestionGroup[]>([]);
+
+    // Common states
+    const [loading, setLoading] = useState(!isNew);
+    const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
@@ -37,12 +80,30 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         }
     }, [authLoading, isAdmin, router]);
 
-    // For editing existing tests, redirect to list (editing is view-only for now)
+    // Fetch existing test data
     useEffect(() => {
-        if (testId !== 'new') {
-            router.push('/admin/reading');
+        if (!isNew && isAdmin) {
+            fetchTest();
         }
-    }, [testId, router]);
+    }, [isNew, isAdmin, testId]);
+
+    const fetchTest = async () => {
+        try {
+            const res = await fetch(`${API_URL}/tests/${testId}/`);
+            if (!res.ok) throw new Error('Failed to fetch test');
+            const data = await res.json();
+            setTest(data);
+            setTitle(data.title);
+
+            // Extract reading module groups
+            const module = data.modules?.find((m: TestModule) => m.module_type === 'reading');
+            setGroups(module?.question_groups || []);
+            setLoading(false);
+        } catch (err: any) {
+            setError(err.message);
+            setLoading(false);
+        }
+    };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -52,7 +113,6 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         reader.onload = (event) => {
             try {
                 const content = event.target?.result as string;
-                // Validate JSON
                 JSON.parse(content);
                 setJsonContent(content);
                 setError(null);
@@ -63,7 +123,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         reader.readAsText(file);
     };
 
-    const handleSubmit = async () => {
+    const handleCreateTest = async () => {
         if (!title.trim()) {
             setError('Please enter a test title');
             return;
@@ -82,7 +142,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
             return;
         }
 
-        setLoading(true);
+        setSaving(true);
         setError(null);
 
         try {
@@ -110,7 +170,7 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         } catch (err: any) {
             setError(err.message);
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
 
@@ -122,113 +182,123 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         );
     }
 
-    return (
-        <AdminLayout
-            title="Create Reading Test"
-            subtitle="Import from JSON"
-            actions={
-                <div className="flex items-center gap-3">
-                    <Link
-                        href="/admin/reading"
-                        className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back
-                    </Link>
-                    <button
-                        onClick={handleSubmit}
-                        disabled={loading || !title.trim() || !jsonContent.trim()}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-[#6FB63A] hover:bg-[#5fa030] text-white rounded-xl font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Creating...
-                            </>
-                        ) : (
-                            <>
-                                <Check className="w-5 h-5" />
-                                Create Test
-                            </>
-                        )}
-                    </button>
-                </div>
-            }
-        >
-            {/* Messages */}
-            {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-red-600">{error}</p>
-                </div>
-            )}
-            {success && (
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-green-600">{success}</p>
-                </div>
-            )}
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#6FB63A]"></div>
+            </div>
+        );
+    }
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                {/* Test Title */}
-                <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                        Test Title <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none transition-all"
-                        placeholder="e.g. Cambridge 15 Reading Test 1"
-                    />
-                </div>
+    // ========== NEW TEST CREATION UI ==========
+    if (isNew) {
+        return (
+            <AdminLayout
+                title="Create Reading Test"
+                subtitle="Import from JSON"
+                actions={
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href="/admin/reading"
+                            className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                            Back
+                        </Link>
+                        <button
+                            onClick={handleCreateTest}
+                            disabled={saving || !title.trim() || !jsonContent.trim()}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-[#6FB63A] hover:bg-[#5fa030] text-white rounded-xl font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {saving ? (
+                                <>
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Creating...
+                                </>
+                            ) : (
+                                <>
+                                    <Check className="w-5 h-5" />
+                                    Create Test
+                                </>
+                            )}
+                        </button>
+                    </div>
+                }
+            >
+                {/* Messages */}
+                {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-red-600">{error}</p>
+                    </div>
+                )}
+                {success && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-green-600">{success}</p>
+                    </div>
+                )}
 
-                {/* JSON Input */}
-                <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700">
-                                Test JSON <span className="text-red-500">*</span>
-                            </label>
-                            <p className="text-xs text-slate-500 mt-1">
-                                Paste JSON content or upload a JSON file
-                            </p>
-                        </div>
-                        <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl font-medium cursor-pointer transition-colors border border-blue-200">
-                            <Upload className="w-4 h-4" />
-                            Upload JSON
-                            <input
-                                type="file"
-                                accept=".json,application/json"
-                                onChange={handleFileUpload}
-                                className="hidden"
-                            />
+                <div className="max-w-3xl mx-auto space-y-6">
+                    {/* Test Title */}
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                        <label className="block text-sm font-semibold text-slate-700 mb-2">
+                            Test Title <span className="text-red-500">*</span>
                         </label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none transition-all"
+                            placeholder="e.g. Cambridge 15 Reading Test 1"
+                        />
                     </div>
 
-                    <textarea
-                        value={jsonContent}
-                        onChange={(e) => setJsonContent(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-800 font-mono text-sm h-80 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none resize-none"
-                        placeholder='{"passages": [{"title": "Passage 1", "text": "...", "groups": [...]}]}'
-                    />
-
-                    {jsonContent && (
-                        <div className="mt-3 flex items-center gap-2 text-sm">
-                            <FileJson className="w-4 h-4 text-green-500" />
-                            <span className="text-green-600">
-                                JSON loaded ({(jsonContent.length / 1024).toFixed(1)} KB)
-                            </span>
+                    {/* JSON Input */}
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700">
+                                    Test JSON <span className="text-red-500">*</span>
+                                </label>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    Paste JSON content or upload a JSON file
+                                </p>
+                            </div>
+                            <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl font-medium cursor-pointer transition-colors border border-blue-200">
+                                <Upload className="w-4 h-4" />
+                                Upload JSON
+                                <input
+                                    type="file"
+                                    accept=".json,application/json"
+                                    onChange={handleFileUpload}
+                                    className="hidden"
+                                />
+                            </label>
                         </div>
-                    )}
-                </div>
 
-                {/* Help */}
-                <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-                    <h3 className="font-semibold text-blue-800 mb-2">Expected JSON Format</h3>
-                    <pre className="text-xs text-blue-700 bg-blue-100/50 p-3 rounded-lg overflow-x-auto">
-                        {`{
+                        <textarea
+                            value={jsonContent}
+                            onChange={(e) => setJsonContent(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-slate-800 font-mono text-sm h-80 focus:ring-2 focus:ring-[#6FB63A] focus:border-transparent focus:outline-none resize-none"
+                            placeholder='{"passages": [{"title": "Passage 1", "text": "...", "groups": [...]}]}'
+                        />
+
+                        {jsonContent && (
+                            <div className="mt-3 flex items-center gap-2 text-sm">
+                                <FileJson className="w-4 h-4 text-green-500" />
+                                <span className="text-green-600">
+                                    JSON loaded ({(jsonContent.length / 1024).toFixed(1)} KB)
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Help */}
+                    <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                        <h3 className="font-semibold text-blue-800 mb-2">Expected JSON Format</h3>
+                        <pre className="text-xs text-blue-700 bg-blue-100/50 p-3 rounded-lg overflow-x-auto">
+                            {`{
   "passages": [
     {
       "title": "Passage Title",
@@ -246,9 +316,110 @@ export default function AdminReadingEditPage({ params }: PageProps) {
     }
   ]
 }`}
-                    </pre>
+                        </pre>
+                    </div>
+                </div>
+            </AdminLayout>
+        );
+    }
+
+    // ========== EXISTING TEST VIEW UI ==========
+    return (
+        <AdminLayout
+            title={test?.title || 'Reading Test'}
+            subtitle="View Test Details"
+            actions={
+                <div className="flex items-center gap-3">
+                    <Link
+                        href="/admin/reading"
+                        className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
+                    </Link>
+                </div>
+            }
+        >
+            {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                    <p className="text-red-600">{error}</p>
+                </div>
+            )}
+
+            {/* Test Info */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-6">
+                <h2 className="font-bold text-xl text-slate-900 mb-2">{test?.title}</h2>
+                <p className="text-slate-600">{test?.description || 'IELTS Reading Test'}</p>
+                <div className="flex items-center gap-4 mt-4">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${test?.active ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-slate-100 text-slate-600 border border-slate-200'}`}>
+                        {test?.active ? 'Active' : 'Draft'}
+                    </span>
+                    <span className="text-sm text-slate-500">{groups.length} passages</span>
                 </div>
             </div>
+
+            {/* Passages */}
+            <div className="space-y-6">
+                {groups.map((group, index) => (
+                    <div key={group.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                        <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                                    <BookOpen className="w-5 h-5 text-blue-500" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-900">Passage {index + 1}</h3>
+                                    <p className="text-sm text-slate-500">{group.title}</p>
+                                </div>
+                            </div>
+                            <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                                {group.questions?.length || 0} questions
+                            </span>
+                        </div>
+
+                        <div className="p-6">
+                            {/* Passage Preview */}
+                            {group.content && (
+                                <div className="mb-4 p-4 bg-slate-50 rounded-xl max-h-40 overflow-y-auto">
+                                    <p className="text-sm text-slate-700 whitespace-pre-wrap line-clamp-6">
+                                        {group.content.substring(0, 500)}...
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Questions */}
+                            <div className="space-y-2">
+                                {group.questions?.slice(0, 5).map(q => (
+                                    <div key={q.id} className="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                                        <div className="flex items-center gap-3">
+                                            <span className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-mono text-slate-600">
+                                                {q.order}
+                                            </span>
+                                            <span className="text-sm text-slate-700 truncate max-w-md">
+                                                {q.question_text || '(No question text)'}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs font-mono text-green-600 bg-green-50 px-2 py-1 rounded border border-green-200">
+                                            {q.correct_answer}
+                                        </span>
+                                    </div>
+                                ))}
+                                {(group.questions?.length || 0) > 5 && (
+                                    <p className="text-sm text-slate-500 italic text-center py-2">
+                                        + {group.questions.length - 5} more questions
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {groups.length === 0 && (
+                <div className="text-center py-12 text-slate-500 bg-white rounded-2xl border border-slate-200">
+                    No passages found for this test.
+                </div>
+            )}
         </AdminLayout>
     );
 }
