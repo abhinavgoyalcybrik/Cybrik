@@ -163,7 +163,7 @@ export default function ReportDetailPage() {
 
                 // Map session data to report format
                 const moduleType = attempt.module_type || 'reading';
-                const feedback = attempt.feedback || {};
+                const feedback = attempt.feedback || attempt.data?.feedback || {};
 
                 setReport({
                     id: session.id,
