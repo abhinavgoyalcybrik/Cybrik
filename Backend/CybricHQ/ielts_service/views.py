@@ -285,6 +285,70 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
             'reading_modules': reading_count,
         })
 
+    @action(detail=False, methods=['get'])
+    def student_reports(self, request):
+        """Get aggregated student performance reports"""
+        from django.contrib.auth import get_user_model
+        from django.db.models import Count, Avg, Max
+        
+        User = get_user_model()
+        
+        # Get all students (non-staff users)
+        students = User.objects.filter(is_staff=False, is_superuser=False)
+        
+        student_data = []
+        for student in students:
+            # Get all sessions for this student
+            sessions = UserTestSession.objects.filter(user=student)
+            attempts = UserModuleAttempt.objects.filter(session__user=student)
+            
+            # Aggregate scores by module type
+            module_scores = {}
+            for module_type in ['reading', 'writing', 'speaking', 'listening']:
+                module_attempts = attempts.filter(module__module_type=module_type)
+                if module_attempts.exists():
+                    avg_band = module_attempts.aggregate(avg=Avg('band_score'))['avg']
+                    best_band = module_attempts.aggregate(best=Max('band_score'))['best']
+                    count = module_attempts.count()
+                    module_scores[module_type] = {
+                        'attempts': count,
+                        'average_band': float(avg_band) if avg_band else None,
+                        'best_band': float(best_band) if best_band else None,
+                    }
+                else:
+                    module_scores[module_type] = {
+                        'attempts': 0,
+                        'average_band': None,
+                        'best_band': None,
+                    }
+            
+            # Overall stats
+            total_attempts = attempts.count()
+            completed_sessions = sessions.filter(is_completed=True).count()
+            
+            # Calculate overall average band (if any)
+            overall_avg = attempts.exclude(band_score__isnull=True).aggregate(avg=Avg('band_score'))['avg']
+            
+            student_data.append({
+                'id': student.id,
+                'email': student.email,
+                'username': student.username or student.email.split('@')[0],
+                'full_name': f"{student.first_name} {student.last_name}".strip() or student.email.split('@')[0],
+                'date_joined': student.date_joined.isoformat() if student.date_joined else None,
+                'total_attempts': total_attempts,
+                'completed_sessions': completed_sessions,
+                'overall_average_band': float(overall_avg) if overall_avg else None,
+                'module_scores': module_scores,
+            })
+        
+        # Sort by total attempts (most active first)
+        student_data.sort(key=lambda x: x['total_attempts'], reverse=True)
+        
+        return Response({
+            'total_students': len(student_data),
+            'students': student_data,
+        })
+
     def get_queryset(self):
         queryset = IELTSTest.objects.all()
         module_type = self.request.query_params.get('module_type')
