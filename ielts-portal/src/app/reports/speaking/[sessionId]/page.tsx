@@ -518,7 +518,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
 
                     {/* Right Column Sidebar */}
                     <div className="lg:col-span-1 space-y-6 sticky top-24 h-fit">
-                        <AITutorCard type="speaking" overallBand={result.overall_band} />
+                        {/* AITutorCard moved to footer */}
 
                         {/* Motivation Card */}
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
@@ -530,6 +530,23 @@ export default function SpeakingReportPage({ params }: PageProps) {
                             </ul>
                         </div>
                     </div>
+                </div>
+
+                {/* Footer Nav */}
+                <div className="flex justify-center mt-8 gap-4 flex-wrap pb-10">
+                    <Link href="/reports" className="px-6 py-3 bg-white border border-slate-200 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                        Back to All Reports
+                    </Link>
+                    <button
+                        onClick={() => window.dispatchEvent(new CustomEvent('open-ai-chat'))}
+                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 shadow-md transition-all flex items-center gap-2"
+                    >
+                        <MessageCircle className="w-5 h-5" />
+                        Chat with AI Tutor
+                    </button>
+                    <Link href="/dashboard" className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 shadow-md transition-all">
+                        Go to Dashboard
+                    </Link>
                 </div>
 
             </div>
