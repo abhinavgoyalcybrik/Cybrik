@@ -49,29 +49,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const initAuth = async () => {
             const savedUser = localStorage.getItem('ielts_user');
             const savedToken = localStorage.getItem('ielts_token');
+            const isLoginPage = typeof window !== 'undefined' && window.location.pathname === '/login';
 
             if (savedUser && savedToken) {
                 try {
                     setUser(JSON.parse(savedUser));
                     setToken(savedToken);
 
-                    // Proactively verify the session with the backend
-                    const meResponse = await fetch(`/api/auth/me/`, {
-                        credentials: 'include',
-                    });
+                    // Only verify session if we're not on the login page
+                    // (prevents infinite redirect loops if cookies are already gone)
+                    if (!isLoginPage) {
+                        const meResponse = await fetch(`/api/auth/me/`, {
+                            credentials: 'include',
+                        });
 
-                    if (!meResponse.ok) {
-                        // Backend session is invalid, trigger logout
-                        console.warn('Backend session expired on mount, logging out.');
-                        logout();
-                    } else {
-                        // Refresh user data to be sure
-                        const userData = await meResponse.json();
-                        // (Optional: update user state with fresh data here)
+                        if (!meResponse.ok) {
+                            console.warn('Backend session expired on mount, logging out.');
+                            logout();
+                        } else {
+                            // Refresh user data to be sure
+                            const userData = await meResponse.json();
+                            // (Optional: update user state with fresh data here)
+                        }
                     }
                 } catch (e) {
                     console.error('Auth initialization error:', e);
-                    logout();
+                    // Just clear storage on parse error, don't necessarily logout/redirect
+                    localStorage.removeItem('ielts_user');
+                    localStorage.removeItem('ielts_token');
                 }
             }
             setIsLoading(false);
@@ -292,7 +297,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             localStorage.removeItem('ielts_onboarding_data');
             // Redirect to login page with logout flag to prevent auto-login
             if (typeof window !== 'undefined') {
-                window.location.href = '/login?logout=true';
+                const currentPath = window.location.pathname;
+                if (currentPath !== '/login') {
+                    window.location.href = '/login?logout=true';
+                }
             }
         }
     };
