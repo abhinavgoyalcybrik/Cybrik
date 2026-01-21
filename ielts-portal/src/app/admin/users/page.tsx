@@ -46,7 +46,7 @@ export default function AdminUsersPage() {
     }, [authLoading, isAdmin, router]);
 
     useEffect(() => {
-        fetch('/api/ielts/admin/students/')
+        fetch('/api/ielts/admin/students/', { credentials: 'include' })
             .then((r) => r.json())
             .then((data) => {
                 // API returns array directly, not { students: [...] }
@@ -82,7 +82,7 @@ export default function AdminUsersPage() {
             if (res.ok) {
                 setShowModal(data);
                 // refresh list
-                const refreshed = await fetch('/api/ielts/admin/students/').then((r) => r.json());
+                const refreshed = await fetch('/api/ielts/admin/students/', { credentials: 'include' }).then((r) => r.json());
                 setStudents(Array.isArray(refreshed) ? refreshed : (refreshed.students || []));
                 form.reset();
             } else {
@@ -136,7 +136,7 @@ export default function AdminUsersPage() {
 
             if (res.ok) {
                 // Refresh list
-                const refreshed = await fetch('/api/ielts/admin/students/').then((r) => r.json());
+                const refreshed = await fetch('/api/ielts/admin/students/', { credentials: 'include' }).then((r) => r.json());
                 setStudents(Array.isArray(refreshed) ? refreshed : (refreshed.students || []));
                 setEditStudent(null);
                 setEditPassword('');

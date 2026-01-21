@@ -70,7 +70,7 @@ export default function AdminDashboard() {
             fetch('/data/speaking_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
             fetch('/api/ielts/tests/?module_type=listening').then(r => r.json()).catch(() => []),
             fetch('/api/ielts/tests/?module_type=reading').then(r => r.json()).catch(() => []),
-            fetch('/api/ielts/admin/students/count/').then(r => r.json()).catch(() => ({ count: 0 })),
+            fetch('/api/ielts/admin/students/count/', { credentials: 'include' }).then(r => r.json()).catch(() => ({ count: 0 })),
         ]).then(([writing, speaking, listening, reading, studentsData]) => {
             const listeningCount = Array.isArray(listening) ? listening.length : (listening.results?.length || listening.length || 0);
             const readingCount = Array.isArray(reading) ? reading.length : (reading.results?.length || reading.length || 0);
