@@ -112,7 +112,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Try Django auth (for production with CRM integration)
     const tryDjangoAuth = async (username: string, password: string, role: 'student' | 'admin'): Promise<boolean> => {
         try {
-            const response = await fetch(`${API_BASE}/api/auth/login/`, {
+            // Use relative path so cookies are set for the correct domain (via Next.js rewrites)
+            const response = await fetch(`/api/auth/login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,8 +124,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (response.ok) {
                 // Django auth uses JWT cookies, not JSON response with token
-                // Call /me to get user info
-                const meResponse = await fetch(`${API_BASE}/api/auth/me/`, {
+                // Call /me to get user info (also via relative path)
+                const meResponse = await fetch(`/api/auth/me/`, {
                     credentials: 'include',
                 });
 
@@ -214,7 +215,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             // Try Django logout if we were using Django auth
             if (token === 'django-cookie-auth') {
-                await fetch(`${API_BASE}/api/auth/logout/`, {
+                await fetch(`/api/auth/logout/`, {
                     method: 'POST',
                     credentials: 'include',
                 });

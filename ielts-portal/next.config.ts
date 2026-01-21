@@ -23,6 +23,23 @@ const nextConfig: NextConfig = {
         source: '/api/ielts/:path*',
         destination: `${API_URL}/api/ielts/:path*/`,
       },
+      // Django auth endpoints (login, logout, me, refresh) - must be explicit since /api/auth/* is reserved for NextAuth
+      {
+        source: '/api/auth/login/',
+        destination: `${API_URL}/api/auth/login/`,
+      },
+      {
+        source: '/api/auth/logout/',
+        destination: `${API_URL}/api/auth/logout/`,
+      },
+      {
+        source: '/api/auth/me/',
+        destination: `${API_URL}/api/auth/me/`,
+      },
+      {
+        source: '/api/auth/refresh/',
+        destination: `${API_URL}/api/auth/refresh/`,
+      },
       // Forward other /api/* requests to Django (except NextAuth /api/auth/*)
       {
         source: '/api/:path((?!auth).*)',
