@@ -517,7 +517,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
                     </div>
 
                     {/* Right Column Sidebar */}
-                    <div className="lg:col-span-1 space-y-6">
+                    <div className="lg:col-span-1 space-y-6 sticky top-24 h-fit">
                         <AITutorCard type="speaking" overallBand={result.overall_band} />
 
                         {/* Motivation Card */}

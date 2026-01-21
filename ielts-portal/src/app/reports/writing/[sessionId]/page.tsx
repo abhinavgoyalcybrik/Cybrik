@@ -322,7 +322,7 @@ export default function WritingReportPage({ params }: PageProps) {
                     </div>
 
                     {/* Right Column: Sidebar */}
-                    <div className="lg:col-span-1 space-y-6">
+                    <div className="lg:col-span-1 space-y-6 sticky top-24 h-fit">
                         <AITutorCard type="writing" overallBand={result.overall_writing_band} />
 
                         {/* Additional Sidebar items could go here */}
