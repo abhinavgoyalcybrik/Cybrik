@@ -4,34 +4,19 @@ import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
-    FileText,
-    TrendingUp,
-    MessageCircle,
-    CheckCircle,
+    Check,
     AlertCircle,
     BookOpen,
     Lightbulb,
-    ChevronRight,
     Target,
-    Clock,
-    Check,
-    Lock,
-    ArrowLeft
+    ArrowLeft,
+    Share2,
+    Download
 } from 'lucide-react';
 import { WritingEvaluationResult } from '@/services/evaluatorApi';
 
 interface PageProps {
     params: Promise<{ sessionId: string }>;
-}
-
-// CEFR mapping
-function getCEFRLevel(band: number): string {
-    if (band >= 8.5) return 'C2';
-    if (band >= 7) return 'C1';
-    if (band >= 5.5) return 'B2';
-    if (band >= 4) return 'B1';
-    if (band >= 2.5) return 'A2';
-    return 'A1';
 }
 
 export default function WritingReportPage({ params }: PageProps) {
@@ -41,41 +26,30 @@ export default function WritingReportPage({ params }: PageProps) {
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
     const [result, setResult] = useState<WritingEvaluationResult | null>(null);
     const [activeTab, setActiveTab] = useState<'task1' | 'task2'>('task1');
-    const [analysisTab, setAnalysisTab] = useState<'task_response' | 'coherence_cohesion' | 'lexical_resource' | 'grammar_accuracy'>('task_response');
     const [userAnswers, setUserAnswers] = useState<{ task_1?: string, task_2?: string }>({});
-    const [evalData, setEvalData] = useState<any>(null); // Full raw data
+
+    // Derived state for the active task
+    const taskData = result?.tasks?.[activeTab as keyof typeof result.tasks];
+    const userResponse = userAnswers[activeTab as keyof typeof userAnswers];
 
     useEffect(() => {
         const fetchSession = async () => {
             try {
-                const response = await fetch(`/api/ielts/sessions/${sessionId}/`, {
-                    credentials: 'include',
-                });
-
-                if (!response.ok) {
-                    throw new Error('Session not found');
-                }
+                const response = await fetch(`/api/ielts/sessions/${sessionId}/`, { credentials: 'include' });
+                if (!response.ok) throw new Error('Session not found');
 
                 const session = await response.json();
                 const attempt = session.module_attempts?.find((a: any) => a.module_type === 'writing');
 
-                if (attempt) {
-                    // Extract data
+                if (attempt && (attempt.feedback || attempt.data?.feedback)) {
                     const feedback = attempt.feedback || attempt.data?.feedback;
-                    const answers = attempt.answers || attempt.data?.answers || {};
+                    setResult(feedback as WritingEvaluationResult);
+                    setUserAnswers(attempt.answers || attempt.data?.answers || {});
+                    setStatus('ready');
 
-                    if (feedback) {
-                        setResult(feedback as WritingEvaluationResult);
-                        setEvalData(feedback);
-                        setUserAnswers(answers);
-                        setStatus('ready');
-
-                        // Default to Task 2 if Task 1 is missing/empty
-                        if (!feedback.tasks?.task_1 && feedback.tasks?.task_2) {
-                            setActiveTab('task2');
-                        }
-                    } else {
-                        setStatus('error'); // No detailed feedback found
+                    // Default to Task 2 if Task 1 is missing
+                    if (!feedback.tasks?.task_1 && feedback.tasks?.task_2) {
+                        setActiveTab('task2');
                     }
                 } else {
                     setStatus('error');
@@ -89,35 +63,15 @@ export default function WritingReportPage({ params }: PageProps) {
         fetchSession();
     }, [sessionId]);
 
-    if (status === 'loading') {
-        return (
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600"></div>
-            </div>
-        );
-    }
+    if (status === 'loading') return <div className="min-h-screen bg-slate-50 flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div></div>;
+    if (status === 'error' || !result) return <div className="min-h-screen flex items-center justify-center">Report unavailable</div>;
 
-    if (status === 'error' || !result) {
-        return (
-            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
-                <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">Report Unavailable</h1>
-                <p className="text-slate-500 mb-6">Detailed analysis could not be loaded for this test.</p>
-                <Link href="/reports" className="px-6 py-3 bg-slate-800 text-white rounded-xl hover:bg-slate-700 transition">
-                    Back to Reports
-                </Link>
-            </div>
-        );
-    }
+    const getBandColor = (band: number) => {
+        if (band >= 7) return 'text-emerald-600 bg-emerald-50 border-emerald-200';
+        if (band >= 5) return 'text-amber-600 bg-amber-50 border-amber-200';
+        return 'text-red-600 bg-red-50 border-red-200';
+    };
 
-    const overallBand = result.overall_writing_band || 0;
-    const cefrLevel = getCEFRLevel(overallBand);
-
-    // Check which task is active and get its data
-    const taskData = activeTab === 'task1' ? result.tasks?.task_1 : result.tasks?.task_2;
-    const currentAnswer = activeTab === 'task1' ? userAnswers.task_1 : userAnswers.task_2;
-
-    // Helper to get formatted criteria name
     const getCriteriaLabel = (key: string) => {
         const labels: Record<string, string> = {
             task_response: 'Task Response',
@@ -128,239 +82,229 @@ export default function WritingReportPage({ params }: PageProps) {
         return labels[key] || key;
     };
 
-    // Helper to get criterion color
-    const getCriteriaColor = (key: string) => {
-        const colors: Record<string, string> = {
-            task_response: 'text-purple-600 bg-purple-100',
-            coherence_cohesion: 'text-blue-600 bg-blue-100',
-            lexical_resource: 'text-orange-600 bg-orange-100',
-            grammar_accuracy: 'text-emerald-600 bg-emerald-100'
-        };
-        return colors[key] || 'text-slate-600 bg-slate-100';
+    // Helper to generate generic improvements if API doesn't provide them
+    const getImprovementSuggestions = () => {
+        const suggestions: string[] = [];
+        const scores = taskData?.criteria_scores;
+        if (!scores) return [];
+
+        if (scores.task_response < 6) suggestions.push("Focus on fully addressing all parts of the question.");
+        if (scores.coherence_cohesion < 6) suggestions.push("Use more linking words to connect your ideas logically.");
+        if (scores.lexical_resource < 6) suggestions.push("Expand your vocabulary range and avoid repetition.");
+        if (scores.grammar_accuracy < 6) suggestions.push("Review complex sentence structures and punctuation.");
+        if (suggestions.length === 0) suggestions.push("Excellent work! To reach Band 9, focus on using more sophisticated vocabulary and complex grammatical structures naturally.");
+
+        return suggestions;
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-blue-50">
-            {/* Top Navigation */}
-            <div className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-6 py-3">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <button onClick={() => router.back()} className="flex items-center text-slate-500 hover:text-slate-800 transition">
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Reports
-                    </button>
-                    <div className="font-bold text-slate-800">Writing Test Report</div>
-                    <div className="w-20"></div> {/* Spacer */}
+        <div className="min-h-screen bg-slate-50 p-6 font-sans">
+            <div className="max-w-6xl mx-auto space-y-6">
+
+                {/* Header */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-900">Writing Test Results</h1>
+                        <p className="text-slate-500">Test #{result.attempt_id?.split('_')[1] || 'Unknown'} - AI Evaluation Report</p>
+                    </div>
+                    <div className={`px-6 py-3 rounded-xl border-2 ${getBandColor(result.overall_writing_band)}`}>
+                        <div className="text-xs font-bold uppercase opacity-70 mb-1">Overall Band</div>
+                        <div className="text-4xl font-bold">{result.overall_writing_band.toFixed(1)}</div>
+                    </div>
                 </div>
-            </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                {/* Score Header */}
-                <div className="bg-white rounded-3xl shadow-lg border border-purple-100 p-8 mb-8 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-purple-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-50" />
-
-                    <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
-                        <div className="flex items-center gap-8">
-                            <div className="text-center md:text-left">
-                                <div className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 leading-none mb-2">
-                                    {overallBand.toFixed(1)}<span className="text-3xl text-slate-300 font-normal">/9.0</span>
-                                </div>
-                                <div className="text-slate-500 font-medium">Overall Band Score</div>
-                            </div>
-                            <div className="hidden md:block w-px h-20 bg-slate-200" />
-                            <div className="text-center md:text-left">
-                                <div className="text-4xl font-bold text-slate-800 mb-1">{cefrLevel}</div>
-                                <div className="text-slate-500 font-medium">CEFR Level</div>
-                            </div>
-                        </div>
-
-                        <button className="flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold hover:bg-slate-800 transition-all shadow-lg shadow-purple-200 hover:shadow-xl hover:-translate-y-0.5">
-                            <MessageCircle className="w-5 h-5" />
-                            Chat with AI Tutor
+                {/* Tab Navigation */}
+                <div className="flex gap-4">
+                    {result.tasks?.task_1 && (
+                        <button
+                            onClick={() => setActiveTab('task1')}
+                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task1' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+                        >
+                            Task 1 (Band {result.tasks.task_1.overall_band?.toFixed(1)})
                         </button>
-                    </div>
+                    )}
+                    {result.tasks?.task_2 && (
+                        <button
+                            onClick={() => setActiveTab('task2')}
+                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task2' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+                        >
+                            Task 2 (Band {result.tasks.task_2.overall_band?.toFixed(1)})
+                        </button>
+                    )}
                 </div>
 
-                {/* Main Content Area */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-250px)] min-h-[600px]">
+                {taskData ? (
+                    <>
+                        {/* Row 1: Criteria & Errors */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* Left Panel: User Answer */}
-                    <div className="lg:col-span-7 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        {/* Task Toggles */}
-                        <div className="flex border-b border-slate-100 p-2 bg-slate-50/50">
-                            {result.tasks?.task_1 && (
-                                <button
-                                    onClick={() => setActiveTab('task1')}
-                                    className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === 'task1'
-                                        ? 'bg-white text-purple-700 shadow-sm border border-slate-100'
-                                        : 'text-slate-500 hover:bg-white/50 hover:text-slate-700'}`}
-                                >
-                                    Task 1
-                                </button>
-                            )}
-                            <button
-                                onClick={() => setActiveTab('task2')}
-                                className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === 'task2'
-                                    ? 'bg-white text-purple-700 shadow-sm border border-slate-100'
-                                    : 'text-slate-500 hover:bg-white/50 hover:text-slate-700'}`}
-                            >
-                                Task 2
-                            </button>
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 overflow-y-auto p-6">
-                            {!taskData ? (
-                                <div className="text-center text-slate-400 py-20">Task not attempted</div>
-                            ) : (
-                                <>
-                                    <div className="mb-6 bg-purple-50 rounded-xl p-5 border border-purple-100">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <BookOpen className="w-4 h-4 text-purple-600" />
-                                            <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Question Prompt</span>
+                            {/* Criteria Breakdown */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                                <div className="flex items-center gap-2 mb-6">
+                                    <Target className="w-5 h-5 text-emerald-600" />
+                                    <h3 className="font-bold text-slate-800">IELTS Criteria Breakdown</h3>
+                                </div>
+                                <div className="space-y-5">
+                                    {Object.entries(taskData.criteria_scores).map(([key, score]) => (
+                                        <div key={key}>
+                                            <div className="flex justify-between mb-2">
+                                                <span className="text-sm font-medium text-slate-700">{getCriteriaLabel(key)}</span>
+                                                <span className={`text-sm font-bold ${score >= 7 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                                    {score.toFixed(1)} / 9.0
+                                                </span>
+                                            </div>
+                                            <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div
+                                                    className={`h-full rounded-full transition-all ${score >= 7 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                                                    style={{ width: `${(score / 9) * 100}%` }}
+                                                />
+                                            </div>
                                         </div>
-                                        <p className="text-slate-700 font-medium leading-relaxed">
-                                            {/* We might not have the question text in result... check if passed? 
-                                                Actually API result structure doesn't always echo question. 
-                                                Ideally we fetched test data? But for now generic or passed in 'mistakes' sentence context? 
-                                                If unavailable, generic text or skip. */}
-                                            Writing Task {activeTab === 'task1' ? '1' : '2'}
-                                        </p>
-                                    </div>
+                                    ))}
+                                </div>
+                                <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                                    <span className="text-slate-600 font-medium">Word Count</span>
+                                    <span className={`font-bold ${taskData.word_count >= (activeTab === 'task1' ? 150 : 250) ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                        {taskData.word_count} / {activeTab === 'task1' ? '150' : '250'}+ words
+                                    </span>
+                                </div>
+                            </div>
 
-                                    <div className="mb-4 flex items-center justify-between">
-                                        <h3 className="font-bold text-slate-800">Your Answer</h3>
-                                        <span className={`text-xs px-2 py-1 rounded font-medium ${taskData.word_count < (activeTab === 'task1' ? 150 : 250) ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                                            {taskData.word_count} words
-                                        </span>
-                                    </div>
-
-                                    <div className="prose prose-slate max-w-none text-slate-600 leading-loose whitespace-pre-wrap font-serif text-lg bg-slate-50 p-6 rounded-xl border border-slate-100">
-                                        {currentAnswer || "No answer text available."}
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Right Panel: Analysis */}
-                    <div className="lg:col-span-5 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        {taskData ? (
-                            <>
-                                {/* Criteria Tabs */}
-                                <div className="flex overflow-x-auto border-b border-slate-100 p-2 gap-1 hide-scrollbar">
-                                    {(['task_response', 'coherence_cohesion', 'lexical_resource', 'grammar_accuracy'] as const).map((key) => {
-                                        const shortLabels: any = { task_response: 'TR', coherence_cohesion: 'CC', lexical_resource: 'LR', grammar_accuracy: 'GRA' };
-                                        return (
-                                            <button
-                                                key={key}
-                                                onClick={() => setAnalysisTab(key)}
-                                                className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${analysisTab === key
-                                                        ? 'bg-slate-900 text-white'
-                                                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-                                                    }`}
-                                                title={getCriteriaLabel(key)}
-                                            >
-                                                {shortLabels[key]} {taskData.criteria_scores[key]?.toFixed(1)}
-                                            </button>
-                                        );
-                                    })}
+                            {/* Errors Found */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <AlertCircle className="w-5 h-5 text-amber-500" />
+                                    <h3 className="font-bold text-slate-800">Errors Found ({taskData.mistakes?.length || 0})</h3>
                                 </div>
 
-                                <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
-                                    {/* Score Card */}
-                                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <div>
-                                                <h3 className="font-bold text-slate-800">{getCriteriaLabel(analysisTab)}</h3>
-                                                <div className="text-sm text-slate-500 mt-1">Band Score</div>
-                                            </div>
-                                            <div className="text-4xl font-bold text-slate-900">{taskData.criteria_scores[analysisTab]}</div>
-                                        </div>
-
-                                        <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                                            <div
-                                                className={`h-full rounded-full transition-all duration-700 ${analysisTab === 'task_response' ? 'bg-purple-500' :
-                                                        analysisTab === 'coherence_cohesion' ? 'bg-blue-500' :
-                                                            analysisTab === 'lexical_resource' ? 'bg-orange-500' : 'bg-emerald-500'
-                                                    }`}
-                                                style={{ width: `${(taskData.criteria_scores[analysisTab] / 9) * 100}%` }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Feedback Items for this Criteria */}
-                                    {analysisTab === 'grammar_accuracy' ? (
-                                        <div className="space-y-4">
-                                            <h4 className="font-semibold text-slate-800 text-sm uppercase tracking-wide opacity-70">Mistakes detected</h4>
-
-                                            {taskData.mistakes?.filter(m => m.correction).length === 0 && (
-                                                <div className="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-center text-sm border border-emerald-100">
-                                                    No major grammar errors found. Great job!
-                                                </div>
-                                            )}
-
-                                            {taskData.mistakes?.map((mistake, i) => (
-                                                <div key={i} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm group hover:border-red-200 transition-all">
-                                                    <div className="text-red-500 text-xs font-bold uppercase mb-2">{mistake.error_type}</div>
-                                                    <div className="text-slate-500 line-through text-sm mb-1 opacity-70">{mistake.sentence}</div>
-                                                    <div className="text-emerald-700 font-medium text-sm flex items-start gap-2">
-                                                        <Check className="w-4 h-4 mt-0.5 shrink-0" />
-                                                        {mistake.correction}
-                                                    </div>
-                                                    <div className="mt-3 pt-3 border-t border-slate-50 text-xs text-slate-500">
-                                                        {mistake.explanation}
-                                                    </div>
-                                                </div>
-                                            ))}
+                                <div className="flex-1 overflow-y-auto pr-2 space-y-4 max-h-[400px]">
+                                    {(!taskData.mistakes || taskData.mistakes.length === 0) ? (
+                                        <div className="text-center py-10 text-slate-400">
+                                            <Check className="w-12 h-12 mx-auto mb-2 text-emerald-300" />
+                                            No major errors detected.
                                         </div>
                                     ) : (
-                                        <div className="space-y-4">
-                                            <h4 className="font-semibold text-slate-800 text-sm uppercase tracking-wide opacity-70">Improvement Tips</h4>
-                                            {/* Generate heuristic tips since API doesn't return per-criteria text highlights yet */}
-                                            {taskData.criteria_scores[analysisTab] < 7 ? (
-                                                <div className="bg-white p-5 rounded-xl border border-amber-100 shadow-sm">
-                                                    <div className="flex gap-3">
-                                                        <Lightbulb className="w-5 h-5 text-amber-500 shrink-0" />
-                                                        <div>
-                                                            <p className="text-slate-700 text-sm leading-relaxed">
-                                                                Your score indicates room for improvement.
-                                                                {analysisTab === 'task_response' && " Try to develop your main ideas more fully and ensure all parts of the prompt are covered in depth."}
-                                                                {analysisTab === 'coherence_cohesion' && " Focus on using a wider range of linking words and ensure logical paragraph progression."}
-                                                                {analysisTab === 'lexical_resource' && " Try to use less common vocabulary. Avoid repetition by using synonyms."}
-                                                            </p>
-                                                        </div>
-                                                    </div>
+                                        taskData.mistakes.map((mistake, idx) => (
+                                            <div key={idx} className="bg-red-50/50 rounded-xl p-4 border border-red-100">
+                                                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-red-100 text-red-600 mb-2">
+                                                    {mistake.error_type}
+                                                </span>
+                                                <div className="space-y-2">
+                                                    <p className="text-sm text-red-500/80 line-through decoration-red-400">
+                                                        "{mistake.sentence}"
+                                                    </p>
+                                                    <p className="text-sm font-medium text-emerald-700 flex items-start gap-1.5">
+                                                        <span className="bg-emerald-100 text-emerald-600 p-0.5 rounded shadow-sm"><Check className="w-3 h-3" /></span>
+                                                        "{mistake.correction}"
+                                                    </p>
                                                 </div>
-                                            ) : (
-                                                <div className="bg-white p-5 rounded-xl border border-emerald-100 shadow-sm">
-                                                    <div className="flex gap-3">
-                                                        <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0" />
-                                                        <div>
-                                                            <p className="text-slate-700 text-sm leading-relaxed">
-                                                                Excellent performance in this area. You demonstrated sophisticated control.
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
+                                                <p className="text-xs text-slate-500 mt-2 pl-2 border-l-2 border-slate-200">
+                                                    💡 {mistake.explanation}
+                                                </p>
+                                            </div>
+                                        ))
                                     )}
-
-                                    {/* Model Answer (always visible at bottom or separate tab? Let's keep it here) */}
-                                    <div className="mt-8 pt-8 border-t border-slate-200">
-                                        <button className="w-full py-3 bg-white border border-slate-200 rounded-xl text-slate-600 font-semibold text-sm hover:bg-slate-50 hover:text-purple-600 transition-colors flex items-center justify-center gap-2">
-                                            <Lock className="w-4 h-4" />
-                                            View Band 9 Model Answer
-                                        </button>
-                                        <p className="text-center text-xs text-slate-400 mt-2">Available for Premium users</p>
-                                    </div>
                                 </div>
-                            </>
-                        ) : (
-                            <div className="flex items-center justify-center h-full text-slate-400">Analysis unavailable</div>
-                        )}
-                    </div>
-                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 2: Improvements */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+                                    <BookOpen className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-slate-800">How to Improve</h3>
+                                    <p className="text-xs text-slate-500">Personalized tips from your AI examiner</p>
+                                </div>
+                            </div>
+                            <div className="bg-indigo-50/30 rounded-xl p-5 border border-indigo-50">
+                                <div className="flex gap-4">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-white rounded-lg shadow-sm flex items-center justify-center text-indigo-600 font-bold border border-indigo-100">1</div>
+                                    <p className="text-slate-700 font-medium leading-relaxed pt-1">
+                                        {getImprovementSuggestions()[0]}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 3: Answer vs Model */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Original Answer */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-full">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-600">Y</div>
+                                    <h3 className="font-bold text-slate-800">Your Original Answer</h3>
+                                </div>
+                                <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 h-[400px] overflow-y-auto">
+                                    <p className="text-sm leading-relaxed text-slate-700 whitespace-pre-wrap font-serif">
+                                        {userResponse || "No answer submitted."}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Model Answer */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 h-full border-l-4 border-l-amber-400">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-2">
+                                        <Lightbulb className="w-5 h-5 text-amber-500" />
+                                        <h3 className="font-bold text-slate-800">Band 9 Model Answer</h3>
+                                    </div>
+                                    <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase rounded">AI Generated</span>
+                                </div>
+                                <div className="bg-amber-50/50 rounded-xl p-5 border border-amber-100 h-[400px] overflow-y-auto relative">
+                                    {/* Quote Icon Background */}
+                                    <div className="absolute top-4 right-4 text-amber-200/50 pointer-events-none">
+                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z" />
+                                        </svg>
+                                    </div>
+                                    <p className="text-sm leading-relaxed text-slate-700 whitespace-pre-wrap font-serif relative z-10">
+                                        {taskData.refined_answer || "Model answer generating..."}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 4: Checklist */}
+                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+                            <div className="flex items-center gap-2 mb-4">
+                                <Target className="w-5 h-5 text-purple-600" />
+                                <h3 className="font-bold text-slate-800">IELTS Writing Checklist</h3>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                {[
+                                    { label: 'Word Count Met', check: taskData.word_count >= (activeTab === 'task1' ? 150 : 250) },
+                                    { label: 'Task Addressed', check: taskData.criteria_scores.task_response >= 6 },
+                                    { label: 'Well Organized', check: taskData.criteria_scores.coherence_cohesion >= 6 },
+                                    { label: 'Good Vocabulary', check: taskData.criteria_scores.lexical_resource >= 6 },
+                                ].map((item, i) => (
+                                    <div key={i} className={`p-4 rounded-xl border flex items-center gap-3 ${item.check ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100'}`}>
+                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.check ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'}`}>
+                                            {item.check ? <Check className="w-3.5 h-3.5" /> : <span className="text-xs font-bold">!</span>}
+                                        </div>
+                                        <span className={`text-sm font-semibold ${item.check ? 'text-emerald-700' : 'text-red-700'}`}>
+                                            {item.label}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Footer Nav */}
+                        <div className="flex justify-center mt-8 gap-4">
+                            <Link href="/reports" className="px-6 py-3 bg-white border border-slate-200 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                                Back to All Reports
+                            </Link>
+                            <Link href="/dashboard" className="px-6 py-3 bg-emerald-600 text-white rounded-xl font-medium hover:bg-emerald-700 shadow-md transition-all">
+                                Go to Dashboard
+                            </Link>
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-center py-20 text-slate-400">Data not available for this task.</div>
+                )}
             </div>
         </div>
     );
