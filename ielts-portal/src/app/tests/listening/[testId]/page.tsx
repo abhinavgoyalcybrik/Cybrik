@@ -432,6 +432,28 @@ export default function ListeningTestPage({ params }: PageProps) {
             const result = await evaluateListening(answerKey, userAnswersMap);
             setEvaluationResult(result);
 
+            // Create detailed breakdown for report
+            const detailedAnswers = questions.map((q) => {
+                const qNum = q.order.toString();
+                const uAnswer = (userAnswersMap[qNum] || '').trim();
+
+                let correctAnswers: string[] = [];
+                try {
+                    correctAnswers = JSON.parse(q.correct_answer);
+                } catch {
+                    correctAnswers = [q.correct_answer];
+                }
+
+                const isCorrect = correctAnswers.some((ca: string) => ca.toLowerCase() === uAnswer.toLowerCase());
+
+                return {
+                    question_number: q.order,
+                    user_answer: uAnswer || '-',
+                    correct_answer: correctAnswers[0] || '-',
+                    is_correct: isCorrect
+                };
+            });
+
             // Save result to backend for Reports
             try {
                 const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
@@ -444,7 +466,10 @@ export default function ListeningTestPage({ params }: PageProps) {
                         band_score: result?.overall_band || 0,
                         raw_score: correct,
                         answers: userAnswersMap,
-                        feedback: result // Send full evaluation result
+                        feedback: {
+                            ...result,
+                            breakdown: detailedAnswers
+                        }
                     })
                 });
 

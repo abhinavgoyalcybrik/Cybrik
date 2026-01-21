@@ -173,12 +173,19 @@ export default function ReportDetailPage() {
                     timeTaken: attempt.duration_minutes ? `${attempt.duration_minutes} min` : '0 min',
                     bandScore: attempt.band_score || feedback.overall_band || 0,
                     feedback: typeof feedback === 'string' ? feedback : feedback.summary || feedback.feedback || '',
-                    questionBreakdown: attempt.answers?.map((ans: any, idx: number) => ({
-                        question_number: idx + 1,
-                        user_answer: ans.user_answer || ans.answer_text || '-',
-                        correct_answer: ans.correct_answer || '-',
-                        is_correct: ans.is_correct ?? false,
-                    })) || [],
+                    questionBreakdown: (attempt.answers && attempt.answers.length > 0)
+                        ? attempt.answers.map((ans: any, idx: number) => ({
+                            question_number: idx + 1,
+                            user_answer: ans.user_answer || ans.answer_text || '-',
+                            correct_answer: ans.correct_answer || '-',
+                            is_correct: ans.is_correct ?? false,
+                        }))
+                        : (feedback.breakdown || []).map((item: any) => ({
+                            question_number: item.question_number,
+                            user_answer: item.user_answer,
+                            correct_answer: item.correct_answer,
+                            is_correct: item.is_correct
+                        })),
                     transcript: feedback.transcript,
                     audioUrl: attempt.audio_url
                 });

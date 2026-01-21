@@ -359,6 +359,14 @@ export default function ReadingTestPage({ params }: PageProps) {
             const result = await evaluateReading(questions, userAnswersMap);
             setEvaluationResult(result);
 
+            // Create detailed breakdown for report
+            const detailedAnswers = questions.map((q, idx) => ({
+                question_number: idx + 1,
+                user_answer: userAnswersMap[q.question_id] || '-',
+                correct_answer: q.answer_key,
+                is_correct: (userAnswersMap[q.question_id] || '').trim().toUpperCase() === q.answer_key
+            }));
+
             // Save result to backend for Reports
             try {
                 const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
@@ -371,7 +379,10 @@ export default function ReadingTestPage({ params }: PageProps) {
                         band_score: result?.overall_band || 0,
                         raw_score: correctCount,
                         answers: userAnswersMap,
-                        feedback: result // Send the full evaluation result
+                        feedback: {
+                            ...result,
+                            breakdown: detailedAnswers
+                        }
                     })
                 });
 
