@@ -49,7 +49,8 @@ export default function AdminUsersPage() {
         fetch('/api/ielts/admin/students/')
             .then((r) => r.json())
             .then((data) => {
-                setStudents(data.students || []);
+                // API returns array directly, not { students: [...] }
+                setStudents(Array.isArray(data) ? data : (data.students || []));
                 setLoading(false);
             })
             .catch(() => setLoading(false));
@@ -82,7 +83,7 @@ export default function AdminUsersPage() {
                 setShowModal(data);
                 // refresh list
                 const refreshed = await fetch('/api/ielts/admin/students/').then((r) => r.json());
-                setStudents(refreshed.students || []);
+                setStudents(Array.isArray(refreshed) ? refreshed : (refreshed.students || []));
                 form.reset();
             } else {
                 alert(`Failed to create student: ${data.error || 'Unknown error'}`);
@@ -136,7 +137,7 @@ export default function AdminUsersPage() {
             if (res.ok) {
                 // Refresh list
                 const refreshed = await fetch('/api/ielts/admin/students/').then((r) => r.json());
-                setStudents(refreshed.students || []);
+                setStudents(Array.isArray(refreshed) ? refreshed : (refreshed.students || []));
                 setEditStudent(null);
                 setEditPassword('');
                 alert('Student updated successfully');
