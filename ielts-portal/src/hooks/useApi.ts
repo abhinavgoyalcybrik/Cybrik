@@ -30,7 +30,7 @@ export function useApi() {
             const token = getToken();
             const headers: HeadersInit = {
                 'Content-Type': 'application/json',
-                ...(useAuth && token ? { 'Authorization': `Token ${token}` } : {}),
+                ...(token && token !== 'django-cookie-auth' ? { 'Authorization': `Token ${token}` } : {}),
                 ...options.headers,
             };
 

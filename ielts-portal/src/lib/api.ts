@@ -46,7 +46,7 @@ export async function apiCall<T>(
 
         const headers: HeadersInit = {
             'Content-Type': 'application/json',
-            ...(token ? { 'Authorization': `Token ${token}` } : {}),
+            ...(token && token !== 'django-cookie-auth' ? { 'Authorization': `Token ${token}` } : {}),
             ...options.headers,
         };
 
