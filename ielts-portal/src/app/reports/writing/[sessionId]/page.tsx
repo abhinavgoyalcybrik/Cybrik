@@ -25,12 +25,12 @@ export default function WritingReportPage({ params }: PageProps) {
 
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
     const [result, setResult] = useState<WritingEvaluationResult | null>(null);
-    const [activeTab, setActiveTab] = useState<'task1' | 'task2'>('task1');
+    const [activeTab, setActiveTab] = useState<'task_1' | 'task_2'>('task_1');
     const [userAnswers, setUserAnswers] = useState<{ task_1?: string, task_2?: string }>({});
 
     // Derived state for the active task
-    const taskData = result?.tasks?.[activeTab as keyof typeof result.tasks];
-    const userResponse = userAnswers[activeTab as keyof typeof userAnswers];
+    const taskData = result?.tasks?.[activeTab];
+    const userResponse = userAnswers[activeTab];
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -49,7 +49,7 @@ export default function WritingReportPage({ params }: PageProps) {
 
                     // Default to Task 2 if Task 1 is missing
                     if (!feedback.tasks?.task_1 && feedback.tasks?.task_2) {
-                        setActiveTab('task2');
+                        setActiveTab('task_2');
                     }
                 } else {
                     setStatus('error');
@@ -117,16 +117,16 @@ export default function WritingReportPage({ params }: PageProps) {
                 <div className="flex gap-4">
                     {result.tasks?.task_1 && (
                         <button
-                            onClick={() => setActiveTab('task1')}
-                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task1' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+                            onClick={() => setActiveTab('task_1')}
+                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task_1' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
                         >
                             Task 1 (Band {result.tasks.task_1.overall_band?.toFixed(1)})
                         </button>
                     )}
                     {result.tasks?.task_2 && (
                         <button
-                            onClick={() => setActiveTab('task2')}
-                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task2' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
+                            onClick={() => setActiveTab('task_2')}
+                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all ${activeTab === 'task_2' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
                         >
                             Task 2 (Band {result.tasks.task_2.overall_band?.toFixed(1)})
                         </button>
@@ -164,8 +164,8 @@ export default function WritingReportPage({ params }: PageProps) {
                                 </div>
                                 <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
                                     <span className="text-slate-600 font-medium">Word Count</span>
-                                    <span className={`font-bold ${taskData.word_count >= (activeTab === 'task1' ? 150 : 250) ? 'text-emerald-600' : 'text-amber-600'}`}>
-                                        {taskData.word_count} / {activeTab === 'task1' ? '150' : '250'}+ words
+                                    <span className={`font-bold ${taskData.word_count >= (activeTab === 'task_1' ? 150 : 250) ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                        {taskData.word_count} / {activeTab === 'task_1' ? '150' : '250'}+ words
                                     </span>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@ export default function WritingReportPage({ params }: PageProps) {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 {[
-                                    { label: 'Word Count Met', check: taskData.word_count >= (activeTab === 'task1' ? 150 : 250) },
+                                    { label: 'Word Count Met', check: taskData.word_count >= (activeTab === 'task_1' ? 150 : 250) },
                                     { label: 'Task Addressed', check: taskData.criteria_scores.task_response >= 6 },
                                     { label: 'Well Organized', check: taskData.criteria_scores.coherence_cohesion >= 6 },
                                     { label: 'Good Vocabulary', check: taskData.criteria_scores.lexical_resource >= 6 },
