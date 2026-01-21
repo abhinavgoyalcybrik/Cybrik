@@ -349,7 +349,7 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
             overall_avg = attempts.exclude(band_score__isnull=True).aggregate(avg=Avg('band_score'))['avg']
             
             # Use profile data where available
-            target_band = profile.target_band
+            target_band = profile.target_score
             
             student_data.append({
                 'id': student.id,
