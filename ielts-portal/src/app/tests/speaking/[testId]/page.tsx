@@ -741,8 +741,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
                         try { await saveSpeakingResults(testId, result, sessionIdRef.current); } catch (e) { }
 
                         // Reliability Save for Reports
-                        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-                        const saveRes = await fetch(`${API_BASE}/api/ielts/sessions/save_module_result/`, {
+                        // Use relative path to ensure cookies are sent correctly (same-origin/proxy) for auth
+                        const saveRes = await fetch('/api/ielts/sessions/save_module_result/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             credentials: 'include',
