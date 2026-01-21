@@ -261,8 +261,8 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     """
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
-    permission_classes = [permissions.AllowAny]
-    authentication_classes = []  # Disable authentication
+    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = []  # Enabled for tenant filtering
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
@@ -295,6 +295,16 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
         
         # Get users who have an IELTSUserProfile (actual IELTS students)
         ielts_profiles = IELTSUserProfile.objects.select_related('user').all()
+
+        # Multi-Tenancy: Filter by Admin's Tenant
+        if not request.user.is_superuser:
+            try:
+                if hasattr(request.user, 'profile') and request.user.profile.tenant:
+                    ielts_profiles = ielts_profiles.filter(user__profile__tenant=request.user.profile.tenant)
+                else:
+                    return Response({'students': []}) # No tenant context
+            except Exception:
+                return Response({'students': []})
         
         student_data = []
         for profile in ielts_profiles:
@@ -429,18 +439,43 @@ class AdminStudentViewSet(viewsets.ModelViewSet):
     from django.contrib.auth import get_user_model
     queryset = get_user_model().objects.all()
     serializer_class = AdminStudentSerializer
-    permission_classes = [permissions.AllowAny]
-    authentication_classes = []
+    permission_classes = [permissions.IsAuthenticated]
+    # authentication_classes = [] # Removed to allow request.user to be populated
 
     def get_queryset(self):
-        # Only show users who have an IELTSUserProfile (actual students)
-        return self.queryset.filter(ielts_profile__isnull=False).order_by('-date_joined')
+        # Multi-tenancy: Filter students by the admin's tenant
+        user = self.request.user
+        base_qs = self.queryset.filter(ielts_profile__isnull=False)
+
+        # 1. Superusers see everything
+        if user.is_superuser:
+            return base_qs.order_by('-date_joined')
+
+        # 2. Tenant Admins see only users in their tenant
+        try:
+            if hasattr(user, 'profile') and user.profile.tenant:
+                return base_qs.filter(profile__tenant=user.profile.tenant).order_by('-date_joined')
+        except Exception:
+            pass
+            
+        # 3. If no tenant context, show nothing (security by default)
+        return base_qs.none()
 
     def create(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
+            
+            # Assign Client/Tenant Relationship
+            # If the creator is a Tenant Admin, assign the new student to that Tenant
+            creator = request.user
+            if hasattr(creator, 'profile') and creator.profile.tenant:
+                from crm_app.models import UserProfile
+                # Ensure student has a CRM profile linked to the tenant
+                profile, _ = UserProfile.objects.get_or_create(user=user)
+                profile.tenant = creator.profile.tenant
+                profile.save()
             
             # Helper to return the plain password if generated
             response_data = serializer.data
