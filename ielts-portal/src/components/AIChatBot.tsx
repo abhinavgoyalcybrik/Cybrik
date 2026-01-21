@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2, Bot } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Bot, History, Sparkles, ChevronRight, Minimize2 } from 'lucide-react';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -18,15 +18,19 @@ Your role is to help students ONLY with topics related to:
 5. IELTS exam format, timing, and structure
 6. Vocabulary and grammar relevant to IELTS
 
-You must REFUSE to answer questions about:
-- Topics unrelated to IELTS or English learning
-- General knowledge, news, or current events
-- Personal opinions on non-IELTS matters
-- Anything not directly related to IELTS preparation
-
 If asked about unrelated topics, politely redirect the conversation back to IELTS preparation.
 
 Keep responses concise, helpful, and encouraging. Use examples where helpful.`;
+
+const SUGGESTED_QUESTIONS = [
+    "Give improvement tips",
+    "Find my key mistakes",
+    "Explain my score",
+    "Help with ideas",
+    "Rewrite for a higher band",
+    "Paraphrase my introduction",
+    "Suggest new vocabulary"
+];
 
 export default function AIChatBot() {
     const [isOpen, setIsOpen] = useState(false);
@@ -49,10 +53,11 @@ export default function AIChatBot() {
         return () => window.removeEventListener('open-ai-chat', handleOpenChat);
     }, []);
 
-    const sendMessage = async () => {
-        if (!input.trim() || isLoading) return;
+    const sendMessage = async (textOverride?: string) => {
+        const textToSend = textOverride || input;
+        if (!textToSend.trim() || isLoading) return;
 
-        const userMessage = input.trim();
+        const userMessage = textToSend.trim();
         setInput('');
         setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
         setIsLoading(true);
@@ -76,7 +81,7 @@ export default function AIChatBot() {
                             },
                             {
                                 role: 'model',
-                                parts: [{ text: 'I understand. I am an IELTS AI Assistant for Cybrik IELTS. I will only help with IELTS-related topics and politely decline other requests. How can I help you with your IELTS preparation today?' }]
+                                parts: [{ text: 'I understand. I am an IELTS AI Assistant for Cybrik IELTS. I will only help with IELTS-related topics. How can I help you today?' }]
                             },
                             ...messages.map(msg => ({
                                 role: msg.role === 'user' ? 'user' : 'model',
@@ -97,7 +102,6 @@ export default function AIChatBot() {
 
             const data = await response.json();
 
-            // Better error handling
             if (!response.ok) {
                 console.error('API Error:', data);
                 throw new Error(data.error?.message || 'API request failed');
@@ -105,7 +109,6 @@ export default function AIChatBot() {
 
             const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text;
             if (!aiResponse) {
-                console.error('Unexpected response structure:', data);
                 throw new Error('Invalid response from AI');
             }
 
@@ -125,248 +128,149 @@ export default function AIChatBot() {
         }
     };
 
-
-    // Dragging logic
-    const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const dragStartPos = useRef<{ x: number, y: number } | null>(null);
-    const dragStartTime = useRef<number>(0);
-
-    // Initialize position on mount (optional, or just rely on CSS default until first drag)
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (isDragging) {
-                setPosition({
-                    x: e.clientX - (dragStartPos.current?.x || 0),
-                    y: e.clientY - (dragStartPos.current?.y || 0)
-                });
-            }
-        };
-
-        const handleMouseUp = () => {
-            setIsDragging(false);
-        };
-
-        if (isDragging) {
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-        }
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [isDragging]);
-
-    const handleMouseDown = (e: React.MouseEvent) => {
-        // Only allow primary button drag
-        if (e.button !== 0) return;
-
-        // e.preventDefault(); // Don't prevent default immediately, might block input focus if used elsewhere, but for button it's fine. 
-        // Actually, preventing default might stop text selection which is good.
-        // e.preventDefault();
-
-        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-
-        // Calculate offset from top-left of the element
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
-
-        // If this is the very first drag, and position is null, we need to respect the current CSS position
-        // rect.left and rect.top ARE the current position.
-
-        // We want subsequent mouse moves to set the Top/Left style.
-        // newX = currentMouseX - offsetX
-        // newY = currentMouseY - offsetY
-
-        // But wait, our state `position` corresponds to the `top/left` styles we apply.
-        // So offset needed is just the difference.
-
-        dragStartPos.current = { x: offsetX, y: offsetY };
-        dragStartTime.current = Date.now();
-
-        // If we haven't set a manual position yet, capture the current computed position
-        if (!position) {
-            setPosition({ x: rect.left, y: rect.top });
-        }
-
-        setIsDragging(true);
-    };
-
-    const handleClick = (e: React.MouseEvent) => {
-        // Prevent click if we dragged
-        const dragDuration = Date.now() - dragStartTime.current;
-        // Simple heuristic: if held down for > 200ms, assume drag/hold, but better to check distance.
-        // Since we don't track start x/y for click, let's just rely on isDragging logic?
-        // Actually, typical 'click' fires after mouseup.
-        // We can just check drag duration implies intentional drag?
-        // Or better: did we move?
-        // Let's assume if the mouse didn't move much, it's a click.
-        // Ideally we track moved distance.
-        // For now, let's just allow click if drag was short or didn't move much (handled by the fact that if it moved, position updated)
-        // A simple way:
-        if (isDragging) {
-            // e.stopPropagation(); // maybe?
-        }
-    };
-
-    // Helper to determine if we should toggle on click
-    const handleToggle = () => {
-        // If a drag just happened (or is happening), don't toggle.
-        // But handleMouseUp fires before click.
-        // Let's track if we actually MOVED.
-        // We can use a ref 'hasMoved' set in mouseMove.
-    };
-
-    // We need 'hasMoved' ref.
-    const hasMoved = useRef(false);
-
-    // Updated Effect
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (isDragging) {
-                hasMoved.current = true;
-                setPosition({
-                    x: e.clientX - (dragStartPos.current?.x || 0),
-                    y: e.clientY - (dragStartPos.current?.y || 0)
-                });
-            }
-        };
-
-        const handleMouseUp = () => {
-            setIsDragging(false);
-        };
-
-        if (isDragging) {
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-        }
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [isDragging]);
-
-    const onMouseDown = (e: React.MouseEvent) => {
-        hasMoved.current = false;
-        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-        dragStartPos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-
-        if (!position) {
-            setPosition({ x: rect.left, y: rect.top });
-        }
-        setIsDragging(true);
-    };
-
-    const onButtonClick = () => {
-        if (!hasMoved.current) {
-            setIsOpen(true);
-        }
-    };
-
-    // For the modal window (also draggable? maybe by header?)
-    const onHeaderMouseDown = (e: React.MouseEvent) => {
-        hasMoved.current = false;
-        const rect = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
-        dragStartPos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-
-        if (!position) {
-            setPosition({ x: rect.left, y: rect.top });
-        }
-        setIsDragging(true);
-    };
-
-    // Dynamic style
-    const style = position ? { left: position.x, top: position.y, bottom: 'auto', right: 'auto' } : {};
-
     return (
         <>
-            {/* Chat Bubble */}
-            <button
-                onMouseDown={onMouseDown}
-                onClick={onButtonClick}
-                style={style}
-                className={`fixed z-50 w-14 h-14 bg-[#6FB63A] text-white rounded-full shadow-lg hover:bg-[#5FA030] transition-transform duration-300 flex items-center justify-center ${!position ? 'bottom-6 right-6' : ''} ${isOpen ? 'scale-0' : 'scale-100'} cursor-move`}
-                aria-label="Open AI Chat"
-            >
-                <MessageCircle className="w-6 h-6" />
-            </button>
-
-            {/* Chat Modal */}
-            <div
-                style={style}
-                className={`fixed z-50 w-[380px] max-w-[calc(100vw-48px)] h-[500px] max-h-[calc(100vh-100px)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-transform duration-300 ${!position ? 'bottom-6 right-6' : ''} ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
-            >
-                {/* Header - Draggable */}
-                <div
-                    onMouseDown={onHeaderMouseDown}
-                    className="bg-[#0B1F3A] text-white p-4 flex items-center justify-between cursor-move"
+            {/* Toggle Button (Visible when closed) - kept as backup/floating trigger if needed */}
+            {!isOpen && (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="fixed z-50 bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center animate-bounce-slow"
+                    aria-label="Open Personal AI Tutor"
                 >
+                    <Bot className="w-7 h-7" />
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+                </button>
+            )}
+
+            {/* Backdrop (Optional - for mobile or focus) */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 transition-opacity"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
+
+            {/* Sidebar Drawer */}
+            <div
+                className={`fixed top-0 right-0 z-50 h-[100dvh] w-full sm:w-[400px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-slate-100 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
+                {/* Header */}
+                <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#6FB63A] rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
                             <Bot className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="font-semibold text-sm">IELTS AI Assistant</h3>
-                            <p className="text-xs text-gray-300">Ask me about IELTS prep!</p>
+                            <h2 className="text-sm font-bold text-slate-800">Personal AI Tutor</h2>
+                            <div className="flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Online</span>
+                            </div>
                         </div>
                     </div>
-                    {/* Close button shouldn't trigger drag - handled by bubbling? stopPropagation on close click */}
-                    <button
-                        onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        className="text-gray-300 hover:text-white transition-colors"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center gap-1">
+                        <button
+                            className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                            title="Chat History"
+                        >
+                            <History className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                {/* Messages Area */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-slate-50">
+
+                    {/* Welcome State */}
                     {messages.length === 0 && (
-                        <div className="text-center text-gray-500 text-sm py-8">
-                            <Bot className="w-12 h-12 mx-auto mb-3 text-[#6FB63A]" />
-                            <p className="font-medium">Hi! I'm your IELTS AI Assistant.</p>
-                            <p className="text-xs mt-1">Ask me anything about IELTS preparation!</p>
+                        <div className="mt-8 text-center px-6">
+                            <div className="w-20 h-20 bg-white rounded-full shadow-sm mx-auto mb-6 flex items-center justify-center relative">
+                                <div className="absolute inset-0 bg-purple-100 rounded-full animate-ping opacity-20"></div>
+                                <Bot className="w-10 h-10 text-purple-600" />
+                            </div>
+                            <h3 className="font-bold text-slate-800 text-lg mb-2">How can I help you?</h3>
+                            <p className="text-sm text-slate-500 leading-relaxed mb-8">
+                                I've analyzed your test results. Ask me to explain your score, find mistakes, or help you practice!
+                            </p>
+
+                            <div className="space-y-2">
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Suggested Questions</p>
+                                <div className="flex flex-wrap justify-center gap-2">
+                                    {SUGGESTED_QUESTIONS.map((q, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => sendMessage(q)}
+                                            className="px-3 py-2 bg-white border border-slate-200 hover:border-purple-300 hover:text-purple-700 text-slate-600 text-xs font-medium rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95"
+                                        >
+                                            {q}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     )}
+
+                    {/* Chat Messages */}
                     {messages.map((msg, i) => (
                         <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-[#6FB63A] text-white rounded-br-md' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-md'}`}>
-                                {msg.content}
+                            <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed shadow-sm ${msg.role === 'user'
+                                    ? 'bg-purple-600 text-white rounded-br-none'
+                                    : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
+                                }`}>
+                                {msg.role === 'assistant' && (
+                                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100 opacity-70">
+                                        <Bot className="w-3 h-3" />
+                                        <span className="text-[10px] font-bold uppercase">AI Tutor</span>
+                                    </div>
+                                )}
+                                <div className="markdown-prose whitespace-pre-wrap">
+                                    {msg.content}
+                                </div>
                             </div>
                         </div>
                     ))}
+
                     {isLoading && (
                         <div className="flex justify-start">
-                            <div className="bg-white border border-gray-200 px-4 py-2.5 rounded-2xl rounded-bl-md">
-                                <Loader2 className="w-5 h-5 animate-spin text-[#6FB63A]" />
+                            <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
+                                <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                                <span className="text-xs font-medium text-slate-400">Thinking...</span>
                             </div>
                         </div>
                     )}
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
-                <div className="p-3 border-t border-gray-200 bg-white">
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="text"
+                {/* Input Area */}
+                <div className="p-4 bg-white border-t border-slate-100 shrink-0">
+                    <div className="relative">
+                        <textarea
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            placeholder="Ask about IELTS..."
-                            className="flex-1 px-4 py-2.5 bg-gray-100 border-none rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#6FB63A]"
+                            placeholder="Ask anything about your results..."
+                            rows={1}
+                            className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all resize-none shadow-inner"
+                            style={{ minHeight: '52px' }}
                         />
                         <button
-                            onClick={sendMessage}
+                            onClick={() => sendMessage()}
                             disabled={!input.trim() || isLoading}
-                            className="w-10 h-10 bg-[#6FB63A] text-white rounded-full flex items-center justify-center hover:bg-[#5FA030] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="absolute right-2 top-2 p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
                         >
                             <Send className="w-4 h-4" />
                         </button>
+                    </div>
+                    <div className="mt-2 text-center">
+                        <p className="text-[10px] text-slate-400">
+                            AI can make mistakes. Double check important info.
+                        </p>
                     </div>
                 </div>
             </div>
