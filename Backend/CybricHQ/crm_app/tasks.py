@@ -739,7 +739,25 @@ def analyze_call_transcript(call_record_id):
                         lead.english_test_scores = score_str
                         lead_updates.append('english_test_scores')
                 
-                # 4. Store full analysis in metadata for reference
+                # 4. Visa Consultancy Fields
+                if analysis.get('enquiry_type') and not lead.enquiry_type:
+                    lead.enquiry_type = analysis.get('enquiry_type')
+                    lead_updates.append('enquiry_type')
+                
+                if analysis.get('exam_type') and not lead.exam_type:
+                    lead.exam_type = analysis.get('exam_type')
+                    lead_updates.append('exam_type')
+                
+                if analysis.get('qualification_gap') and not lead.qualification_gap:
+                    lead.qualification_gap = analysis.get('qualification_gap')
+                    lead_updates.append('qualification_gap')
+                
+                # preferred_country from top-level analysis (not nested in personal_details)
+                if analysis.get('preferred_country') and not lead.preferred_country:
+                    lead.preferred_country = analysis.get('preferred_country')
+                    lead_updates.append('preferred_country')
+                
+                # 5. Store full analysis in metadata for reference
                 if not lead.metadata:
                     lead.metadata = {}
                 lead.metadata['last_ai_analysis'] = {

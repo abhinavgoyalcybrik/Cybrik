@@ -606,6 +606,26 @@ class Lead(models.Model):
         help_text="English proficiency scores (e.g., IELTS 7.5, PTE 65, Not taken)"
     )
     
+    # Visa Consultancy Specific Fields
+    enquiry_type = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True,
+        help_text="Type of enquiry: study_visa, visitor_visa, spouse_visa, work_visa, other"
+    )
+    exam_type = models.CharField(
+        max_length=64,
+        blank=True,
+        null=True,
+        help_text="English exam type: IELTS, PTE, Other, Not Taken"
+    )
+    qualification_gap = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text="Gap in education/work (e.g., '2 years after 12th')"
+    )
+    
     raw_payload = models.JSONField(blank=True, null=True)
     status = models.CharField(
         max_length=32, 

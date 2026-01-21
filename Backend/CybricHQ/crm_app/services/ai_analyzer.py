@@ -58,17 +58,21 @@ class CallAnalyzer:
                 messages=[
                     {
                         "role": "system",
-                        "content": """You are an AI assistant analyzing university admission counseling calls.
-                        Your PRIMARY GOAL is to determine if the student has submitted their documents (Passport, Marksheets, IELTS/TOEFL, etc.).
-                        If documents are missing, you MUST recommend a follow-up to collect them.
+                        "content": """You are an AI assistant analyzing visa and study abroad counseling calls.
+                        
+                        YOUR PRIMARY GOALS:
+                        1. Extract VISA/ENQUIRY TYPE: Is the caller interested in study visa, visitor visa, spouse visa, work visa, or PR?
+                        2. Extract PREFERRED COUNTRY: Canada, UK, Australia, New Zealand, Europe, USA, or other.
+                        3. Extract EXAM TYPE: Has the caller taken IELTS, PTE, TOEFL, or not taken any exam yet?
+                        4. Extract QUALIFICATION GAP: Any gap in education or career mentioned.
+                        5. Determine if documents (Passport, Marksheets, Test Scores) have been submitted.
+                        6. Extract personal details: Name, Mobile, Date of Birth, Address.
+                        7. Extract education details: Highest qualification, marks/CGPA.
                         
                         FOLLOW-UP HANDLING:
-                        - If the user explicitly asks for a callback (e.g., "call me in 10 mins", "busy now"), scheduled a 'phone' follow-up with 'high' priority.
+                        - If the user explicitly asks for a callback, schedule a 'phone' follow-up with 'high' priority.
                         - If the user is interested but busy, schedule a 'phone' follow-up.
-                        - If the user asks for information, schedule an 'email' or 'whatsapp' follow-up.
                         - Be precise with timing (e.g. "5 minutes", "2 hours", "Tomorrow at 10am").
-                        
-                        Also extract detailed applicant information including personal details, academic history, and english proficiency scores.
                         """
                     },
                     {
@@ -123,6 +127,25 @@ class CallAnalyzer:
                                     "overall_score": {"type": "string", "description": "Overall score/band"},
                                     "band_scores": {"type": "string", "description": "Individual band scores (e.g. L:7, R:6.5...)"}
                                 }
+                            },
+                            "enquiry_type": {
+                                "type": "string",
+                                "enum": ["study_visa", "visitor_visa", "spouse_visa", "work_visa", "pr", "other"],
+                                "description": "Type of visa/service the caller is enquiring about"
+                            },
+                            "exam_type": {
+                                "type": "string",
+                                "enum": ["IELTS", "PTE", "TOEFL", "Duolingo", "Other", "Not Taken"],
+                                "description": "English proficiency exam type the caller has taken or plans to take"
+                            },
+                            "qualification_gap": {
+                                "type": "string",
+                                "description": "Gap in education or work mentioned by the caller (e.g., '2 years gap after 12th', '1 year career break')"
+                            },
+                            "preferred_country": {
+                                "type": "string",
+                                "enum": ["Canada", "UK", "USA", "Australia", "New Zealand", "Europe", "Other"],
+                                "description": "Country the caller prefers for study/visa"
                             },
                             "interest_level": {
                                 "type": "string",
