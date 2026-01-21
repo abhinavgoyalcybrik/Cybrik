@@ -293,11 +293,13 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
         
         User = get_user_model()
         
-        # Get all students (non-staff users)
-        students = User.objects.filter(is_staff=False, is_superuser=False)
+        # Get users who have an IELTSUserProfile (actual IELTS students)
+        ielts_profiles = IELTSUserProfile.objects.select_related('user').all()
         
         student_data = []
-        for student in students:
+        for profile in ielts_profiles:
+            student = profile.user
+            
             # Get all sessions for this student
             sessions = UserTestSession.objects.filter(user=student)
             attempts = UserModuleAttempt.objects.filter(session__user=student)
@@ -329,16 +331,22 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
             # Calculate overall average band (if any)
             overall_avg = attempts.exclude(band_score__isnull=True).aggregate(avg=Avg('band_score'))['avg']
             
+            # Use profile data where available
+            target_band = profile.target_band
+            
             student_data.append({
                 'id': student.id,
                 'email': student.email,
                 'username': student.username or student.email.split('@')[0],
                 'full_name': f"{student.first_name} {student.last_name}".strip() or student.email.split('@')[0],
                 'date_joined': student.date_joined.isoformat() if student.date_joined else None,
+                'target_band': float(target_band) if target_band else None,
+                'test_purpose': profile.purpose,
                 'total_attempts': total_attempts,
                 'completed_sessions': completed_sessions,
                 'overall_average_band': float(overall_avg) if overall_avg else None,
                 'module_scores': module_scores,
+                'onboarding_completed': profile.onboarding_completed,
             })
         
         # Sort by total attempts (most active first)
