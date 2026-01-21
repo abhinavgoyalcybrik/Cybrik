@@ -26,11 +26,12 @@ export default function WritingReportPage({ params }: PageProps) {
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
     const [result, setResult] = useState<WritingEvaluationResult | null>(null);
     const [activeTab, setActiveTab] = useState<'task_1' | 'task_2'>('task_1');
-    const [userAnswers, setUserAnswers] = useState<{ task_1?: string, task_2?: string }>({});
+    const [userAnswers, setUserAnswers] = useState<any>({}); // Use any to be flexible with keys
 
     // Derived state for the active task
     const taskData = result?.tasks?.[activeTab];
-    const userResponse = userAnswers[activeTab];
+    // Try both formats: task_1 and task1
+    const userResponse = userAnswers[activeTab] || userAnswers[activeTab.replace('_', '')];
 
     useEffect(() => {
         const fetchSession = async () => {
