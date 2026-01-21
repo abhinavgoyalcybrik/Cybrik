@@ -8,6 +8,8 @@ import {
     BookOpen,
     Plus,
     Trash2,
+    Edit,
+    Play,
 } from 'lucide-react';
 
 import AdminLayout from '@/components/AdminLayout';
@@ -145,6 +147,23 @@ export default function AdminReadingPage() {
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
+                                        {/* Preview Button */}
+                                        <Link
+                                            href={`/tests/reading/${test.id}`}
+                                            target="_blank"
+                                            className="p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                                            title="Preview"
+                                        >
+                                            <Play className="w-4 h-4" />
+                                        </Link>
+                                        {/* Edit Button */}
+                                        <Link
+                                            href={`/admin/reading/${test.id}`}
+                                            className="p-2 rounded-lg text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                            title="Edit"
+                                        >
+                                            <Edit className="w-4 h-4" />
+                                        </Link>
                                         {/* Delete Button */}
                                         <button
                                             onClick={() => handleDelete(test.id, test.title)}
