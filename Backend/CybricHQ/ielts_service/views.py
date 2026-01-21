@@ -249,6 +249,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
+
 @method_decorator(csrf_exempt, name='dispatch')
 class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     """
@@ -262,7 +268,7 @@ class AdminIELTSTestViewSet(viewsets.ModelViewSet):
     queryset = IELTSTest.objects.all()
     serializer_class = AdminIELTSTestSerializer
     permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = []  # Enabled for tenant filtering
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
 
     @action(detail=False, methods=['get'])
     def stats(self, request):
@@ -440,7 +446,7 @@ class AdminStudentViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
     serializer_class = AdminStudentSerializer
     permission_classes = [permissions.IsAuthenticated]
-    # authentication_classes = [] # Removed to allow request.user to be populated
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
 
     def get_queryset(self):
         # Multi-tenancy: Filter students by the admin's tenant
