@@ -19,6 +19,7 @@ import {
     Mic,
     Play,
     ChevronDown,
+    TrendingUp,
     BookOpen,
 } from 'lucide-react';
 
@@ -163,6 +164,13 @@ export default function ReportDetailPage() {
 
                 // Map session data to report format
                 const moduleType = attempt.module_type || 'reading';
+
+                // Redirect to Premium Writing Report if applicable
+                if (moduleType === 'writing') {
+                    router.replace(`/reports/writing/${id}`);
+                    return;
+                }
+
                 const feedback = attempt.feedback || attempt.data?.feedback || {};
 
                 setReport({
@@ -240,30 +248,35 @@ export default function ReportDetailPage() {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wide 
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide 
                                     ${report.testType === 'reading' ? 'bg-emerald-100 text-emerald-700' :
                                         report.testType === 'listening' ? 'bg-purple-100 text-purple-700' :
                                             report.testType === 'writing' ? 'bg-orange-100 text-orange-700' :
                                                 'bg-blue-100 text-blue-700'}`}>
                                     {report.testType}
                                 </span>
-                                <span className="text-slate-400">•</span>
-                                <span className="text-slate-500 text-sm flex items-center gap-1">
-                                    <Calendar className="w-3.5 h-3.5" />
-                                    {new Date(report.dateTaken).toLocaleDateString()}
+                                <span className="text-slate-300">|</span>
+                                <span className="text-slate-500 text-sm font-medium flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" />
+                                    {new Date(report.dateTaken).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </span>
                             </div>
-                            <h1 className="text-2xl font-bold text-slate-900">{report.testName}</h1>
+                            <h1 className="text-3xl font-bold text-slate-800 tracking-tight">{report.testName}</h1>
                         </div>
 
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-6">
                             <div className="text-right">
-                                <p className="text-sm text-slate-500">Overall Band</p>
-                                <p className={`text-4xl font-bold ${report.bandScore >= 7.0 ? 'text-green-600' :
-                                    report.bandScore >= 6.0 ? 'text-emerald-600' : 'text-amber-600'
-                                    }`}>
+                                <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
                                     {report.bandScore}
-                                </p>
+                                </div>
+                                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Band Score</div>
+                            </div>
+                            <div className="h-12 w-px bg-slate-100 hidden md:block"></div>
+                            <div className="hidden md:block text-right">
+                                <div className="text-3xl font-bold text-slate-700">
+                                    {report.bandScore >= 8.5 ? 'C2' : report.bandScore >= 7 ? 'C1' : report.bandScore >= 5.5 ? 'B2' : 'B1'}
+                                </div>
+                                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">CEFR Level</div>
                             </div>
                         </div>
                     </div>
@@ -401,24 +414,35 @@ export default function ReportDetailPage() {
                 {/* Sidebar Stats */}
                 <div className="space-y-6">
                     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-                        <h3 className="font-semibold text-slate-900 mb-4">Performance Summary</h3>
+                        <h3 className="font-bold text-slate-900 mb-6 flex items-center gap-2">
+                            <TrendingUp className="w-5 h-5 text-emerald-600" />
+                            Performance Summary
+                        </h3>
 
                         <div className="space-y-4">
-                            <div className="flex justify-between items-center pb-3 border-b border-slate-50">
-                                <span className="text-sm text-slate-500">Correct Answers</span>
-                                <span className="font-medium text-slate-900">
-                                    {report.questionBreakdown?.filter(q => q.is_correct).length || 0} / 40
-                                </span>
+                            <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-100">
+                                <span className="text-xs font-bold text-indigo-400 uppercase tracking-wide">Correct Answers</span>
+                                <div className="mt-1 flex items-baseline gap-2">
+                                    <span className="text-2xl font-bold text-indigo-700">
+                                        {report.questionBreakdown?.filter(q => q.is_correct).length || 0}
+                                    </span>
+                                    <span className="text-sm font-medium text-indigo-400">/ 40</span>
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center pb-3 border-b border-slate-50">
-                                <span className="text-sm text-slate-500">Time Taken</span>
-                                <span className="font-medium text-slate-900 flex items-center gap-1">
-                                    <Clock className="w-3.5 h-3.5 text-slate-400" /> {report.timeTaken}
-                                </span>
+
+                            <div className="p-4 rounded-xl bg-orange-50 border border-orange-100">
+                                <span className="text-xs font-bold text-orange-400 uppercase tracking-wide">Time Taken</span>
+                                <div className="mt-1 flex items-center gap-2">
+                                    <Clock className="w-5 h-5 text-orange-600" />
+                                    <span className="text-xl font-bold text-orange-700">{report.timeTaken}</span>
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-slate-500">Percentile</span>
-                                <span className="font-medium text-purple-600">Top 15%</span>
+
+                            <div className="p-4 rounded-xl bg-purple-50 border border-purple-100">
+                                <span className="text-xs font-bold text-purple-400 uppercase tracking-wide">Percentile</span>
+                                <div className="mt-1 flex items-center gap-2">
+                                    <span className="text-xl font-bold text-purple-700">Top 15%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
