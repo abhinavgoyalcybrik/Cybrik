@@ -169,17 +169,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const login = async (username: string, password: string, role: 'student' | 'admin'): Promise<boolean> => {
-        // Try local JSON auth first (works offline and for development)
-        const localSuccess = await tryLocalAuth(username, password, role);
-        if (localSuccess) {
-            console.log('Logged in via local JSON auth');
-            return true;
-        }
-
-        // If local fails, try Django auth
+        // Try Django auth first (sets JWT cookies needed for API calls)
         const djangoSuccess = await tryDjangoAuth(username, password, role);
         if (djangoSuccess) {
             console.log('Logged in via Django auth');
+            return true;
+        }
+
+        // If Django fails, try local JSON auth (for development/offline use)
+        const localSuccess = await tryLocalAuth(username, password, role);
+        if (localSuccess) {
+            console.log('Logged in via local JSON auth');
             return true;
         }
 
