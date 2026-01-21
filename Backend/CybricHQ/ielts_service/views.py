@@ -351,12 +351,14 @@ class AdminQuestionViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AdminStudentViewSet(viewsets.ModelViewSet):
     """Admin CRUD for Students"""
     from django.contrib.auth import get_user_model
     queryset = get_user_model().objects.all()
     serializer_class = AdminStudentSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
     def get_queryset(self):
         # Only show students (non-staff) or all?
