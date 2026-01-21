@@ -160,9 +160,14 @@ export default function SpeakingReportPage({ params }: PageProps) {
                         },
                         detailed_results: feedback.parts?.map((p: any, idx: number) => {
                             const evalData = p.result || p.score || {};
+                            // Defensive check to avoid Object rendering errors
+                            let safeTranscript = '';
+                            if (typeof evalData.transcript === 'string') safeTranscript = evalData.transcript;
+                            else if (typeof p.transcript === 'string') safeTranscript = p.transcript;
+
                             return {
                                 label: `Part ${p.part || idx + 1}`,
-                                transcript: evalData.transcript || p.transcript || '',
+                                transcript: safeTranscript,
                                 evaluation: evalData,
                             };
                         }) || [],
@@ -474,7 +479,9 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                                     <div className="flex justify-between items-start mb-1">
                                                         <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Error #{i + 1}</span>
                                                     </div>
-                                                    <div className="text-sm line-through text-red-400 mb-1 font-medium">{mistake.error}</div>
+                                                    <div className="text-sm line-through text-red-400 mb-1 font-medium">
+                                                        {typeof mistake.error === 'string' ? mistake.error : JSON.stringify(mistake.error)}
+                                                    </div>
                                                     <div className="text-sm text-emerald-600 font-bold flex items-center gap-1">
                                                         <ChevronRight className="w-3 h-3" /> {mistake.correction}
                                                     </div>
@@ -565,7 +572,7 @@ function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
             <span>
                 {text.split(' ').map((word, i) => {
                     // Very naive matching
-                    const isError = evaluation.grammar_analysis.some((e: any) => e.error.includes(word));
+                    const isError = evaluation.grammar_analysis.some((e: any) => typeof e.error === 'string' && e.error.includes(word));
                     return isError ? <span key={i} className="bg-red-100 text-red-600 px-0.5 rounded mx-0.5 font-medium border-b border-red-200">{word}</span> : word + ' ';
                 })}
             </span>
