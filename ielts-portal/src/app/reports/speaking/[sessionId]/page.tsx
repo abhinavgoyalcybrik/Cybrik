@@ -240,9 +240,27 @@ export default function SpeakingReportPage({ params }: PageProps) {
                             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">CEFR Level</div>
                         </div>
                     </div>
-                    <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2">
-                        <MessageCircle className="w-4 h-4" />
-                        Chat with your personal AI tutor
+                </div>
+
+                {/* AI Tutor Banner */}
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white flex flex-col md:flex-row items-center justify-between shadow-lg">
+                    <div className="flex items-center gap-4 mb-4 md:mb-0">
+                        <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm">
+                            <Mic className="w-8 h-8 text-white" />
+                        </div>
+                        <div>
+                            <h3 className="text-xl font-bold">Personal AI Tutor</h3>
+                            <p className="text-indigo-100 text-sm opacity-90 max-w-xl">
+                                Want to sound more natural? Chat with your AI tutor to practice this topic again, get pronunciation tips, and improve your fluency.
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => window.dispatchEvent(new CustomEvent('open-ai-chat'))}
+                        className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold shadow-sm hover:bg-indigo-50 transition-colors flex items-center gap-2 whitespace-nowrap"
+                    >
+                        <MessageCircle className="w-5 h-5" />
+                        Chat with Tutor
                     </button>
                 </div>
 
