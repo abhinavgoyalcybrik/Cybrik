@@ -105,6 +105,9 @@ export default function WritingReportPage({ params }: PageProps) {
                 {/* Header */}
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center justify-between">
                     <div>
+                        <div className="mb-4">
+                            <img src="/logo.png" alt="Cybrik Logo" className="h-8 w-auto object-contain" />
+                        </div>
                         <h1 className="text-2xl font-bold text-slate-900">Writing Test Results</h1>
                         <p className="text-slate-500">Test #{result.attempt_id?.split('_')[1] || 'Unknown'} - AI Evaluation Report</p>
                     </div>

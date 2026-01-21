@@ -197,6 +197,9 @@ export default function ReportDetailPage() {
                 {/* Header Card */}
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
                     <div>
+                        <div className="mb-4">
+                            <img src="/logo.png" alt="Cybrik Logo" className="h-8 w-auto object-contain" />
+                        </div>
                         <div className="flex items-center gap-3 mb-2">
                             <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${report.testType === 'reading' ? 'bg-emerald-100 text-emerald-700' :
                                 report.testType === 'listening' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'

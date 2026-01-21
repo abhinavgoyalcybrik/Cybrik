@@ -222,6 +222,9 @@ export default function SpeakingReportPage({ params }: PageProps) {
                 {/* 1. Header Card (Matching "5.5/9.0" screenshot) */}
                 <div className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-100">
                     <div className="flex items-center gap-6">
+                        <div className="mr-4">
+                            <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
+                        </div>
                         <div className="text-left">
                             <div className="flex items-baseline gap-2">
                                 <span className="text-5xl font-bold text-purple-600">{result.overall_band.toFixed(1)}</span>
