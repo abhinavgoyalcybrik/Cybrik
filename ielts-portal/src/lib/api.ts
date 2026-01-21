@@ -42,7 +42,7 @@ export async function apiCall<T>(
     options: RequestInit = {}
 ): Promise<{ data?: T; error?: string }> {
     try {
-        const token = localStorage.getItem('auth_token');
+        const token = localStorage.getItem('ielts_token');
 
         const headers: HeadersInit = {
             'Content-Type': 'application/json',
@@ -57,6 +57,9 @@ export async function apiCall<T>(
         });
 
         if (!response.ok) {
+            if (response.status === 401) {
+                window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+            }
             const errorData = await response.json().catch(() => ({}));
             return { error: errorData.detail || errorData.error || `Error: ${response.status}` };
         }

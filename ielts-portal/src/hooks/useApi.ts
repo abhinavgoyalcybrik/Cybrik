@@ -43,6 +43,9 @@ export function useApi() {
             });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+                }
                 const errorData = await response.json().catch(() => ({}));
                 const errorMessage = errorData.detail || errorData.error || `Error: ${response.status}`;
                 return { data: null, error: errorMessage };

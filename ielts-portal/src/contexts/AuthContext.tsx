@@ -44,23 +44,71 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [token, setToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Load user from localStorage on mount
+    // Load user from localStorage on mount and verify session
     useEffect(() => {
-        const savedUser = localStorage.getItem('ielts_user');
-        const savedToken = localStorage.getItem('ielts_token');
-        if (savedUser) {
-            try {
-                setUser(JSON.parse(savedUser));
-                if (savedToken) {
+        const initAuth = async () => {
+            const savedUser = localStorage.getItem('ielts_user');
+            const savedToken = localStorage.getItem('ielts_token');
+
+            if (savedUser && savedToken) {
+                try {
+                    setUser(JSON.parse(savedUser));
                     setToken(savedToken);
+
+                    // Proactively verify the session with the backend
+                    const meResponse = await fetch(`/api/auth/me/`, {
+                        credentials: 'include',
+                    });
+
+                    if (!meResponse.ok) {
+                        // Backend session is invalid, trigger logout
+                        console.warn('Backend session expired on mount, logging out.');
+                        logout();
+                    } else {
+                        // Refresh user data to be sure
+                        const userData = await meResponse.json();
+                        // (Optional: update user state with fresh data here)
+                    }
+                } catch (e) {
+                    console.error('Auth initialization error:', e);
+                    logout();
                 }
-            } catch (e) {
-                localStorage.removeItem('ielts_user');
-                localStorage.removeItem('ielts_token');
             }
-        }
-        setIsLoading(false);
+            setIsLoading(false);
+        };
+
+        initAuth();
     }, []);
+
+    // Global listener for unauthorized events (e.g., 401 from any API call)
+    useEffect(() => {
+        const handleUnauthorized = () => {
+            console.warn('Unauthorized event received, logging out.');
+            logout();
+        };
+
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    }, []);
+
+    // Periodic session check (every 5 minutes)
+    useEffect(() => {
+        if (!user) return;
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch('/api/auth/me/', { credentials: 'include' });
+                if (!res.ok) {
+                    console.warn('Periodic session check failed, logging out.');
+                    logout();
+                }
+            } catch (error) {
+                console.error('Periodic check error:', error);
+            }
+        }, 5 * 60 * 1000); // 5 minutes
+
+        return () => clearInterval(interval);
+    }, [user]);
 
     // Sync with NextAuth session (Google Login)
     const { data: session } = useSession();
@@ -74,8 +122,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 role: 'student', // Default role
             };
             setUser(googleUser);
-            // Optional: Persist to localStorage if you want it to survive refresh without waiting for session check
-            // but NextAuth handles session persistence better.
         }
     }, [session, user]);
 
