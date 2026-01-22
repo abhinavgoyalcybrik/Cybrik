@@ -58,6 +58,7 @@ export default function CallDetailPage() {
     };
 
     const [syncing, setSyncing] = useState(false);
+    const [followUpTriggered, setFollowUpTriggered] = useState(false);
 
     const handleSync = async () => {
         if (!id) return;
@@ -69,11 +70,40 @@ export default function CallDetailPage() {
             setCall(data);
         } catch (err: any) {
             console.error("Sync failed", err);
-            alert("Failed to sync data: " + (err.message || "Unknown error"));
         } finally {
             setSyncing(false);
         }
     };
+
+    // Auto-trigger Sync while call is active, then Generate Follow-ups when completed
+    useEffect(() => {
+        if (!call) return;
+
+        const activeStatuses = ['initiated', 'ringing', 'in_progress', 'scheduled'];
+        const isActive = activeStatuses.includes(call.status);
+
+        let intervalId: NodeJS.Timeout | null = null;
+
+        if (isActive) {
+            // Auto-sync every 5 seconds while call is active
+            intervalId = setInterval(() => {
+                handleSync();
+            }, 5000);
+        } else if (call.status === 'completed' && !followUpTriggered) {
+            // Call just completed - trigger follow-up generation
+            setFollowUpTriggered(true);
+            const leadId = call.lead;
+            if (leadId) {
+                apiFetch(`/api/leads/${leadId}/generate-follow-ups/`, { method: "POST" })
+                    .then(() => console.log("Follow-ups generated automatically"))
+                    .catch((err) => console.error("Auto follow-up generation failed", err));
+            }
+        }
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [call?.status, followUpTriggered]);
 
     if (loading) {
         return (
