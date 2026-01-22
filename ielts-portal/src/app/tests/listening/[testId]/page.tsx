@@ -84,6 +84,7 @@ export default function ListeningTestPage({ params }: PageProps) {
     const [audioDuration, setAudioDuration] = useState(0);
     const [testCompleted, setTestCompleted] = useState(false);
     const [score, setScore] = useState(0);
+    const [savedSessionId, setSavedSessionId] = useState<string | null>(null);
 
     // AI Evaluation state
     const [isEvaluating, setIsEvaluating] = useState(false);
@@ -476,6 +477,10 @@ export default function ListeningTestPage({ params }: PageProps) {
                 });
 
                 if (saveRes.ok) {
+                    const saveData = await saveRes.json();
+                    if (saveData.session_id) {
+                        setSavedSessionId(saveData.session_id);
+                    }
                     console.log('Result saved successfully');
                 } else {
                     console.warn('Failed to save result:', await saveRes.text());
@@ -578,9 +583,20 @@ export default function ListeningTestPage({ params }: PageProps) {
                                 <h1 className="text-2xl font-bold text-slate-800">Listening Test Results</h1>
                                 <p className="text-slate-500">Test #{test.id} - AI Evaluation Report</p>
                             </div>
-                            <div className={`px-6 py-4 rounded-2xl border-2 ${getBandColor(bandScore)}`}>
-                                <div className="text-sm font-medium opacity-75">Overall Band</div>
-                                <div className="text-4xl font-bold">{bandScore.toFixed(1)}</div>
+                            <div className="flex items-center gap-4">
+                                {savedSessionId && (
+                                    <a
+                                        href={`/reports/${savedSessionId}`}
+                                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                                    >
+                                        <FileText className="w-4 h-4" />
+                                        View Full Report
+                                    </a>
+                                )}
+                                <div className={`px-6 py-4 rounded-2xl border-2 ${getBandColor(bandScore)}`}>
+                                    <div className="text-sm font-medium opacity-75">Overall Band</div>
+                                    <div className="text-4xl font-bold">{bandScore.toFixed(1)}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
