@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send, AlertCircle, CheckCircle } from 'lucide-react';
 
+import { createPortal } from 'react-dom';
+
 interface QuickSupportWidgetProps {
     testType: string;
     testId?: string;
@@ -15,6 +17,11 @@ export default function QuickSupportWidget({ testType, testId, variant = 'floati
     const [category, setCategory] = useState('test');
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -78,8 +85,8 @@ export default function QuickSupportWidget({ testType, testId, variant = 'floati
             )}
 
             {/* Widget Modal */}
-            {isOpen && (
-                <div className="fixed bottom-6 right-6 z-50 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200">
+            {isOpen && mounted && createPortal(
+                <div className="fixed bottom-6 right-6 z-50 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 font-sans">
                     {/* Header */}
                     <div className="bg-slate-900 px-4 py-3 flex items-center justify-between">
                         <h3 className="text-white font-medium flex items-center gap-2">
@@ -144,7 +151,8 @@ export default function QuickSupportWidget({ testType, testId, variant = 'floati
                             </form>
                         )}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );

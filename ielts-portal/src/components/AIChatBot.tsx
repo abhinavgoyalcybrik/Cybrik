@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { MessageCircle, X, Send, Loader2, Bot, History, Sparkles, ChevronRight, Minimize2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
@@ -42,10 +43,15 @@ export default function AIChatBot({ variant = 'floating' }: AIChatBotProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const pathname = usePathname();
 
     const isTestPage = pathname?.startsWith('/tests/');
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Hide the global floating instance on test pages
     if (variant === 'floating' && isTestPage) return null;
@@ -164,138 +170,142 @@ export default function AIChatBot({ variant = 'floating' }: AIChatBotProps) {
                 </button>
             )}
 
-            {/* Backdrop (Optional - for mobile or focus) */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 transition-opacity"
-                    onClick={() => setIsOpen(false)}
-                />
-            )}
+            {/* Portal for Modal Elements */}
+            {isOpen && mounted && createPortal(
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-[60] transition-opacity"
+                        onClick={() => setIsOpen(false)}
+                    />
 
-            {/* Sidebar Drawer */}
-            <div
-                className={`fixed top-0 right-0 z-50 h-[100dvh] w-full sm:w-[400px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-slate-100 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-            >
-                {/* Header */}
-                <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
-                            <Bot className="w-5 h-5" />
-                        </div>
-                        <div>
-                            <h2 className="text-sm font-bold text-slate-800">Personal AI Tutor</h2>
-                            <div className="flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Online</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <button
-                            className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                            title="Chat History"
-                        >
-                            <History className="w-4 h-4" />
-                        </button>
-                        <button
-                            onClick={() => setIsOpen(false)}
-                            className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-slate-50">
-
-                    {/* Welcome State */}
-                    {messages.length === 0 && (
-                        <div className="mt-8 text-center px-6">
-                            <div className="w-20 h-20 bg-white rounded-full shadow-sm mx-auto mb-6 flex items-center justify-center relative">
-                                <div className="absolute inset-0 bg-purple-100 rounded-full animate-ping opacity-20"></div>
-                                <Bot className="w-10 h-10 text-purple-600" />
-                            </div>
-                            <h3 className="font-bold text-slate-800 text-lg mb-2">How can I help you?</h3>
-                            <p className="text-sm text-slate-500 leading-relaxed mb-8">
-                                I've analyzed your test results. Ask me to explain your score, find mistakes, or help you practice!
-                            </p>
-
-                            <div className="space-y-2">
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Suggested Questions</p>
-                                <div className="flex flex-wrap justify-center gap-2">
-                                    {SUGGESTED_QUESTIONS.map((q, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => sendMessage(q)}
-                                            className="px-3 py-2 bg-white border border-slate-200 hover:border-purple-300 hover:text-purple-700 text-slate-600 text-xs font-medium rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95"
-                                        >
-                                            {q}
-                                        </button>
-                                    ))}
+                    {/* Sidebar Drawer */}
+                    <div
+                        className={`fixed top-0 right-0 z-[70] h-[100dvh] w-full sm:w-[400px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out border-l border-slate-100 flex flex-col font-sans animate-in slide-in-from-right`}
+                    >
+                        {/* Header */}
+                        <div className="h-16 px-6 border-b border-slate-100 flex items-center justify-between bg-white shrink-0">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                                    <Bot className="w-5 h-5" />
                                 </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Chat Messages */}
-                    {messages.map((msg, i) => (
-                        <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                                ? 'bg-purple-600 text-white rounded-br-none'
-                                : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
-                                }`}>
-                                {msg.role === 'assistant' && (
-                                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100 opacity-70">
-                                        <Bot className="w-3 h-3" />
-                                        <span className="text-[10px] font-bold uppercase">AI Tutor</span>
+                                <div>
+                                    <h2 className="text-sm font-bold text-slate-800">Personal AI Tutor</h2>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Online</span>
                                     </div>
-                                )}
-                                <div className="markdown-prose whitespace-pre-wrap">
-                                    {msg.content}
                                 </div>
                             </div>
-                        </div>
-                    ))}
-
-                    {isLoading && (
-                        <div className="flex justify-start">
-                            <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
-                                <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
-                                <span className="text-xs font-medium text-slate-400">Thinking...</span>
+                            <div className="flex items-center gap-1">
+                                <button
+                                    className="p-2 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                    title="Chat History"
+                                >
+                                    <History className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
                             </div>
                         </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
 
-                {/* Input Area */}
-                <div className="p-4 bg-white border-t border-slate-100 shrink-0">
-                    <div className="relative">
-                        <textarea
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Ask anything about your results..."
-                            rows={1}
-                            className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all resize-none shadow-inner"
-                            style={{ minHeight: '52px' }}
-                        />
-                        <button
-                            onClick={() => sendMessage()}
-                            disabled={!input.trim() || isLoading}
-                            className="absolute right-2 top-2 p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
-                        >
-                            <Send className="w-4 h-4" />
-                        </button>
+                        {/* Messages Area */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-slate-50">
+
+                            {/* Welcome State */}
+                            {messages.length === 0 && (
+                                <div className="mt-8 text-center px-6">
+                                    <div className="w-20 h-20 bg-white rounded-full shadow-sm mx-auto mb-6 flex items-center justify-center relative">
+                                        <div className="absolute inset-0 bg-purple-100 rounded-full animate-ping opacity-20"></div>
+                                        <Bot className="w-10 h-10 text-purple-600" />
+                                    </div>
+                                    <h3 className="font-bold text-slate-800 text-lg mb-2">How can I help you?</h3>
+                                    <p className="text-sm text-slate-500 leading-relaxed mb-8">
+                                        I've analyzed your test results. Ask me to explain your score, find mistakes, or help you practice!
+                                    </p>
+
+                                    <div className="space-y-2">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Suggested Questions</p>
+                                        <div className="flex flex-wrap justify-center gap-2">
+                                            {SUGGESTED_QUESTIONS.map((q, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => sendMessage(q)}
+                                                    className="px-3 py-2 bg-white border border-slate-200 hover:border-purple-300 hover:text-purple-700 text-slate-600 text-xs font-medium rounded-lg transition-all shadow-sm hover:shadow-md active:scale-95"
+                                                >
+                                                    {q}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Chat Messages */}
+                            {messages.map((msg, i) => (
+                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                    <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed shadow-sm ${msg.role === 'user'
+                                        ? 'bg-purple-600 text-white rounded-br-none'
+                                        : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
+                                        }`}>
+                                        {msg.role === 'assistant' && (
+                                            <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100 opacity-70">
+                                                <Bot className="w-3 h-3" />
+                                                <span className="text-[10px] font-bold uppercase">AI Tutor</span>
+                                            </div>
+                                        )}
+                                        <div className="markdown-prose whitespace-pre-wrap">
+                                            {msg.content}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {isLoading && (
+                                <div className="flex justify-start">
+                                    <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center gap-2">
+                                        <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                                        <span className="text-xs font-medium text-slate-400">Thinking...</span>
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* Input Area */}
+                        <div className="p-4 bg-white border-t border-slate-100 shrink-0">
+                            <div className="relative">
+                                <textarea
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Ask anything about your results..."
+                                    rows={1}
+                                    className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all resize-none shadow-inner"
+                                    style={{ minHeight: '52px' }}
+                                />
+                                <button
+                                    onClick={() => sendMessage()}
+                                    disabled={!input.trim() || isLoading}
+                                    className="absolute right-2 top-2 p-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
+                                >
+                                    <Send className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="mt-2 text-center">
+                                <p className="text-[10px] text-slate-400">
+                                    AI can make mistakes. Double check important info.
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="mt-2 text-center">
-                        <p className="text-[10px] text-slate-400">
-                            AI can make mistakes. Double check important info.
-                        </p>
-                    </div>
-                </div>
-            </div>
+                </>,
+                document.body
+            )}
         </>
     );
 }
