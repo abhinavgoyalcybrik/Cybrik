@@ -15,6 +15,7 @@ import {
     Headphones,
     BookOpen,
     FileText,
+    LifeBuoy,
 } from 'lucide-react';
 
 const navItems = [
@@ -24,6 +25,7 @@ const navItems = [
     { name: 'Listening Tests', href: '/admin/listening', icon: Headphones },
     { name: 'Reading Tests', href: '/admin/reading', icon: BookOpen },
     { name: 'Student Reports', href: '/admin/reports', icon: FileText },
+    { name: 'Support', href: '/admin/tickets', icon: LifeBuoy },
     { name: 'Manage Students', href: '/admin/users', icon: Users },
     { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
@@ -35,6 +37,7 @@ const studentNavItems = [
     { name: 'Practice Listening', href: '/tests/listening', icon: Headphones },
     { name: 'Practice Reading', href: '/tests/reading', icon: BookOpen },
     { name: 'My Reports', href: '/reports', icon: FileText },
+    { name: 'Support', href: '/support', icon: LifeBuoy },
     { name: 'My Profile', href: '/account/profile', icon: Users },
 ];
 
