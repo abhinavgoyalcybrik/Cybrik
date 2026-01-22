@@ -432,10 +432,10 @@ def country_wise_stats(request):
     else:
         leads_qs = Lead.objects.none()
     
-    # Optional country filter
+    # Optional country filter (case-insensitive)
     country_filter = request.query_params.get("country")
     if country_filter:
-        leads_qs = leads_qs.filter(preferred_country=country_filter)
+        leads_qs = leads_qs.filter(preferred_country__iexact=country_filter)
     
     # Country distribution with status breakdown
     country_stats = leads_qs.exclude(
@@ -483,10 +483,16 @@ def country_wise_stats(request):
     conversion_rate = round((funnel["converted"] / total * 100) if total > 0 else 0, 2)
     
     # Get list of available countries for the filter dropdown
+    # Use proper tenant filtering
+    if tenant:
+        countries_base_qs = Lead.objects.filter(tenant=tenant)
+    elif request.user.is_superuser:
+        countries_base_qs = Lead.objects.all()
+    else:
+        countries_base_qs = Lead.objects.none()
+    
     available_countries = list(
-        Lead.objects.filter(
-            tenant=tenant if tenant else Q()
-        ).exclude(
+        countries_base_qs.exclude(
             preferred_country__isnull=True
         ).exclude(
             preferred_country=""
