@@ -49,7 +49,13 @@ interface ReportDetail {
     dateTaken: string;
     timeTaken: string;
     bandScore: number;
-    feedback?: string;
+    feedback?: string | {
+        strengths?: string;
+        improvements?: string;
+        overall_band?: number;
+        transcript?: string;
+        [key: string]: any;
+    };
     questionBreakdown?: QuestionResult[];
     transcript?: string;
     audioUrl?: string;
@@ -147,8 +153,8 @@ export default function ReportDetailPage() {
                     testType: moduleType,
                     dateTaken: session.created_at || session.start_time,
                     timeTaken: attempt.duration_minutes ? `${attempt.duration_minutes} min` : '0 min',
-                    bandScore: attempt.band_score || feedback.overall_band || 0,
-                    feedback: typeof feedback === 'string' ? feedback : feedback.summary || feedback.feedback || '',
+                    bandScore: attempt.band_score || (typeof feedback === 'object' ? feedback.overall_band : undefined) || 0,
+                    feedback: typeof feedback === 'string' ? feedback : feedback,
                     questionBreakdown: (attempt.answers && Object.keys(attempt.answers).length > 0)
                         ? (Array.isArray(attempt.answers)
                             ? attempt.answers.map((ans: any, idx: number) => ({
@@ -170,9 +176,9 @@ export default function ReportDetailPage() {
                             correct_answer: item.correct_answer,
                             is_correct: item.is_correct
                         })),
-                    transcript: feedback.transcript,
+                    transcript: typeof feedback === 'object' ? feedback.transcript : undefined,
                     audioUrl: attempt.audio_url,
-                    improvementAreas: feedback.improvements || []
+                    improvementAreas: typeof feedback === 'object' ? (feedback.improvements || []) : []
                 });
             } catch (err) {
                 console.error(err);
