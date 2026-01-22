@@ -848,6 +848,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         """
         Analyze all transcripts for this lead and generate follow-up tasks.
         """
+        logger.info(f"Generating follow-ups for lead {pk}")
         lead = self.get_object()
         
         # Gather all transcripts from calls linked to this lead
@@ -867,7 +868,10 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 date_str = call.created_at.strftime("%Y-%m-%d %H:%M")
                 full_transcript += f"\n\n--- Call on {date_str} ---\n{text}"
         
+        logger.info(f"Collected transcript length: {len(full_transcript)}")
+        
         if not full_transcript:
+            logger.warning(f"No transcripts found for lead {lead.id}, scheduling auto-retry")
             # If no transcript, assume call failed/unattended and schedule retry
             from django.utils import timezone
             from datetime import timedelta
@@ -876,17 +880,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             due_time = timezone.now() + timedelta(hours=2)
             
             task = FollowUp.objects.create(
-                lead=None, # lead is checking Lead model, but FollowUp expects Applicant usually? 
-                # Wait, LeadViewSet.generate_follow_ups... lead variable is a Lead instance.
-                # FollowUp.lead is a ForeignKey to Applicant? Let's check model.
-                # Based on previous code: task = FollowUp.objects.create(lead=None, ... metadata={'lead_id': lead.id})
-                # But wait, FollowUp model definition in serializers.py line 506 says lead is Applicant.
-                # So we should set crm_lead or just use metadata.
-                # Let's match the existing creation logic in this file.
-                
-                # Looking at lines 749-755 (which I can't see fully but saw in previous view_file):
-                # task = FollowUp.objects.create(lead=None ...)
-                
+                lead=None,
                 crm_lead=lead, # Assuming crm_lead field exists for Lead model link, or just rely on metadata
                 channel='ai_call',
                 status='pending',
@@ -1037,11 +1031,33 @@ class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         if call.metadata:
             conversation_id = call.metadata.get("conversation_id")
             
-        if not conversation_id:
-            conversation_id = call.external_call_id
+        # If no conversation ID, or if external_ID is a SmartFlo SID (starts with CA), try to look it up
+        if not conversation_id or (call.external_call_id and call.external_call_id.startswith("CA")):
+            # It might be using external_call_id as fallback, but check if it's valid
+            if call.external_call_id and not call.external_call_id.startswith("CA") and not conversation_id:
+                conversation_id = call.external_call_id
             
+            # If still invalid or missing, try to sync from list
+            if not conversation_id:
+                logger.info(f"Conversation ID missing for call {call.id} (Ext: {call.external_call_id}). Attempting auto-sync...")
+                from .tasks import sync_all_elevenlabs_conversations
+                # Sync conversations from last 24h (or more if call is older)
+                hours_back = 24
+                if call.created_at:
+                    from django.utils import timezone
+                    diff = timezone.now() - call.created_at
+                    if diff.days > 0:
+                        hours_back = (diff.days + 1) * 24
+                
+                # Run sync synchronously to get the ID
+                sync_all_elevenlabs_conversations(hours_back=hours_back)
+                call.refresh_from_db()
+                
+                if call.metadata:
+                    conversation_id = call.metadata.get("conversation_id")
+
         if not conversation_id:
-             return Response({"error": "No conversation ID found on call record"}, status=status.HTTP_400_BAD_REQUEST)
+             return Response({"error": "No conversation ID found (and auto-sync failed to find match)"}, status=status.HTTP_404_NOT_FOUND)
              
         # Trigger task
         from .tasks import fetch_and_store_conversation_task
