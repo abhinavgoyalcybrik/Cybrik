@@ -904,8 +904,96 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             analyzer = CallAnalyzer()
             logger.debug("Sending to AI...")
             analysis = analyzer.analyze_transcript(full_transcript, metadata={"lead_id": lead.id, "name": lead.first_name or lead.name})
-            logger.debug(f"AI Analysis Result: {analysis}")
+            logger.info(f"AI Analysis Result: {analysis}")
             
+            # ====== AUTO-UPDATE LEAD PROFILE ======
+            # Ported from tasks.py analyze_call_transcript to ensure immediate update
+            try:
+                lead_updates = []
+                
+                # 1. Personal Details
+                personal = analysis.get('personal_details', {})
+                if personal:
+                    if personal.get('first_name') and not lead.first_name:
+                        lead.first_name = personal.get('first_name')
+                        lead_updates.append('first_name')
+                    if personal.get('last_name') and not lead.last_name:
+                        lead.last_name = personal.get('last_name')
+                        lead_updates.append('last_name')
+                    if personal.get('dob') and not lead.dob:
+                        lead.dob = personal.get('dob')
+                        lead_updates.append('dob')
+                    if personal.get('passport_number') and not lead.passport_number:
+                        lead.passport_number = personal.get('passport_number')
+                        lead_updates.append('passport_number')
+                    if personal.get('address') and not lead.address:
+                        lead.address = personal.get('address')
+                        lead_updates.append('address')
+                    if personal.get('city') and not lead.city:
+                        lead.city = personal.get('city')
+                        lead_updates.append('city')
+                    if personal.get('country') and not lead.country:
+                        lead.country = personal.get('country')
+                        lead_updates.append('country')
+                    if personal.get('preferred_country') and not lead.preferred_country:
+                        lead.preferred_country = personal.get('preferred_country')
+                        lead_updates.append('preferred_country')
+                
+                # 2. Academic History -> highest_qualification, qualification_marks
+                academic_history = analysis.get('academic_history', [])
+                if academic_history and len(academic_history) > 0:
+                    latest = academic_history[0]
+                    if latest.get('degree') and not lead.highest_qualification:
+                        lead.highest_qualification = latest.get('degree')
+                        lead_updates.append('highest_qualification')
+                    grade = latest.get('grade') or latest.get('score')
+                    if grade and not lead.qualification_marks:
+                        lead.qualification_marks = str(grade)
+                        lead_updates.append('qualification_marks')
+                
+                # 3. English Proficiency
+                english = analysis.get('english_proficiency', {})
+                if english and not lead.english_test_scores:
+                    score_str = f"{english.get('test_type', '')} {english.get('overall_score', '')}".strip()
+                    if score_str:
+                        lead.english_test_scores = score_str
+                        lead_updates.append('english_test_scores')
+                
+                # 4. Visa Consultancy Fields
+                if analysis.get('enquiry_type') and not lead.enquiry_type:
+                    lead.enquiry_type = analysis.get('enquiry_type')
+                    lead_updates.append('enquiry_type')
+                
+                if analysis.get('exam_type') and not lead.exam_type:
+                    lead.exam_type = analysis.get('exam_type')
+                    lead_updates.append('exam_type')
+                
+                if analysis.get('qualification_gap') and not lead.qualification_gap:
+                    lead.qualification_gap = analysis.get('qualification_gap')
+                    lead_updates.append('qualification_gap')
+                
+                # preferred_country from top-level analysis
+                if analysis.get('preferred_country') and not lead.preferred_country:
+                    lead.preferred_country = analysis.get('preferred_country')
+                    lead_updates.append('preferred_country')
+                
+                # 5. Store full analysis in metadata
+                if not lead.metadata:
+                    lead.metadata = {}
+                lead.metadata['last_ai_analysis'] = {
+                    'source': 'manual_generate_follow_ups',
+                    'qualification_score': analysis.get('qualification_score'),
+                    'interest_level': analysis.get('interest_level'),
+                    'analyzed_at': timezone.now().isoformat(),
+                }
+                lead_updates.append('metadata')
+                
+                if lead_updates:
+                    lead.save(update_fields=list(set(lead_updates)))
+                    logger.info(f"Updated Lead {lead.id} profile from AI analysis in generate_follow_ups: {lead_updates}")
+            except Exception as e:
+                logger.error(f"Error updating Lead profile in generate_follow_ups: {e}")
+
             # ====== AI AUTO-STATUS UPDATE ======
             # Update lead status based on AI analysis
             interest_level = analysis.get('interest_level', 'medium')
@@ -923,6 +1011,17 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 lead.save(update_fields=['status'])
                 logger.info(f"AI auto-updated lead {lead.id} status: {old_status} -> {lead.status}")
             
+            # ====== UPDATE CALL RECORDS ======
+            # Mark calls as analyzed to prevent background task from re-processing
+            # and to store the result on the call record(s)
+            for call in calls:
+                if not call.ai_analyzed:
+                    call.ai_analyzed = True
+                    call.ai_analysis_result = analysis
+                    call.ai_quality_score = analysis.get('qualification_score', 0)
+                    call.save(update_fields=['ai_analyzed', 'ai_analysis_result', 'ai_quality_score'])
+                    logger.info(f"Marked call {call.id} as analyzed from generate_follow_ups")
+
             created_tasks = []
             analysis_follow_up = analysis.get('follow_up', {})
             

@@ -91,12 +91,18 @@ export default function CallDetailPage() {
             }, 5000);
         } else if (call.status === 'completed' && !followUpTriggered) {
             // Call just completed - trigger follow-up generation
-            setFollowUpTriggered(true);
-            const leadId = call.lead;
-            if (leadId) {
-                apiFetch(`/api/leads/${leadId}/generate-follow-ups/`, { method: "POST" })
-                    .then(() => console.log("Follow-ups generated automatically"))
-                    .catch((err) => console.error("Auto follow-up generation failed", err));
+            // Only trigger if analysis hasn't been done yet (avoid race with background task)
+            if (!call.ai_analysis_result) {
+                setFollowUpTriggered(true);
+                const leadId = call.lead;
+                if (leadId) {
+                    apiFetch(`/api/leads/${leadId}/generate-follow-ups/`, { method: "POST" })
+                        .then(() => console.log("Follow-ups generated automatically"))
+                        .catch((err) => console.error("Auto follow-up generation failed", err));
+                }
+            } else {
+                // Already analyzed (by background task), just mark as triggered so we don't retry
+                setFollowUpTriggered(true);
             }
         }
 
