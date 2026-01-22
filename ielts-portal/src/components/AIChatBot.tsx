@@ -53,9 +53,6 @@ export default function AIChatBot({ variant = 'floating' }: AIChatBotProps) {
         setMounted(true);
     }, []);
 
-    // Hide the global floating instance on test pages
-    if (variant === 'floating' && isTestPage) return null;
-
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -144,6 +141,11 @@ export default function AIChatBot({ variant = 'floating' }: AIChatBotProps) {
             sendMessage();
         }
     };
+
+    // Helper to determine if we should render anything
+    const shouldRender = !(variant === 'floating' && isTestPage);
+
+    if (!shouldRender) return null;
 
     return (
         <>
