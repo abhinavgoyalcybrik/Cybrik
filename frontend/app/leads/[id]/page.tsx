@@ -54,6 +54,10 @@ export default function LeadDetailPage() {
   const [uploading, setUploading] = useState(false);
   const [tasksLoading, setTasksLoading] = useState(false);
 
+  // Overview state
+  const [overview, setOverview] = useState<any>(null);
+  const [overviewLoading, setOverviewLoading] = useState(false);
+
   // Education Modal State
   const [showEducationModal, setShowEducationModal] = useState(false);
   const [eduForm, setEduForm] = useState({
@@ -163,6 +167,19 @@ export default function LeadDetailPage() {
     }
   };
 
+  const fetchOverview = async () => {
+    if (!id) return;
+    setOverviewLoading(true);
+    try {
+      const overviewData = await apiFetch(`/api/leads/${id}/overview/`);
+      setOverview(overviewData);
+    } catch (e) {
+      console.error("Failed to load overview", e);
+    } finally {
+      setOverviewLoading(false);
+    }
+  };
+
   useEffect(() => {
     let mounted = true;
     async function load() {
@@ -206,6 +223,13 @@ export default function LeadDetailPage() {
       fetchActivities();
     }
   }, [activeTab, id]);
+
+  // Fetch Overview when page loads (for Profile overview section)
+  useEffect(() => {
+    if (id) {
+      fetchOverview();
+    }
+  }, [id]);
 
   async function handleDelete() {
     if (!confirm("Are you sure you want to delete this lead? This action cannot be undone.")) return;
@@ -426,28 +450,128 @@ export default function LeadDetailPage() {
     switch (activeTab) {
       case "profile":
         return (
-          <div className="bg-white rounded-xl border border-[var(--cy-border)] p-6 shadow-sm">
-            <div className="flex justify-between items-center mb-6 border-b border-[var(--cy-border)] pb-2">
-              <h3 className="text-lg font-bold text-[var(--cy-navy)]">Personal Details</h3>
-              <button className="btn btn-sm btn-outline" onClick={() => setIsEditModalOpen(true)}>Edit Profile</button>
+          <div className="space-y-6">
+            {/* Overview Section */}
+            <div className="bg-[#1a1f2e] rounded-xl border border-gray-700 overflow-hidden">
+              {/* Tab Header */}
+              <div className="border-b border-gray-700">
+                <nav className="flex gap-6 px-6">
+                  <button className="px-1 py-3 text-sm font-medium border-b-2 border-[var(--cy-lime)] text-white">Overview</button>
+                  <button className="px-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white"
+                    onClick={() => setActiveTab("transcripts")}>Transcription</button>
+                  <button className="px-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white"
+                    onClick={() => setActiveTab("profile")}>Client data</button>
+                </nav>
+              </div>
+              {/* Overview Content */}
+              <div className="p-6">
+                {overviewLoading ? (
+                  <div className="flex justify-center py-8">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--cy-lime)]"></div>
+                  </div>
+                ) : overview ? (
+                  <div className="space-y-6">
+                    {/* Summary */}
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-400 mb-2">Summary</h4>
+                      <p className="text-white text-sm leading-relaxed">
+                        {overview.summary || "No conversation summary available yet. Complete a call with this lead to generate an overview."}
+                      </p>
+                    </div>
+                    {/* Call Details Grid */}
+                    <div className="space-y-4 pt-4 border-t border-gray-700">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-gray-400">Call status</span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${overview.call_status === 'completed' || overview.call_status === 'done'
+                            ? 'bg-green-500/20 text-green-400'
+                            : overview.call_status === 'failed'
+                              ? 'bg-red-500/20 text-red-400'
+                              : 'bg-gray-500/20 text-gray-400'
+                          }`}>
+                          {overview.call_status ? overview.call_status.charAt(0).toUpperCase() + overview.call_status.slice(1) : 'No calls yet'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-gray-400">How the call ended</span>
+                        <span className="text-sm text-gray-300">{overview.call_outcome || 'N/A'}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-gray-400">User ID</span>
+                        <span className="text-sm text-gray-300">{overview.user_id || 'No user ID'}</span>
+                      </div>
+                      {overview.call_duration && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-400">Call Duration</span>
+                          <span className="text-sm text-gray-300">
+                            {Math.floor(overview.call_duration / 60)}m {overview.call_duration % 60}s
+                          </span>
+                        </div>
+                      )}
+                      {overview.interest_level && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-400">Interest Level</span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${overview.interest_level === 'high'
+                              ? 'bg-green-500/20 text-green-400'
+                              : overview.interest_level === 'medium'
+                                ? 'bg-yellow-500/20 text-yellow-400'
+                                : 'bg-gray-500/20 text-gray-400'
+                            }`}>
+                            {overview.interest_level.charAt(0).toUpperCase() + overview.interest_level.slice(1)}
+                          </span>
+                        </div>
+                      )}
+                      {overview.qualification_score !== null && overview.qualification_score !== undefined && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-400">Qualification Score</span>
+                          <span className="text-sm text-gray-300">{overview.qualification_score}%</span>
+                        </div>
+                      )}
+                    </div>
+                    {/* Key Points */}
+                    {overview.key_points && overview.key_points.length > 0 && (
+                      <div className="pt-4 border-t border-gray-700">
+                        <h4 className="text-sm font-semibold text-gray-400 mb-2">Key Discussion Points</h4>
+                        <ul className="space-y-1">
+                          {overview.key_points.map((point: string, idx: number) => (
+                            <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
+                              <span className="text-[var(--cy-lime)]">•</span>
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-gray-400 text-sm italic">No overview data available. Complete a call to generate an overview.</p>
+                )}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { label: "Full Name", value: displayName },
-                { label: "Email", value: lead.email || "N/A" },
-                { label: "Phone", value: lead.phone || "N/A" },
-                { label: "Date of Birth", value: lead.dob ? new Date(lead.dob).toLocaleDateString() : "N/A" },
-                { label: "Passport Number", value: lead.passport_number || "N/A" },
-                { label: "Stage", value: currentStage.label },
-                { label: "Joined", value: lead.received_at ? new Date(lead.received_at).toLocaleDateString() : "N/A" },
-                { label: "Address", value: lead.address || "Not available" },
-                { label: "Preferred Country", value: lead.preferred_country || "Not specified" },
-              ].map((item, idx) => (
-                <div key={idx} className="flex flex-col">
-                  <span className="text-xs font-medium text-[var(--cy-text-muted)] uppercase tracking-wider mb-1">{item.label}</span>
-                  <span className="text-[var(--cy-navy)] font-medium text-base border-b border-dashed border-[var(--cy-border)] pb-1">{item.value}</span>
-                </div>
-              ))}
+
+            {/* Personal Details */}
+            <div className="bg-white rounded-xl border border-[var(--cy-border)] p-6 shadow-sm">
+              <div className="flex justify-between items-center mb-6 border-b border-[var(--cy-border)] pb-2">
+                <h3 className="text-lg font-bold text-[var(--cy-navy)]">Personal Details</h3>
+                <button className="btn btn-sm btn-outline" onClick={() => setIsEditModalOpen(true)}>Edit Profile</button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { label: "Full Name", value: displayName },
+                  { label: "Email", value: lead.email || "N/A" },
+                  { label: "Phone", value: lead.phone || "N/A" },
+                  { label: "Date of Birth", value: lead.dob ? new Date(lead.dob).toLocaleDateString() : "N/A" },
+                  { label: "Passport Number", value: lead.passport_number || "N/A" },
+                  { label: "Stage", value: currentStage.label },
+                  { label: "Joined", value: lead.received_at ? new Date(lead.received_at).toLocaleDateString() : "N/A" },
+                  { label: "Address", value: lead.address || "Not available" },
+                  { label: "Preferred Country", value: lead.preferred_country || "Not specified" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex flex-col">
+                    <span className="text-xs font-medium text-[var(--cy-text-muted)] uppercase tracking-wider mb-1">{item.label}</span>
+                    <span className="text-[var(--cy-navy)] font-medium text-base border-b border-dashed border-[var(--cy-border)] pb-1">{item.value}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );

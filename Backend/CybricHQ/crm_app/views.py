@@ -1070,6 +1070,88 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             logger.exception(f"Error generating follow-ups: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(detail=True, methods=["get"], url_path="overview")
+    def overview(self, request, pk=None):
+        """
+        Fetch the lead overview including latest call summary, status, and evaluation data.
+        Returns data from ElevenLabs conversation analysis for display in the Profile section.
+        """
+        lead = self.get_object()
+        
+        # Find the latest completed call for this lead
+        latest_call = CallRecord.objects.filter(
+            lead=lead,
+            status__in=["completed", "done"]
+        ).order_by("-created_at").first()
+        
+        overview_data = {
+            "lead_id": lead.id,
+            "lead_name": lead.name or f"{lead.first_name} {lead.last_name or ''}".strip(),
+            "summary": None,
+            "call_status": None,
+            "call_outcome": None,
+            "user_id": None,
+            "call_duration": None,
+            "interest_level": None,
+            "qualification_score": None,
+            "evaluation_criteria": None,
+            "key_points": [],
+            "transcript_available": False,
+            "last_call_at": None,
+        }
+        
+        if latest_call:
+            metadata = latest_call.metadata or {}
+            
+            # Extract ElevenLabs summary
+            overview_data["summary"] = metadata.get("elevenlabs_summary")
+            
+            # Extract call status
+            overview_data["call_status"] = latest_call.status
+            overview_data["call_duration"] = latest_call.duration_seconds
+            overview_data["last_call_at"] = latest_call.created_at.isoformat() if latest_call.created_at else None
+            
+            # Check for conversation data from ElevenLabs
+            conv_data = metadata.get("conversation_data", {})
+            if conv_data:
+                # Get call outcome/end reason
+                overview_data["call_outcome"] = conv_data.get("status") or conv_data.get("call_status")
+                
+                # Get user ID if available
+                conv_metadata = conv_data.get("metadata", {})
+                overview_data["user_id"] = conv_metadata.get("user_id") or conv_metadata.get("lead_id")
+                
+                # Get analysis data if available
+                analysis = conv_data.get("analysis", {})
+                if analysis:
+                    overview_data["evaluation_criteria"] = analysis.get("evaluation_criteria_results")
+                    # If no summary from top-level, try analysis
+                    if not overview_data["summary"]:
+                        overview_data["summary"] = analysis.get("transcript_summary")
+            
+            # Get AI analysis data if available
+            ai_analysis = metadata.get("ai_analysis_result") or {}
+            if ai_analysis:
+                overview_data["interest_level"] = ai_analysis.get("interest_level")
+                overview_data["qualification_score"] = ai_analysis.get("qualification_score")
+                overview_data["key_points"] = ai_analysis.get("key_points", [])
+            
+            # Check for transcript
+            overview_data["transcript_available"] = latest_call.transcripts.exists()
+            
+            # Get evaluation criteria from metadata
+            if metadata.get("elevenlabs_evaluation"):
+                overview_data["evaluation_criteria"] = metadata.get("elevenlabs_evaluation")
+        
+        # Also check lead's metadata for AI analysis
+        lead_metadata = lead.metadata or {}
+        last_ai_analysis = lead_metadata.get("last_ai_analysis", {})
+        if last_ai_analysis and not overview_data["interest_level"]:
+            overview_data["interest_level"] = last_ai_analysis.get("interest_level")
+            overview_data["qualification_score"] = last_ai_analysis.get("qualification_score")
+        
+        return Response(overview_data)
+
 
 class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
     queryset = CallRecord.objects.all().order_by("-created_at")
