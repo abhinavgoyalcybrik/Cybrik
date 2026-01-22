@@ -23,6 +23,7 @@ import { SpeakingTest } from '@/types';
 import MicrophoneTest from '@/components/MicrophoneTest';
 import { evaluateAllSpeakingParts, CombinedSpeakingResult, saveSpeakingResults } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
+import AIChatBot from '@/components/AIChatBot';
 
 type TestPart = 'intro' | 1 | 2 | 3;
 type InterviewState = 'idle' | 'connecting' | 'speaking' | 'listening' | 'processing' | 'completed' | 'error';
@@ -1200,6 +1201,13 @@ export default function SpeakingTestPage({ params }: PageProps) {
                                 </p>
                             </div>
                         </div>
+
+                        {/* Header Actions */}
+                        <div className="flex items-center gap-3 mr-4">
+                            <AIChatBot variant="header" />
+                            <QuickSupportWidget testType="Speaking" testId={testId} variant="header" />
+                        </div>
+
                         <button
                             onClick={() => setVoiceEnabled(!voiceEnabled)}
                             className={`p-3 rounded-xl transition-all ${voiceEnabled ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}
@@ -1361,8 +1369,6 @@ export default function SpeakingTestPage({ params }: PageProps) {
                     </div>
                 </div>
             )}
-            {/* Quick Support Widget */}
-            <QuickSupportWidget testType="Speaking" testId={testId} />
         </div>
     );
 }

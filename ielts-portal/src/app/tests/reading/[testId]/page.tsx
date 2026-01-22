@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { evaluateReading, ReadingEvaluationResult } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
+import AIChatBot from '@/components/AIChatBot';
 
 interface Question {
     id: string;
@@ -936,6 +937,11 @@ export default function ReadingTestPage({ params }: PageProps) {
                 </div>
 
                 <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3">
+                        <AIChatBot variant="header" />
+                        <QuickSupportWidget testType="Reading" testId={testId} variant="header" />
+                    </div>
+
                     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border content-center ${timeLeft < 300
                         ? 'bg-red-50 border-red-200 text-red-600 animate-pulse'
                         : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
@@ -1179,8 +1185,6 @@ export default function ReadingTestPage({ params }: PageProps) {
                     {currentPartIndex < parts.length - 1 ? <ChevronRight className="w-5 h-5" /> : <Check className="w-5 h-5" />}
                 </button>
             </div>
-            {/* Quick Support Widget */}
-            <QuickSupportWidget testType="Reading" testId={testId} />
         </div>
     );
 }

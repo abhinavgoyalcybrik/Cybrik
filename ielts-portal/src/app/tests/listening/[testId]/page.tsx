@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { evaluateListening, ListeningEvaluationResult } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
+import AIChatBot from '@/components/AIChatBot';
 
 interface Question {
     id: string;
@@ -730,6 +731,12 @@ export default function ListeningTestPage({ params }: PageProps) {
                     </div>
 
                     <div className="flex items-center gap-4">
+                        {/* Header Actions */}
+                        <div className="flex items-center gap-3">
+                            <AIChatBot variant="header" />
+                            <QuickSupportWidget testType="Listening" testId={testId} variant="header" />
+                        </div>
+
                         {/* Timer */}
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg font-bold transition-colors ${timeLeft < 300
                             ? 'bg-red-50 text-red-600 border border-red-100'
@@ -927,8 +934,6 @@ export default function ListeningTestPage({ params }: PageProps) {
                     </div>
                 </div>
             </footer>
-            {/* Quick Support Widget */}
-            <QuickSupportWidget testType="Listening" testId={testId} />
         </div>
     );
 }

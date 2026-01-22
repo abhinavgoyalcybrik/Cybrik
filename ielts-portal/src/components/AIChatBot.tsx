@@ -2,10 +2,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Loader2, Bot, History, Sparkles, ChevronRight, Minimize2 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 interface Message {
     role: 'user' | 'assistant';
     content: string;
+}
+
+interface AIChatBotProps {
+    variant?: 'floating' | 'header';
 }
 
 const SYSTEM_PROMPT = `You are an IELTS AI Assistant for Cybrik IELTS - an AI-powered IELTS preparation platform.
@@ -32,12 +37,18 @@ const SUGGESTED_QUESTIONS = [
     "Suggest new vocabulary"
 ];
 
-export default function AIChatBot() {
+export default function AIChatBot({ variant = 'floating' }: AIChatBotProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const pathname = usePathname();
+
+    const isTestPage = pathname?.startsWith('/tests/');
+
+    // Hide the global floating instance on test pages
+    if (variant === 'floating' && isTestPage) return null;
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -130,8 +141,19 @@ export default function AIChatBot() {
 
     return (
         <>
-            {/* Toggle Button (Visible when closed) - kept as backup/floating trigger if needed */}
-            {!isOpen && (
+            {/* Header Button */}
+            {variant === 'header' && !isOpen && (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+                >
+                    <Bot className="w-4 h-4" />
+                    AI Tutor
+                </button>
+            )}
+
+            {/* Floating Button (Visible when closed) - kept as backup/floating trigger if needed */}
+            {variant === 'floating' && !isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
                     className="fixed z-50 bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center animate-bounce-slow"
@@ -220,8 +242,8 @@ export default function AIChatBot() {
                     {messages.map((msg, i) => (
                         <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             <div className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                                    ? 'bg-purple-600 text-white rounded-br-none'
-                                    : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
+                                ? 'bg-purple-600 text-white rounded-br-none'
+                                : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
                                 }`}>
                                 {msg.role === 'assistant' && (
                                     <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100 opacity-70">

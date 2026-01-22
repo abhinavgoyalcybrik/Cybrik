@@ -22,6 +22,7 @@ import { WritingTestsData, WritingTest } from '@/types';
 import HandwritingUpload from '@/components/HandwritingUpload';
 import { evaluateWriting, WritingEvaluationResult } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
+import AIChatBot from '@/components/AIChatBot';
 
 type PartNumber = 1 | 2;
 
@@ -623,6 +624,12 @@ export default function WritingTestPage({ params }: PageProps) {
                         <span className="text-slate-500 text-sm">Test #{test.test_id}</span>
                     </div>
                     <div className="flex items-center gap-4">
+                        {/* Header Actions */}
+                        <div className="flex items-center gap-3">
+                            <AIChatBot variant="header" />
+                            <QuickSupportWidget testType="Writing" testId={testId} variant="header" />
+                        </div>
+
                         {/* Timer */}
                         <div className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg font-bold ${timeRemaining === 0
                             ? 'bg-slate-100 text-slate-400'
@@ -814,8 +821,6 @@ export default function WritingTestPage({ params }: PageProps) {
                 </div>
             </footer>
 
-            {/* Quick Support Widget */}
-            <QuickSupportWidget testType="Writing" testId={testId} />
         </div>
     );
 }

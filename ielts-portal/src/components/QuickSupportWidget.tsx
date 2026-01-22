@@ -6,9 +6,10 @@ import { MessageCircle, X, Send, AlertCircle, CheckCircle } from 'lucide-react';
 interface QuickSupportWidgetProps {
     testType: string;
     testId?: string;
+    variant?: 'floating' | 'header';
 }
 
-export default function QuickSupportWidget({ testType, testId }: QuickSupportWidgetProps) {
+export default function QuickSupportWidget({ testType, testId, variant = 'floating' }: QuickSupportWidgetProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [category, setCategory] = useState('test');
@@ -52,16 +53,29 @@ export default function QuickSupportWidget({ testType, testId }: QuickSupportWid
 
     return (
         <>
+            {/* Header Button */}
+            {variant === 'header' && !isOpen && (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium border border-red-100"
+                >
+                    <AlertCircle className="w-4 h-4" />
+                    <span className="hidden sm:inline">Report Issue</span>
+                </button>
+            )}
+
             {/* Floating Button */}
-            <button
-                onClick={() => setIsOpen(true)}
-                className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 bg-white text-slate-700 rounded-full shadow-lg border border-slate-200 hover:shadow-xl hover:border-[#6FB63A] hover:text-[#6FB63A] transition-all duration-200 ${isOpen ? 'hidden' : 'flex'}`}
-            >
-                <div className="w-8 h-8 rounded-full bg-[#6FB63A]/10 flex items-center justify-center text-[#6FB63A]">
-                    <MessageCircle className="w-5 h-5" />
-                </div>
-                <span className="font-medium pr-1">Report Issue</span>
-            </button>
+            {variant === 'floating' && !isOpen && (
+                <button
+                    onClick={() => setIsOpen(true)}
+                    className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 bg-white text-slate-700 rounded-full shadow-lg border border-slate-200 hover:shadow-xl hover:border-[#6FB63A] hover:text-[#6FB63A] transition-all duration-200 ${isOpen ? 'hidden' : 'flex'}`}
+                >
+                    <div className="w-8 h-8 rounded-full bg-[#6FB63A]/10 flex items-center justify-center text-[#6FB63A]">
+                        <MessageCircle className="w-5 h-5" />
+                    </div>
+                    <span className="font-medium pr-1">Report Issue</span>
+                </button>
+            )}
 
             {/* Widget Modal */}
             {isOpen && (
