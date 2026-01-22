@@ -19,6 +19,7 @@ import {
     Target,
     Lightbulb,
     BookOpen,
+    FileText,
 } from 'lucide-react';
 import { evaluateListening, ListeningEvaluationResult } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
