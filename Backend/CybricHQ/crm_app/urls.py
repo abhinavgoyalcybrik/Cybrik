@@ -118,6 +118,7 @@ urlpatterns = [
     path("smartflo/call/end/", __import__('crm_app.smartflo_api', fromlist=['end_call']).end_call, name="smartflo-end-call"),
     path("smartflo/call/<str:call_sid>/status/", __import__('crm_app.smartflo_api', fromlist=['get_call_status']).get_call_status, name="smartflo-call-status"),
     path("smartflo/dialplan/", __import__('crm_app.smartflo_api', fromlist=['dialplan_webhook']).dialplan_webhook, name="smartflo-dialplan"),
+    path("smartflo/dialplan", __import__('crm_app.smartflo_api', fromlist=['dialplan_webhook']).dialplan_webhook, name="smartflo-dialplan-noslash"),
     
     # Public Uploads
     path("public/upload/", __import__('crm_app.views_public', fromlist=['PublicUploadView']).PublicUploadView.as_view(), name="public-upload"),
