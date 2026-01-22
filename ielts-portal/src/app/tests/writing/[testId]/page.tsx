@@ -21,6 +21,7 @@ import {
 import { WritingTestsData, WritingTest } from '@/types';
 import HandwritingUpload from '@/components/HandwritingUpload';
 import { evaluateWriting, WritingEvaluationResult } from '@/services/evaluatorApi';
+import QuickSupportWidget from '@/components/QuickSupportWidget';
 
 type PartNumber = 1 | 2;
 
@@ -812,6 +813,9 @@ export default function WritingTestPage({ params }: PageProps) {
                     </div>
                 </div>
             </footer>
+
+            {/* Quick Support Widget */}
+            <QuickSupportWidget testType="Writing" testId={testId} />
         </div>
     );
 }

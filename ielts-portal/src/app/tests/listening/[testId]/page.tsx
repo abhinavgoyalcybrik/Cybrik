@@ -21,6 +21,7 @@ import {
     BookOpen,
 } from 'lucide-react';
 import { evaluateListening, ListeningEvaluationResult } from '@/services/evaluatorApi';
+import QuickSupportWidget from '@/components/QuickSupportWidget';
 
 interface Question {
     id: string;
@@ -926,6 +927,8 @@ export default function ListeningTestPage({ params }: PageProps) {
                     </div>
                 </div>
             </footer>
+            {/* Quick Support Widget */}
+            <QuickSupportWidget testType="Listening" testId={testId} />
         </div>
     );
 }

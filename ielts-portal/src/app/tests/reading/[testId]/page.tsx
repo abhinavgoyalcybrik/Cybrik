@@ -19,6 +19,7 @@ import {
     BookOpen,
 } from 'lucide-react';
 import { evaluateReading, ReadingEvaluationResult } from '@/services/evaluatorApi';
+import QuickSupportWidget from '@/components/QuickSupportWidget';
 
 interface Question {
     id: string;
@@ -1178,6 +1179,8 @@ export default function ReadingTestPage({ params }: PageProps) {
                     {currentPartIndex < parts.length - 1 ? <ChevronRight className="w-5 h-5" /> : <Check className="w-5 h-5" />}
                 </button>
             </div>
+            {/* Quick Support Widget */}
+            <QuickSupportWidget testType="Reading" testId={testId} />
         </div>
     );
 }

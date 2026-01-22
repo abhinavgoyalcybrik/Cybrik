@@ -22,6 +22,7 @@ import {
 import { SpeakingTest } from '@/types';
 import MicrophoneTest from '@/components/MicrophoneTest';
 import { evaluateAllSpeakingParts, CombinedSpeakingResult, saveSpeakingResults } from '@/services/evaluatorApi';
+import QuickSupportWidget from '@/components/QuickSupportWidget';
 
 type TestPart = 'intro' | 1 | 2 | 3;
 type InterviewState = 'idle' | 'connecting' | 'speaking' | 'listening' | 'processing' | 'completed' | 'error';
@@ -1360,6 +1361,8 @@ export default function SpeakingTestPage({ params }: PageProps) {
                     </div>
                 </div>
             )}
+            {/* Quick Support Widget */}
+            <QuickSupportWidget testType="Speaking" testId={testId} />
         </div>
     );
 }
