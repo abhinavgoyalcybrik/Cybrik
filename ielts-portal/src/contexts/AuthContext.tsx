@@ -10,6 +10,7 @@ interface User {
     email?: string;
     role: 'student' | 'admin';
     is_staff?: boolean;
+    is_superuser?: boolean;
     account_type?: 'crm' | 'self_signup';
     subscription_status?: 'free' | 'premium' | 'crm_full';
     has_full_access?: boolean;
@@ -197,6 +198,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         email: userData.email,
                         role: isStaff ? 'admin' : 'student',
                         is_staff: isStaff,
+                        is_superuser: userData.is_superuser,
                         account_type: userData.account_type,
                         subscription_status: userData.subscription_status,
                         has_full_access: userData.has_full_access,
