@@ -17,6 +17,7 @@ import {
     Target,
     Lightbulb,
     BookOpen,
+    FileText,
 } from 'lucide-react';
 import { evaluateReading, ReadingEvaluationResult } from '@/services/evaluatorApi';
 import QuickSupportWidget from '@/components/QuickSupportWidget';
