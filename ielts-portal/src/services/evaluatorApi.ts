@@ -98,6 +98,28 @@ export interface CombinedSpeakingResult {
         improvements: string;
     };
     parts: SpeakingEvaluationResult[];
+    // Add parts array for structured data
+    parts_detailed?: Array<{
+        part: number;
+        transcript: string;
+        duration: string;
+        audio_url?: string;
+        result: {
+            fluency: number;
+            lexical: number;
+            grammar: number;
+            pronunciation: number;
+            overall_band: number;
+            feedback: {
+                strengths: string;
+                improvements: string;
+            };
+            grammar_analysis?: Array<{ error: string; correction: string; explanation: string; type: string }>;
+            vocabulary_analysis?: Array<{ word: string; cefr: string; enhancement?: string }>;
+            pronunciation_analysis?: Array<{ word: string; status: string; score: number }>;
+            fluency_analysis?: { wpm: number; pauses: Array<{ start: number; end: number; duration: number }>; pause_count: number };
+        };
+    }>;
 }
 
 export interface ReadingEvaluationResult {
@@ -257,38 +279,63 @@ export async function evaluateAllSpeakingParts(
 ): Promise<CombinedSpeakingResult> {
     const attempt_id = attemptId || generateAttemptId();
     const results: SpeakingEvaluationResult[] = [];
+    
+    // Ensure all 3 parts are represented, even if not evaluated
+    const partsMap = new Map<number, SpeakingEvaluationResult>();
+    for (let i = 1; i <= 3; i++) {
+        partsMap.set(i, {
+            attempt_id,
+            part: i,
+            result: {
+                fluency: 0,
+                lexical: 0,
+                grammar: 0,
+                pronunciation: 0,
+                overall_band: 0,
+                feedback: {
+                    strengths: '',
+                    improvements: ''
+                }
+            }
+        });
+    }
 
     // Evaluate each part
     for (const rec of recordings) {
         try {
             const result = await evaluateSpeakingPart(rec.part, rec.blob, attempt_id);
             results.push(result);
+            partsMap.set(rec.part, result);
         } catch (error) {
             console.error(`Failed to evaluate Part ${rec.part}:`, error);
             // Continue with other parts even if one fails
         }
     }
 
+    // Get all parts in order
+    const allParts = Array.from(partsMap.values()).sort((a, b) => a.part - b.part);
+    const evaluatedParts = results.length > 0 ? results : allParts;
+
     if (results.length === 0) {
-        throw new Error('No speaking parts could be evaluated');
+        console.warn('No speaking parts could be evaluated, returning empty structure');
     }
 
-    // Calculate averages
-    const avgFluency = results.reduce((sum, r) => sum + r.result.fluency, 0) / results.length;
-    const avgLexical = results.reduce((sum, r) => sum + r.result.lexical, 0) / results.length;
-    const avgGrammar = results.reduce((sum, r) => sum + r.result.grammar, 0) / results.length;
-    const avgPronunciation = results.reduce((sum, r) => sum + r.result.pronunciation, 0) / results.length;
-    const overallBand = results.reduce((sum, r) => sum + r.result.overall_band, 0) / results.length;
+    // Calculate averages only from evaluated parts
+    const avgFluency = evaluatedParts.length > 0 ? evaluatedParts.reduce((sum, r) => sum + r.result.fluency, 0) / evaluatedParts.length : 0;
+    const avgLexical = evaluatedParts.length > 0 ? evaluatedParts.reduce((sum, r) => sum + r.result.lexical, 0) / evaluatedParts.length : 0;
+    const avgGrammar = evaluatedParts.length > 0 ? evaluatedParts.reduce((sum, r) => sum + r.result.grammar, 0) / evaluatedParts.length : 0;
+    const avgPronunciation = evaluatedParts.length > 0 ? evaluatedParts.reduce((sum, r) => sum + r.result.pronunciation, 0) / evaluatedParts.length : 0;
+    const overallBand = evaluatedParts.length > 0 ? evaluatedParts.reduce((sum, r) => sum + r.result.overall_band, 0) / evaluatedParts.length : 0;
 
     // Combine feedback from all parts
-    const strengths = results
+    const strengths = evaluatedParts
         .map(r => r.result.feedback?.strengths)
         .filter(Boolean)
-        .join(' ');
-    const improvements = results
+        .join(' ') || 'Good overall performance';
+    const improvements = evaluatedParts
         .map(r => r.result.feedback?.improvements)
         .filter(Boolean)
-        .join(' ');
+        .join(' ') || 'Continue practicing for further improvement';
 
     return {
         attempt_id,
@@ -301,7 +348,14 @@ export async function evaluateAllSpeakingParts(
             strengths: strengths || 'Good overall performance.',
             improvements: improvements || 'Continue practicing for further improvement.',
         },
-        parts: results,
+        parts: evaluatedParts,  // Include all parts (1, 2, 3)
+        parts_detailed: allParts.map(p => ({
+            part: p.part,
+            transcript: '',
+            duration: '0:00',
+            audio_url: undefined,
+            result: p.result
+        }))
     };
 }
 

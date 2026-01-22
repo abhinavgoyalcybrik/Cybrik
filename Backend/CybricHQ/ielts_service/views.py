@@ -191,6 +191,23 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Create Module Attempt with score
         try:
+            # Ensure feedback includes proper structure for speaking evaluation results
+            feedback_data = data.get('feedback', {})
+            
+            # For speaking module, ensure parts are properly structured
+            if module_type == 'speaking' and 'parts' not in feedback_data:
+                # Transform flat parts list into structured format if needed
+                parts = data.get('parts', [])
+                if isinstance(parts, list) and len(parts) > 0:
+                    feedback_data['parts'] = parts
+                else:
+                    # Create empty parts structure for 3 parts
+                    feedback_data['parts'] = [
+                        {'part': 1, 'transcript': '', 'result': {}, 'audio_url': None},
+                        {'part': 2, 'transcript': '', 'result': {}, 'audio_url': None},
+                        {'part': 3, 'transcript': '', 'result': {}, 'audio_url': None},
+                    ]
+            
             attempt = UserModuleAttempt.objects.create(
                 session=session,
                 module=module,
@@ -201,17 +218,16 @@ class UserTestSessionViewSet(viewsets.ReadOnlyModelViewSet):
                 raw_score=data.get('raw_score'),
                 data={
                     'answers': data.get('answers', {}),
-                    'feedback': data.get('feedback', {}),
-                    'extra_data': {k: v for k, v in data.items() if k not in ['test_id', 'module_type', 'band_score', 'raw_score', 'answers', 'feedback']}
+                    'feedback': feedback_data,
+                    'parts': data.get('parts', []),
+                    'audio_files': data.get('audio_files', {}),
+                    'extra_data': {k: v for k, v in data.items() if k not in ['test_id', 'module_type', 'band_score', 'raw_score', 'answers', 'feedback', 'parts', 'audio_files']}
                 }
             )
             
             # Store feedback if provided (for AI evaluation results)
-            feedback_data = data.get('feedback')
             if feedback_data:
-                # Store feedback as JSON in the attempt or a related model
-                # For now, we can just log it - the frontend will need to fetch via session
-                logger.info(f"Feedback stored for attempt {attempt.id}")
+                logger.info(f"Feedback stored for attempt {attempt.id}: {list(feedback_data.keys())}")
             
             # Update session overall score
             session.overall_band_score = data.get('band_score')

@@ -58,6 +58,8 @@ interface EvaluationResult {
             };
         };
         error?: string;
+        audioUrl?: string | null;
+        duration?: string;
     }>;
     total_evaluated: number;
 }
@@ -166,13 +168,22 @@ export default function SpeakingReportPage({ params }: PageProps) {
                             let safeTranscript = '';
                             if (typeof evalData.transcript === 'string') safeTranscript = evalData.transcript;
                             else if (typeof p.transcript === 'string') safeTranscript = p.transcript;
+                            else if (typeof p.answer === 'string') safeTranscript = p.answer;
 
                             return {
                                 label: `Part ${p.part || idx + 1}`,
                                 transcript: safeTranscript,
                                 evaluation: evalData,
+                                audioUrl: p.audio_url || p.recording_url || null,
+                                duration: p.duration || '0:00',
                             };
-                        }) || [],
+                        }) || 
+                        // Fallback: create 3 empty parts if no detailed results
+                        [
+                            { label: 'Part 1', transcript: '', evaluation: null, audioUrl: null, duration: '0:00' },
+                            { label: 'Part 2', transcript: '', evaluation: null, audioUrl: null, duration: '0:00' },
+                            { label: 'Part 3', transcript: '', evaluation: null, audioUrl: null, duration: '0:00' },
+                        ],
                         total_evaluated: feedback.parts?.length || 0,
                     });
                     setStatus('ready');
@@ -312,26 +323,41 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                 {/* Question Prompt Box */}
                                 <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-6">
                                     <p className="text-sm font-medium text-slate-700">
-                                        {activeData?.label === 'Part 1' ? "What do you usually do at the weekends?" : "Describe a memorable event in your life."}
+                                        {getQuestionPrompt(activeQuestion + 1)}
                                         {/* ^ Placeholder if prompt is missing from response, ideally fetch from test data */}
                                     </p>
                                 </div>
 
                                 {/* Audio Player Strip */}
                                 <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-4 mb-8">
-                                    <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0 cursor-pointer shadow-lg hover:bg-purple-700 transition" onClick={() => setPlayingAudio(!playingAudio)}>
+                                    <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0 cursor-pointer shadow-lg hover:bg-purple-700 transition" onClick={() => {
+                                        if (activeData?.audioUrl) {
+                                            setPlayingAudio(!playingAudio);
+                                        }
+                                    }}>
                                         {playingAudio ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex justify-between text-xs font-medium text-slate-500 mb-1">
                                             <span>My answer</span>
-                                            <span>0:04</span>
+                                            <span>{activeData?.duration || '0:00'}</span>
                                         </div>
                                         <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                            {activeData?.audioUrl ? (
+                                                <audio 
+                                                    autoPlay={playingAudio} 
+                                                    controls 
+                                                    className="w-full h-6"
+                                                    style={{ display: 'none' }}
+                                                >
+                                                    <source src={activeData.audioUrl} type="audio/webm" />
+                                                    <source src={activeData.audioUrl} type="audio/mpeg" />
+                                                </audio>
+                                            ) : null}
                                             <div className="h-full bg-slate-400 w-1/3 rounded-full" />
                                         </div>
                                     </div>
-                                    <div className="text-xs font-medium text-slate-400">0:00 / 0:04</div>
+                                    <div className="text-xs font-medium text-slate-400">0:00 / {activeData?.duration || '0:04'}</div>
                                 </div>
                             </div>
 
@@ -624,4 +650,14 @@ function renderFeedbackText(text: string = '', evaluation: any, tab: string) {
             })}
         </span>
     );
+}
+
+// Helper function to get question prompts based on IELTS speaking parts
+function getQuestionPrompt(part: number): string {
+    const prompts: Record<number, string> = {
+        1: "Tell me about yourself. What's your name, where are you from?",
+        2: "Describe a memorable person you know. You should say: who this person is, when you met them, what they look like, and explain why they are memorable to you.",
+        3: "Let's discuss how personal relationships affect our daily lives. What do you think are the most important relationships people have?",
+    };
+    return prompts[part] || `Part ${part} - No specific question prompt available`;
 }
