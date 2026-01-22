@@ -279,9 +279,26 @@ export default function ReportDetailPage() {
                         {!isObjective && report.feedback && (
                             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                                 <h3 className="font-bold text-slate-900 mb-4">Examiner Feedback</h3>
-                                <div className="prose prose-slate max-w-none text-slate-600 bg-slate-50 p-6 rounded-xl border border-slate-100">
-                                    {report.feedback}
-                                </div>
+                                {typeof report.feedback === 'string' ? (
+                                    <div className="prose prose-slate max-w-none text-slate-600 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                                        {report.feedback}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {report.feedback.strengths && (
+                                            <div className="bg-zinc-800/50 p-5 rounded-xl border border-zinc-700/50">
+                                                <h4 className="text-emerald-400 font-bold mb-3 flex items-center gap-2">Strengths</h4>
+                                                <p className="text-slate-600 leading-relaxed text-sm">{report.feedback.strengths}</p>
+                                            </div>
+                                        )}
+                                        {report.feedback.improvements && (
+                                            <div className="bg-zinc-800/50 p-5 rounded-xl border border-zinc-700/50">
+                                                <h4 className="text-amber-400 font-bold mb-3 flex items-center gap-2">Improvement Areas</h4>
+                                                <p className="text-slate-600 leading-relaxed text-sm">{report.feedback.improvements}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
