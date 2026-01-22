@@ -459,46 +459,65 @@ def get_call_status(request, call_sid):
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 @permission_classes([])  # Public endpoint for webhook
 def dialplan_webhook(request):
     """
-    Handle Smartflo API Dialplan Webhook for INBOUND calls.
+    Handle Smartflo API Dialplan Webhook for INBOUND calls (Dynamic Endpoint).
     
     When a call is received, Smartflo hits this endpoint to ask for instructions.
     We return the WSS URL so Smartflo knows where to stream audio.
+    
+    IMPORTANT: SmartFlo Dynamic Endpoint requires EXACT response format:
+    {
+        "sucess": true,  // Note: SmartFlo has a typo - it's "sucess" not "success"
+        "wss_url": "wss://..."
+    }
+    Response must be within 2000ms and HTTP 200.
     """
     try:
-        data = request.data
-        logger.info(f"[DIALPLAN] Smartflo Webhook received: {data}")
+        # Handle both GET (query params) and POST (JSON body)
+        if request.method == 'GET':
+            data = request.query_params.dict()
+        else:
+            data = request.data
+            
+        logger.info(f"[DIALPLAN] Smartflo Webhook received ({request.method}): {data}")
         
-        # Extract call details
-        caller_number = data.get('caller_id_number') or data.get('from') or data.get('caller')
-        called_number = data.get('call_to_number') or data.get('to') or data.get('destination')
-        call_uuid = data.get('uuid') or data.get('call_uuid') or data.get('callSid')
+        # Extract call details using SmartFlo's predefined variables
+        # SmartFlo sends: $callId, $fromNumber, $toNumber, $status
+        caller_number = (
+            data.get('fromNumber') or 
+            data.get('caller_id_number') or 
+            data.get('from') or 
+            data.get('caller')
+        )
+        called_number = (
+            data.get('toNumber') or 
+            data.get('call_to_number') or 
+            data.get('to') or 
+            data.get('destination')
+        )
+        call_uuid = (
+            data.get('callId') or 
+            data.get('uuid') or 
+            data.get('call_uuid') or 
+            data.get('callSid')
+        )
+        call_status = data.get('status', 'unknown')
         
-        logger.info(f"[DIALPLAN] Inbound call: {caller_number} -> {called_number}, UUID: {call_uuid}")
+        logger.info(f"[DIALPLAN] Inbound call: {caller_number} -> {called_number}, UUID: {call_uuid}, Status: {call_status}")
         
         # Build the WSS URL for Smartflo to connect to
-        # Use the production domain
+        # Use the production domain with secure WebSocket
         ws_url = "wss://api.cybriksolutions.com/ws/smartflo/audio/"
         
-        # Response format for Smartflo Dynamic Endpoint
-        # Smartflo may expect different formats - try common ones
+        # SmartFlo Dynamic Endpoint STRICT Response Format
+        # CRITICAL: Must match exactly - "sucess" (with typo) and "wss_url"
+        # Any other keys or format will cause call to hang up!
         response_payload = {
-            "status": "success",
-            "action": "connect",
-            "url": ws_url,
-            "websocket_url": ws_url,
-            "endpoint": ws_url,
-            "stream_url": ws_url,
-            # Include call context
-            "customParameters": {
-                "caller": caller_number,
-                "called": called_number,
-                "uuid": call_uuid,
-                "direction": "inbound"
-            }
+            "sucess": True,  # Note: SmartFlo uses "sucess" (typo in their API)
+            "wss_url": ws_url
         }
         
         logger.info(f"[DIALPLAN] Responding with WSS URL: {ws_url}")
@@ -506,5 +525,9 @@ def dialplan_webhook(request):
         
     except Exception as e:
         logger.error(f"[DIALPLAN] Error: {e}")
-        return Response({'success': False, 'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Even on error, try to return proper format to avoid call hangup
+        return Response({
+            "sucess": False, 
+            "wss_url": ""
+        }, status=status.HTTP_200_OK)  # Still return 200 to avoid SmartFlo rejection
 
