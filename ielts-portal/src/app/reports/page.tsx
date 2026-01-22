@@ -540,7 +540,20 @@ function ReportsContent() {
 
                                         {/* View Details Button */}
                                         <button
-                                            onClick={() => router.push(`/reports/${report.sessionId}`)}
+                                            onClick={() => {
+                                                // Route to appropriate page based on test type
+                                                if (report.testType === 'reading') {
+                                                    router.push(`/tests/reading/${report.testId}?view=result&sessionId=${report.sessionId}`);
+                                                } else if (report.testType === 'listening') {
+                                                    router.push(`/tests/listening/${report.testId}?view=result&sessionId=${report.sessionId}`);
+                                                } else if (report.testType === 'writing') {
+                                                    router.push(`/reports/writing/${report.sessionId}`);
+                                                } else if (report.testType === 'speaking') {
+                                                    router.push(`/reports/speaking/${report.sessionId}`);
+                                                } else {
+                                                    router.push(`/reports/${report.sessionId}`);
+                                                }
+                                            }}
                                             className="flex items-center gap-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-700 text-sm font-medium transition-colors"
                                         >
                                             View Details
