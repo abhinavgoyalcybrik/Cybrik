@@ -8,6 +8,7 @@ from . import auth_views
 router = DefaultRouter()
 router.register(r'tests', views.IELTSTestViewSet, basename='ielts-test')
 router.register(r'sessions', views.UserTestSessionViewSet, basename='ielts-session')
+router.register(r'tickets', views.SupportTicketViewSet, basename='support-ticket')
 
 # Admin routes
 admin_router = DefaultRouter()
@@ -16,6 +17,7 @@ admin_router.register(r'modules', views.AdminTestModuleViewSet, basename='admin-
 admin_router.register(r'question-groups', views.AdminQuestionGroupViewSet, basename='admin-question-group')
 admin_router.register(r'questions', views.AdminQuestionViewSet, basename='admin-question')
 admin_router.register(r'students', views.AdminStudentViewSet, basename='admin-student')
+admin_router.register(r'tickets', views.SupportTicketViewSet, basename='admin-ticket')
 
 # Helper to wrap all admin router URLs with csrf_exempt
 def csrf_exempt_view(view):

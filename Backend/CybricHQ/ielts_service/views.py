@@ -1224,3 +1224,74 @@ def _import_listening_content(module, data):
                 correct_answer=correct_answer,
                 order=q_order
             )
+
+
+# --- Support Ticket ViewSet ---
+
+from .models import SupportTicket, TicketReply
+from .serializers import SupportTicketSerializer, TicketReplySerializer
+
+
+class SupportTicketViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for support tickets.
+    - Students see only their own tickets
+    - Admins see all tickets
+    """
+    serializer_class = SupportTicketSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication, JWTAuthFromCookie]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
+            # Admins see all tickets
+            return SupportTicket.objects.all()
+        # Students see only their tickets
+        return SupportTicket.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @action(detail=True, methods=['post'])
+    def reply(self, request, pk=None):
+        """Add a reply to a ticket."""
+        ticket = self.get_object()
+        message = request.data.get('message', '').strip()
+        
+        if not message:
+            return Response({"error": "Message is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        is_admin = request.user.is_staff or request.user.is_superuser
+        
+        reply = TicketReply.objects.create(
+            ticket=ticket,
+            user=request.user,
+            message=message,
+            is_admin=is_admin
+        )
+        
+        # If admin replies, update status to 'in_progress' if still 'open'
+        if is_admin and ticket.status == 'open':
+            ticket.status = 'in_progress'
+            ticket.save()
+        
+        return Response(TicketReplySerializer(reply).data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['patch'])
+    def update_status(self, request, pk=None):
+        """Update ticket status (admin only)."""
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({"error": "Admin privileges required"}, status=status.HTTP_403_FORBIDDEN)
+        
+        ticket = self.get_object()
+        new_status = request.data.get('status')
+        
+        valid_statuses = ['open', 'in_progress', 'resolved', 'closed']
+        if new_status not in valid_statuses:
+            return Response({"error": f"Invalid status. Must be one of: {valid_statuses}"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        ticket.status = new_status
+        ticket.save()
+        
+        return Response(SupportTicketSerializer(ticket).data)

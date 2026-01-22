@@ -216,3 +216,64 @@ class IELTSUserProfile(models.Model):
     def __str__(self):
         return f"{self.user.email} - IELTS Profile"
 
+
+class SupportTicket(models.Model):
+    """
+    Support ticket raised by a student.
+    """
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
+    CATEGORY_CHOICES = [
+        ('technical', 'Technical Issue'),
+        ('billing', 'Billing/Payment'),
+        ('test', 'Test Related'),
+        ('account', 'Account Issue'),
+        ('other', 'Other'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='support_tickets')
+    subject = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='other')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Support Ticket"
+        verbose_name_plural = "Support Tickets"
+
+    def __str__(self):
+        return f"#{str(self.id)[:8]} - {self.subject}"
+
+
+class TicketReply(models.Model):
+    """
+    Reply to a support ticket (by student or admin).
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ticket = models.ForeignKey(SupportTicket, on_delete=models.CASCADE, related_name='replies')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_admin = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+        verbose_name = "Ticket Reply"
+        verbose_name_plural = "Ticket Replies"
+
+    def __str__(self):
+        return f"Reply to {self.ticket} by {self.user.email}"

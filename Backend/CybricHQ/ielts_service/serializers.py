@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import (
     IELTSTest, TestModule, QuestionGroup, Question, 
-    UserTestSession, UserModuleAttempt, UserAnswer
+    UserTestSession, UserModuleAttempt, UserAnswer,
+    SupportTicket, TicketReply
 )
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -215,3 +216,43 @@ class AdminStudentSerializer(serializers.ModelSerializer):
             user.set_password(password)
             user.save()
         return user
+
+
+# --- Support Ticket Serializers ---
+
+class TicketReplySerializer(serializers.ModelSerializer):
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    user_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TicketReply
+        fields = ['id', 'ticket', 'user', 'user_email', 'user_name', 'message', 'is_admin', 'created_at']
+        read_only_fields = ['id', 'user', 'user_email', 'user_name', 'is_admin', 'created_at']
+
+    def get_user_name(self, obj):
+        if obj.user.first_name:
+            return f"{obj.user.first_name} {obj.user.last_name or ''}".strip()
+        return obj.user.email.split('@')[0]
+
+
+class SupportTicketSerializer(serializers.ModelSerializer):
+    replies = TicketReplySerializer(many=True, read_only=True)
+    user_email = serializers.CharField(source='user.email', read_only=True)
+    user_name = serializers.SerializerMethodField()
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+    priority_display = serializers.CharField(source='get_priority_display', read_only=True)
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
+
+    class Meta:
+        model = SupportTicket
+        fields = [
+            'id', 'user', 'user_email', 'user_name', 'subject', 'description',
+            'category', 'category_display', 'status', 'status_display',
+            'priority', 'priority_display', 'created_at', 'updated_at', 'replies'
+        ]
+        read_only_fields = ['id', 'user', 'user_email', 'user_name', 'created_at', 'updated_at', 'replies']
+
+    def get_user_name(self, obj):
+        if obj.user.first_name:
+            return f"{obj.user.first_name} {obj.user.last_name or ''}".strip()
+        return obj.user.email.split('@')[0]
