@@ -441,6 +441,16 @@ export default function DashboardAnalytics() {
         else if (module === 'writing') order = ['Task Response', 'Coherence', 'Grammar', 'Lexical'];
         else if (module === 'speaking') order = ['Fluency', 'Lexical', 'Grammar', 'Pronunciation'];
 
+        // If no criteria data but tests completed, generate simple visualization based on scores
+        if (keys.length === 0 && sectionStats[module].scores.length > 0) {
+            const avgBand = sectionStats[module].averageScore;
+            // Generate uniform data for all parts based on average
+            return order.map(subject => ({
+                subject,
+                band: Number(avgBand.toFixed(1))
+            }));
+        }
+
         if (keys.length === 0) return [];
 
         // Map and sort based on standard order
