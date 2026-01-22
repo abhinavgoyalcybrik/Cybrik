@@ -519,16 +519,6 @@ export default function SpeakingReportPage({ params }: PageProps) {
                     {/* Right Column Sidebar */}
                     <div className="lg:col-span-1 space-y-6 sticky top-24 h-fit">
                         {/* AITutorCard moved to footer */}
-
-                        {/* Motivation Card */}
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <h3 className="font-bold text-slate-800 mb-3">Speaking Tips</h3>
-                            <ul className="text-sm text-slate-500 space-y-3 list-disc pl-4">
-                                <li>Speak naturally and don't rush.</li>
-                                <li>Use a range of connecting words.</li>
-                                <li>Don't worry about accent, focus on clarity.</li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
 
