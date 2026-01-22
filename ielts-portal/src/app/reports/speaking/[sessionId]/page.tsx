@@ -230,38 +230,38 @@ export default function SpeakingReportPage({ params }: PageProps) {
 
     return (
         <div className="min-h-screen bg-[#F8F9FA] p-4 lg:p-8 font-sans text-slate-900">
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="max-w-7xl mx-auto space-y-6">
 
                 {/* Brand Logo */}
-                <div className="mb-2">
+                <div className="mb-6 flex justify-start">
                     <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 place-items-stretch">
                     {/* Left Column */}
                     <div className="lg:col-span-2 space-y-6">
 
                         {/* 1. Header Card (Matching "5.5/9.0" screenshot) */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-100">
-                            <div className="flex items-center gap-6">
-                                <div className="text-left">
-                                    <div className="flex items-baseline gap-2">
+                        <div className="bg-white rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center justify-start md:justify-between gap-8 border border-slate-100">
+                            <div className="flex items-center gap-8 w-full md:w-auto">
+                                <div className="text-center md:text-left">
+                                    <div className="flex items-baseline gap-2 justify-center md:justify-start">
                                         <span className="text-5xl font-bold text-purple-600">{result.overall_band.toFixed(1)}</span>
                                         <span className="text-3xl font-medium text-slate-300">/9.0</span>
                                     </div>
-                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Overall Band Score</div>
+                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Overall Band Score</div>
                                 </div>
-                                <div className="h-12 w-px bg-slate-100 mx-2 hidden md:block" />
-                                <div className="text-left">
+                                <div className="h-16 w-px bg-slate-200 mx-4 hidden md:block" />
+                                <div className="text-center md:text-left">
                                     <div className="text-3xl font-bold text-purple-600/80">{getCEFRLevel(result.overall_band)}</div>
-                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">CEFR Level</div>
+                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">CEFR Level</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* 2. Criteria Breakdown (4 Cards) */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
-                            <h3 className="font-bold text-slate-800 mb-6 text-lg">Criteria Breakdown</h3>
+                        <div className="bg-white rounded-xl p-8 shadow-sm border border-slate-100">
+                            <h3 className="font-bold text-slate-800 mb-8 text-lg text-center md:text-left">Criteria Breakdown</h3>
                             <div className="space-y-6">
                                 {/* Fluency */}
                                 <CriteriaRow
@@ -293,19 +293,19 @@ export default function SpeakingReportPage({ params }: PageProps) {
                         </div>
 
                         {/* 3. Detailed Feedback Header */}
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mb-6 justify-start">
                             <TrendingUp className="w-5 h-5 text-purple-600" />
                             <h3 className="text-lg font-bold text-slate-800">Detailed Feedback</h3>
                         </div>
 
                         <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
 
-                            <div className="p-6 pb-0">
+                            <div className="p-8 pb-0">
                                 {/* Speaking Task Label */}
-                                <div className="text-sm font-bold text-slate-900 mb-4">Speaking Task</div>
+                                <div className="text-sm font-bold text-slate-900 mb-6">Speaking Task</div>
 
                                 {/* Question Tabs (Q1, Q2...) */}
-                                <div className="flex flex-wrap gap-3 mb-6">
+                                <div className="flex flex-wrap gap-3 mb-8 justify-start">
                                     {result.detailed_results.map((item, idx) => (
                                         <button
                                             key={idx}
@@ -321,15 +321,15 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                 </div>
 
                                 {/* Question Prompt Box */}
-                                <div className="bg-purple-50 border border-purple-100 rounded-lg p-4 mb-6">
-                                    <p className="text-sm font-medium text-slate-700">
+                                <div className="bg-purple-50 border border-purple-100 rounded-lg p-6 mb-8">
+                                    <p className="text-sm font-medium text-slate-700 text-center md:text-left">
                                         {getQuestionPrompt(activeQuestion + 1)}
                                         {/* ^ Placeholder if prompt is missing from response, ideally fetch from test data */}
                                     </p>
                                 </div>
 
                                 {/* Audio Player Strip */}
-                                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-4 mb-8">
+                                <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex items-center gap-4 mb-8">
                                     <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0 cursor-pointer shadow-lg hover:bg-purple-700 transition" onClick={() => {
                                         if (activeData?.audioUrl) {
                                             setPlayingAudio(!playingAudio);
