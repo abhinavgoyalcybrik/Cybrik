@@ -150,6 +150,9 @@ export default function ReportDetailPage() {
                 }
 
                 const feedback = attempt.feedback || attempt.data?.feedback || {};
+                // Check for answers in multiple locations: attempt.answers, attempt.data.answers, or feedback.breakdown
+                const storedAnswers = attempt.answers || attempt.data?.answers || {};
+                const breakdownAnswers = feedback.breakdown || [];
 
                 setReport({
                     id: session.id,
@@ -159,22 +162,22 @@ export default function ReportDetailPage() {
                     timeTaken: attempt.duration_minutes ? `${attempt.duration_minutes} min` : '0 min',
                     bandScore: attempt.band_score || (typeof feedback === 'object' ? feedback.overall_band : undefined) || 0,
                     feedback: typeof feedback === 'string' ? feedback : feedback,
-                    questionBreakdown: (attempt.answers && Object.keys(attempt.answers).length > 0)
-                        ? (Array.isArray(attempt.answers)
-                            ? attempt.answers.map((ans: any, idx: number) => ({
+                    questionBreakdown: (storedAnswers && Object.keys(storedAnswers).length > 0)
+                        ? (Array.isArray(storedAnswers)
+                            ? storedAnswers.map((ans: any, idx: number) => ({
                                 question_number: ans.question_number || idx + 1,
                                 user_answer: ans.user_answer || '-',
                                 correct_answer: ans.correct_answer || '-',
                                 is_correct: ans.is_correct ?? false,
                             }))
-                            : Object.entries(attempt.answers).map(([key, value]: [string, any], idx: number) => ({
+                            : Object.entries(storedAnswers).map(([key, value]: [string, any], idx: number) => ({
                                 question_number: parseInt(key) || idx + 1, // Try to use key as question number
                                 user_answer: typeof value === 'string' ? value : (value?.user_answer || '-'),
                                 correct_answer: value?.correct_answer || '-',
                                 is_correct: value?.is_correct ?? false
                             }))
                         )
-                        : (feedback.breakdown || []).map((item: any) => ({
+                        : breakdownAnswers.map((item: any) => ({
                             question_number: item.question_number,
                             user_answer: item.user_answer,
                             correct_answer: item.correct_answer,

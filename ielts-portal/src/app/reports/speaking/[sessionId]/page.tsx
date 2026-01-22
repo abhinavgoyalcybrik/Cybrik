@@ -229,17 +229,17 @@ export default function SpeakingReportPage({ params }: PageProps) {
     const evaluation = activeData?.evaluation;
 
     return (
-        <div className="min-h-screen bg-[#F8F9FA] p-4 lg:p-8 font-sans text-slate-900">
-            <div className="max-w-7xl mx-auto space-y-6">
+        <div className="min-h-screen bg-[#F8F9FA] flex justify-center p-4 lg:p-8 font-sans text-slate-900">
+            <div className="w-full max-w-7xl space-y-6">
 
                 {/* Brand Logo */}
                 <div className="mb-6 flex justify-start">
                     <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 place-items-stretch">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Left Column */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-2 space-y-6 w-full">
 
                         {/* 1. Header Card (Matching "5.5/9.0" screenshot) */}
                         <div className="bg-white rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center justify-start md:justify-between gap-8 border border-slate-100">
