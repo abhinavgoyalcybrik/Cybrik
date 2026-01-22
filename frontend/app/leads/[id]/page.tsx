@@ -459,8 +459,6 @@ export default function LeadDetailPage() {
                   <button className="px-1 py-3 text-sm font-medium border-b-2 border-[var(--cy-lime)] text-white">Overview</button>
                   <button className="px-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white"
                     onClick={() => setActiveTab("transcripts")}>Transcription</button>
-                  <button className="px-1 py-3 text-sm font-medium border-b-2 border-transparent text-gray-400 hover:text-white"
-                    onClick={() => setActiveTab("profile")}>Client data</button>
                 </nav>
               </div>
               {/* Overview Content */}
@@ -483,10 +481,10 @@ export default function LeadDetailPage() {
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium text-gray-400">Call status</span>
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${overview.call_status === 'completed' || overview.call_status === 'done'
-                            ? 'bg-green-500/20 text-green-400'
-                            : overview.call_status === 'failed'
-                              ? 'bg-red-500/20 text-red-400'
-                              : 'bg-gray-500/20 text-gray-400'
+                          ? 'bg-green-500/20 text-green-400'
+                          : overview.call_status === 'failed'
+                            ? 'bg-red-500/20 text-red-400'
+                            : 'bg-gray-500/20 text-gray-400'
                           }`}>
                           {overview.call_status ? overview.call_status.charAt(0).toUpperCase() + overview.call_status.slice(1) : 'No calls yet'}
                         </span>
@@ -511,10 +509,10 @@ export default function LeadDetailPage() {
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium text-gray-400">Interest Level</span>
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${overview.interest_level === 'high'
-                              ? 'bg-green-500/20 text-green-400'
-                              : overview.interest_level === 'medium'
-                                ? 'bg-yellow-500/20 text-yellow-400'
-                                : 'bg-gray-500/20 text-gray-400'
+                            ? 'bg-green-500/20 text-green-400'
+                            : overview.interest_level === 'medium'
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-gray-500/20 text-gray-400'
                             }`}>
                             {overview.interest_level.charAt(0).toUpperCase() + overview.interest_level.slice(1)}
                           </span>

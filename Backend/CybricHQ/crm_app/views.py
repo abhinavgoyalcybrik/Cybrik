@@ -1078,11 +1078,17 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         """
         lead = self.get_object()
         
-        # Find the latest completed call for this lead
+        # Find the latest call for this lead (try completed first, then any status)
         latest_call = CallRecord.objects.filter(
             lead=lead,
             status__in=["completed", "done"]
         ).order_by("-created_at").first()
+        
+        # If no completed call, try any call with data
+        if not latest_call:
+            latest_call = CallRecord.objects.filter(
+                lead=lead
+            ).exclude(status__in=["failed", "cancelled"]).order_by("-created_at").first()
         
         overview_data = {
             "lead_id": lead.id,
@@ -1103,7 +1109,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         if latest_call:
             metadata = latest_call.metadata or {}
             
-            # Extract ElevenLabs summary
+            # Extract ElevenLabs summary - check multiple locations
             overview_data["summary"] = metadata.get("elevenlabs_summary")
             
             # Extract call status
@@ -1115,19 +1121,22 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             conv_data = metadata.get("conversation_data", {})
             if conv_data:
                 # Get call outcome/end reason
-                overview_data["call_outcome"] = conv_data.get("status") or conv_data.get("call_status")
+                overview_data["call_outcome"] = conv_data.get("status") or conv_data.get("call_status") or conv_data.get("call_successful")
                 
                 # Get user ID if available
-                conv_metadata = conv_data.get("metadata", {})
-                overview_data["user_id"] = conv_metadata.get("user_id") or conv_metadata.get("lead_id")
+                conv_metadata = conv_data.get("metadata", {}) or {}
+                overview_data["user_id"] = conv_metadata.get("user_id") or conv_metadata.get("lead_id") or str(lead.id)
                 
                 # Get analysis data if available
-                analysis = conv_data.get("analysis", {})
+                analysis = conv_data.get("analysis", {}) or {}
                 if analysis:
                     overview_data["evaluation_criteria"] = analysis.get("evaluation_criteria_results")
-                    # If no summary from top-level, try analysis
+                    # Get summary from analysis
                     if not overview_data["summary"]:
                         overview_data["summary"] = analysis.get("transcript_summary")
+                    # Also check for call_successful in analysis
+                    if not overview_data["call_outcome"]:
+                        overview_data["call_outcome"] = analysis.get("call_successful")
             
             # Get AI analysis data if available
             ai_analysis = metadata.get("ai_analysis_result") or {}
@@ -1136,8 +1145,15 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 overview_data["qualification_score"] = ai_analysis.get("qualification_score")
                 overview_data["key_points"] = ai_analysis.get("key_points", [])
             
-            # Check for transcript
-            overview_data["transcript_available"] = latest_call.transcripts.exists()
+            # Check for transcript and extract summary if still missing
+            if latest_call.transcripts.exists():
+                overview_data["transcript_available"] = True
+                # If still no summary, try to get short preview from transcript
+                if not overview_data["summary"]:
+                    first_transcript = latest_call.transcripts.first()
+                    if first_transcript and first_transcript.transcript_text:
+                        # Get first 500 chars as summary preview
+                        overview_data["summary"] = first_transcript.transcript_text[:500] + "..." if len(first_transcript.transcript_text) > 500 else first_transcript.transcript_text
             
             # Get evaluation criteria from metadata
             if metadata.get("elevenlabs_evaluation"):
