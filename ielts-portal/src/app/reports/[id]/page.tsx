@@ -144,6 +144,10 @@ export default function ReportDetailPage() {
                     router.replace(`/reports/writing/${id}`);
                     return;
                 }
+                if (moduleType === 'speaking') {
+                    router.replace(`/reports/speaking/${id}`);
+                    return;
+                }
 
                 const feedback = attempt.feedback || attempt.data?.feedback || {};
 
