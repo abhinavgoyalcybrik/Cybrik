@@ -495,10 +495,11 @@ class CallRecordSerializer(serializers.ModelSerializer):
     application = serializers.SerializerMethodField()
     conversation_id = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
+    elevenlabs_summary = serializers.SerializerMethodField()
 
     class Meta:
         model = CallRecord
-        fields = ['id', 'applicant', 'lead', 'application', 'provider', 'external_call_id', 'recording_url', 'conversation_id', 'phone_number', 'metadata', 'qualified_data', 'cost', 'currency', 'created_at', 'status', 'direction', 'duration_seconds', 'transcripts']
+        fields = ['id', 'applicant', 'lead', 'application', 'provider', 'external_call_id', 'recording_url', 'conversation_id', 'phone_number', 'metadata', 'qualified_data', 'cost', 'currency', 'created_at', 'status', 'direction', 'duration_seconds', 'transcripts', 'elevenlabs_summary']
 
     def get_conversation_id(self, obj):
         # Try to get conversation_id from metadata first (ElevenLabs)
@@ -549,6 +550,11 @@ class CallRecordSerializer(serializers.ModelSerializer):
         # Fallback to applicant phone
         if obj.applicant and obj.applicant.phone:
             return obj.applicant.phone
+        return None
+
+    def get_elevenlabs_summary(self, obj):
+        if obj.metadata and isinstance(obj.metadata, dict):
+            return obj.metadata.get('elevenlabs_summary')
         return None
 
 

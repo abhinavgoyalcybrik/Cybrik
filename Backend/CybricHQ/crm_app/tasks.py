@@ -987,9 +987,24 @@ def fetch_and_store_conversation_task(call_record_id, conversation_id):
             else:
                 # Fallback: try analysis.cost if llm_price not available
                 if "analysis" in data and isinstance(data["analysis"], dict):
-                    cost = data["analysis"].get("cost")
+                    analysis_data = data["analysis"]
+                    cost = analysis_data.get("cost")
                     if cost:
                         call_record.cost = float(cost)
+                        
+                    # Extract Summary
+                    summary = analysis_data.get("transcript_summary")
+                    if summary:
+                        if not call_record.metadata:
+                            call_record.metadata = {}
+                        call_record.metadata["elevenlabs_summary"] = summary
+                        
+                    # Extract Evaluation Criteria
+                    eval_results = analysis_data.get("evaluation_criteria_results")
+                    if eval_results:
+                         if not call_record.metadata:
+                            call_record.metadata = {}
+                         call_record.metadata["elevenlabs_evaluation"] = eval_results
             
             # Save raw conversation data
             if not call_record.metadata:

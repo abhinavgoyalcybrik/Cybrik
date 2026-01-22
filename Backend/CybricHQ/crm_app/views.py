@@ -1166,7 +1166,11 @@ class CallRecordViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
              try:
                  fetch_and_store_conversation_task(call.id, conversation_id)
                  call.refresh_from_db()
-                 return Response({"status": "completed", "transcript": call.transcripts.first().transcript_text if call.transcripts.exists() else None})
+                 return Response({
+                    "status": "completed", 
+                    "transcript": call.transcripts.first().transcript_text if call.transcripts.exists() else None,
+                    "elevenlabs_summary": call.metadata.get("elevenlabs_summary") if call.metadata else None
+                 })
              except Exception as e:
                  return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
