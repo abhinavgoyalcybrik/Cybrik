@@ -447,7 +447,8 @@ export default function DashboardAnalytics() {
             // Generate uniform data for all parts based on average
             return order.map(subject => ({
                 subject,
-                band: Number(avgBand.toFixed(1))
+                A: Number(avgBand.toFixed(1)),
+                fullMark: 9
             }));
         }
 
