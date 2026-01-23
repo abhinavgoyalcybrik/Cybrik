@@ -24,25 +24,46 @@ export default function ReadingTestsPage() {
             let fetchedTests: ReadingTest[] = [];
             // 1. Fetch Tests
             try {
-                // Try local JSON first (most reliable for static data)
+                let localTests: ReadingTest[] = [];
+                let apiTests: ReadingTest[] = [];
+
+                // Try local JSON
                 try {
                     const localRes = await fetch('/data/reading_tests.json');
                     const localData = await localRes.json();
                     if (localData.tests && localData.tests.length > 0) {
-                        fetchedTests = localData.tests;
+                        localTests = localData.tests;
                     }
                 } catch {
-                    // Continue to API fallback
+                    console.warn('Failed to load local reading tests');
                 }
 
-                if (fetchedTests.length === 0) {
-                    // Fallback to backend API
+                // Fetch from Backend API
+                try {
                     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
                     const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`);
-                    if (!res.ok) throw new Error('Failed to fetch tests');
-                    const data = await res.json();
-                    fetchedTests = data.results || data || [];
+                    if (res.ok) {
+                        const data = await res.json();
+                        apiTests = data.results || data || [];
+                    }
+                } catch (e) {
+                    console.error('Failed to load API tests', e);
                 }
+
+                // Merge and Deduplicate (API takes precedence)
+                const testMap = new Map<string, ReadingTest>();
+
+                // Add local tests first
+                localTests.forEach(t => testMap.set(String(t.id), t));
+
+                // Add/Overwrite with API tests
+                apiTests.forEach(t => testMap.set(String(t.id), t));
+
+                fetchedTests = Array.from(testMap.values());
+
+                // Sort by ID or Title
+                fetchedTests.sort((a, b) => String(a.title).localeCompare(String(b.title)));
+
                 setTests(fetchedTests);
             } catch (err: any) {
                 setError(err.message);
