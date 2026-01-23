@@ -19,6 +19,7 @@ import DashboardGettingStarted from '@/components/DashboardGettingStarted';
 
 
 interface TestCounts {
+  [key: string]: number;
   speaking: number;
   writing: number;
   listening: number;
@@ -39,6 +40,12 @@ export default function Dashboard() {
     writing: 0,
     listening: 0,
     reading: 0,
+  });
+  const [sectionStats, setSectionStats] = useState<Record<string, { averageScore: number; testsCompleted: number }>>({
+    speaking: { averageScore: 0, testsCompleted: 0 },
+    writing: { averageScore: 0, testsCompleted: 0 },
+    listening: { averageScore: 0, testsCompleted: 0 },
+    reading: { averageScore: 0, testsCompleted: 0 },
   });
 
   // Authentication check - verify with backend to prevent redirect loop
@@ -140,45 +147,62 @@ export default function Dashboard() {
       });
     });
 
-    // Fetch user sessions for completed counts
+    // Fetch user sessions for completed counts and average scores
     fetch('/api/ielts/sessions/', { credentials: 'include' })
       .then(r => r.json())
       .then((sessions: any[]) => {
         if (!Array.isArray(sessions)) return;
 
         const completed = { speaking: 0, writing: 0, listening: 0, reading: 0 };
+        const scores: Record<string, number[]> = { speaking: [], writing: [], listening: [], reading: [] };
+
+        // Helper to determine type
+        const guessType = (title: string) => {
+          const t = title.toLowerCase();
+          if (t.includes('speak')) return 'speaking';
+          if (t.includes('writ')) return 'writing';
+          if (t.includes('listen') || t.includes('lt')) return 'listening';
+          if (t.includes('read') || t.includes('rt')) return 'reading';
+          return 'reading';
+        };
 
         sessions.forEach(session => {
-          // Helper to determine type
-          const guessType = (title: string) => {
-            const t = title.toLowerCase();
-            if (t.includes('speak')) return 'speaking';
-            if (t.includes('writ')) return 'writing';
-            if (t.includes('listen') || t.includes('lt')) return 'listening';
-            if (t.includes('read') || t.includes('rt')) return 'reading';
-            return 'reading'; // default
-          };
-
           const type = session.module_type || guessType(session.test_title || '');
           if (session.is_completed || session.status === 'completed') {
             if (completed[type as keyof typeof completed] !== undefined) {
               completed[type as keyof typeof completed]++;
+              // Track scores for average calculation
+              if (session.overall_band_score) {
+                scores[type].push(Number(session.overall_band_score));
+              }
             }
           }
 
-          // Also check nested attempts if any
+          // Also check nested attempts for scores
           if (session.module_attempts) {
             session.module_attempts.forEach((att: any) => {
               const attType = att.module_type || guessType(session.test_title || '');
-              if (att.is_completed && completed[attType as keyof typeof completed] !== undefined) {
-                // Avoid double counting if session was already counted? 
-                // Actually sessions usually group attempts. Let's rely on distinct attempts if present.
-                // For simplicity, just count unique completed tests based on session for now or strictly completed attempts.
+              if (att.is_completed && att.band_score && scores[attType]) {
+                scores[attType].push(Number(att.band_score));
               }
             });
           }
         });
+
         setCompletedCounts(completed);
+
+        // Calculate section stats with averages
+        const stats: Record<string, { averageScore: number; testsCompleted: number }> = {};
+        Object.keys(completed).forEach(module => {
+          const moduleScores = scores[module];
+          stats[module] = {
+            averageScore: moduleScores.length > 0
+              ? moduleScores.reduce((a, b) => a + b, 0) / moduleScores.length
+              : 0,
+            testsCompleted: completed[module as keyof typeof completed],
+          };
+        });
+        setSectionStats(stats);
       })
       .catch(e => console.error(e));
   }, []);
@@ -364,7 +388,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <DashboardGettingStarted />
+          <DashboardGettingStarted completedCounts={completedCounts} sectionStats={sectionStats} />
 
           {/* Upgrade Banner */}
           {!hasFullAccess && (
