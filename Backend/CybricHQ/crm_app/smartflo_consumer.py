@@ -351,10 +351,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
 
     async def handle_connected(self, message):
         """Handle Smartflo connected event (WebSocket handshake complete)"""
-        logger.info("[SMARTFLO] Handshake received - connecting to ElevenLabs immediately...")
-        # Connect proactively to avoid deadlock if Smartflo waits for us to speak first
-        if not self.elevenlabs_ws:
-            await self.connect_elevenlabs_agent()
+        logger.info("[SMARTFLO] Handshake received - stream starting soon...")
 
     @database_sync_to_async
     def get_lead_from_db(self, phone_number):
@@ -480,7 +477,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         self.caller_to = start_data.get('to')
         
         # 1. Start with custom params from Smartflo (least reliable)
-        raw_custom_params = start_data.get('customParameters', {})
+        raw_custom_params = start_data.get('customParameters') or {}
         logger.info(f"[SMARTFLO] Raw custom params: {raw_custom_params}")
         
         lead_context = {}
