@@ -154,10 +154,10 @@ export default function AdminReadingPage() {
                                     <div className="flex items-center gap-2">
                                         {/* Preview Button */}
                                         <Link
-                                            href={`/tests/reading/${test.id}`}
+                                            href={`/tests/reading/answer-key/${test.id}`}
                                             target="_blank"
                                             className="p-2 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
-                                            title="Preview"
+                                            title="Preview Answer Key"
                                         >
                                             <Play className="w-4 h-4" />
                                         </Link>

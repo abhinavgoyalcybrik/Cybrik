@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Clock, PlayCircle, CheckCircle2, Check } from 'lucide-react';
+import { BookOpen, Clock, PlayCircle, CheckCircle2, Check } from 'lucide-react';
 import AdminLayout from '@/components/AdminLayout';
 
 interface ReadingTest {
@@ -21,74 +21,57 @@ export default function ReadingTestsPage() {
 
     useEffect(() => {
         const loadData = async () => {
-            // 1. Fetch Tests (API ONLY - Simplified source of truth)
+            // Load tests from LOCAL JSON ONLY (no API placeholders)
             try {
-                const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-                const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`);
-
+                const res = await fetch('/data/reading_tests.json');
                 if (res.ok) {
                     const data = await res.json();
-                    let apiTests: ReadingTest[] = (data.results || data || []).map((t: any) => ({
-                        id: String(t.id),
-                        title: t.title || 'Untitled Test',
-                        description: t.description || '',
-                        test_type: t.test_type || 'academic',
-                        active: t.active ?? true
-                    }));
 
-                    // Filter out placeholders and invalid tests logic
-                    apiTests = apiTests.filter(t => {
-                        const title = (t.title || '').trim().toLowerCase();
-                        const desc = (t.description || '').trim().toLowerCase();
+                    if (data.tests && data.tests.length > 0) {
+                        const localTests: ReadingTest[] = data.tests.map((t: any) => ({
+                            id: String(t.id),
+                            title: t.title || `Reading Test ${t.id}`,
+                            description: t.description || 'IELTS Academic Reading Test',
+                            test_type: t.test_type || 'academic',
+                            active: true
+                        }));
 
-                        // Filter out empty titles or 'Untitled'
-                        if (!title || title === 'untitled test') return false;
+                        // Sort by title
+                        localTests.sort((a, b) => a.title.localeCompare(b.title));
+                        setTests(localTests);
 
-                        // Filter out explicit placeholders
-                        if (title.includes('placeholder') || desc.includes('placeholder')) return false;
+                        // Check completion status
+                        try {
+                            const sessionRes = await fetch('/api/ielts/sessions/', { credentials: 'include' });
+                            if (sessionRes.ok) {
+                                const sessions = await sessionRes.json();
+                                const completed: Record<string, boolean> = {};
 
-                        return true;
-                    });
-
-                    // Sort by Title
-                    apiTests.sort((a, b) => a.title.localeCompare(b.title));
-
-                    setTests(apiTests);
-
-                    // 2. Fetch Sessions for Blocking (Only if tests loaded successfully)
-                    try {
-                        const sessionRes = await fetch('/api/ielts/sessions/', { credentials: 'include' });
-                        if (sessionRes.ok) {
-                            const sessions = await sessionRes.json();
-                            const completed: Record<string, boolean> = {};
-
-                            apiTests.forEach(test => {
-                                // Match completed sessions - STRICT MATCHING
-                                const isCompleted = sessions.some((s: any) =>
-                                    s.is_completed && (
-                                        // Exact ID match
-                                        String(s.test_id) === String(test.id) ||
-                                        // Exact Title match (fallback for legacy sessions)
-                                        (s.test_title && s.test_title.trim() === test.title.trim())
-                                    )
-                                );
-                                if (isCompleted) {
-                                    completed[test.id] = true;
-                                }
-                            });
-                            setCompletedTests(completed);
+                                localTests.forEach(test => {
+                                    const isCompleted = sessions.some((s: any) =>
+                                        s.is_completed && (
+                                            String(s.test_id) === String(test.id) ||
+                                            (s.test_title && s.test_title.trim() === test.title.trim())
+                                        )
+                                    );
+                                    if (isCompleted) {
+                                        completed[test.id] = true;
+                                    }
+                                });
+                                setCompletedTests(completed);
+                            }
+                        } catch (e) {
+                            console.error('Failed to load sessions:', e);
                         }
-                    } catch (e) {
-                        console.error('Failed to load sessions:', e);
+                    } else {
+                        setError('No tests found in the data file');
                     }
-
                 } else {
-                    console.error('Failed to fetch tests:', res.statusText);
-                    setError('Failed to load tests from server');
+                    setError('Failed to load tests data');
                 }
             } catch (err: any) {
-                console.error('API Error:', err);
-                setError('Could not connect to server');
+                console.error('Error loading tests:', err);
+                setError('Could not load tests');
             } finally {
                 setLoading(false);
             }
