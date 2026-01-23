@@ -34,15 +34,22 @@ export default function AdminReadingPage() {
     }, [isAdmin]);
 
     const fetchTests = async () => {
+        // Load from LOCAL JSON file (same source as student view)
         try {
-            const res = await fetch('/api/ielts/admin/tests/?module_type=reading', {
-                credentials: 'include',
-            });
+            const res = await fetch('/data/reading_tests.json');
             if (!res.ok) throw new Error('Failed to fetch tests');
             const data = await res.json();
-            let loadedTests = data.results || data || [];
-            // Sort by created_at descending
-            loadedTests.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+            let loadedTests = (data.tests || []).map((t: any) => ({
+                id: t.id,
+                title: t.title || `Reading Test ${t.id}`,
+                description: t.description || 'IELTS Academic Reading Test',
+                active: true,
+                created_at: new Date().toISOString(),
+            }));
+
+            // Sort by title
+            loadedTests.sort((a: any, b: any) => a.title.localeCompare(b.title));
             setTests(loadedTests);
             setLoading(false);
         } catch (err: any) {
