@@ -258,7 +258,35 @@ export default function ReadingTestPage({ params }: PageProps) {
             const res = await fetch(`/api/ielts/tests/${testId}/`);
             if (!res.ok) throw new Error('Failed to fetch test');
             const data = await res.json();
-            setTest(data);
+
+            // Adapt API response if needed
+            if (!data.modules && data.question_groups) {
+                // Construct a module wrapper if API returns flat question_groups
+                const adaptedTest: ReadingTest = {
+                    id: String(data.id),
+                    title: data.title || `Reading Test ${data.id}`,
+                    description: data.description || '',
+                    test_type: data.test_type || 'academic',
+                    modules: [{
+                        id: `reading-${data.id}`,
+                        module_type: 'reading',
+                        duration_minutes: 60,
+                        question_groups: data.question_groups.map((group: any) => ({
+                            ...group,
+                            id: String(group.id),
+                            options: group.options || [],
+                            questions: group.questions?.map((q: any) => ({
+                                ...q,
+                                id: String(q.id),
+                                options: q.options || group.options || [] // Fallback options
+                            })) || []
+                        }))
+                    }]
+                };
+                setTest(adaptedTest);
+            } else {
+                setTest(data);
+            }
         } catch (err: any) {
             setError(err.message);
         }

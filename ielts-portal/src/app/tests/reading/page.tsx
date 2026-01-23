@@ -32,7 +32,13 @@ export default function ReadingTestsPage() {
                     const localRes = await fetch('/data/reading_tests.json');
                     const localData = await localRes.json();
                     if (localData.tests && localData.tests.length > 0) {
-                        localTests = localData.tests;
+                        localTests = localData.tests.map((t: any) => ({
+                            id: String(t.id),
+                            title: t.title || `Reading Test ${t.id}`,
+                            description: t.description || 'Practice Test',
+                            test_type: t.test_type || 'academic',
+                            active: t.active !== undefined ? t.active : true
+                        }));
                     }
                 } catch {
                     console.warn('Failed to load local reading tests');
@@ -44,24 +50,46 @@ export default function ReadingTestsPage() {
                     const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`);
                     if (res.ok) {
                         const data = await res.json();
-                        apiTests = data.results || data || [];
+                        apiTests = (data.results || data || []).map((t: any) => ({
+                            id: String(t.id),
+                            title: t.title || 'Untitled Test',
+                            description: t.description || '',
+                            test_type: t.test_type || 'academic',
+                            active: t.active ?? true
+                        }));
                     }
                 } catch (e) {
                     console.error('Failed to load API tests', e);
                 }
 
-                // Merge and Deduplicate (API takes precedence)
+                // Merge and Deduplicate (Identify duplicates by ID or Title)
                 const testMap = new Map<string, ReadingTest>();
 
-                // Add local tests first
-                localTests.forEach(t => testMap.set(String(t.id), t));
+                // Helper to normalize strings for comparison
+                const normalize = (s: string) => s.trim().toLowerCase();
 
-                // Add/Overwrite with API tests
-                apiTests.forEach(t => testMap.set(String(t.id), t));
+                // 1. Add API tests first (Source of Truth)
+                apiTests.forEach(t => {
+                    testMap.set(String(t.id), t);
+                });
+
+                // 2. Add local tests ONLY if not already present (checking ID and Title)
+                localTests.forEach(localTest => {
+                    const isDuplicate = Array.from(testMap.values()).some(apiTest =>
+                        String(apiTest.id) === String(localTest.id) ||
+                        normalize(apiTest.title) === normalize(localTest.title) ||
+                        // Check if API title contains local ID (common pattern: "Reading Test 01RT01")
+                        normalize(apiTest.title).includes(normalize(localTest.id))
+                    );
+
+                    if (!isDuplicate) {
+                        testMap.set(String(localTest.id), localTest);
+                    }
+                });
 
                 fetchedTests = Array.from(testMap.values());
 
-                // Sort by ID or Title
+                // Sort by ID naturally or Title
                 fetchedTests.sort((a, b) => String(a.title).localeCompare(String(b.title)));
 
                 setTests(fetchedTests);
@@ -79,12 +107,13 @@ export default function ReadingTestsPage() {
                     const completed: Record<string, boolean> = {};
 
                     fetchedTests.forEach(test => {
-                        // Match completed sessions
+                        // Match completed sessions - STRICT MATCHING
                         const isCompleted = sessions.some((s: any) =>
                             s.is_completed && (
+                                // Exact ID match
                                 String(s.test_id) === String(test.id) ||
-                                (s.test_title && s.test_title.toLowerCase().includes(test.title.toLowerCase())) ||
-                                (s.test_title && s.test_title.toLowerCase().includes(`reading test ${test.id}`))
+                                // Exact Title match (fallback for legacy sessions)
+                                (s.test_title && s.test_title.trim() === test.title.trim())
                             )
                         );
                         if (isCompleted) {
