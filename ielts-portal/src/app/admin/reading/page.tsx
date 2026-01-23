@@ -143,6 +143,11 @@ export default function AdminReadingPage() {
                                                     }`}>
                                                     {test.active ? 'Active' : 'Draft'}
                                                 </span>
+                                                {test.description?.includes('Auto-created') && (
+                                                    <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                                        Placeholder
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

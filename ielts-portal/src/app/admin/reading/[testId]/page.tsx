@@ -416,8 +416,18 @@ export default function AdminReadingEditPage({ params }: PageProps) {
             </div>
 
             {groups.length === 0 && (
-                <div className="text-center py-12 text-slate-500 bg-white rounded-2xl border border-slate-200">
-                    No passages found for this test.
+                <div className="bg-amber-50 rounded-2xl border border-amber-200 p-8 text-center">
+                    <div className="inline-flex p-3 rounded-full bg-amber-100 mb-4">
+                        <AlertCircle className="w-8 h-8 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">No Content Available</h3>
+                    <p className="text-slate-600 max-w-md mx-auto mb-4">
+                        This test was auto-created as a placeholder when a student saved their results.
+                        It doesn&apos;t contain actual passages or questions.
+                    </p>
+                    <p className="text-sm text-slate-500">
+                        To add content, import a JSON file with passages and questions via the &quot;Add New Test&quot; page.
+                    </p>
                 </div>
             )}
         </AdminLayout>
