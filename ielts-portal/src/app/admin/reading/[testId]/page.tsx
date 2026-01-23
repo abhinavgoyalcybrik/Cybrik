@@ -120,6 +120,36 @@ export default function AdminReadingEditPage({ params }: PageProps) {
         }
     };
 
+    const handleSave = async () => {
+        try {
+            const parsed = JSON.parse(jsonContent);
+            setSaving(true);
+            setError(null);
+
+            const res = await fetch('/api/admin/reading', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    testId: testId,
+                    testData: parsed
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to save');
+            }
+
+            setSuccess('Saved successfully!');
+            setTimeout(() => setSuccess(null), 3000);
+        } catch (e: any) {
+            setError(`Save failed: ${e.message}`);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     if (authLoading || !isAdmin) {
         return (
             <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -222,11 +252,30 @@ export default function AdminReadingEditPage({ params }: PageProps) {
                             </button>
                             <button
                                 onClick={handleDownload}
-                                className="flex items-center gap-2 px-3 py-2 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg font-medium transition-colors border border-green-200 text-sm"
+                                className="flex items-center gap-2 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-lg font-medium transition-colors border border-slate-200 text-sm"
                             >
                                 <Download className="w-4 h-4" />
                                 Download
                             </button>
+                            {!isNew && (
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                    className="flex items-center gap-2 px-4 py-2 bg-[#6FB63A] hover:bg-[#5fa030] text-white rounded-lg font-medium transition-colors shadow-sm text-sm disabled:opacity-50"
+                                >
+                                    {saving ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Check className="w-4 h-4" />
+                                            Save
+                                        </>
+                                    )}
+                                </button>
+                            )}
                         </div>
                     </div>
 
