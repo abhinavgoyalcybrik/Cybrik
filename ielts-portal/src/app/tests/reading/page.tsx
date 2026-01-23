@@ -21,112 +21,77 @@ export default function ReadingTestsPage() {
 
     useEffect(() => {
         const loadData = async () => {
-            let fetchedTests: ReadingTest[] = [];
-            // 1. Fetch Tests
+            // 1. Fetch Tests (API ONLY - Simplified source of truth)
             try {
-                let localTests: ReadingTest[] = [];
-                let apiTests: ReadingTest[] = [];
+                const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+                const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`);
 
-                // Try local JSON
-                try {
-                    const localRes = await fetch('/data/reading_tests.json');
-                    const localData = await localRes.json();
-                    if (localData.tests && localData.tests.length > 0) {
-                        localTests = localData.tests.map((t: any) => ({
-                            id: String(t.id),
-                            title: t.title || `Reading Test ${t.id}`,
-                            description: t.description || 'Practice Test',
-                            test_type: t.test_type || 'academic',
-                            active: t.active !== undefined ? t.active : true
-                        }));
-                    }
-                } catch {
-                    console.warn('Failed to load local reading tests');
-                }
-
-                // Fetch from Backend API
-                try {
-                    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-                    const res = await fetch(`${API_BASE}/api/ielts/tests/?module_type=reading`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        apiTests = (data.results || data || []).map((t: any) => ({
-                            id: String(t.id),
-                            title: t.title || 'Untitled Test',
-                            description: t.description || '',
-                            test_type: t.test_type || 'academic',
-                            active: t.active ?? true
-                        }));
-                    }
-                } catch (e) {
-                    console.error('Failed to load API tests', e);
-                }
-
-                // Merge and Deduplicate (Identify duplicates by ID or Title)
-                const testMap = new Map<string, ReadingTest>();
-
-                // Helper to normalize strings for comparison
-                const normalize = (s: string) => s.trim().toLowerCase();
-
-                // 1. Add API tests first (Source of Truth)
-                apiTests.forEach(t => {
-                    testMap.set(String(t.id), t);
-                });
-
-                // 2. Add local tests ONLY if not already present (checking ID and Title)
-                localTests.forEach(localTest => {
-                    const isDuplicate = Array.from(testMap.values()).some(apiTest =>
-                        String(apiTest.id) === String(localTest.id) ||
-                        normalize(apiTest.title) === normalize(localTest.title) ||
-                        // Check if API title contains local ID (common pattern: "Reading Test 01RT01")
-                        normalize(apiTest.title).includes(normalize(localTest.id))
-                    );
-
-                    if (!isDuplicate) {
-                        testMap.set(String(localTest.id), localTest);
-                    }
-                });
-
-                fetchedTests = Array.from(testMap.values());
-
-                // Sort by ID naturally or Title
-                fetchedTests.sort((a, b) => String(a.title).localeCompare(String(b.title)));
-
-                setTests(fetchedTests);
-            } catch (err: any) {
-                setError(err.message);
-                setLoading(false);
-                return; // Stop if tests fail
-            }
-
-            // 2. Fetch Sessions for Blocking
-            try {
-                const res = await fetch('/api/ielts/sessions/', { credentials: 'include' });
                 if (res.ok) {
-                    const sessions = await res.json();
-                    const completed: Record<string, boolean> = {};
+                    const data = await res.json();
+                    let apiTests: ReadingTest[] = (data.results || data || []).map((t: any) => ({
+                        id: String(t.id),
+                        title: t.title || 'Untitled Test',
+                        description: t.description || '',
+                        test_type: t.test_type || 'academic',
+                        active: t.active ?? true
+                    }));
 
-                    fetchedTests.forEach(test => {
-                        // Match completed sessions - STRICT MATCHING
-                        const isCompleted = sessions.some((s: any) =>
-                            s.is_completed && (
-                                // Exact ID match
-                                String(s.test_id) === String(test.id) ||
-                                // Exact Title match (fallback for legacy sessions)
-                                (s.test_title && s.test_title.trim() === test.title.trim())
-                            )
-                        );
-                        if (isCompleted) {
-                            completed[test.id] = true;
-                        }
+                    // Filter out placeholders and invalid tests logic
+                    apiTests = apiTests.filter(t => {
+                        const title = (t.title || '').trim().toLowerCase();
+                        const desc = (t.description || '').trim().toLowerCase();
+
+                        // Filter out empty titles or 'Untitled'
+                        if (!title || title === 'untitled test') return false;
+
+                        // Filter out explicit placeholders
+                        if (title.includes('placeholder') || desc.includes('placeholder')) return false;
+
+                        return true;
                     });
-                    setCompletedTests(completed);
-                }
-            } catch (e) {
-                console.error('Failed to load sessions:', e);
-            }
 
-            setLoading(false);
+                    // Sort by Title
+                    apiTests.sort((a, b) => a.title.localeCompare(b.title));
+
+                    setTests(apiTests);
+
+                    // 2. Fetch Sessions for Blocking (Only if tests loaded successfully)
+                    try {
+                        const sessionRes = await fetch('/api/ielts/sessions/', { credentials: 'include' });
+                        if (sessionRes.ok) {
+                            const sessions = await sessionRes.json();
+                            const completed: Record<string, boolean> = {};
+
+                            apiTests.forEach(test => {
+                                // Match completed sessions - STRICT MATCHING
+                                const isCompleted = sessions.some((s: any) =>
+                                    s.is_completed && (
+                                        // Exact ID match
+                                        String(s.test_id) === String(test.id) ||
+                                        // Exact Title match (fallback for legacy sessions)
+                                        (s.test_title && s.test_title.trim() === test.title.trim())
+                                    )
+                                );
+                                if (isCompleted) {
+                                    completed[test.id] = true;
+                                }
+                            });
+                            setCompletedTests(completed);
+                        }
+                    } catch (e) {
+                        console.error('Failed to load sessions:', e);
+                    }
+
+                } else {
+                    console.error('Failed to fetch tests:', res.statusText);
+                    setError('Failed to load tests from server');
+                }
+            } catch (err: any) {
+                console.error('API Error:', err);
+                setError('Could not connect to server');
+            } finally {
+                setLoading(false);
+            }
         };
 
         loadData();
