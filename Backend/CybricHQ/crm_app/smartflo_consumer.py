@@ -311,6 +311,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         
         # Wait for ElevenLabs handshake
         if not self.elevenlabs_ready:
+            if len(self.input_audio_buffer) % 40000 == 0: 
+                 logger.warning(f"[SMARTFLO] Buffering audio - waiting for ElevenLabs handshake. Buffer size: {len(self.input_audio_buffer)}")
+            
             # Just keep buffering limit check
             if len(self.input_audio_buffer) > 320000: 
                  self.input_audio_buffer = self.input_audio_buffer[-320000:]
@@ -348,7 +351,10 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
 
     async def handle_connected(self, message):
         """Handle Smartflo connected event (WebSocket handshake complete)"""
-        logger.info("[SMARTFLO] Handshake received - stream starting soon...")
+        logger.info("[SMARTFLO] Handshake received - connecting to ElevenLabs immediately...")
+        # Connect proactively to avoid deadlock if Smartflo waits for us to speak first
+        if not self.elevenlabs_ws:
+            await self.connect_elevenlabs_agent()
 
     @database_sync_to_async
     def get_lead_from_db(self, phone_number):

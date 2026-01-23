@@ -58,7 +58,32 @@ export default function SpeakingTestPage({ params }: PageProps) {
     const [currentPart, setCurrentPart] = useState<TestPart>('intro');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [voiceEnabled, setVoiceEnabled] = useState(true);
+    const [voicesLoaded, setVoicesLoaded] = useState(false);
     const [testCompleted, setTestCompleted] = useState(false);
+
+    // Initial voice loading
+    useEffect(() => {
+        const loadVoices = () => {
+            if (typeof window === 'undefined') return;
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                setVoicesLoaded(true);
+            }
+        };
+
+        loadVoices();
+
+        // Chrome requires this event listener
+        if (typeof window !== 'undefined') {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.speechSynthesis.onvoiceschanged = null;
+            }
+        };
+    }, []);
     const [showDoneButton, setShowDoneButton] = useState(false);
     const [micCheckComplete, setMicCheckComplete] = useState(false);
     const [evaluationResult, setEvaluationResult] = useState<any>(null);
@@ -292,52 +317,85 @@ export default function SpeakingTestPage({ params }: PageProps) {
             setShowDoneButton(false);
 
             const synth = window.speechSynthesis;
-            synth.cancel();
+            synth.cancel(); // Cancel any ongoing speech
 
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.rate = 0.9; // Slightly slower for clarity
             utterance.pitch = 1;
             utterance.volume = 1;
 
-            // Get all available voices
-            const voices = synth.getVoices();
+            // Helper to select voice
+            const selectVoice = () => {
+                const voices = synth.getVoices();
+                if (voices.length === 0) return null;
 
-            // Priority order for best voice quality
-            const preferredVoice =
-                // Best: Google UK English Female (very natural)
-                voices.find(v => v.name === 'Google UK English Female') ||
-                // Good: Microsoft Hazel (UK)
-                voices.find(v => v.name.includes('Microsoft Hazel')) ||
-                // Good: Google UK English Male
-                voices.find(v => v.name === 'Google UK English Male') ||
-                // Fallback: Any Google English voice
-                voices.find(v => v.name.startsWith('Google') && v.lang.startsWith('en')) ||
-                // Fallback: Any Microsoft English voice
-                voices.find(v => v.name.includes('Microsoft') && v.lang.startsWith('en')) ||
-                // Fallback: Any British English voice
-                voices.find(v => v.lang === 'en-GB') ||
-                // Fallback: Any English voice
-                voices.find(v => v.lang.startsWith('en')) ||
-                voices[0];
+                // Priority order for best voice quality
+                return (
+                    // Best: Google UK English Female (very natural)
+                    voices.find(v => v.name === 'Google UK English Female') ||
+                    // Good: Microsoft Hazel (UK)
+                    voices.find(v => v.name.includes('Microsoft Hazel')) ||
+                    // Good: Google UK English Male
+                    voices.find(v => v.name === 'Google UK English Male') ||
+                    // Fallback: Any Google English voice
+                    voices.find(v => v.name.startsWith('Google') && v.lang.startsWith('en')) ||
+                    // Fallback: Any Microsoft English voice
+                    voices.find(v => v.name.includes('Microsoft') && v.lang.startsWith('en')) ||
+                    // Fallback: Any British English voice
+                    voices.find(v => v.lang === 'en-GB') ||
+                    // Fallback: Any English voice
+                    voices.find(v => v.lang.startsWith('en')) ||
+                    voices[0]
+                );
+            };
 
+            // Try to set voice immediately
+            const preferredVoice = selectVoice();
             if (preferredVoice) {
                 utterance.voice = preferredVoice;
-                console.log('Using voice:', preferredVoice.name);
+                // console.log('Using voice:', preferredVoice.name);
+            } else {
+                // If no voices yet, try to wait for them (up to 1s)
+                setTimeout(() => {
+                    const lateVoice = selectVoice();
+                    if (lateVoice) utterance.voice = lateVoice;
+                }, 500);
             }
 
             utterance.onend = () => {
                 setTimeout(() => {
                     isSpeakingRef.current = false;
                     resolve();
-                }, 500);
+                }, 300);
             };
+
             utterance.onerror = (e) => {
                 console.error('Speech error:', e);
                 isSpeakingRef.current = false;
-                resolve();
+                resolve(); // resolve anyway to not block the test
             };
 
-            synth.speak(utterance);
+            // Small delay to ensure browser is ready
+            setTimeout(() => {
+                try {
+                    synth.speak(utterance);
+
+                    // Fallback watchdog: if onend doesn't fire within expected time + 3s, resolve anyway
+                    // Estimate duration: 15 chars ~ 1 sec at 0.9 rate
+                    const estimatedDurationMs = (text.length / 15) * 1000 + 3000;
+                    setTimeout(() => {
+                        if (isSpeakingRef.current) {
+                            console.warn('Speech timed out, forcing progress');
+                            isSpeakingRef.current = false;
+                            resolve();
+                        }
+                    }, Math.max(5000, estimatedDurationMs));
+
+                } catch (e) {
+                    console.error('Synth speak failed:', e);
+                    resolve();
+                }
+            }, 50);
         });
     };
 
@@ -794,6 +852,24 @@ export default function SpeakingTestPage({ params }: PageProps) {
 
         setInterviewState('connecting');
         setCurrentPart('intro');
+
+        // Wait for voices if not loaded
+        if (!voicesLoaded && typeof window !== 'undefined') {
+            await new Promise<void>(resolve => {
+                const checkInterval = setInterval(() => {
+                    if (window.speechSynthesis.getVoices().length > 0) {
+                        clearInterval(checkInterval);
+                        setVoicesLoaded(true);
+                        resolve();
+                    }
+                }, 100);
+                // Timeout after 3s to avoid hanging
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    resolve();
+                }, 3000);
+            });
+        }
 
         // Start with first intro step
         const firstStep = INTRO_SEQUENCE[0];
