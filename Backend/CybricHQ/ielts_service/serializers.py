@@ -15,7 +15,7 @@ class QuestionGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionGroup
-        fields = ['id', 'title', 'instructions', 'content', 'media_file', 'audio_start_time', 'order', 'questions']
+        fields = ['id', 'title', 'instructions', 'content', 'group_type', 'container', 'media_file', 'audio_start_time', 'order', 'questions']
 
 class TestModuleSerializer(serializers.ModelSerializer):
     question_groups = QuestionGroupSerializer(many=True, read_only=True)
@@ -91,7 +91,7 @@ class AdminQuestionGroupSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = QuestionGroup
-        fields = ['id', 'module', 'title', 'instructions', 'content', 'media_file', 'audio_start_time', 'order', 'questions']
+        fields = ['id', 'module', 'title', 'instructions', 'content', 'group_type', 'container', 'media_file', 'audio_start_time', 'order', 'questions']
 
 class AdminTestModuleSerializer(serializers.ModelSerializer):
     """Full CRUD serializer for test modules"""
