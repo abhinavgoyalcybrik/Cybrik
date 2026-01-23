@@ -63,6 +63,9 @@ class QuestionGroup(models.Model):
     # Content
     content = models.TextField(blank=True, help_text="Reading passage text or transcript")
     
+    # Type of question group (e.g. true_false, multiple_choice)
+    group_type = models.CharField(max_length=50, default='text_input', help_text="Type of questions in this group")
+    
     # Rich text container for complex question types (tables, diagrams)
     container = models.JSONField(null=True, blank=True, help_text="Structure for table completion, flow charts etc.")
     
