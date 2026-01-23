@@ -69,6 +69,9 @@ class QuestionGroup(models.Model):
     # Rich text container for complex question types (tables, diagrams)
     container = models.JSONField(null=True, blank=True, help_text="Structure for table completion, flow charts etc.")
     
+    # Shared options for the group (e.g. List of Words for summary completion)
+    options = models.JSONField(default=list, blank=True, help_text="List of options shared by questions in this group")
+    
     media_file = models.FileField(upload_to='ielts/media/', null=True, blank=True, help_text="Audio for listening or Image for reading")
     
     # Audio timestamp (in seconds) - when this part/section starts in the audio

@@ -1126,6 +1126,7 @@ def _import_reading_content(module, data):
                 instructions=group.get('instructions', ''),
                 group_type=group.get('type', 'text_input').lower().replace(' ', '_'),
                 container=group.get('container'),
+                options=group.get('options', []),
                 order=global_order
             )
             global_order += 1
@@ -1204,6 +1205,7 @@ def _import_listening_content(module, data):
             instructions=section_data.get('question_type', ''),
             content='',
             group_type='text_input',
+            options=[],
             order=section_num
         )
         
