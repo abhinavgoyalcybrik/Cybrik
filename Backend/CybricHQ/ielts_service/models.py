@@ -72,6 +72,9 @@ class QuestionGroup(models.Model):
     # Shared options for the group (e.g. List of Words for summary completion)
     options = models.JSONField(default=list, blank=True, help_text="List of options shared by questions in this group")
     
+    # Image for the group (e.g. diagram for labelling)
+    image = models.ImageField(upload_to='ielts/images/', null=True, blank=True, help_text="Image for diagram/flowchart questions")
+    
     media_file = models.FileField(upload_to='ielts/media/', null=True, blank=True, help_text="Audio for listening or Image for reading")
     
     # Audio timestamp (in seconds) - when this part/section starts in the audio

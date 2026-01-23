@@ -1127,6 +1127,7 @@ def _import_reading_content(module, data):
                 group_type=group.get('type', 'text_input').lower().replace(' ', '_'),
                 container=group.get('container'),
                 options=group.get('options', []),
+                image=group.get('image'),
                 order=global_order
             )
             global_order += 1
