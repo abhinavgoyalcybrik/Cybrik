@@ -513,11 +513,13 @@ def dialplan_webhook(request):
         ws_url = "wss://api.cybriksolutions.com/ws/smartflo/audio/"
         
         # SmartFlo Dynamic Endpoint STRICT Response Format
-        # CRITICAL: Must match exactly - "sucess" (with typo) and "wss_url"
-        # Any other keys or format will cause call to hang up!
+        # CRITICAL: We include multiple variations to be safe against API changes/typos
         response_payload = {
-            "sucess": True,  # Note: SmartFlo uses "sucess" (typo in their API)
-            "wss_url": ws_url
+            "sucess": True,   # SmartFlo legacy typo
+            "success": True,  # Corect spelling
+            "wss_url": ws_url,
+            "voice_url": ws_url, # Possible alias used in some versions
+            "url": ws_url        # Fallback alias
         }
         
         logger.info(f"[DIALPLAN] Responding with WSS URL: {ws_url}")
