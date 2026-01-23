@@ -62,6 +62,10 @@ class QuestionGroup(models.Model):
     
     # Content
     content = models.TextField(blank=True, help_text="Reading passage text or transcript")
+    
+    # Rich text container for complex question types (tables, diagrams)
+    container = models.JSONField(null=True, blank=True, help_text="Structure for table completion, flow charts etc.")
+    
     media_file = models.FileField(upload_to='ielts/media/', null=True, blank=True, help_text="Audio for listening or Image for reading")
     
     # Audio timestamp (in seconds) - when this part/section starts in the audio
