@@ -33,7 +33,6 @@ def setup():
             'price_cents': 100000,  # 1000 INR
             'currency': 'INR',
             'interval': 'month',
-            'description': 'Unlimited access to all IELTS modules',
             'active': True
         }
     )
