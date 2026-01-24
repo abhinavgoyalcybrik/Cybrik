@@ -14,6 +14,14 @@ try:
     print("1. Attempting to import billing.views...")
     from billing import views
     print("   ✅ billing.views imported successfully.")
+
+    # Check URL Order
+    from CybricHQ.urls import urlpatterns
+    print("\n   Checking URL Pattern Order:")
+    for i, p in enumerate(urlpatterns):
+        print(f"   [{i}] {p.pattern}")
+        # We want to see 'api/billing/' BEFORE 'api/'
+
 except ImportError as e:
     print(f"   ❌ FAILED to import billing.views: {e}")
     print("   ⚠️  Likely missing 'razorpay' library. Run: pip install razorpay")
