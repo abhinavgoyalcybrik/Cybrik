@@ -23,4 +23,7 @@ class JWTAuthFromCookie(BaseAuthentication):
             user = User.objects.get(pk=user_id)
             return (user, None)
         except Exception as exc:
-            raise exceptions.AuthenticationFailed("Invalid/expired token")
+            # If the token is invalid/expired, we return None so that the request
+            # continues as an unauthenticated request. This allows permissions
+            # like AllowAny to work for public endpoints.
+            return None
