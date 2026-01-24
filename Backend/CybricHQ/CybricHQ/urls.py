@@ -9,9 +9,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include("crm_app.urls")),
-    path("api/billing/", include("billing.urls")),  # Billing API
-    path("api/ielts/", include("ielts_service.urls")),  # IELTS API
+    path("api/billing/", include("billing.urls")),  # Billing API (Specific)
+    path("api/ielts/", include("ielts_service.urls")),  # IELTS API (Specific)
+    path("api/", include("crm_app.urls")),  # Generic API (Catch-all for 'api/')
 ]
 
 # Stripe webhook (separate for CSRF exemption)
