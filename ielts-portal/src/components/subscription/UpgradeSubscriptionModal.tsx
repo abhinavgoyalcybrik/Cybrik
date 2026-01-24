@@ -2,6 +2,7 @@
 
 import { Check, X } from "lucide-react";
 import { RazorpayButton } from "@/components/payment/RazorpayButton";
+import { useEffect, useState } from "react";
 
 interface UpgradeModalProps {
     isOpen: boolean;
@@ -9,6 +10,31 @@ interface UpgradeModalProps {
 }
 
 export const UpgradeSubscriptionModal = ({ isOpen, onClose }: UpgradeModalProps) => {
+    const [planId, setPlanId] = useState<string | null>(null);
+    const [price, setPrice] = useState<string>("1000");
+    const [loadingPlan, setLoadingPlan] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setLoadingPlan(true);
+            fetch('/api/billing/plans/?active=true')
+                .then(res => res.json())
+                .then(data => {
+                    const plans = Array.isArray(data) ? data : (data.results || []);
+                    // Find the premium plan (assuming 'Premium' in name)
+                    const premium = plans.find((p: any) => p.name.includes('Premium')) || plans[0];
+                    if (premium) {
+                        setPlanId(premium.id);
+                        if (premium.price_cents) {
+                            setPrice((premium.price_cents / 100).toString());
+                        }
+                    }
+                })
+                .catch(console.error)
+                .finally(() => setLoadingPlan(false));
+        }
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     return (
@@ -50,19 +76,23 @@ export const UpgradeSubscriptionModal = ({ isOpen, onClose }: UpgradeModalProps)
 
                         <div className="mt-4 p-4 bg-gray-50 rounded-lg text-center">
                             <p className="text-lg font-semibold">Premium Plan</p>
-                            <p className="text-3xl font-bold mt-1">₹1000<span className="text-sm font-normal text-gray-500">/month</span></p>
+                            <p className="text-3xl font-bold mt-1">₹{price}<span className="text-sm font-normal text-gray-500">/month</span></p>
                         </div>
 
-                        <RazorpayButton
-                            planId="051a32b0-9f37-432b-aed6-3c4a18e5d1a6"
-                            buttonText="Upgrade Now"
-                            onSuccess={() => {
-                                alert("Welcome to Premium!");
-                                onClose();
-                                window.location.reload();
-                            }}
-                            description="Premium Subscription"
-                        />
+                        {loadingPlan ? (
+                            <div className="text-center text-sm text-gray-500">Loading plan details...</div>
+                        ) : (
+                            <RazorpayButton
+                                planId={planId || ""}
+                                buttonText="Upgrade Now"
+                                onSuccess={() => {
+                                    alert("Welcome to Premium!");
+                                    onClose();
+                                    window.location.reload();
+                                }}
+                                description="Premium Subscription"
+                            />
+                        )}
                     </div>
                 </div>
             </div>

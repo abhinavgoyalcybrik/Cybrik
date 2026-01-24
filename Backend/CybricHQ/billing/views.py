@@ -140,6 +140,11 @@ class PlanViewSet(viewsets.ModelViewSet):
     # needed for filtering and editing.
     serializer_class = PlanSerializer
     
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticated()]
+        return [IsAdminUser()]
+    
     def get_queryset(self):
         queryset = super().get_queryset()
         
