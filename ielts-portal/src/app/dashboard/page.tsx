@@ -391,16 +391,7 @@ export default function Dashboard() {
           <DashboardGettingStarted completedCounts={completedCounts} sectionStats={sectionStats} />
 
           {/* Upgrade Banner */}
-          {!hasFullAccess && (
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white text-center shadow-lg shadow-blue-900/20">
-              <p className="text-sm font-medium opacity-90 mb-1">0/3 weekly free check rights used</p>
-              <p className="text-xs opacity-70 mb-4">Renews in 6 days 23 hours...</p>
-              <button className="w-full py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-medium transition-colors flex items-center justify-center gap-2">
-                <Trophy className="w-4 h-4" />
-                Upgrade to premium now
-              </button>
-            </div>
-          )}
+
         </div>
       </div>
     </AdminLayout>
