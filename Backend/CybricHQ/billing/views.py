@@ -133,7 +133,7 @@ class PlanViewSet(viewsets.ModelViewSet):
     CRUD for Plans. Admin only.
     """
     queryset = Plan.objects.select_related('product').all()
-    permission_classes = [IsAdminUser]
+    # permission_classes removed to rely on get_permissions
     
     # Removed get_serializer_class to use PlanSerializer for all actions
     # This ensures the frontend receives all fields (product, price_cents, etc.)
