@@ -21,7 +21,7 @@ from .models import (
     Product, Plan, Subscription, Purchase, 
     Invoice, PaymentLog, AuditLog, WebhookEvent
 )
-from .services.razorpay_service import RazorpayService
+# from .services.razorpay_service import RazorpayService  <-- Removed top level import
 from .serializers import (
     ProductSerializer, PlanSerializer, PlanListSerializer,
     SubscriptionSerializer, SubscriptionCreateSerializer,
@@ -783,6 +783,16 @@ class RazorpayViewSet(viewsets.ViewSet):
                 return Response({"error": f"Database error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             # Create Razorpay Order
+            try:
+                from .services.razorpay_service import RazorpayService
+            except ImportError as e:
+                logger.error(f"Failed to import RazorpayService: {e}")
+                purchase.delete()
+                return Response(
+                    {"error": "Payment service configuration error (missing library)."}, 
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+
             rzp = RazorpayService()
             try:
                 # Razorpay expects amount in paise (100 paise = 1 INR)
@@ -797,7 +807,7 @@ class RazorpayViewSet(viewsets.ViewSet):
                 logger.error(f"Razorpay Order Creation Failed: {e}")
                 purchase.delete() # Rollback
                 return Response(
-                    {"error": "Failed to create payment order"}, 
+                    {"error": f"Failed to create payment order: {str(e)}"}, 
                     status=status.HTTP_503_SERVICE_UNAVAILABLE
                 )
             
