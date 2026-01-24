@@ -16,6 +16,7 @@ import {
     BookOpen,
     FileText,
     LifeBuoy,
+    CreditCard,
 } from 'lucide-react';
 
 const navItems = [
@@ -37,6 +38,7 @@ const studentNavItems = [
     { name: 'Practice Listening', href: '/tests/listening', icon: Headphones },
     { name: 'Practice Reading', href: '/tests/reading', icon: BookOpen },
     { name: 'My Reports', href: '/reports', icon: FileText },
+    { name: 'Subscription', href: '/account/subscription', icon: CreditCard },
     { name: 'Support', href: '/support', icon: LifeBuoy },
     { name: 'My Profile', href: '/account/profile', icon: Users },
 ];
