@@ -113,6 +113,14 @@ export default function SubscriptionPage() {
                         Back to Account
                     </Link>
 
+                    <div className="flex justify-center mb-6">
+                        <img
+                            src="/cybrik-logo.png"
+                            alt="Cybrik Logo"
+                            className="h-16 w-auto object-contain"
+                        />
+                    </div>
+
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                         Unlock your full potential with unlimited practice and expert guidance
