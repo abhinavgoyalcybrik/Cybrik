@@ -16,6 +16,7 @@ router.register(r'invoices', views.InvoiceViewSet, basename='invoice')
 router.register(r'payment-logs', views.PaymentLogViewSet, basename='payment-log')
 router.register(r'audit-logs', views.AuditLogViewSet, basename='audit-log')
 router.register(r'reports', views.ReportsViewSet, basename='report')
+router.register(r'razorpay', views.RazorpayViewSet, basename='razorpay')
 
 urlpatterns = [
     path('', include(router.urls)),

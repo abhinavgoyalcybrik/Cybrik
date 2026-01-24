@@ -29,6 +29,10 @@ RAILWAY_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
 # Frontend URL for generating links (upload links, etc)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://crm.cybriksolutions.com")
 
+# Razorpay Settings
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",

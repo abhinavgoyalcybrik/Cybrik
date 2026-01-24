@@ -21,6 +21,7 @@ from .models import (
     Product, Plan, Subscription, Purchase, 
     Invoice, PaymentLog, AuditLog, WebhookEvent
 )
+from .services.razorpay_service import RazorpayService
 from .serializers import (
     ProductSerializer, PlanSerializer, PlanListSerializer,
     SubscriptionSerializer, SubscriptionCreateSerializer,
@@ -712,3 +713,161 @@ class ReportsViewSet(viewsets.ViewSet):
             'overdue_invoices': overdue,
             'currency': 'USD'
         })
+
+
+class RazorpayViewSet(viewsets.ViewSet):
+    """
+    Handle Razorpay payment flow.
+    """
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['post'])
+    def initiate_payment(self, request):
+        """
+        Create a Purchase record and a Razorpay Order.
+        """
+        product_id = request.data.get('product_id')
+        plan_id = request.data.get('plan_id')
+        
+        # Validation
+        if not product_id and not plan_id:
+            return Response(
+                {"error": "Either product_id or plan_id is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        amount_cents = 0
+        currency = 'INR'  # Razorpay default
+        description = ""
+        metadata = {}
+
+        try:
+            if plan_id:
+                plan = Plan.objects.get(id=plan_id)
+                amount_cents = plan.price_cents
+                currency = plan.currency
+                description = f"Subscription to {plan.name}"
+                metadata['plan_id'] = str(plan_id)
+                metadata['type'] = 'subscription'
+            elif product_id:
+                product = Product.objects.get(id=product_id)
+                # For fixed price products
+                return Response(
+                    {"error": "Direct product purchase not yet supported, please select a plan"},
+                     status=status.HTTP_400_BAD_REQUEST
+                )
+        except (Plan.DoesNotExist, Product.DoesNotExist):
+            return Response({"error": "Invalid product or plan"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create Purchase Record (Unpaid)
+        with transaction.atomic():
+            purchase = Purchase.objects.create(
+                user=request.user,
+                product=plan.product if plan_id else None,
+                amount_cents=amount_cents,
+                currency=currency,
+                paid=False,
+                payment_method='razorpay',
+                metadata=metadata
+            )
+
+            # Create Razorpay Order
+            rzp = RazorpayService()
+            try:
+                # Razorpay expects amount in paise (100 paise = 1 INR)
+                # Ensure amount_cents is treated as such
+                order = rzp.create_order(
+                    amount=amount_cents, 
+                    currency=currency, 
+                    receipt=str(purchase.id),
+                    notes={'user_email': request.user.email, 'purchase_id': str(purchase.id)}
+                )
+            except Exception as e:
+                logger.error(f"Razorpay Order Creation Failed: {e}")
+                purchase.delete() # Rollback
+                return Response(
+                    {"error": "Failed to create payment order"}, 
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+            
+            # Save Order ID to Purchase metadata
+            purchase.payment_id = order['id'] # Store format: order_xxxx
+            purchase.save()
+
+            return Response({
+                'order_id': order['id'],
+                'key_id': settings.RAZORPAY_KEY_ID,
+                'amount': amount_cents,
+                'currency': currency,
+                'name': "Cybrik IELTS",
+                'description': description,
+                'prefill': {
+                    'name': request.user.get_full_name(),
+                    'email': request.user.email,
+                },
+                'purchase_id': purchase.id
+            })
+
+    @action(detail=False, methods=['post'])
+    def verify_payment(self, request):
+        """
+        Verify Razorpay signature and mark purchase as paid.
+        """
+        razorpay_order_id = request.data.get('razorpay_order_id')
+        razorpay_payment_id = request.data.get('razorpay_payment_id')
+        razorpay_signature = request.data.get('razorpay_signature')
+
+        if not all([razorpay_order_id, razorpay_payment_id, razorpay_signature]):
+            return Response(
+                {"error": "Missing verification parameters"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        rzp = RazorpayService()
+        if rzp.verify_payment_signature(razorpay_payment_id, razorpay_order_id, razorpay_signature):
+            try:
+                purchase = Purchase.objects.get(payment_id=razorpay_order_id)
+            except Purchase.DoesNotExist:
+                 return Response(
+                    {"error": "Purchase not found for this order"}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            if purchase.paid:
+                 return Response({"status": "already_paid"})
+
+            # Mark as Paid
+            with transaction.atomic():
+                purchase.paid = True
+                purchase.paid_at = timezone.now()
+                purchase.metadata['razorpay_payment_id'] = razorpay_payment_id
+                purchase.save()
+
+                # Create PaymentLog
+                PaymentLog.objects.create(
+                    invoice=None,
+                    gateway='razorpay',
+                    gateway_payment_id=razorpay_payment_id,
+                    amount_cents=purchase.amount_cents,
+                    currency=purchase.currency,
+                    status='succeeded',
+                    raw_response=request.data
+                )
+                
+                # Create Invoice
+                Invoice.objects.create(
+                    user=purchase.user,
+                    purchase=purchase,
+                    total_cents=purchase.amount_cents,
+                    currency=purchase.currency,
+                    status='paid',
+                    paid_at=timezone.now(),
+                    payment_method='razorpay'
+                )
+                
+                return Response({"status": "success"})
+        else:
+            return Response(
+                {"error": "Signature verification failed"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )

@@ -28,6 +28,41 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
             # Filter tests that have modules of the specified type
             queryset = queryset.filter(modules__module_type=module_type).distinct()
         
+        # Access Control Logic
+        user = self.request.user
+        has_premium = False
+        if user.is_authenticated:
+            try:
+                from billing.models import Subscription
+                # Check for active Premium Plan subscription (Tenant level or User level)
+                # Supporting both legacy user-linked and new tenant-linked subs
+                has_premium = Subscription.objects.filter(
+                    user=user, 
+                    status='active', 
+                    plan__name='Premium Plan'
+                ).exists()
+                
+                # Also check tenant level if applicable
+                if not has_premium and hasattr(user, 'profile') and user.profile.tenant:
+                     has_premium = Subscription.objects.filter(
+                        tenant=user.profile.tenant,
+                        status='active',
+                        plan__name='Premium Plan'
+                    ).exists()
+            except ImportError:
+                pass
+        
+        if not has_premium:
+            # Free/Start Plan: Access to only 1 test per section
+            # If specific module requested, limit to 1
+            if module_type:
+                 return queryset.order_by('created_at')[:1]
+            
+            # If listing all, maybe just show a filtered subset?
+            # Ideally we'd show 1 of each, but that's complex in one query.
+            # Limiting to 4 total as a proxy for "1 per section"
+            return queryset.order_by('created_at')[:4]
+            
         return queryset
 
     def get_serializer_class(self):

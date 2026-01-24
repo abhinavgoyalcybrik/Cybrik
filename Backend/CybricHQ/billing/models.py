@@ -321,6 +321,7 @@ class PaymentLog(models.Model):
     """
     GATEWAY_CHOICES = [
         ('stripe', 'Stripe'),
+        ('razorpay', 'Razorpay'),
         ('manual', 'Manual'),
         ('bank_transfer', 'Bank Transfer'),
     ]

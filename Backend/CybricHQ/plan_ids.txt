@@ -1,0 +1,4 @@
+54 objects imported automatically (use -v 2 for details).
+
+FREE=cee3caf4-e003-4af6-a6f5-eb7458d6012b
+PAID=051a32b0-9f37-432b-aed6-3c4a18e5d1a6
