@@ -54,14 +54,24 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
         
         if not has_premium:
             # Free/Start Plan: Access to only 1 test per section
-            # If specific module requested, limit to 1
-            if module_type:
-                 return queryset.order_by('created_at')[:1]
+            # We must identify WHICH tests are allowed so that detail/retrieve actions also respect this.
+            # Strategy: Get the first active test for each module type.
             
-            # If listing all, maybe just show a filtered subset?
-            # Ideally we'd show 1 of each, but that's complex in one query.
-            # Limiting to 4 total as a proxy for "1 per section"
-            return queryset.order_by('created_at')[:4]
+            allowed_ids = set()
+            module_types = ['listening', 'reading', 'writing', 'speaking']
+            
+            for m_type in module_types:
+                # Find the first test for this module type
+                first_test = IELTSTest.objects.filter(
+                    active=True, 
+                    modules__module_type=m_type
+                ).order_by('created_at').first()
+                
+                if first_test:
+                    allowed_ids.add(first_test.id)
+            
+            # Apply filter
+            queryset = queryset.filter(id__in=allowed_ids)
             
         return queryset
 
