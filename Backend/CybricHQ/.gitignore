@@ -65,14 +65,19 @@ db.sqlite3
 # Static files (collected)
 staticfiles/
 
+
 # Media files (uploaded to cloud)
-media/
+!media/
+media/*
+!media/ielts/
+!media/ielts/media/
+!media/ielts/media/*.wav
 
 # Attached assets (temporary uploads)
 attached_assets/
 
 # Large audio files
-*.wav
+# *.wav (Removed to allow LFS tracking)
 
 # Sensitive files
 update_key.py
