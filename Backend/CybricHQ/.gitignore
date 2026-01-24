@@ -85,4 +85,5 @@ cybrik-ec2-key.pem
 *.pem
 
 # Configuration
-.settings.pymedia/
+**/CybricHQ/settings.py
+media/

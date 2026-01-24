@@ -77,3 +77,5 @@ cybrik-ec2-key.pem
 
 # Configuration
 Backend/CybricHQ/CybricHQ/settings.py
+**/CybricHQ/settings.py
+**/settings.py
