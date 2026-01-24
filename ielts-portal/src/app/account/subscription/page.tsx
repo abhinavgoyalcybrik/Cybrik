@@ -100,14 +100,6 @@ export default function SubscriptionPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 relative">
-            {/* Top Left Logo */}
-            <div className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
-                <img
-                    src="/cybrik-logo.png"
-                    alt="Cybrik Logo"
-                    className="h-10 w-auto object-contain opacity-90 hover:opacity-100 transition-opacity"
-                />
-            </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Header */}
@@ -121,6 +113,14 @@ export default function SubscriptionPage() {
                         </svg>
                         Back to Account
                     </Link>
+
+                    <div className="flex justify-center mb-6">
+                        <img
+                            src="/cybrik-logo.png"
+                            alt="Cybrik Logo"
+                            className="h-16 w-auto object-contain hover:scale-105 transition-transform"
+                        />
+                    </div>
 
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -160,7 +160,7 @@ export default function SubscriptionPage() {
 
                 {/* Plans Grid */}
                 {/* Plans Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     {plans.map((plan, index) => {
                         const isCurrentPlan = subscription?.plan === plan.id;
                         const canUpgrade = subscription && plans.findIndex(p => p.id === subscription.plan) < index;
