@@ -4,6 +4,12 @@ from rest_framework.exceptions import ValidationError
 
 class RazorpayService:
     def __init__(self):
+        # Debugging: check if keys are present
+        if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+            print("❌ CRITICAL: Razorpay keys are MISSING in settings!")
+        else:
+            print(f"✅ RazorpayService initialized with Key ID: {settings.RAZORPAY_KEY_ID[:5]}***")
+            
         self.client = razorpay.Client(
             auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
         )

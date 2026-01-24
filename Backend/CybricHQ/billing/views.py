@@ -768,15 +768,19 @@ class RazorpayViewSet(viewsets.ViewSet):
 
         # Create Purchase Record (Unpaid)
         with transaction.atomic():
-            purchase = Purchase.objects.create(
-                user=request.user,
-                product=plan.product if plan_id else None,
-                amount_cents=amount_cents,
-                currency=currency,
-                paid=False,
-                payment_method='razorpay',
-                metadata=metadata
-            )
+            try:
+                purchase = Purchase.objects.create(
+                    user=request.user,
+                    product=plan.product if plan_id else None,
+                    amount_cents=amount_cents,
+                    currency=currency,
+                    paid=False,
+                    payment_method='razorpay',
+                    metadata=metadata
+                )
+            except Exception as e:
+                logger.error(f"Failed to create Purchase record: {e}")
+                return Response({"error": f"Database error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             # Create Razorpay Order
             rzp = RazorpayService()
