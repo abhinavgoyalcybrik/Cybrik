@@ -52,32 +52,7 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
             except ImportError:
                 pass
         
-        if not has_premium:
-            # Free/Start Plan: Access to only 1 test per section
-            # We must identify WHICH tests are allowed so that detail/retrieve actions also respect this.
-            # Strategy: Get the first active test for each module type.
-            
-            allowed_ids = set()
-            module_types = ['listening', 'reading', 'writing', 'speaking']
-            
-            for m_type in module_types:
-                # Find the first 4 tests for this module type
-                tests = IELTSTest.objects.filter(
-                    active=True, 
-                    modules__module_type=m_type
-                ).order_by('created_at')[:4]
-                
-                for t in tests:
-                    allowed_ids.add(t.id)
-            
-            # Fallback: If no tests found by module type (e.g. general tests), add simply the first 4 active tests
-            if not allowed_ids:
-                fallback_tests = IELTSTest.objects.filter(active=True).order_by('created_at')[:4]
-                for fb in fallback_tests:
-                    allowed_ids.add(fb.id)
 
-            # Apply filter
-            queryset = queryset.filter(id__in=allowed_ids)
             
         return queryset
 

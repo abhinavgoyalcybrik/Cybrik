@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Mic, Clock, Filter, Search, CheckCircle } from 'lucide-react';
 import { SpeakingTestsData, SpeakingTest } from '@/types';
 import AdminLayout from '@/components/AdminLayout';
+import { useAuth } from '@/contexts/AuthContext';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -15,6 +16,9 @@ const difficultyColors = {
 };
 
 export default function SpeakingTestsPage() {
+    const { user } = useAuth();
+    const hasFullAccess = user?.has_full_access ?? false;
+
     const [tests, setTests] = useState<SpeakingTest[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
@@ -44,23 +48,24 @@ export default function SpeakingTestsPage() {
                 });
                 if (response.ok) {
                     const sessions = await response.json();
-                    // Extract test IDs from completed speaking sessions
+
                     const completedIds = sessions
                         .filter((s: any) => {
-                            // Check if session has speaking module attempts that are completed
+                            // Strict check: Must be a SPEAKING session
                             const hasSpeakingModule = s.module_attempts?.some((m: any) =>
                                 m.module_type?.toLowerCase() === 'speaking' && m.is_completed
                             );
-                            // Also check if the test title contains 'speaking'
-                            const isSpeakingTest = s.test_title?.toLowerCase().includes('speaking');
-                            return (hasSpeakingModule || isSpeakingTest) && s.is_completed;
+                            const isSpeakingTitle = s.test_title?.toLowerCase().includes('speaking');
+
+                            // Only count if it's completed AND it's actually a speaking test
+                            return (hasSpeakingModule || isSpeakingTitle) && s.is_completed;
                         })
                         .map((s: any) => {
-                            // Extract the numeric test ID from the title (e.g., "Speaking Test 1" -> "1")
                             const match = s.test_title?.match(/Test\s*(\d+)/i);
                             return match ? match[1] : s.test?.toString();
                         })
                         .filter(Boolean);
+
                     setCompletedTestIds([...new Set(completedIds)] as string[]);
                 }
             } catch (err) {
@@ -123,8 +128,44 @@ export default function SpeakingTestsPage() {
 
             {/* Test Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredTests.map((test) => {
+                {filteredTests.map((test, index) => {
                     const isCompleted = completedTestIds.includes(test.test_id.toString());
+                    const isLocked = !hasFullAccess && index >= 4;
+
+                    if (isLocked) {
+                        // LOCKED TEST CARD
+                        return (
+                            <div
+                                key={test.test_id}
+                                className="relative bg-white p-6 rounded-xl border border-slate-200 overflow-hidden group"
+                            >
+                                {/* Blur Content */}
+                                <div className="blur-[2px] opacity-60 select-none pointer-events-none filter grayscale">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="bg-slate-100 p-2.5 rounded-lg text-slate-400"> <Mic className="w-5 h-5" /> </div>
+                                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-500`}> Premium </span>
+                                    </div>
+                                    <h3 className="font-semibold text-slate-500 mb-2"> Test {test.test_id}: {test.part_1.topic} </h3>
+                                    <p className="text-sm text-slate-400 mb-4"> {test.part_2.title} </p>
+                                    <div className="flex items-center gap-4 text-xs text-slate-400 border-t border-slate-100 pt-4">
+                                        <div className="flex items-center gap-1"> <Clock className="w-3 h-3" /> 11-14 min </div>
+                                        <div className="text-slate-400 font-medium"> 3 Parts </div>
+                                    </div>
+                                </div>
+
+                                {/* Lock Overlay */}
+                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 text-center transition-opacity hover:bg-white/50">
+                                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 shadow-sm">
+                                        <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                    </div>
+                                    <h3 className="text-gray-900 font-bold mb-1">Premium Only</h3>
+                                    <Link href="/account/subscription" className="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                                        Unlock Now
+                                    </Link>
+                                </div>
+                            </div>
+                        );
+                    }
 
                     if (isCompleted) {
                         // Completed test - non-clickable card
