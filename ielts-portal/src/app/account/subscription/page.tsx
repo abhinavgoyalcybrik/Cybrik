@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { UpgradeSubscriptionModal } from '@/components/subscription/UpgradeSubscriptionModal';
 
 interface Subscription {
     plan: 'free' | 'basic' | 'premium';
@@ -76,6 +77,7 @@ const plans = [
 
 export default function SubscriptionPage() {
     const [subscription, setSubscription] = useState<Subscription | null>(null);
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -165,10 +167,12 @@ export default function SubscriptionPage() {
                 )}
 
                 {/* Plans Grid */}
+                {/* Plans Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {plans.map((plan, index) => {
                         const isCurrentPlan = subscription?.plan === plan.id;
                         const canUpgrade = subscription && plans.findIndex(p => p.id === subscription.plan) < index;
+                        const isPremium = plan.id === 'premium';
 
                         return (
                             <motion.div
@@ -177,10 +181,10 @@ export default function SubscriptionPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 className={`relative bg-white rounded-2xl shadow-xl border-2 ${plan.highlighted
-                                        ? 'border-blue-500 scale-105'
-                                        : isCurrentPlan
-                                            ? 'border-green-400'
-                                            : 'border-gray-200'
+                                    ? 'border-blue-500 scale-105'
+                                    : isCurrentPlan
+                                        ? 'border-green-400'
+                                        : 'border-gray-200'
                                     } p-8`}
                             >
                                 {plan.highlighted && (
@@ -224,20 +228,31 @@ export default function SubscriptionPage() {
                                     ))}
                                 </div>
 
-                                <button
-                                    onClick={() => canUpgrade && handleUpgrade(plan.id)}
-                                    disabled={isCurrentPlan || !canUpgrade}
-                                    className={`w-full py-3 rounded-xl font-semibold transition-all ${isCurrentPlan
-                                            ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                                            : canUpgrade
-                                                ? plan.highlighted
-                                                    ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-700 hover:to-green-700 shadow-lg hover:shadow-xl'
-                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
-                                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        }`}
-                                >
-                                    {isCurrentPlan ? 'Current Plan' : canUpgrade ? plan.cta : 'Downgrade Not Available'}
-                                </button>
+                                {isPremium ? (
+                                    <div className="w-full">
+                                        <UpgradeSubscriptionModal
+                                            isOpen={showUpgradeModal}
+                                            onClose={() => setShowUpgradeModal(false)}
+                                        />
+                                        <button
+                                            onClick={() => setShowUpgradeModal(true)}
+                                            disabled={isCurrentPlan}
+                                            className={`w-full py-3 rounded-xl font-semibold transition-all ${isCurrentPlan
+                                                ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+                                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                                                }`}
+                                        >
+                                            {isCurrentPlan ? 'Current Plan' : 'Upgrade to Premium'}
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button
+                                        disabled={true}
+                                        className="w-full py-3 rounded-xl font-semibold transition-all bg-gray-100 text-gray-400 cursor-not-allowed"
+                                    >
+                                        {isCurrentPlan ? 'Current Plan' : 'Not Available'}
+                                    </button>
+                                )}
                             </motion.div>
                         );
                     })}
