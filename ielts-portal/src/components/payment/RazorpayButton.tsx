@@ -44,8 +44,16 @@ export const RazorpayButton = ({
             });
 
             if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error || "Failed to initiate payment");
+                const text = await response.text();
+                console.error("Initiate Payment Failed Body:", text);
+                try {
+                    const errData = JSON.parse(text);
+                    throw new Error(errData.error || "Failed to initiate payment");
+                } catch (e: any) {
+                    if (e.message && e.message !== "Unexpected token") throw e;
+                    // If JSON parse failed, it's likely an HTML error page (500/502)
+                    throw new Error(`Server Error (${response.status}): Check console for details.`);
+                }
             }
 
             const orderData = await response.json();

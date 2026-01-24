@@ -18,16 +18,23 @@ export const UpgradeSubscriptionModal = ({ isOpen, onClose }: UpgradeModalProps)
         if (isOpen) {
             setLoadingPlan(true);
             fetch('/api/billing/plans/?active=true')
-                .then(res => res.json())
-                .then(data => {
-                    const plans = Array.isArray(data) ? data : (data.results || []);
-                    // Find the premium plan (assuming 'Premium' in name)
-                    const premium = plans.find((p: any) => p.name.includes('Premium')) || plans[0];
-                    if (premium) {
-                        setPlanId(premium.id);
-                        if (premium.price_cents) {
-                            setPrice((premium.price_cents / 100).toString());
+                .then(async (res) => {
+                    const text = await res.text();
+                    try {
+                        const data = JSON.parse(text);
+                        if (!res.ok) throw new Error(data.detail || data.error || "Failed to fetch plans");
+
+                        const plans = Array.isArray(data) ? data : (data.results || []);
+                        const premium = plans.find((p: any) => p.name.includes('Premium')) || plans[0];
+                        if (premium) {
+                            setPlanId(premium.id);
+                            if (premium.price_cents) {
+                                setPrice((premium.price_cents / 100).toString());
+                            }
                         }
+                    } catch (e) {
+                        console.error("Plan Fetch Error:", e);
+                        console.error("Server Response Body:", text); // <--- THIS IS CRITICAL
                     }
                 })
                 .catch(console.error)
