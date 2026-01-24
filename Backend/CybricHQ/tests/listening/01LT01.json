@@ -86,7 +86,8 @@
           "type": "text",
           "question": "Estimated value of the briefcase (£)"
         }
-      ]
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT01.wav"
     },
     {
       "section": 2,
@@ -147,7 +148,8 @@
           "type": "text",
           "question": "Unfortunately they lost their ____"
         }
-      ]
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT01.wav"
     },
     {
       "section": 3,
@@ -227,7 +229,8 @@
           "type": "text",
           "question": "Focus of course"
         }
-      ]
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT01.wav"
     },
     {
       "section": 4,
@@ -325,7 +328,8 @@
             "D"
           ]
         }
-      ]
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT01.wav"
     }
   ],
   "answer_key": {

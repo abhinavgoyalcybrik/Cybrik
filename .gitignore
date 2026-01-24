@@ -68,7 +68,7 @@ Backend/CybricHQ/staticfiles/
 attached_assets/
 
 # Large audio files
-*.wav
+# *.wav (Removed to allow LFS tracking)
 
 # Sensitive files
 update_key.py

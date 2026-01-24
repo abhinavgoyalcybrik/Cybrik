@@ -26,6 +26,11 @@ class Command(BaseCommand):
             action='store_true',
             help='Show what would be imported without actually saving'
         )
+        parser.add_argument(
+            '--update',
+            action='store_true',
+            help='Update existing tests if found'
+        )
 
     def handle(self, *args, **options):
         # Find the listening.json file/directory
@@ -75,7 +80,7 @@ class Command(BaseCommand):
                 self.stdout.write(f'Found {len(tests_to_import)} tests in file')
                 
                 for test_data in tests_to_import:
-                    result = self.import_test_data(test_data, dry_run=options['dry_run'])
+                    result = self.import_test_data(test_data, dry_run=options['dry_run'], update=options['update'])
                     if result:
                         imported += 1
                         self.stdout.write(self.style.SUCCESS(f"✓ Imported: {test_data.get('title', 'Unknown')}"))
@@ -108,7 +113,7 @@ class Command(BaseCommand):
                         if 'test_id' not in test_data:
                             test_data['_filename_id'] = json_file.stem 
                             
-                        result = self.import_test_data(test_data, dry_run=options['dry_run'])
+                        result = self.import_test_data(test_data, dry_run=options['dry_run'], update=options['update'])
                         if result:
                             imported += 1
                             self.stdout.write(self.style.SUCCESS(f'✓ Imported from: {json_file.name}'))
@@ -120,53 +125,66 @@ class Command(BaseCommand):
         
         self.stdout.write(self.style.SUCCESS(f'\nDone! Imported: {imported}, Skipped: {skipped}'))
     
-    def import_test_data(self, data: dict, dry_run: bool = False) -> bool:
+    def import_test_data(self, data: dict, dry_run: bool = False, update: bool = False) -> bool:
         """Import a single listening test from dictionary data."""
         
         test_id = data.get('test_id', data.get('_filename_id', 'Unknown'))
         title = data.get('title', f"IELTS Listening - {test_id}")
         
         # Check if test already exists
-        if IELTSTest.objects.filter(title=title).exists():
-            return False
+        ielts_test = IELTSTest.objects.filter(title=title).first()
+        
+        if ielts_test:
+            if not update:
+                return False
+            self.stdout.write(f'  Updating existing test: {title}')
+        else:
+             if dry_run:
+                self.stdout.write(f'  Would create: {title} with {len(data.get("sections", []))} sections')
+                return True
+             
+             # Create IELTSTest
+             ielts_test = IELTSTest.objects.create(
+                title=title,
+                description=f"IELTS Listening Test {test_id} - Imported from JSON",
+                test_type='academic',
+                active=True
+             )
         
         if dry_run:
-            self.stdout.write(f'  Would create: {title} with {len(data.get("sections", []))} sections')
+            self.stdout.write(f'  Would update: {title}')
             return True
-        
-        # Create IELTSTest
-        ielts_test = IELTSTest.objects.create(
-            title=title,
-            description=f"IELTS Listening Test {test_id} - Imported from JSON",
-            test_type='academic',
-            active=True
-        )
-        
-        # Create TestModule (Listening)
-        test_module = TestModule.objects.create(
+
+        # Get or Create TestModule (Listening)
+        test_module, _ = TestModule.objects.get_or_create(
             test=ielts_test,
             module_type='listening',
-            duration_minutes=30,  # Standard IELTS listening is ~30 mins
-            order=1
+            defaults={
+                'duration_minutes': 30,
+                'order': 1
+            }
         )
         
         # Get answer key
         answer_key = data.get('answer_key', {})
         
-        # Create QuestionGroups for each section
+        # Create/Update QuestionGroups for each section
         for section_data in data.get('sections', []):
             section_num = section_data.get('section', 1)
             
-            # Create QuestionGroup
-            question_group = QuestionGroup.objects.create(
+            # Create or Update QuestionGroup
+            question_group, created = QuestionGroup.objects.update_or_create(
                 module=test_module,
-                title=f"Section {section_num}",
-                instructions=section_data.get('question_type', ''),
-                content='',  # Audio transcript can be added later
-                order=section_num
+                order=section_num,
+                defaults={
+                    'title': f"Section {section_num}",
+                    'instructions': section_data.get('question_type', ''),
+                    'content': '',
+                    'media_file': section_data.get('media_file', '')
+                }
             )
             
-            # Create Questions
+            # Create/Update Questions
             for q_data in section_data.get('questions', []):
                 q_num = q_data.get('q', 0)
                 q_type = q_data.get('type', 'text')
@@ -189,10 +207,9 @@ class Command(BaseCommand):
                     question_type = 'text_input'
                 
                 # Get options for MCQ
-                options = q_data.get('options', [])
+                options_list = q_data.get('options', [])
                 
                 # Get correct answer from answer_key
-                # Handling integer keys in answer_key which might be strings in JSON
                 correct_answers = answer_key.get(str(q_num)) or answer_key.get(q_num) or []
                 
                 if isinstance(correct_answers, list):
@@ -200,13 +217,15 @@ class Command(BaseCommand):
                 else:
                     correct_answer = str(correct_answers)
                 
-                Question.objects.create(
+                Question.objects.update_or_create(
                     group=question_group,
-                    question_text=q_data.get('question', f'Question {q_num}'),
-                    question_type=question_type,
-                    options=options,
-                    correct_answer=correct_answer,
-                    order=q_order
+                    order=q_order,
+                    defaults={
+                        'question_text': q_data.get('question', f'Question {q_num}'),
+                        'question_type': question_type,
+                        'options': options_list,
+                        'correct_answer': correct_answer,
+                    }
                 )
         
         return True

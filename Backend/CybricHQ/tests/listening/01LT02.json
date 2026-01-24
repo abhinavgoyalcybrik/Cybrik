@@ -6,121 +6,427 @@
       "section": 1,
       "question_type": "Note Completion",
       "questions": [
-        { "q": 1, "type": "text", "question": "Type of accommodation (Kate)" },
-        { "q": 2, "type": "text", "question": "Kate’s feelings about the accommodation" },
-        { "q": 3, "type": "text", "question": "Kate’s feelings about the other students" },
-        { "q": 4, "type": "text", "question": "Difficulties experienced on the course" },
-        { "q": 5, "type": "text", "question": "Suggestions for improving the course" },
-        { "q": 6, "type": "text", "question": "First type of accommodation (Luki)" },
-        { "q": 7, "type": "text", "question": "Problem with the first accommodation" },
-        { "q": 8, "type": "text", "question": "Second type of accommodation" },
-        { "q": 9, "type": "text", "question": "Name of course" },
-        { "q": 10, "type": "text", "question": "Suggestion for improving computer access" }
-      ]
+        {
+          "q": 1,
+          "type": "text",
+          "question": "Type of accommodation (Kate)"
+        },
+        {
+          "q": 2,
+          "type": "text",
+          "question": "Kate’s feelings about the accommodation"
+        },
+        {
+          "q": 3,
+          "type": "text",
+          "question": "Kate’s feelings about the other students"
+        },
+        {
+          "q": 4,
+          "type": "text",
+          "question": "Difficulties experienced on the course"
+        },
+        {
+          "q": 5,
+          "type": "text",
+          "question": "Suggestions for improving the course"
+        },
+        {
+          "q": 6,
+          "type": "text",
+          "question": "First type of accommodation (Luki)"
+        },
+        {
+          "q": 7,
+          "type": "text",
+          "question": "Problem with the first accommodation"
+        },
+        {
+          "q": 8,
+          "type": "text",
+          "question": "Second type of accommodation"
+        },
+        {
+          "q": 9,
+          "type": "text",
+          "question": "Name of course"
+        },
+        {
+          "q": 10,
+          "type": "text",
+          "question": "Suggestion for improving computer access"
+        }
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT02.wav"
     },
     {
       "section": 2,
       "question_type": "Note Completion",
       "questions": [
-        { "q": 11, "type": "text", "question": "Type of bicycle: racing, touring, ____" },
-        { "q": 12, "type": "text", "question": "They vary in price and ____" },
-        { "q": 13, "type": "text", "question": "Prices range from $50 to ____" },
-        { "q": 14, "type": "text", "question": "Single speed cycles suitable for ____" },
-        { "q": 15, "type": "text", "question": "Three speed cycles suitable for ____" },
-        { "q": 16, "type": "text", "question": "Five and ten speed cycles suitable for longer distances, hills and ____" },
-        { "q": 17, "type": "text", "question": "Ten speed bikes are better because they are ____ in price" },
-        { "q": 18, "type": "text", "question": "But have ____ components" },
-        { "q": 19, "type": "text", "question": "Buying a cycle is like ____" },
-        { "q": 20, "type": "text", "question": "Size of the bicycle is determined by the size of the ____" }
-      ]
+        {
+          "q": 11,
+          "type": "text",
+          "question": "Type of bicycle: racing, touring, ____"
+        },
+        {
+          "q": 12,
+          "type": "text",
+          "question": "They vary in price and ____"
+        },
+        {
+          "q": 13,
+          "type": "text",
+          "question": "Prices range from $50 to ____"
+        },
+        {
+          "q": 14,
+          "type": "text",
+          "question": "Single speed cycles suitable for ____"
+        },
+        {
+          "q": 15,
+          "type": "text",
+          "question": "Three speed cycles suitable for ____"
+        },
+        {
+          "q": 16,
+          "type": "text",
+          "question": "Five and ten speed cycles suitable for longer distances, hills and ____"
+        },
+        {
+          "q": 17,
+          "type": "text",
+          "question": "Ten speed bikes are better because they are ____ in price"
+        },
+        {
+          "q": 18,
+          "type": "text",
+          "question": "But have ____ components"
+        },
+        {
+          "q": 19,
+          "type": "text",
+          "question": "Buying a cycle is like ____"
+        },
+        {
+          "q": 20,
+          "type": "text",
+          "question": "Size of the bicycle is determined by the size of the ____"
+        }
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT02.wav"
     },
     {
       "section": 3,
       "question_type": "Multiple Choice + Note Completion",
       "questions": [
-        { "q": 21, "type": "mcq", "question": "At first Fiona thinks Martin’s topic is", "options": ["A", "B", "C", "D"] },
-        { "q": 22, "type": "mcq", "question": "According to Martin, the banana", "options": ["A", "B", "C", "D"] },
-        { "q": 23, "type": "mcq", "question": "Fiona listens because she", "options": ["A", "B", "C", "D"] },
-        { "q": 24, "type": "mcq", "question": "Bananas were introduced into Australia from", "options": ["A", "B", "C", "D"] },
-
-        { "q": 25, "type": "text", "question": "Each banana tree produces ____ of bananas" },
-        { "q": 26, "type": "text", "question": "A tree can bear fruit after ____" },
-        { "q": 27, "type": "text", "question": "Banana trees prefer to grow ____" },
-        { "q": 28, "type": "text", "question": "They require rich soil and ____" },
-        { "q": 29, "type": "text", "question": "Fruit is often protected by ____" },
-        { "q": 30, "type": "text", "question": "Gas helps other ____ to ripen" },
-
+        {
+          "q": 21,
+          "type": "mcq",
+          "question": "At first Fiona thinks Martin’s topic is",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 22,
+          "type": "mcq",
+          "question": "According to Martin, the banana",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 23,
+          "type": "mcq",
+          "question": "Fiona listens because she",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 24,
+          "type": "mcq",
+          "question": "Bananas were introduced into Australia from",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 25,
+          "type": "text",
+          "question": "Each banana tree produces ____ of bananas"
+        },
+        {
+          "q": 26,
+          "type": "text",
+          "question": "A tree can bear fruit after ____"
+        },
+        {
+          "q": 27,
+          "type": "text",
+          "question": "Banana trees prefer to grow ____"
+        },
+        {
+          "q": 28,
+          "type": "text",
+          "question": "They require rich soil and ____"
+        },
+        {
+          "q": 29,
+          "type": "text",
+          "question": "Fruit is often protected by ____"
+        },
+        {
+          "q": 30,
+          "type": "text",
+          "question": "Gas helps other ____ to ripen"
+        },
         {
           "q": "31-32",
           "type": "mcq_multi",
           "question": "Consumption of Australian bananas",
-          "options": ["A", "B", "C", "D", "E"]
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E"
+          ]
         }
-      ]
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT02.wav"
     },
     {
       "section": 4,
       "question_type": "Multiple Choice + Diagram Completion",
       "questions": [
-        { "q": 33, "type": "mcq", "question": "Focus of the lecture series", "options": ["A", "B", "C", "D"] },
-        { "q": 34, "type": "mcq", "question": "The lecture will be given by", "options": ["A", "B", "C", "D"] },
-        { "q": 35, "type": "mcq", "question": "This week’s lecture is on", "options": ["A", "B", "C", "D"] },
-
-        { "q": 36, "type": "text", "question": "Vitamins can be lost through ____" },
-        { "q": 37, "type": "text", "question": "Water soluble vitamins require a ____" },
-        { "q": 38, "type": "text", "question": "Eat ____ of foods" },
-        { "q": 39, "type": "text", "question": "Store vegetables in ____" },
-
-        { "q": 40, "type": "text", "question": "Food group to eat in moderation" },
-        { "q": 41, "type": "text", "question": "Food group to eat most" }
-      ]
+        {
+          "q": 33,
+          "type": "mcq",
+          "question": "Focus of the lecture series",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 34,
+          "type": "mcq",
+          "question": "The lecture will be given by",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 35,
+          "type": "mcq",
+          "question": "This week’s lecture is on",
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "q": 36,
+          "type": "text",
+          "question": "Vitamins can be lost through ____"
+        },
+        {
+          "q": 37,
+          "type": "text",
+          "question": "Water soluble vitamins require a ____"
+        },
+        {
+          "q": 38,
+          "type": "text",
+          "question": "Eat ____ of foods"
+        },
+        {
+          "q": 39,
+          "type": "text",
+          "question": "Store vegetables in ____"
+        },
+        {
+          "q": 40,
+          "type": "text",
+          "question": "Food group to eat in moderation"
+        },
+        {
+          "q": 41,
+          "type": "text",
+          "question": "Food group to eat most"
+        }
+      ],
+      "media_file": "ielts/media/ElevenLabs_audio01LT02.wav"
     }
   ],
   "answer_key": {
-    "1": ["student accommodation", "hostel"],
-    "2": ["awful food"],
-    "3": ["not friendly", "kept to themselves"],
-    "4": ["lecturers too busy", "lecturers busy"],
-    "5": ["regular meetings", "meetings with lecturers", "fortnightly meetings"],
-    "6": ["family", "homestay"],
-    "7": ["lot of noise", "children made noise", "difficult to study"],
-    "8": ["student house"],
-    "9": ["Bachelor of Computing", "Computing"],
-    "10": ["reserve computer time"],
-
-    "11": ["mountain"],
-    "12": ["quality"],
-    "13": ["2000", "$2000"],
-    "14": ["short rides", "casual rides"],
-    "15": ["town riding", "shopping"],
-    "16": ["serious touring"],
-    "17": ["similar", "almost the same"],
-    "18": ["better quality", "better quality components"],
-    "19": ["buying clothes"],
-    "20": ["frame"],
-
-    "21": ["B"],
-    "22": ["C"],
-    "23": ["D"],
-    "24": ["B"],
-    "25": ["one bunch"],
-    "26": ["15 months"],
-    "27": ["uphill", "on hillsides"],
-    "28": ["lots of water", "plenty of water"],
-    "29": ["plastic bags"],
-    "30": ["bananas", "ones"],
-
-    "31": ["C"],
-    "32": ["D"],
-
-    "33": ["B"],
-    "34": ["D"],
-    "35": ["C"],
-    "36": ["cooking"],
-    "37": ["regular daily intake", "daily intake"],
-    "38": ["a variety", "variety"],
-    "39": ["the dark", "the fridge", "a cool place", "a dark place"],
-    "40": ["eat in moderation", "not too much"],
-    "41": ["eat lots", "eat most"]
+    "1": [
+      "student accommodation",
+      "hostel"
+    ],
+    "2": [
+      "awful food"
+    ],
+    "3": [
+      "not friendly",
+      "kept to themselves"
+    ],
+    "4": [
+      "lecturers too busy",
+      "lecturers busy"
+    ],
+    "5": [
+      "regular meetings",
+      "meetings with lecturers",
+      "fortnightly meetings"
+    ],
+    "6": [
+      "family",
+      "homestay"
+    ],
+    "7": [
+      "lot of noise",
+      "children made noise",
+      "difficult to study"
+    ],
+    "8": [
+      "student house"
+    ],
+    "9": [
+      "Bachelor of Computing",
+      "Computing"
+    ],
+    "10": [
+      "reserve computer time"
+    ],
+    "11": [
+      "mountain"
+    ],
+    "12": [
+      "quality"
+    ],
+    "13": [
+      "2000",
+      "$2000"
+    ],
+    "14": [
+      "short rides",
+      "casual rides"
+    ],
+    "15": [
+      "town riding",
+      "shopping"
+    ],
+    "16": [
+      "serious touring"
+    ],
+    "17": [
+      "similar",
+      "almost the same"
+    ],
+    "18": [
+      "better quality",
+      "better quality components"
+    ],
+    "19": [
+      "buying clothes"
+    ],
+    "20": [
+      "frame"
+    ],
+    "21": [
+      "B"
+    ],
+    "22": [
+      "C"
+    ],
+    "23": [
+      "D"
+    ],
+    "24": [
+      "B"
+    ],
+    "25": [
+      "one bunch"
+    ],
+    "26": [
+      "15 months"
+    ],
+    "27": [
+      "uphill",
+      "on hillsides"
+    ],
+    "28": [
+      "lots of water",
+      "plenty of water"
+    ],
+    "29": [
+      "plastic bags"
+    ],
+    "30": [
+      "bananas",
+      "ones"
+    ],
+    "31": [
+      "C"
+    ],
+    "32": [
+      "D"
+    ],
+    "33": [
+      "B"
+    ],
+    "34": [
+      "D"
+    ],
+    "35": [
+      "C"
+    ],
+    "36": [
+      "cooking"
+    ],
+    "37": [
+      "regular daily intake",
+      "daily intake"
+    ],
+    "38": [
+      "a variety",
+      "variety"
+    ],
+    "39": [
+      "the dark",
+      "the fridge",
+      "a cool place",
+      "a dark place"
+    ],
+    "40": [
+      "eat in moderation",
+      "not too much"
+    ],
+    "41": [
+      "eat lots",
+      "eat most"
+    ]
   }
 }
