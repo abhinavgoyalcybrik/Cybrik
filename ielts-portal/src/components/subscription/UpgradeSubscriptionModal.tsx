@@ -56,11 +56,20 @@ export const UpgradeSubscriptionModal = ({ isOpen, onClose }: UpgradeModalProps)
                         <span className="sr-only">Close</span>
                     </button>
 
-                    <div className="flex flex-col space-y-1.5 text-center sm:text-left">
-                        <h2 className="text-2xl font-bold text-center leading-none tracking-tight">Upgrade to Premium</h2>
-                        <p className="text-sm text-center text-gray-500">
-                            Unlock unlimited practice tests and accelerate your preparation.
-                        </p>
+                    <div className="flex flex-col space-y-4 text-center items-center">
+                        <img
+                            src="/cybrik-logo.png"
+                            alt="Cybrik Logo"
+                            className="h-12 w-auto object-contain mx-auto"
+                        />
+                        <div className="space-y-1">
+                            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                                Upgrade to Premium
+                            </h2>
+                            <p className="text-sm text-gray-500">
+                                Unlock unlimited practice tests and accelerate your preparation.
+                            </p>
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-4 py-6">

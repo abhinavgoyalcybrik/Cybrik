@@ -8,6 +8,7 @@ interface PaymentOrder {
     currency: string;
     name: string;
     description: string;
+    image?: string; // Add image support
     prefill: {
         name: string;
         email: string;
@@ -32,6 +33,7 @@ export const useRazorpayPayment = () => {
             currency: order.currency as any,
             name: order.name,
             description: order.description,
+            image: order.image, // Pass image to Razorpay
             order_id: order.order_id,
             handler: (response: any) => {
                 onSuccess({

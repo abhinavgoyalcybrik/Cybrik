@@ -60,7 +60,10 @@ export const RazorpayButton = ({
 
             // 2. Open Razorpay Checkout
             handlePayment(
-                orderData,
+                {
+                    ...orderData,
+                    image: window.location.origin + "/cybrik-logo.png"
+                },
                 async (verificationData) => {
                     // 3. Verify Payment on Backend
                     try {
