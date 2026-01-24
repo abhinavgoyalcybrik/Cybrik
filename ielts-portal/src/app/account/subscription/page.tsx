@@ -29,7 +29,7 @@ const plans = [
         period: 'forever',
         description: 'Perfect for getting started',
         features: [
-            '1 test per module',
+            '4 tests per module',
             'Basic scoring',
             'Standard support',
             'Email reports',

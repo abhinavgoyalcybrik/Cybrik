@@ -61,20 +61,20 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
             module_types = ['listening', 'reading', 'writing', 'speaking']
             
             for m_type in module_types:
-                # Find the first test for this module type
-                first_test = IELTSTest.objects.filter(
+                # Find the first 4 tests for this module type
+                tests = IELTSTest.objects.filter(
                     active=True, 
                     modules__module_type=m_type
-                ).order_by('created_at').first()
+                ).order_by('created_at')[:4]
                 
-                if first_test:
-                    allowed_ids.add(first_test.id)
+                for t in tests:
+                    allowed_ids.add(t.id)
             
-            # Fallback: If no tests found by module type (e.g. general tests), add simply the first active test
+            # Fallback: If no tests found by module type (e.g. general tests), add simply the first 4 active tests
             if not allowed_ids:
-                fallback = IELTSTest.objects.filter(active=True).order_by('created_at').first()
-                if fallback:
-                    allowed_ids.add(fallback.id)
+                fallback_tests = IELTSTest.objects.filter(active=True).order_by('created_at')[:4]
+                for fb in fallback_tests:
+                    allowed_ids.add(fb.id)
 
             # Apply filter
             queryset = queryset.filter(id__in=allowed_ids)
