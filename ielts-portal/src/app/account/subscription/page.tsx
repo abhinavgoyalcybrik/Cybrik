@@ -222,10 +222,6 @@ export default function SubscriptionPage() {
 
                                 {isPremium ? (
                                     <div className="w-full">
-                                        <UpgradeSubscriptionModal
-                                            isOpen={showUpgradeModal}
-                                            onClose={() => setShowUpgradeModal(false)}
-                                        />
                                         <button
                                             onClick={() => setShowUpgradeModal(true)}
                                             disabled={isCurrentPlan}
@@ -283,7 +279,12 @@ export default function SubscriptionPage() {
                     </div>
                 </div>
             </div>
-        </div>
+
+            <UpgradeSubscriptionModal
+                isOpen={showUpgradeModal}
+                onClose={() => setShowUpgradeModal(false)}
+            />
+        </div >
     );
 }
 
