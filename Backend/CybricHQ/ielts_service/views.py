@@ -70,6 +70,12 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
                 if first_test:
                     allowed_ids.add(first_test.id)
             
+            # Fallback: If no tests found by module type (e.g. general tests), add simply the first active test
+            if not allowed_ids:
+                fallback = IELTSTest.objects.filter(active=True).order_by('created_at').first()
+                if fallback:
+                    allowed_ids.add(fallback.id)
+
             # Apply filter
             queryset = queryset.filter(id__in=allowed_ids)
             
