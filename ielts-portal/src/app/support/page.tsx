@@ -124,7 +124,16 @@ export default function SupportPage() {
     };
 
     const handleSendReply = async () => {
-        if (!selectedTicket || !replyMessage.trim()) return;
+        if (!selectedTicket) {
+            alert("Error: No ticket selected");
+            return;
+        }
+        if (!replyMessage.trim()) {
+            alert("Error: Message is empty");
+            return;
+        }
+
+        console.log("Sending reply for ticket:", selectedTicket.id);
 
         setSubmitting(true);
         try {
