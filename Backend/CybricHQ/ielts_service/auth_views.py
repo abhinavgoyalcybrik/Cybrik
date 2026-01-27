@@ -98,6 +98,8 @@ def get_user_data(user):
         "subscription_status": getattr(user, "subscription_status", "free"),
         "has_full_access": getattr(user, "has_full_access", False),
         "evaluations_remaining": getattr(user, "evaluations_remaining", 0),
+        "is_staff": user.is_staff,
+        "is_superuser": user.is_superuser,
         **profile_data,
     }
 
