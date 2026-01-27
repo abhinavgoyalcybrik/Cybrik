@@ -1,6 +1,0 @@
-Signal triggered for Lead 2, Status: new
-Lead 2 not converted, returning.
-Signal triggered for Lead 2, Status: converted
-Proceeding to create application/applicant for Lead 2
-Creating new Applicant...
-Application Created: 1

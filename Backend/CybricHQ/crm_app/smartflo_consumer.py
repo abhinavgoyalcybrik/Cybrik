@@ -258,12 +258,12 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 return
             
             if text_data:
-                print(f"[DEBUG] SMARTFLO TEXT: {text_data[:200]}...")
+
                 logger.info(f"[SMARTFLO] Received TEXT: {text_data[:300]}...")
                 try:
                     message = json.loads(text_data)
                     event = message.get('event')
-                    print(f"[DEBUG] SMARTFLO EVENT: {event}")
+
                     logger.info(f"[SMARTFLO] Event type: {event}")
                     
                     if event == 'connected':
@@ -287,7 +287,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     logger.error(f"[SMARTFLO] Raw text: {text_data[:200]}")
                 except Exception as e:
                     logger.exception(f"[SMARTFLO] Error handling event: {e}")
-                    print(f"[DEBUG] CRITICAL ERROR IN CONSUMER: {e}")
+
         except Exception as e:
             logger.exception(f"[DEBUG] CRITICAL: Unhandled exception in receive(): {e}")
 
@@ -728,7 +728,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
         
         # ====== DEBUG: Log configuration ======
-        print(f"[DEBUG] ====== ELEVENLABS CONNECTION START ======")
+
         
         # Determine which Agent ID to use
         is_followup_str = self.lead_context.get('is_followup')
@@ -736,9 +736,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         reason = self.lead_context.get('reason')
         
         # Log all relevant values for debugging
-        print(f"[DEBUG] is_followup raw value: {is_followup_str} (type: {type(is_followup_str).__name__})")
-        print(f"[DEBUG] followUpReason: {followup_reason}")
-        print(f"[DEBUG] reason: {reason}")
+
         logger.info(f"[AGENT-SELECT] is_followup={is_followup_str}, followUpReason={followup_reason}, reason={reason}")
         
         # Check multiple ways is_followup could be set
@@ -752,42 +750,38 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Also auto-detect if followUpReason or reason is present
         if not is_followup and (followup_reason or reason):
             is_followup = True
-            print(f"[DEBUG] Auto-detected as follow-up from followUpReason/reason")
+
         
         # Get follow-up agent ID
         followup_agent_id = getattr(settings, 'ELEVENLABS_FOLLOWUP_AGENT_ID', None) or ''
         default_agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
         
-        print(f"[DEBUG] ELEVENLABS_FOLLOWUP_AGENT_ID configured: {bool(followup_agent_id)} (value: {followup_agent_id[:10]}...)" if followup_agent_id else "[DEBUG] ELEVENLABS_FOLLOWUP_AGENT_ID: NOT SET")
-        print(f"[DEBUG] ELEVENLABS_AGENT_ID: {default_agent_id[:10]}..." if default_agent_id else "[DEBUG] ELEVENLABS_AGENT_ID: NOT SET")
-        print(f"[DEBUG] is_followup final: {is_followup}")
+
             
         if is_followup and followup_agent_id:
             agent_id = followup_agent_id
             logger.info(f"[AGENT-SELECT] *** USING FOLLOW-UP AGENT ID: {agent_id[:15]}... ***")
-            print(f"[DEBUG] *** SELECTED: FOLLOW-UP AGENT ***")
+
         else:
             agent_id = default_agent_id
             logger.info(f"[AGENT-SELECT] Using DEFAULT Agent ID: {agent_id[:15] if agent_id else 'None'}...")
-            print(f"[DEBUG] *** SELECTED: DEFAULT AGENT ***")
+
             if is_followup and not followup_agent_id:
-                print(f"[DEBUG] WARNING: is_followup=True but ELEVENLABS_FOLLOWUP_AGENT_ID is not set!")
+
                 logger.warning("[AGENT-SELECT] is_followup=True but ELEVENLABS_FOLLOWUP_AGENT_ID is not configured!")
 
-        print(f"[DEBUG] Agent ID: {agent_id}")
-        print(f"[DEBUG] API Key present: {bool(api_key)}")
-        print(f"[DEBUG] Lead context keys: {list(self.lead_context.keys())}")
+
         logger.info(f"[ELEVENLABS] Connecting with agent_id={agent_id}")
         
         if not api_key or not agent_id:
-            print(f"[DEBUG] ERROR: Missing API key or Agent ID!")
+            logger.error(f"[DEBUG] ERROR: Missing API key or Agent ID!")
             logger.error("ElevenLabs API key or Agent ID not configured")
             return
             
         try:
             # ElevenLabs Conversational AI Agent WebSocket endpoint
             ws_url = f"wss://api.elevenlabs.io/v1/convai/conversation?agent_id={agent_id}"
-            print(f"[DEBUG] Connecting to: {ws_url}")
+
             
             # Headers for authentication
             headers = {"xi-api-key": api_key}
@@ -799,14 +793,14 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     ws_url,
                     additional_headers=headers
                 )
-                print(f"[DEBUG] WebSocket connected (using additional_headers)")
+
             except TypeError:
                 # Older websockets versions use extra_headers
                 self.elevenlabs_ws = await websockets.connect(
                     ws_url,
                     extra_headers=headers
                 )
-                print(f"[DEBUG] WebSocket connected (using extra_headers)")
+
             
             # Build dynamic variables - must match ElevenLabs agent config exactly
             # Start with explicit mappings for safety/defaults
@@ -841,9 +835,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 dynamic_vars.pop(key, None)
             
             # ====== DEBUG: Log all dynamic variables ======
-            print(f"[DEBUG] ====== DYNAMIC VARIABLES ======")
-            for key, value in dynamic_vars.items():
-                print(f"[DEBUG]   {key}: {value}")
+
+
             logger.info(f"[ELEVENLABS] Dynamic variables: {dynamic_vars}")
             
             # Send conversation initiation with dynamic variables and audio formats
@@ -864,14 +857,14 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 "dynamic_variables": dynamic_vars
             }
             
-            print(f"[DEBUG] Sending init message: {json.dumps(init_message, indent=2)}")
+
             await self.elevenlabs_ws.send(json.dumps(init_message))
-            print(f"[DEBUG] Init message sent successfully!")
+
             
             # Start listening for ElevenLabs Agent responses
             asyncio.create_task(self.listen_elevenlabs_agent())
             
-            print(f"[DEBUG] ====== ELEVENLABS CONNECTION SUCCESS ======")
+
             logger.info(f"Connected to ElevenLabs Agent: {agent_id}")
             
         except Exception as e:
@@ -984,7 +977,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                             # Log for debugging
                             self.chunk_number += 1
                             if self.chunk_number <= 5:
-                                print(f"[DEBUG] ELEVENLABS AUDIO: chunk {self.chunk_number}, PCM size={len(pcm_audio)} bytes")
+
                                 logger.info(f"[ELEVENLABS] Audio chunk {self.chunk_number}: PCM size={len(pcm_audio)} bytes")
                             
                             # Convert PCM 16kHz to PCM 8kHz (downsample)
@@ -996,10 +989,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                             # Convert PCM to mulaw
                             mulaw_audio = pcm_to_mulaw(pcm_8k_loud)
                             
-                            # debug sizes
-                            if self.chunk_number <= 5:
-                                print(f"[DEBUG] After conversion: mulaw size={len(mulaw_audio)} bytes")
-                            
+
                             # Stream in 160-byte chunks (standard 20ms) for smoother playback on telephony
                             CHUNK_SIZE = 160
                             for i in range(0, len(mulaw_audio), CHUNK_SIZE):
@@ -1060,7 +1050,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         )
                 except Exception as e:
                     logger.exception(f"[ELEVENLABS] Error handling ElevenLabs message: {e}")
-                    print(f"[DEBUG] CRITICAL ERROR IN ELEVENLABS LISTENER: {e}")
+
                         
         except Exception as e:
             logger.error(f"[ELEVENLABS] Agent listening error: {e}")

@@ -93,7 +93,7 @@ Admissions Team
             # send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [applicant.email])
             
             logger.info(f"Generated email for {applicant.email}: {subject}")
-            print(f"--- EMAIL TO {applicant.email} ---\nSubject: {subject}\n\n{body}\n-------------------")
+
             
             return True
         except Exception as e:
