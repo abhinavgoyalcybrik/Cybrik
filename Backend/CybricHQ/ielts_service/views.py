@@ -1329,16 +1329,18 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def unread_count(self, request):
         """
-        Get the count of unread notifications (tickets/replies).
+        Get the count of notifications.
+        - Admins: Count of 'Actionable' tickets (Open/In Progress).
+        - Students: Count of Unread replies from Admins.
         """
         user = request.user
         if user.is_staff or user.is_superuser:
-            # Admin: Unread tickets + Unread replies from students
-            unread_tickets = SupportTicket.objects.filter(is_read=False).count()
-            unread_replies = TicketReply.objects.filter(is_admin=False, is_read=False).count()
-            count = unread_tickets + unread_replies
+            # Admin: tickets needing attention
+            # We count tickets where status is 'open' or 'in_progress'
+            count = SupportTicket.objects.filter(status__in=['open', 'in_progress']).count()
         else:
             # Student: Unread replies from admins
+            # We count replies to the user's tickets that are from admin and unread
             count = TicketReply.objects.filter(ticket__user=user, is_admin=True, is_read=False).count()
             
         return Response({"unread_count": count})
