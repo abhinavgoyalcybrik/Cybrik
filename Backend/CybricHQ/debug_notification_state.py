@@ -53,13 +53,14 @@ else:
                 print(f"Attempting to create reply on ticket {test_ticket.id}")
                 
                 # Simulate logic in view
-                is_admin = info_user.is_staff or info_user.is_superuser
+                # Test STUDENT REPLY (is_admin=False)
+                print("Testing STUDENT reply creation (is_admin=False)...")
                 
                 reply = TicketReply.objects.create(
                     ticket=test_ticket,
                     user=info_user,
-                    message="Debug auto-reply test",
-                    is_admin=is_admin
+                    message="Debug STUDENT reply test",
+                    is_admin=False # FORCING STUDENT REPLY
                 )
                 print(f"SUCCESS: Reply created with ID {reply.id}")
                 print(f"is_admin: {reply.is_admin}")
