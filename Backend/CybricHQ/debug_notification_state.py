@@ -41,10 +41,38 @@ else:
             print(f"Student Count (Unread Admin Replies): {count}")
 
 
-print("--------------------------------")
-print(f"Replies from Students (Unread for Admin): {admin_unread_replies.count()}")
 
-student_unread_replies = TicketReply.objects.filter(is_read=False, is_admin=True)
-print(f"Replies from Admin (Unread for Student): {student_unread_replies.count()}")
+
+
+        # --- TEST REPLY CREATION ---
+        print("--- TESTING REPLY CREATION ---")
+        try:
+            # Find a ticket for this user
+            test_ticket = SupportTicket.objects.filter(user=info_user).first()
+            if test_ticket:
+                print(f"Attempting to create reply on ticket {test_ticket.id}")
+                
+                # Simulate logic in view
+                is_admin = info_user.is_staff or info_user.is_superuser
+                
+                reply = TicketReply.objects.create(
+                    ticket=test_ticket,
+                    user=info_user,
+                    message="Debug auto-reply test",
+                    is_admin=is_admin
+                )
+                print(f"SUCCESS: Reply created with ID {reply.id}")
+                print(f"is_admin: {reply.is_admin}")
+                print(f"is_read: {reply.is_read}")
+                
+                # Cleanup
+                reply.delete()
+                print("Test reply deleted.")
+            else:
+                print("No tickets found to test reply on.")
+        except Exception as e:
+            print(f"FAILED to create reply: {e}")
+            import traceback
+            traceback.print_exc()
 
 print("--------------------------------")
