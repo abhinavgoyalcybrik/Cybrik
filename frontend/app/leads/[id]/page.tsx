@@ -35,6 +35,7 @@ type Lead = {
   academic_records?: any[];
   documents?: any[];
   applications?: any[];
+  whatsapp_messages?: any[];
 };
 
 export default function LeadDetailPage() {
@@ -105,6 +106,30 @@ export default function LeadDetailPage() {
       setGeneratingLink(false);
     }
   };
+
+  const [sendingWa, setSendingWa] = useState(false);
+  const sendWhatsAppDocRequest = async () => {
+    if (!lead?.id) return;
+    if (!confirm("Send document upload request via WhatsApp?")) return;
+    setSendingWa(true);
+    try {
+      const res = await apiFetch('/api/whatsapp/send-document-request/', {
+        method: 'POST',
+        body: JSON.stringify({ lead_id: lead.id })
+      });
+      if (res.success) {
+        alert("WhatsApp message sent!");
+        await loadLead(); // Reload to see new message
+      } else {
+        alert("Failed: " + res.error);
+      }
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setSendingWa(false);
+    }
+  };
+
 
   // Document Upload State
   const [selectedEnglishTest, setSelectedEnglishTest] = useState("IELTS");
@@ -770,6 +795,47 @@ export default function LeadDetailPage() {
 
         return (
           <div className="space-y-8">
+            {/* Link Status Section */}
+            <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-between">
+              <div>
+                <h4 className="font-bold text-blue-900">Document Upload Link</h4>
+                <div className="text-sm text-blue-700 mt-1">
+                  {(() => {
+                    const lastMsg = lead.whatsapp_messages?.find((m: any) => m.template_name === 'document_upload_request');
+                    if (lastMsg) {
+                      return (
+                        <span className="flex items-center gap-2">
+                          Last sent via WhatsApp: {new Date(lastMsg.created_at).toLocaleString()}
+                          <span className={`badge badge-xs ${lastMsg.status === 'read' ? 'badge-success' : 'badge-ghost'}`}>
+                            {lastMsg.status}
+                          </span>
+                        </span>
+                      );
+                    }
+                    return "No upload link sent via WhatsApp yet.";
+                  })()}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={sendWhatsAppDocRequest}
+                  disabled={sendingWa}
+                  className="btn btn-sm bg-green-600 hover:bg-green-700 text-white border-none gap-2"
+                >
+                  {sendingWa ? <span className="loading loading-spinner loading-xs"></span> : <span className="text-lg">📱</span>}
+                  Send WhatsApp Link
+                </button>
+                <button
+                  onClick={generateUploadLink}
+                  disabled={generatingLink}
+                  className="btn btn-sm btn-outline gap-2"
+                >
+                  {generatingLink ? <span className="loading loading-spinner loading-xs"></span> : <LinkIcon className="w-4 h-4" />}
+                  Copy Link
+                </button>
+              </div>
+            </div>
+
             {docSections.map((section) => {
               const sectionDocs = getDocsByType(section.id);
               return (
@@ -1025,29 +1091,71 @@ export default function LeadDetailPage() {
           </div>
         );
 
-      case "activity":
+      case "activity": {
+        // Merge standard activities and WhatsApp messages
+        const waMessages = lead.whatsapp_messages || [];
+        const mergedTimeline = [
+          ...activities.map((a: any) => ({ ...a, type: 'activity', sortTime: new Date(a.created_at).getTime() })),
+          ...waMessages.map((w: any) => ({ ...w, type: 'whatsapp', sortTime: new Date(w.created_at).getTime() }))
+        ].sort((a, b) => b.sortTime - a.sortTime);
+
         return (
           <div className="space-y-4">
             <h3 className="text-lg font-bold text-[var(--cy-navy)]">Activity Log</h3>
-            {activities.length === 0 ? (
+            {mergedTimeline.length === 0 ? (
               <div className="p-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
                 <p className="text-[var(--cy-text-muted)] italic">No activity recorded yet.</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {activities.map((activity: any) => (
-                  <div key={activity.id} className="p-4 bg-white rounded-xl border border-[var(--cy-border)]">
-                    <div className="flex justify-between">
-                      <div className="font-medium text-[var(--cy-navy)]">{activity.action}</div>
-                      <div className="text-xs text-[var(--cy-text-muted)]">{new Date(activity.created_at).toLocaleString()}</div>
-                    </div>
-                    {activity.notes && <div className="text-sm text-[var(--cy-text-secondary)] mt-1">{activity.notes}</div>}
-                  </div>
-                ))}
+                {mergedTimeline.map((item: any) => {
+                  if (item.type === 'whatsapp') {
+                    // Render WhatsApp Message
+                    const isOutbound = item.direction === 'outbound';
+                    return (
+                      <div key={`wa-${item.id}`} className={`p-4 rounded-xl border ${isOutbound ? 'bg-green-50 border-green-200' : 'bg-white border-[var(--cy-border)]'}`}>
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">{isOutbound ? '📤' : '📥'}</span>
+                            <div>
+                              <div className="font-bold text-[var(--cy-navy)] flex items-center gap-2">
+                                WhatsApp {isOutbound ? 'Sent' : 'Received'}
+                                <span className={`badge badge-xs ${item.status === 'read' ? 'badge-primary' : item.status === 'failed' ? 'badge-error' : 'badge-ghost'}`}>
+                                  {item.status}
+                                </span>
+                              </div>
+                              <div className="text-xs text-[var(--cy-text-muted)]">
+                                {new Date(item.created_at).toLocaleString()}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-2 text-sm text-[var(--cy-text-secondary)] bg-white/50 p-2 rounded border border-black/5 font-mono text-xs">
+                          {item.template_name ? `Template: ${item.template_name}` : item.message_body}
+                        </div>
+                        {item.error_message && (
+                          <div className="mt-1 text-xs text-red-500">Error: {item.error_message}</div>
+                        )}
+                      </div>
+                    );
+                  } else {
+                    // Render Standard Activity
+                    return (
+                      <div key={`act-${item.id}`} className="p-4 bg-white rounded-xl border border-[var(--cy-border)] hover:bg-gray-50 transition-colors">
+                        <div className="flex justify-between">
+                          <div className="font-medium text-[var(--cy-navy)]">{item.action}</div>
+                          <div className="text-xs text-[var(--cy-text-muted)]">{new Date(item.created_at).toLocaleString()}</div>
+                        </div>
+                        {item.notes && <div className="text-sm text-[var(--cy-text-secondary)] mt-1">{item.notes}</div>}
+                      </div>
+                    );
+                  }
+                })}
               </div>
             )}
           </div>
         );
+      }
 
       default:
         return null;

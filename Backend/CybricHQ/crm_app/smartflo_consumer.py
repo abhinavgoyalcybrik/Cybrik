@@ -319,9 +319,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                  self.input_audio_buffer = self.input_audio_buffer[-320000:]
             return
         
-        # Process audio if we have enough buffered (100ms = 800 bytes of mulaw)
-        # This reduces WebSocket overhead and packet rate
-        THRESHOLD = 800 
+        # Process audio if we have enough buffered
+        # Reduced THRESHOLD to 480 bytes (60ms) for lower latency while maintaining efficiency
+        THRESHOLD = 480
         
         if len(self.input_audio_buffer) >= THRESHOLD:
             try:
@@ -330,14 +330,19 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 # Reset buffer immediately
                 self.input_audio_buffer = bytearray()
                 
-                # Convert: Mulaw 8k -> PCM 16k -> Amplify for clarity
-                pcm_8k = mulaw_to_pcm(chunk_to_process)
-                pcm_16k = upsample_8k_to_16k(pcm_8k)
-                # Amplify input audio for better recognition (phone audio is often quiet)
-                pcm_16k = amplify_pcm(pcm_16k, gain=3.0)
+                # OPTIMIZED PIPELINE:
+                # 1. Decode Mulaw -> PCM 8k (Lossless conversion)
+                # 2. Amplify PCM 8k (Enhance volume for AI)
+                # 3. Encode PCM 8k -> Mulaw (Back to format ElevenLabs expects)
+                # We stay at 8kHz throughout to avoid "robotic" upsampling artifacts.
                 
+                pcm_8k = mulaw_to_pcm(chunk_to_process)
+                pcm_8k_amplified = amplify_pcm(pcm_8k, gain=2.5) # 2.5x gain is safer than 3.0
+                mulaw_amplified = pcm_to_mulaw(pcm_8k_amplified)
+                
+                # Send amplified mulaw bytes
                 await self.elevenlabs_ws.send(json.dumps({
-                    "user_audio_chunk": base64.b64encode(pcm_16k).decode('utf-8')
+                    "user_audio_chunk": base64.b64encode(mulaw_amplified).decode('utf-8')
                 }))
                 
                 self.chunk_number += 1
@@ -853,7 +858,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         }
                     }
                 },
-                "audio_input_format": "pcm_16000",
+                "audio_input_format": "ulaw_8000",
                 "dynamic_variables": dynamic_vars
             }
             

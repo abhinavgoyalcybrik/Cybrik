@@ -260,6 +260,7 @@ class SupportTicket(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='other')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    is_read = models.BooleanField(default=False, help_text="True if admin has read the new ticket")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -281,6 +282,7 @@ class TicketReply(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
     is_admin = models.BooleanField(default=False)
+    is_read = models.BooleanField(default=False, help_text="True if the recipient has read this reply")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

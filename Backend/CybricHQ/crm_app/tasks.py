@@ -828,7 +828,51 @@ def analyze_call_transcript(call_record_id):
             )
             logger.info(f"Created AI follow-up task for {'Applicant' if call.applicant else 'Lead'} {call.applicant.id if call.applicant else call.lead.id} with call context")
             
+            # --- AUTO-SEND WHATSAPP DOCUMENT LINK ---
+            # Check if FollowUp implies document collection (e.g. "Create task to collect documents")
+            follow_up_reason = follow_up.get('reason', '').lower()
+            is_doc_followup = 'document' in follow_up_reason or 'upload' in follow_up_reason or 'certificate' in follow_up_reason
+            
+            # If documents are pending OR the AI explicitly scheduled a document follow-up
+            if doc_status.get('status') in ['pending', 'partial'] or missing_docs or is_doc_followup:
+                try:
+                    target = call.applicant or call.lead
+                    if target and target.phone:
+                        from django.conf import settings
+                        from .services.whatsapp_client import send_document_request
+                        from .models import WhatsAppMessage
+                        from .views import generate_upload_token
+
+                        # Generate token and link
+                        token = generate_upload_token(target.id if isinstance(target, Lead) else None, target.tenant_id if hasattr(target, 'tenant_id') else None)
+                        upload_link = f"{settings.FRONTEND_URL}/upload?token={token}"
+                        
+                        name = target.first_name if hasattr(target, 'first_name') else target.name
+                        
+                        # Send WhatsApp template
+                        wa_result = send_document_request(target.phone, name, upload_link)
+                        
+                        # Log message
+                        WhatsAppMessage.objects.create(
+                            lead=target if isinstance(target, Lead) else None,
+                            applicant=target if isinstance(target, Applicant) else None,
+                            tenant=getattr(target, 'tenant', None),
+                            direction="outbound",
+                            message_type="template",
+                            template_name="document_upload_request",
+                            from_phone=getattr(settings, 'WHATSAPP_PHONE_NUMBER_ID', ''),
+                            to_phone=target.phone,
+                            message_body=f"Auto-sent document upload request: {upload_link}",
+                            message_id=wa_result.get("message_id"),
+                            status="sent" if wa_result.get("success") else "failed",
+                            error_message=wa_result.get("error") if not wa_result.get("success") else None,
+                        )
+                        logger.info(f"Auto-sent WhatsApp document request to {target.phone}")
+                except Exception as e:
+                    logger.error(f"Failed to auto-send WhatsApp document request: {e}")
+
             # Send automated email if needed
+
             if analysis.get('interest_level') in ['high', 'medium']:
                 try:
                     from .services.email_service import EmailService

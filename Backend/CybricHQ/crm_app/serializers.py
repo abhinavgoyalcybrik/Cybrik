@@ -21,7 +21,9 @@ from .models import (
     UserProfile,
     Notification,
     AdIntegration,
+    AdIntegration,
     AdCampaign,
+    WhatsAppMessage,
 )
 
 User = get_user_model()
@@ -104,6 +106,7 @@ class KPIOverviewSerializer(serializers.Serializer):
 class ApplicantSerializer(serializers.ModelSerializer):
     academic_records = serializers.SerializerMethodField(read_only=True)
     documents = serializers.SerializerMethodField(read_only=True)
+    whatsapp_messages = serializers.SerializerMethodField(read_only=True)
     highest_qualification = serializers.CharField(required=False, allow_blank=True, write_only=True)
     qualification_marks = serializers.CharField(required=False, allow_blank=True, write_only=True)
     english_test_scores = serializers.CharField(required=False, allow_blank=True, write_only=True)
@@ -133,6 +136,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
             "leadId",
             "metadata",
             "tenant",  # Added to ensure tenant assignment works
+            "whatsapp_messages",
         ]
         read_only_fields = ("created_at", "updated_at")
         extra_kwargs = {
@@ -187,6 +191,13 @@ class ApplicantSerializer(serializers.ModelSerializer):
             # Defensive fallback: return empty list on schema mismatch
             logger.exception("Error serializing academic records for Applicant %s", getattr(obj, "id", None))
             return []
+
+    def get_whatsapp_messages(self, obj):
+        qs = getattr(obj, "whatsapp_messages", None)
+        if not qs:
+            return []
+        return WhatsAppMessageSerializer(qs.all(), many=True, context=self.context).data
+
 
 
 class AcademicRecordSerializer(serializers.ModelSerializer):
@@ -631,6 +642,7 @@ class LeadSerializer(serializers.ModelSerializer):
     documents = serializers.SerializerMethodField(read_only=True)
     academic_records = serializers.SerializerMethodField(read_only=True)
     applications = serializers.SerializerMethodField(read_only=True)
+    whatsapp_messages = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Lead
@@ -678,6 +690,7 @@ class LeadSerializer(serializers.ModelSerializer):
             'documents',
             'academic_records',
             'applications',
+            'whatsapp_messages',
         ]
         read_only_fields = ('id', 'received_at', 'forwarded_at', 'created_at', 'updated_at')
         extra_kwargs = {
@@ -701,6 +714,13 @@ class LeadSerializer(serializers.ModelSerializer):
         if not qs:
             return []
         return ApplicationSerializer(qs.all(), many=True, context=self.context).data
+    
+    def get_whatsapp_messages(self, obj):
+        qs = getattr(obj, "whatsapp_messages", None)
+        if not qs:
+            return []
+        return WhatsAppMessageSerializer(qs.all(), many=True, context=self.context).data
+
 
     def create(self, validated_data):
         if not validated_data.get('external_id'):
@@ -798,6 +818,39 @@ class AdCampaignSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AdCampaign
+        fields = [
+            'id', 'integration', 'platform', 'platform_display', 'external_campaign_id', 'name',
+            'status', 'status_display', 'objective', 'daily_budget', 'lifetime_budget',
+            'total_spend', 'currency', 'impressions', 'clicks', 'conversions',
+            'ctr', 'cpc', 'cpm', 'cost_per_conversion', 'start_date', 'end_date',
+            'last_synced_at', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ('id', 'created_at', 'updated_at', 'last_synced_at')
+
+
+class WhatsAppMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhatsAppMessage
+        fields = [
+            "id",
+            "lead",
+            "applicant",
+            "tenant",
+            "direction",
+            "message_type",
+            "template_name",
+            "from_phone",
+            "to_phone",
+            "message_body",
+            "message_id",
+            "status",
+            "error_message",
+            "metadata",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ("id", "created_at", "updated_at")
+
         fields = [
             'id', 'integration', 'platform', 'platform_display',
             'external_campaign_id', 'name', 'status', 'status_display', 'objective',
