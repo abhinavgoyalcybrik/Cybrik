@@ -1326,6 +1326,46 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
         
         return Response(TicketReplySerializer(reply).data, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['get'])
+    def unread_count(self, request):
+        """
+        Get the count of unread notifications (tickets/replies).
+        """
+        user = request.user
+        if user.is_staff or user.is_superuser:
+            # Admin: Unread tickets + Unread replies from students
+            unread_tickets = SupportTicket.objects.filter(is_read=False).count()
+            unread_replies = TicketReply.objects.filter(is_admin=False, is_read=False).count()
+            count = unread_tickets + unread_replies
+        else:
+            # Student: Unread replies from admins
+            count = TicketReply.objects.filter(ticket__user=user, is_admin=True, is_read=False).count()
+            
+        return Response({"unread_count": count})
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve a ticket and mark relevant messages as read.
+        """
+        instance = self.get_object()
+        user = request.user
+        
+        # Mark as read logic
+        if user.is_staff or user.is_superuser:
+            # Admin reading a ticket
+            if not instance.is_read:
+                instance.is_read = True
+                instance.save(update_fields=['is_read'])
+            # Mark all student replies as read
+            instance.replies.filter(is_admin=False, is_read=False).update(is_read=True)
+        elif instance.user == user:
+            # Student reading their own ticket
+            # Mark all admin replies as read
+            instance.replies.filter(is_admin=True, is_read=False).update(is_read=True)
+            
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
         """Update ticket status (admin only)."""

@@ -18,6 +18,7 @@ import {
     LifeBuoy,
     CreditCard,
 } from 'lucide-react';
+import { api, API_ENDPOINTS } from '@/lib/api';
 
 const navItems = [
     { name: 'Dashboard', href: '/admin', icon: Home },
@@ -54,6 +55,31 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
     const { user, logout } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
+    const [unreadCount, setUnreadCount] = React.useState(0);
+
+    React.useEffect(() => {
+        const fetchUnread = async () => {
+            // Only fetch if user is logged in
+            if (!user) return;
+
+            try {
+                // Fetch unread count from API
+                // Endpoint: /api/ielts/tickets/unread_count/
+                const { data } = await api.get<{ unread_count: number }>(`${API_ENDPOINTS.IELTS_BASE}/tickets/unread_count/`);
+                if (data) {
+                    setUnreadCount(data.unread_count);
+                }
+            } catch (e) {
+                console.error("Failed to fetch notification count", e);
+            }
+        };
+
+        fetchUnread();
+
+        // Poll every 30 seconds to keep updated
+        const interval = setInterval(fetchUnread, 30000);
+        return () => clearInterval(interval);
+    }, [user]);
 
     const handleLogout = async () => {
         // AuthContext logout handles API call, localStorage cleanup, and redirect
@@ -92,7 +118,14 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
                             >
                                 <item.icon className={`w-5 h-5 transition-colors ${isActive ? 'text-[#6FB63A]' : 'text-slate-400 group-hover:text-slate-600'}`} />
                                 <span>{item.name}</span>
-                                {isActive && <ChevronRight className="w-4 h-4 ml-auto text-[#6FB63A]" />}
+
+                                {item.name === 'Support' && unreadCount > 0 ? (
+                                    <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm animate-pulse">
+                                        {unreadCount}
+                                    </span>
+                                ) : (
+                                    isActive && <ChevronRight className="w-4 h-4 ml-auto text-[#6FB63A]" />
+                                )}
                             </Link>
                         );
                     })}
