@@ -64,9 +64,11 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
 
             try {
                 // Fetch unread count from API
-                // Endpoint: /api/ielts/tickets/unread_count/
-                const { data } = await api.get<{ unread_count: number }>(`${API_ENDPOINTS.IELTS_BASE}/tickets/unread_count/`);
+                // Endpoint: /api/ielts/tickets/unread_count (Rewrite adds slash)
+                console.log('Fetching unread support tickets...');
+                const { data } = await api.get<{ unread_count: number }>(`${API_ENDPOINTS.IELTS_BASE}/tickets/unread_count`);
                 if (data) {
+                    console.log('Unread count:', data.unread_count);
                     setUnreadCount(data.unread_count);
                 }
             } catch (e) {
