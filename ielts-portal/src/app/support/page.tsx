@@ -111,9 +111,13 @@ export default function SupportPage() {
                 setNewTicket({ subject: '', description: '', category: 'other', priority: 'medium' });
                 setShowNewTicketForm(false);
                 fetchTickets();
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || errData.detail || `Server error: ${res.status}`);
             }
         } catch (err) {
             console.error('Error creating ticket:', err);
+            alert('Failed to create ticket: ' + (err instanceof Error ? err.message : String(err)));
         } finally {
             setSubmitting(false);
         }
@@ -140,9 +144,13 @@ export default function SupportPage() {
                     setSelectedTicket(updatedTicket);
                     setTickets(prev => prev.map(t => t.id === updatedTicket.id ? updatedTicket : t));
                 }
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || errData.detail || `Server error: ${res.status}`);
             }
         } catch (err) {
             console.error('Error sending reply:', err);
+            alert('Failed to answer: ' + (err instanceof Error ? err.message : String(err)));
         } finally {
             setSubmitting(false);
         }

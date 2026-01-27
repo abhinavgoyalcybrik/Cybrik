@@ -1299,11 +1299,13 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
         return SupportTicket.objects.filter(user=user)
 
     def perform_create(self, serializer):
+        logger.info(f"Creating ticket for user: {self.request.user.email}")
         serializer.save(user=self.request.user)
 
     @action(detail=True, methods=['post'])
     def reply(self, request, pk=None):
         """Add a reply to a ticket."""
+        logger.info(f"Reply attempt by user: {request.user.email} on ticket {pk}")
         ticket = self.get_object()
         message = request.data.get('message', '').strip()
         
