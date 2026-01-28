@@ -671,11 +671,15 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Import task for fetching data
         from crm_app.tasks import fetch_and_store_conversation_task
         
+        logger.info(f"[PROCESS-COMPLETION] Starting for call_record_id={call_record_id}, reason={reason}, conversation_id={conversation_id}")
+        
         try:
             call = CallRecord.objects.filter(id=call_record_id).first()
             if not call:
-                logger.error(f"CallRecord {call_record_id} not found for completion processing")
+                logger.error(f"[PROCESS-COMPLETION] CallRecord {call_record_id} not found for completion processing")
                 return
+            
+            logger.info(f"[PROCESS-COMPLETION] Found CallRecord {call.id}, lead={call.lead}, lead_phone={call.lead.phone if call.lead else 'N/A'}")
 
             status_map = {
                 'completed': 'completed',
@@ -710,9 +714,14 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
 
             # ====== SEND WHATSAPP MESSAGE ======
             if status == 'completed':
-                logger.info(f"Triggering AI-generated WhatsApp post-call message for call {call.id}")
-                from crm_app.tasks import send_ai_post_call_whatsapp_task
-                send_ai_post_call_whatsapp_task.delay(call.id)
+                logger.info(f"[PROCESS-COMPLETION] ===== TRIGGERING WHATSAPP MESSAGE =====")
+                logger.info(f"[PROCESS-COMPLETION] Call {call.id} status={status}, lead={call.lead}, phone={call.lead.phone if call.lead else 'N/A'}")
+                try:
+                    from crm_app.tasks import send_ai_post_call_whatsapp_task
+                    result = send_ai_post_call_whatsapp_task.delay(call.id)
+                    logger.info(f"[PROCESS-COMPLETION] WhatsApp task queued with task_id: {result.id}")
+                except Exception as task_err:
+                    logger.exception(f"[PROCESS-COMPLETION] ERROR queueing WhatsApp task: {task_err}")
 
             # NEW: Trigger data fetch if call was successful/connected and we have conversation_id
             if conversation_id and status == 'completed':
@@ -755,19 +764,34 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
 
     async def handle_stop(self, message):
         """Handle call end - update CallRecord with final status"""
+        logger.info("[CALL-END] " + "=" * 50)
+        logger.info(f"[CALL-END] handle_stop called with message: {message}")
+        
         stop_data = message.get('stop', {})
         reason = stop_data.get('reason', 'Unknown')
-        logger.info(f"Call ended: {reason}")
+        logger.info(f"[CALL-END] Call ended. Reason: {reason}")
         
         # Update CallRecord with completed status
         call_record_id = self.lead_context.get('call_record_id')
         conversation_id = getattr(self, 'elevenlabs_conversation_id', None)
         
+        logger.info(f"[CALL-END] call_record_id: {call_record_id}, conversation_id: {conversation_id}")
+        logger.info(f"[CALL-END] lead_context keys: {list(self.lead_context.keys())}")
+        
         if call_record_id:
-            await self.process_call_completion(call_record_id, reason, conversation_id)
+            logger.info(f"[CALL-END] Calling process_call_completion for call {call_record_id}...")
+            try:
+                await self.process_call_completion(call_record_id, reason, conversation_id)
+                logger.info(f"[CALL-END] process_call_completion completed for call {call_record_id}")
+            except Exception as e:
+                logger.exception(f"[CALL-END] ERROR in process_call_completion: {e}")
+        else:
+            logger.warning(f"[CALL-END] No call_record_id found! Cannot process completion.")
         
         if self.elevenlabs_ws:
             await self.elevenlabs_ws.close()
+            
+        logger.info("[CALL-END] " + "=" * 50)
     
     async def handle_mark(self, message):
         """Handle mark event (audio playback complete)"""

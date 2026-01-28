@@ -1612,6 +1612,8 @@ def send_ai_post_call_whatsapp_task(call_record_id):
     3. Send via WhatsApp API using post_call_followup template
     4. Log to WhatsAppMessage model
     """
+    logger.info(f"[WHATSAPP-AI] ===== TASK STARTED for call_record_id={call_record_id} =====")
+    
     try:
         from .models import CallRecord, WhatsAppMessage
         from .services.whatsapp_ai_assistant import WhatsAppAssistant
@@ -1619,14 +1621,18 @@ def send_ai_post_call_whatsapp_task(call_record_id):
         
         # Get CallRecord
         call = CallRecord.objects.get(id=call_record_id)
+        logger.info(f"[WHATSAPP-AI] Found CallRecord {call.id}, status={call.status}")
         
         # Get Lead target
         lead = call.lead
-        if not lead or not lead.phone:
-            logger.warning(f"[WHATSAPP-AI] No lead or phone for call {call_record_id}")
+        if not lead:
+            logger.warning(f"[WHATSAPP-AI] No lead for call {call_record_id}")
+            return
+        if not lead.phone:
+            logger.warning(f"[WHATSAPP-AI] Lead {lead.id} ({lead.name}) has no phone number")
             return
         
-        logger.info(f"[WHATSAPP-AI] Generating post-call message for {lead.name} (Call {call_record_id})")
+        logger.info(f"[WHATSAPP-AI] Lead: {lead.name}, phone: {lead.phone}")
         
         # Generate message using AI
         assistant = WhatsAppAssistant()
