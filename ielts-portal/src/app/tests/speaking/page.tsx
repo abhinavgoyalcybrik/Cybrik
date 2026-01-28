@@ -130,7 +130,7 @@ export default function SpeakingTestsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredTests.map((test, index) => {
                     const isCompleted = completedTestIds.includes(test.test_id.toString());
-                    const isLocked = !hasFullAccess && index >= 4;
+                    const isLocked = !hasFullAccess && index >= 1; // Only first test free for non-premium users
 
                     if (isLocked) {
                         // LOCKED TEST CARD

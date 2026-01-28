@@ -129,7 +129,7 @@ export default function ListeningTestsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {tests.map((test, index) => {
                         const isCompleted = completedTests[test.id];
-                        const isLocked = !hasFullAccess && index >= 4;
+                        const isLocked = !hasFullAccess && index >= 1; // Only first test free for non-premium users
 
                         if (isLocked) {
                             return (

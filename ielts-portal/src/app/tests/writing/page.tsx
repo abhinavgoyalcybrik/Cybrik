@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { PenTool, Clock, Filter, ArrowLeft, Search, FileText, BarChart2, Map, Workflow, Check } from 'lucide-react';
+import { PenTool, Clock, Filter, ArrowLeft, Search, FileText, BarChart2, Map, Workflow, Check, Lock } from 'lucide-react';
 import { WritingTestsData, WritingTest } from '@/types';
 import AdminLayout from '@/components/AdminLayout';
+import { useAuth } from '@/contexts/AuthContext';
 
 const difficultyColors = {
     easy: 'bg-green-100 text-green-700',
@@ -21,6 +22,9 @@ const taskTypeIcons: Record<string, any> = {
 };
 
 export default function WritingTestsPage() {
+    const { user } = useAuth();
+    const hasFullAccess = user?.has_full_access ?? false;
+
     const [tests, setTests] = useState<WritingTest[]>([]);
     const [loading, setLoading] = useState(true);
     const [difficultyFilter, setDifficultyFilter] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
@@ -170,9 +174,53 @@ export default function WritingTestsPage() {
 
             {/* Test Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredTests.map((test) => {
+                {filteredTests.map((test, index) => {
                     const TypeIcon = taskTypeIcons[test.task_1.type] || FileText;
                     const isCompleted = !!completedTests[test.test_id];
+                    const isLocked = !hasFullAccess && index >= 1; // Only first test free for non-premium users
+
+                    // Locked test card for premium-only tests
+                    if (isLocked) {
+                        return (
+                            <div key={test.test_id} className="relative group bg-white rounded-xl border border-slate-200 p-6 overflow-hidden">
+                                {/* Blur Content */}
+                                <div className="blur-[2px] opacity-60 select-none pointer-events-none">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-2 rounded-lg bg-slate-100 text-slate-400">
+                                                <PenTool className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-500 font-medium">
+                                                {test.task_1.type}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-500">
+                                            Premium
+                                        </span>
+                                    </div>
+                                    <h3 className="font-semibold text-slate-500 mb-2">Writing Test {test.test_id}</h3>
+                                    <p className="text-sm text-slate-400 mb-2 line-clamp-2">
+                                        <strong>Task 1:</strong> {test.task_1.question}
+                                    </p>
+                                    <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                                        <strong>Task 2:</strong> {test.task_2.question}
+                                    </p>
+                                </div>
+
+                                {/* Lock Overlay */}
+                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/40 backdrop-blur-sm p-4 text-center transition-opacity hover:bg-white/50">
+                                    <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mb-3 shadow-sm">
+                                        <Lock className="w-6 h-6 text-amber-600" />
+                                    </div>
+                                    <h3 className="text-gray-900 font-bold mb-1">Premium Only</h3>
+                                    <p className="text-sm text-gray-600 mb-3">Unlock all tests with Premium</p>
+                                    <Link href="/account/subscription" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                                        Unlock Now
+                                    </Link>
+                                </div>
+                            </div>
+                        );
+                    }
 
                     return (
                         <div key={test.test_id} className="relative group">

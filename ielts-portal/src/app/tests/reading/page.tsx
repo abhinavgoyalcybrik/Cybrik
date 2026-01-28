@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BookOpen, Clock, PlayCircle, CheckCircle2, Check } from 'lucide-react';
+import { BookOpen, Clock, PlayCircle, CheckCircle2, Check, Lock } from 'lucide-react';
 import AdminLayout from '@/components/AdminLayout';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ReadingTest {
     id: string;
@@ -14,6 +15,9 @@ interface ReadingTest {
 }
 
 export default function ReadingTestsPage() {
+    const { user } = useAuth();
+    const hasFullAccess = user?.has_full_access ?? false;
+
     const [tests, setTests] = useState<ReadingTest[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -115,8 +119,42 @@ export default function ReadingTestsPage() {
             {/* Tests Grid */}
             {tests.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {tests.map((test) => {
+                    {tests.map((test, index) => {
                         const isCompleted = completedTests[test.id];
+                        const isLocked = !hasFullAccess && index >= 1; // Only first test free for non-premium users
+
+                        // Locked test card for premium-only tests
+                        if (isLocked) {
+                            return (
+                                <div key={test.id} className="relative group bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 overflow-hidden">
+                                    {/* Blur Content */}
+                                    <div className="blur-[2px] opacity-60 select-none pointer-events-none">
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="p-3 rounded-lg bg-zinc-100 text-zinc-400">
+                                                <BookOpen className="w-6 h-6" />
+                                            </div>
+                                            <span className="text-xs px-2 py-1 rounded-full bg-zinc-100 text-zinc-500 font-medium">Premium</span>
+                                        </div>
+                                        <h3 className="text-lg font-bold mb-2 text-zinc-500">{test.title}</h3>
+                                        <p className="text-sm text-zinc-500 line-clamp-2 mb-4">
+                                            {test.description || 'IELTS Academic Reading Test'}
+                                        </p>
+                                    </div>
+
+                                    {/* Lock Overlay */}
+                                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/40 dark:bg-black/40 backdrop-blur-sm p-4 text-center transition-opacity hover:bg-white/50 dark:hover:bg-black/50">
+                                        <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center mb-3 shadow-sm">
+                                            <Lock className="w-6 h-6 text-amber-600 dark:text-amber-500" />
+                                        </div>
+                                        <h3 className="text-gray-900 dark:text-gray-100 font-bold mb-1">Premium Only</h3>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Unlock all tests with Premium</p>
+                                        <Link href="/account/subscription" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105">
+                                            Unlock Now
+                                        </Link>
+                                    </div>
+                                </div>
+                            );
+                        }
 
                         return (
                             <div key={test.id} className="relative group">
