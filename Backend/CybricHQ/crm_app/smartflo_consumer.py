@@ -359,9 +359,15 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     logger.error(f"[SMARTFLO-AUDIO] Empty mulaw_amplified! window={len(audio_window)}, pcm={len(pcm_data)}")
                     continue
                 
-                # Check WebSocket is still open
-                if not self.elevenlabs_ws or self.elevenlabs_ws.closed:
-                    logger.error(f"[SMARTFLO-AUDIO] ElevenLabs WebSocket closed, cannot send audio!")
+                # Check WebSocket is still open (handle different websockets library versions)
+                ws_closed = False
+                try:
+                    ws_closed = self.elevenlabs_ws.closed if hasattr(self.elevenlabs_ws, 'closed') else False
+                except Exception:
+                    pass
+                    
+                if not self.elevenlabs_ws or ws_closed:
+                    logger.error(f"[SMARTFLO-AUDIO] ElevenLabs WebSocket closed/None, cannot send audio!")
                     return
                 
                 # Send to ElevenLabs in 160-byte chunks (20ms each)
@@ -369,11 +375,15 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 for i in range(0, len(mulaw_amplified), 160):
                     chunk = mulaw_amplified[i:i + 160]
                     if len(chunk) == 160:  # Only send complete chunks
-                        await self.elevenlabs_ws.send(json.dumps({
-                            "user_audio_chunk": base64.b64encode(chunk).decode('utf-8')
-                        }))
-                        self.chunk_number += 1
-                        chunks_sent_this_window += 1
+                        try:
+                            await self.elevenlabs_ws.send(json.dumps({
+                                "user_audio_chunk": base64.b64encode(chunk).decode('utf-8')
+                            }))
+                            self.chunk_number += 1
+                            chunks_sent_this_window += 1
+                        except Exception as send_err:
+                            logger.error(f"[SMARTFLO-AUDIO] Failed to send chunk: {send_err}")
+                            return
                 
                 # Log every 50 chunks OR the first 5 windows to confirm sending works
                 if self.chunk_number <= 50 or self.chunk_number % 100 == 0:
@@ -600,22 +610,30 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         media = message.get('media', {})
         payload = media.get('payload', '')
         
-        if payload and self.elevenlabs_ws:
-            # Note: We do NOT check self.elevenlabs_ready here anymore.
-            # We pass everything to handle_binary_audio which handles buffering
-            # while waiting for the handshake.
-                
-            try:
-                # Decode mulaw audio from Smartflo (base64 -> bytes)
-                mulaw_audio = base64.b64decode(payload)
-                
-                # Buffer and process via common logic (reuse handle_binary_audio logic)
-                # But handle_binary_audio is async and expects bytes... 
-                # Let's direct call logic to avoid overhead or just call handle_binary_audio since it's cleaner
-                await self.handle_binary_audio(mulaw_audio)
-                
-            except Exception as e:
-                logger.error(f"Error sending to ElevenLabs: {e}")
+        # Track media events for debugging
+        if not hasattr(self, '_media_event_count'):
+            self._media_event_count = 0
+        self._media_event_count += 1
+        
+        if not payload:
+            if self._media_event_count <= 3:
+                logger.warning(f"[HANDLE-MEDIA] #{self._media_event_count} No payload in media event")
+            return
+        
+        # CRITICAL FIX: Always process media, even before ElevenLabs is connected
+        # handle_binary_audio will buffer and connect as needed
+        if self._media_event_count <= 5:
+            logger.info(f"[HANDLE-MEDIA] #{self._media_event_count} payload_len={len(payload)}, ws={self.elevenlabs_ws is not None}")
+        
+        try:
+            # Decode mulaw audio from Smartflo (base64 -> bytes)
+            mulaw_audio = base64.b64decode(payload)
+            
+            # Always call handle_binary_audio - it manages connection and buffering
+            await self.handle_binary_audio(mulaw_audio)
+            
+        except Exception as e:
+            logger.error(f"[HANDLE-MEDIA] Error processing audio: {e}")
                 
     async def handle_dtmf(self, message):
         """Handle DTMF keypress from caller"""
