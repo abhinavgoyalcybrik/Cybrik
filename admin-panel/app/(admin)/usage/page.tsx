@@ -130,7 +130,7 @@ export default function UsagePage() {
 
   const acknowledgeAlert = async (alertId: number) => {
     try {
-      await usageApi.acknowledgeAlert(alertId);
+      await usageApi.acknowledgeAlert(String(alertId));
       loadData(); // Reload data
     } catch (error) {
       console.error('Error acknowledging alert:', error);
