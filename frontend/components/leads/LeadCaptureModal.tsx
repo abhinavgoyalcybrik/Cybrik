@@ -5,7 +5,7 @@ import apiFetch from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
-type LeadSource = 'meta_ads' | 'google_ads' | 'organic' | 'referral' | 'other';
+type LeadSource = 'meta_ads' | 'google_ads' | 'organic' | 'referral' | 'walk-in' | 'other';
 
 interface LeadCaptureModalProps {
     isOpen: boolean;
@@ -189,6 +189,7 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
                                                     <option value="google_ads">Google Ads</option>
                                                     <option value="organic">Organic Search</option>
                                                     <option value="referral">Referral</option>
+                                                    <option value="walk-in">Walk-in</option>
                                                     <option value="other">Other</option>
                                                 </select>
                                             </div>

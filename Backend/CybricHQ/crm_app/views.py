@@ -696,6 +696,21 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         else:
             lead = serializer.save()
         
+        # ============== WALK-IN LEAD HANDLING ==============
+        # Automatically disable AI automation for walk-in leads
+        if lead.source == 'walk-in':
+            lead.is_manual_only = True
+            lead.save(update_fields=['is_manual_only'])
+            logger.info(f"Walk-in lead {lead.id} created - AI automation disabled")
+            # Skip all AI automation for walk-in leads
+            return
+        # ===================================================
+        
+        # Skip AI automation if lead is marked as manual-only
+        if getattr(lead, 'is_manual_only', False):
+            logger.info(f"Lead {lead.id} is manual-only - skipping AI automation")
+            return
+        
         # Auto-call the lead via SmartFlow if they have a phone number
         if lead.phone:
             try:

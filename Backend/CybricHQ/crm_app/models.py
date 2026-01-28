@@ -596,6 +596,33 @@ class Lead(models.Model):
         ('lost', 'Lost'),
     ]
     
+    # Lead source choices with walk-in option
+    LEAD_SOURCE_CHOICES = [
+        ('website', 'Website'),
+        ('facebook', 'Facebook Lead Ad'),
+        ('google', 'Google Ads'),
+        ('walk-in', 'Walk-in'),
+        ('referral', 'Referral'),
+        ('phone', 'Phone Inquiry'),
+        ('email', 'Email'),
+        ('whatsapp', 'WhatsApp'),
+        ('social_media', 'Social Media'),
+        ('advertisement', 'Advertisement'),
+        ('other', 'Other'),
+    ]
+    
+    # Lead source choices with walk-in option
+    LEAD_SOURCE_CHOICES = [
+        ('website', 'Website'),
+        ('referral', 'Referral'),
+        ('walk-in', 'Walk-in'),
+        ('phone', 'Phone'),
+        ('email', 'Email'),
+        ('social_media', 'Social Media'),
+        ('advertisement', 'Advertisement'),
+        ('other', 'Other'),
+    ]
+    
     # Tenant for data isolation
     tenant = models.ForeignKey(
         Tenant, on_delete=models.CASCADE,
@@ -610,7 +637,35 @@ class Lead(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=32, blank=True, null=True)
-    source = models.CharField(max_length=128, blank=True, null=True)
+    source = models.CharField(
+        max_length=128, 
+        choices=LEAD_SOURCE_CHOICES,
+        blank=True, 
+        null=True,
+        help_text="Source of the lead"
+    )
+    
+    # ============== WALK-IN SPECIFIC FIELDS ==============
+    # These fields handle walk-in leads with manual-only processing
+    is_manual_only = models.BooleanField(
+        default=False,
+        help_text="If True, disables all AI automation for this lead (used for walk-ins)"
+    )
+    walked_in_at = models.DateTimeField(
+        blank=True, 
+        null=True,
+        help_text="Timestamp when the lead physically walked into the office"
+    )
+    receptionist = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        blank=True, 
+        null=True,
+        related_name='received_walkin_leads',
+        help_text="Staff member who received this walk-in lead"
+    )
+    # ====================================================
+    
     city = models.CharField(max_length=128, blank=True, null=True)
     country = models.CharField(max_length=128, blank=True, null=True)
     preferred_language = models.CharField(max_length=64, blank=True, null=True)
@@ -619,15 +674,6 @@ class Lead(models.Model):
     visit_type = models.CharField(max_length=64, blank=True, null=True)
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     message = models.TextField(blank=True, null=True)
-    
-    # ============== APPLICANT-LIKE PROFILE FIELDS ==============
-    # These fields enable Lead to function like Applicant without conversion
-    first_name = models.CharField(max_length=150, blank=True, null=True)
-    last_name = models.CharField(max_length=150, blank=True, null=True)
-    dob = models.DateField(blank=True, null=True, help_text="Date of Birth")
-    passport_number = models.CharField(max_length=128, blank=True, null=True)
-    address = models.TextField(blank=True, null=True)
-    preferred_country = models.CharField(max_length=128, blank=True, null=True)
     
     # Stage management (like Applicant)
     stage = models.CharField(max_length=64, default="new")  # new, docs_pending, verified, etc.
@@ -701,6 +747,13 @@ class Lead(models.Model):
         if self.first_name:
             return f"{self.first_name} {self.last_name or ''}".strip()
         return self.name or f"Lead {self.id}"
+    
+    def should_skip_ai_automation(self):
+        """
+        Check if this lead should skip AI automation.
+        Returns True for walk-in leads or any lead marked as manual_only.
+        """
+        return self.is_manual_only or self.source == 'walk-in'
 
 
 class UserDashboardPreference(models.Model):

@@ -433,6 +433,17 @@ class FollowUpGenerator:
         """
         from ..models import FollowUp
         
+        # ============== WALK-IN LEAD PROTECTION ==============
+        # Skip AI automation for manual-only leads (walk-ins)
+        if hasattr(applicant, 'is_manual_only') and applicant.is_manual_only:
+            logger.info(f"Skipping AI follow-up for manual-only lead {applicant.id}")
+            return None
+        
+        if hasattr(applicant, 'should_skip_ai_automation') and applicant.should_skip_ai_automation():
+            logger.info(f"Skipping AI follow-up for lead {applicant.id} (walk-in or manual-only)")
+            return None
+        # ====================================================
+        
         if not due_at:
             if priority == "HIGH":
                 due_at = timezone.now() + timedelta(minutes=5)
