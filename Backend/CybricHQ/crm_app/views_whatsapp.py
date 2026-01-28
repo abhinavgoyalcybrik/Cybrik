@@ -10,7 +10,7 @@ from rest_framework import status
 from django.conf import settings
 from django.http import HttpResponse
 
-from .models import Lead, Applicant, WhatsAppMessage
+from .models import Lead, WhatsAppMessage
 from .services.whatsapp_client import (
     send_template_message,
     send_text_message,
@@ -76,15 +76,14 @@ def handle_incoming_message(parsed: dict):
     
     logger.info(f"Incoming WhatsApp from {from_phone}: {text}")
     
-    # Find associated lead or applicant
-    lead = Lead.objects.filter(phone__icontains=from_phone[-10:]).first()
-    applicant = Applicant.objects.filter(phone__icontains=from_phone[-10:]).first() if not lead else None
+    # Find associated lead by phone number (last 10 digits)
+    phone_suffix = from_phone[-10:] if len(from_phone) >= 10 else from_phone
+    lead = Lead.objects.filter(phone__icontains=phone_suffix).first()
     
     # Log the message
-    WhatsAppMessage.objects.create(
+    msg_record = WhatsAppMessage.objects.create(
         lead=lead,
-        applicant=applicant,
-        tenant=lead.tenant if lead else (applicant.tenant if applicant else None),
+        tenant=lead.tenant if lead else None,
         direction="inbound",
         message_type="text",
         from_phone=from_phone,
@@ -95,7 +94,13 @@ def handle_incoming_message(parsed: dict):
         metadata=parsed,
     )
     
-    # TODO: Auto-reply logic or notify CRM user
+    # Only trigger AI reply if we have a known lead
+    if lead:
+        logger.info(f"Queuing AI reply handler for WhatsApp message {msg_record.id}")
+        from .tasks import handle_incoming_whatsapp_with_ai_task
+        handle_incoming_whatsapp_with_ai_task.delay(msg_record.id)
+    else:
+        logger.warning(f"No lead found for phone {from_phone} - skipping AI reply")
 
 
 def handle_status_update(parsed: dict):

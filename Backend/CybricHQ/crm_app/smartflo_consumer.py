@@ -180,6 +180,10 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         self.chunk_number = 0
         self.elevenlabs_ws = None
         
+        # New counters for fixed audio handling
+        self.elevenlabs_audio_chunk_count = 0
+        self.smartflo_chunk_number = 0
+        
         # Lead context for ElevenLabs dynamic variables
         self.lead_context = {}
         
@@ -189,11 +193,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         # Flag to track when ElevenLabs is ready to receive audio
         self.elevenlabs_ready = False
         
-
-        # Input Jitter Buffer (User -> ElevenLabs)
-        # Buffer incoming audio to send larger chunks (smooths out jitter)
+        # Minimal handshake buffer (only used while waiting for server handshake)
         self.input_audio_buffer = bytearray()
-        self.INPUT_CHUNK_SIZE = 160  # 20ms of 8kHz mulaw - faster response time
 
     async def connect(self):
         """Accept WebSocket connection from Smartflo"""
@@ -295,8 +296,12 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
     async def handle_binary_audio(self, audio_bytes):
         """Handle raw binary audio from Smartflo (mulaw 8kHz format)
         
-        We convert it to PCM 16kHz which is the standard input format for ElevenLabs.
-        We buffer input audio to 100ms (800 bytes) chunks to ensure stability.
+        Smartflo sends mulaw 8kHz audio chunks every 100ms (800 bytes).
+        Strategy:
+        1. Accumulate each incoming chunk into buffer
+        2. When we have enough for strong amplification (200ms = 1600 bytes), process it
+        3. Amplify AGGRESSIVELY (3.5x) to get clear STT recognition
+        4. Send immediately to ElevenLabs in 160-byte chunks
         """
         # Connect to ElevenLabs if not already connected
         if not self.elevenlabs_ws:
@@ -306,53 +311,53 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 logger.error("[SMARTFLO] Failed to connect to ElevenLabs")
                 return
             
-        # Accumulate in buffer
-        self.input_audio_buffer.extend(audio_bytes)
-        
-        # Wait for ElevenLabs handshake
+        # Wait for ElevenLabs handshake before processing ANY audio
         if not self.elevenlabs_ready:
+            self.input_audio_buffer.extend(audio_bytes)
             if len(self.input_audio_buffer) % 40000 == 0: 
-                 logger.warning(f"[SMARTFLO] Buffering audio - waiting for ElevenLabs handshake. Buffer size: {len(self.input_audio_buffer)}")
+                logger.warning(f"[SMARTFLO] Handshake pending... Buffer: {len(self.input_audio_buffer)} bytes")
             
-            # Just keep buffering limit check
-            if len(self.input_audio_buffer) > 320000: 
-                 self.input_audio_buffer = self.input_audio_buffer[-320000:]
+            # Hard limit to prevent unbounded growth
+            if len(self.input_audio_buffer) > 80000:
+                dropped = len(self.input_audio_buffer) - 80000
+                self.input_audio_buffer = self.input_audio_buffer[dropped:]
+                logger.warning(f"[SMARTFLO] Buffer overflow - dropped {dropped} bytes")
             return
         
-        # Process audio if we have enough buffered
-        # Reduced THRESHOLD to 480 bytes (60ms) for lower latency while maintaining efficiency
-        THRESHOLD = 480
+        # Add incoming chunk to buffer
+        self.input_audio_buffer.extend(audio_bytes)
         
-        if len(self.input_audio_buffer) >= THRESHOLD:
-            try:
-                # Process all buffered audio
-                chunk_to_process = self.input_audio_buffer
-                # Reset buffer immediately
-                self.input_audio_buffer = bytearray()
+        # Process when we have 200ms (1600 bytes at 8kHz mulaw)
+        # This gives smooth amplification across multiple Smartflo chunks
+        PROCESS_THRESHOLD = 1600  # 200ms window = 2 x Smartflo's 100ms chunks
+        
+        try:
+            while len(self.input_audio_buffer) >= PROCESS_THRESHOLD:
+                # Extract window
+                audio_window = bytes(self.input_audio_buffer[:PROCESS_THRESHOLD])
+                self.input_audio_buffer = self.input_audio_buffer[PROCESS_THRESHOLD:]
                 
-                # OPTIMIZED PIPELINE:
-                # 1. Decode Mulaw -> PCM 8k (Lossless conversion)
-                # 2. Amplify PCM 8k (Enhance volume for AI)
-                # 3. Encode PCM 8k -> Mulaw (Back to format ElevenLabs expects)
-                # We stay at 8kHz throughout to avoid "robotic" upsampling artifacts.
+                # AGGRESSIVE AMPLIFICATION (3.5x) for clear STT:
+                # This raises weak phone audio above noise floor
+                pcm_data = mulaw_to_pcm(audio_window)
+                pcm_amplified = amplify_pcm(pcm_data, gain=3.5)
+                mulaw_amplified = pcm_to_mulaw(pcm_amplified)
                 
-                pcm_8k = mulaw_to_pcm(chunk_to_process)
-                pcm_8k_amplified = amplify_pcm(pcm_8k, gain=2.5) # 2.5x gain is safer than 3.0
-                mulaw_amplified = pcm_to_mulaw(pcm_8k_amplified)
+                # Send to ElevenLabs in 160-byte chunks (20ms each)
+                for i in range(0, len(mulaw_amplified), 160):
+                    chunk = mulaw_amplified[i:i + 160]
+                    if len(chunk) == 160:  # Only send complete chunks
+                        await self.elevenlabs_ws.send(json.dumps({
+                            "user_audio_chunk": base64.b64encode(chunk).decode('utf-8')
+                        }))
+                        self.chunk_number += 1
                 
-                # Send amplified mulaw bytes
-                await self.elevenlabs_ws.send(json.dumps({
-                    "user_audio_chunk": base64.b64encode(mulaw_amplified).decode('utf-8')
-                }))
-                
-                self.chunk_number += 1
-                if self.chunk_number % 20 == 0:
-                    logger.info(f"[SMARTFLO] Forwarded input chunk #{self.chunk_number} ({len(chunk_to_process)} bytes)")
+                if self.chunk_number % 50 == 0:
+                    logger.debug(f"[SMARTFLO] Processed 200ms window, total chunks sent: {self.chunk_number}")
                     
-            except Exception as e:
-                logger.error(f"[SMARTFLO] Error forwarding audio: {e}")
-                # Don't lose the buffer if error was transient? No, safest to clear to avoid lag loop
-                self.input_audio_buffer = bytearray()
+        except Exception as e:
+            logger.error(f"[SMARTFLO] Error amplifying/streaming audio: {e}")
+            self.input_audio_buffer = bytearray()
 
     async def handle_connected(self, message):
         """Handle Smartflo connected event (WebSocket handshake complete)"""
@@ -659,6 +664,12 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                     call.lead.save(update_fields=['status'])
                     logger.info(f"Auto-updated Lead {call.lead.id} status to 'contacted' after successful call")
 
+            # ====== SEND WHATSAPP MESSAGE ======
+            if status == 'completed':
+                logger.info(f"Triggering AI-generated WhatsApp post-call message for call {call.id}")
+                from crm_app.tasks import send_ai_post_call_whatsapp_task
+                send_ai_post_call_whatsapp_task.delay(call.id)
+
             # NEW: Trigger data fetch if call was successful/connected and we have conversation_id
             if conversation_id and status == 'completed':
                  logger.info(f"Triggering background fetch for conversation {conversation_id}")
@@ -858,7 +869,8 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         }
                     }
                 },
-                "audio_input_format": "ulaw_8000",
+                "audio_input_format": "ulaw_8000", # Direct Mulaw Input
+                "audio_output_format": "ulaw_8000", # Direct Mulaw Output
                 "dynamic_variables": dynamic_vars
             }
             
@@ -955,62 +967,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                         logger.info(f"[ELEVENLABS] Expected input format: {input_format}")
                     
                     elif msg_type == 'audio':
-                        # ElevenLabs sends audio chunks - format may vary
-                        # Try multiple possible locations for audio data
-                        audio_base64 = None
-                        
-                        # Check various possible formats
-                        if 'audio_event' in data and isinstance(data['audio_event'], dict):
-                            # ElevenLabs Conversational AI format
-                            audio_base64 = data['audio_event'].get('audio_base_64', '') or data['audio_event'].get('chunk', '')
-                        elif 'audio_event' in data and isinstance(data['audio_event'], str):
-                            audio_base64 = data['audio_event']
-                        elif 'audio' in data and isinstance(data['audio'], dict):
-                            audio_base64 = data['audio'].get('chunk', '') or data['audio'].get('data', '')
-                        elif 'audio' in data and isinstance(data['audio'], str):
-                            audio_base64 = data['audio']
-                        elif 'audio_chunk' in data:
-                            audio_base64 = data['audio_chunk']
-                        elif 'data' in data:
-                            audio_base64 = data['data']
-                        
-                        if audio_base64:
-                            # ElevenLabs sends PCM 16kHz by default
-                            # Smartflo expects mulaw 8kHz - we need to convert!
-                            pcm_audio = base64.b64decode(audio_base64)
-                            
-                            # Log for debugging
-                            self.chunk_number += 1
-                            if self.chunk_number <= 5:
-
-                                logger.info(f"[ELEVENLABS] Audio chunk {self.chunk_number}: PCM size={len(pcm_audio)} bytes")
-                            
-                            # Convert PCM 16kHz to PCM 8kHz (downsample)
-                            pcm_8k = downsample_16k_to_8k(pcm_audio)
-                            
-                            # Amplify the audio (boost volume by 2.5x)
-                            pcm_8k_loud = amplify_pcm(pcm_8k, gain=2.5)
-                            
-                            # Convert PCM to mulaw
-                            mulaw_audio = pcm_to_mulaw(pcm_8k_loud)
-                            
-
-                            # Stream in 160-byte chunks (standard 20ms) for smoother playback on telephony
-                            CHUNK_SIZE = 160
-                            for i in range(0, len(mulaw_audio), CHUNK_SIZE):
-                                chunk = mulaw_audio[i:i + CHUNK_SIZE]
-                                await self.send_audio_to_smartflo(
-                                    base64.b64encode(chunk).decode('utf-8')
-                                )
-                                # No artificial sleep - send as fast as we process but in small chunks
-                                # The network stack handles the pacing mostly, or Smartflo buffers.
-                                # Adding sleep for 20ms audio (0.02s) might cause gaps if processing is slow.
-                                # Let's try sending without sleep first, or very minimal.
-                            
-                            if self.chunk_number % 50 == 0:
-                                logger.info(f"[ELEVENLABS] Processed output chunk")
-                        else:
-                            logger.warning(f"[ELEVENLABS] audio message but no data found: {list(data.keys())}")
+                        await self.handle_elevenlabs_audio(data)
                     
                     elif msg_type == 'ping':
                         # Health check - respond with pong including event_id
@@ -1060,21 +1017,76 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             logger.error(f"[ELEVENLABS] Agent listening error: {e}")
             
+    async def handle_elevenlabs_audio(self, data):
+        """FIXED: Handle audio from ElevenLabs without duplication"""
+        
+        # Try multiple possible locations for audio data
+        audio_base64 = None
+        
+        # Check various possible formats
+        if 'audio_event' in data and isinstance(data['audio_event'], dict):
+            # ElevenLabs Conversational AI format
+            audio_base64 = data['audio_event'].get('audio_base_64', '') or data['audio_event'].get('chunk', '')
+        elif 'audio_event' in data and isinstance(data['audio_event'], str):
+            audio_base64 = data['audio_event']
+        elif 'audio' in data and isinstance(data['audio'], dict):
+            audio_base64 = data['audio'].get('chunk', '') or data['audio'].get('data', '')
+        elif 'audio' in data and isinstance(data['audio'], str):
+            audio_base64 = data['audio']
+        elif 'audio_chunk' in data:
+            audio_base64 = data['audio_chunk']
+        elif 'data' in data:
+            audio_base64 = data['data']
+        
+        if audio_base64:
+            # With audio_output_format="ulaw_8000", we receive raw mulaw bytes!
+            # No conversion needed - just pass straight to Smartflo.
+            
+            mulaw_audio = base64.b64decode(audio_base64)
+            
+            # Log for debugging (first few chunks)
+            self.elevenlabs_audio_chunk_count += 1
+            if self.elevenlabs_audio_chunk_count <= 5:
+                logger.info(f"[ELEVENLABS] Audio chunk {self.elevenlabs_audio_chunk_count}: Mulaw size={len(mulaw_audio)} bytes (Direct Passthrough)")
+            
+            # FIXED: Stream in 160-byte chunks (standard 20ms) - ONLY ONCE!
+            CHUNK_SIZE = 160
+            # self.smartflo_chunk_number incremented in send_audio_to_smartflo
+            
+            for i in range(0, len(mulaw_audio), CHUNK_SIZE):
+                chunk = mulaw_audio[i:i + CHUNK_SIZE]
+                await self.send_audio_to_smartflo(
+                    base64.b64encode(chunk).decode('utf-8')
+                )
+                
+                # Optional: Add minimal pacing to prevent buffer overflow
+                # 160 bytes at 8kHz = 20ms of audio
+                # Uncomment if you still experience issues:
+                # await asyncio.sleep(0.018)  # Slightly less than 20ms to stay ahead
+            
+            if self.elevenlabs_audio_chunk_count % 50 == 0:
+                logger.info(f"[ELEVENLABS] Processed {self.elevenlabs_audio_chunk_count} output chunks")
+        else:
+            logger.warning(f"[ELEVENLABS] audio message but no data found: {list(data.keys())}")
+
+
     async def send_audio_to_smartflo(self, audio_b64: str):
-        """Send audio back to Smartflo (to caller's phone)"""
-        self.chunk_number += 1
+        """FIXED: Send audio back to Smartflo
+        Increment chunk number PER PACKET to ensure unique sequence for telephony.
+        """
+        self.smartflo_chunk_number += 1
         
         message = {
             "event": "media",
             "streamSid": self.stream_sid,
             "media": {
                 "payload": audio_b64,
-                "chunk": self.chunk_number
+                "chunk": self.smartflo_chunk_number
             }
         }
         
         await self.send(text_data=json.dumps(message))
-        
+
     async def send_mark(self, name: str):
         """Send mark event to Smartflo"""
         message = {
@@ -1083,7 +1095,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             "mark": {"name": name}
         }
         await self.send(text_data=json.dumps(message))
-        
+
     async def send_clear(self):
         """Send clear event to interrupt audio"""
         message = {

@@ -3,9 +3,15 @@ import django.db
 from celery import shared_task
 from django.utils import timezone
 from datetime import timedelta
-from .models import Lead, CallRecord, FollowUp, Transcript
+from .models import Lead, CallRecord, FollowUp, Transcript, Applicant
+from django.core.signing import TimestampSigner
+from django.conf import settings
+from django.db.models import Q
 
 logger = logging.getLogger(__name__)
+
+# Constants for upload token (must match views_public.py)
+UPLOAD_TOKEN_SALT = "cybrik-public-upload-v1"
 
 def send_welcome_message(lead_id, phone, source):
     """
@@ -137,6 +143,7 @@ def schedule_elevenlabs_call(lead_id=None, applicant_id=None, extra_context=None
         call_record = CallRecord.objects.create(
             lead=None if entity_type == "applicant" else entity,
             applicant=entity if entity_type == "applicant" else None,
+            tenant=getattr(entity, 'tenant', None), # Ensure tenant is set
             direction="outbound",
             status="initiated",
             provider="smartflo",
@@ -464,6 +471,71 @@ def forward_lead_to_elevenlabs(lead_id):
     """
     logger.info(f"Auto-calling lead {lead_id} via ElevenLabs...")
     return schedule_elevenlabs_call(lead_id)
+
+
+@shared_task
+def send_post_call_whatsapp_task(call_record_id):
+    """
+    Send a WhatsApp document upload request after a successful call.
+    Triggered by smartflo_consumer.process_call_completion.
+    """
+    try:
+        from .services.whatsapp_client import send_document_request
+        from .models import WhatsAppMessage
+
+        call = CallRecord.objects.get(id=call_record_id)
+        
+        # Determine target (Lead or Applicant)
+        target = call.lead or call.applicant
+        if not target:
+            logger.warning(f"Call {call_record_id} has no linked Lead/Applicant. Skipping WhatsApp.")
+            return "skipped_no_target"
+
+        phone = target.phone
+        name = getattr(target, 'name', None) or getattr(target, 'first_name', None) or "Student"
+        
+        if not phone:
+            logger.warning(f"Target {target.id} has no phone. Skipping WhatsApp.")
+            return "skipped_no_phone"
+
+        # Generate upload token
+        signer = TimestampSigner(salt=UPLOAD_TOKEN_SALT)
+        token = signer.sign(str(target.id))
+        
+        # Build Link
+        frontend_url = getattr(settings, 'FRONTEND_URL', 'https://crm.cybriksolutions.com')
+        upload_link = f"{frontend_url.rstrip('/')}/upload?token={token}"
+        
+        # Send Message
+        logger.info(f"Sending post-call WhatsApp to {phone} (Call {call_record_id})")
+        result = send_document_request(phone, name, upload_link)
+        
+        # Log Message
+        WhatsAppMessage.objects.create(
+            lead=target if isinstance(target, Lead) else None,
+            applicant=target if isinstance(target, Applicant) else None,
+            tenant=getattr(target, 'tenant', None),
+            direction="outbound",
+            message_type="template",
+            template_name="document_upload_request",
+            from_phone=getattr(settings, 'WHATSAPP_PHONE_NUMBER_ID', '') or "",
+            to_phone=phone,
+            message_body=f"Post-call document request: {upload_link}",
+            message_id=result.get("message_id"),
+            status="sent" if result.get("success") else "failed",
+            error_message=result.get("error") if not result.get("success") else None,
+            metadata={"call_record_id": call_record_id, "trigger": "post_call"}
+        )
+        
+        return "sent" if result.get("success") else "failed"
+
+    except CallRecord.DoesNotExist:
+        logger.error(f"CallRecord {call_record_id} not found for WhatsApp task")
+        return "call_not_found"
+    except Exception as e:
+        logger.exception(f"Error in send_post_call_whatsapp_task: {e}")
+        return "error"
+
 
 
 # AI Analysis Tasks
@@ -1526,3 +1598,219 @@ def calculate_follow_up_time(timing_str):
         return now + timedelta(days=2)
     except Exception:
         return now + timedelta(days=2)
+
+
+@shared_task
+def send_ai_post_call_whatsapp_task(call_record_id):
+    """
+    Send an AI-generated WhatsApp message after a call completes.
+    Triggered by smartflo_consumer.process_call_completion.
+    
+    Flow:
+    1. Fetch CallRecord and associated Lead
+    2. Use WhatsAppAssistant to generate personalized message
+    3. Send via WhatsApp API using post_call_followup template
+    4. Log to WhatsAppMessage model
+    """
+    try:
+        from .models import CallRecord, WhatsAppMessage
+        from .services.whatsapp_ai_assistant import WhatsAppAssistant
+        from .services.whatsapp_client import send_template_message
+        
+        # Get CallRecord
+        call = CallRecord.objects.get(id=call_record_id)
+        
+        # Get Lead target
+        lead = call.lead
+        if not lead or not lead.phone:
+            logger.warning(f"[WHATSAPP-AI] No lead or phone for call {call_record_id}")
+            return
+        
+        logger.info(f"[WHATSAPP-AI] Generating post-call message for {lead.name} (Call {call_record_id})")
+        
+        # Generate message using AI
+        assistant = WhatsAppAssistant()
+        result = assistant.generate_post_call_message(call, lead)
+        
+        if not result.get("success"):
+            logger.warning(f"[WHATSAPP-AI] Message generation failed, using fallback: {result.get('error')}")
+        
+        message_text = result.get("message", "Thanks for chatting with us! 🎓")
+        
+        # Send via WhatsApp using post_call_followup template
+        # Note: Template parameters would need to be configured based on Meta template structure
+        send_result = send_template_message(
+            lead.phone, 
+            "post_call_followup",
+            language_code="en",
+            components=[
+                {
+                    "type": "body",
+                    "parameters": [
+                        {"type": "text", "text": lead.name or "Student"},
+                        {"type": "text", "text": message_text}
+                    ]
+                }
+            ]
+        )
+        
+        # Log to WhatsAppMessage
+        WhatsAppMessage.objects.create(
+            lead=lead,
+            tenant=lead.tenant,
+            direction="outbound",
+            message_type="template",
+            template_name="post_call_followup",
+            from_phone=settings.WHATSAPP_PHONE_NUMBER_ID or "",
+            to_phone=lead.phone,
+            message_body=message_text,
+            message_id=send_result.get("message_id"),
+            status="sent" if send_result.get("success") else "failed",
+            error_message=send_result.get("error") if not send_result.get("success") else None,
+            metadata={
+                "call_record_id": call_record_id,
+                "ai_generated": True,
+                "send_result": send_result
+            }
+        )
+        
+        if send_result.get("success"):
+            logger.info(f"[WHATSAPP-AI] Post-call message sent to {lead.phone} (Call {call_record_id})")
+        else:
+            logger.error(f"[WHATSAPP-AI] Failed to send message: {send_result.get('error')}")
+            
+    except CallRecord.DoesNotExist:
+        logger.error(f"[WHATSAPP-AI] CallRecord {call_record_id} not found")
+    except Exception as e:
+        logger.exception(f"[WHATSAPP-AI] Error in send_ai_post_call_whatsapp_task: {e}")
+
+
+@shared_task
+def handle_incoming_whatsapp_with_ai_task(whatsapp_message_id):
+    """
+    Handle incoming WhatsApp message and generate AI reply.
+    Triggered by whatsapp_webhook when a message arrives.
+    
+    Flow:
+    1. Fetch WhatsAppMessage record
+    2. Get conversation history (last 5 messages)
+    3. Get associated Lead and their call context
+    4. Use WhatsAppAssistant to generate reply
+    5. Send reply via WhatsApp
+    6. Log reply to WhatsAppMessage
+    7. If escalation needed, create staff task
+    """
+    try:
+        from .models import WhatsAppMessage, Lead, CallRecord
+        from .services.whatsapp_ai_assistant import WhatsAppAssistant
+        from .services.whatsapp_client import send_text_message
+        
+        # Get incoming message
+        incoming_msg = WhatsAppMessage.objects.get(id=whatsapp_message_id)
+        
+        if incoming_msg.direction != "inbound":
+            logger.warning(f"[WHATSAPP-AI] Message {whatsapp_message_id} is not inbound")
+            return
+        
+        # Get Lead target
+        lead = incoming_msg.lead
+        if not lead:
+            logger.warning(f"[WHATSAPP-AI] No lead found for message {whatsapp_message_id}")
+            return
+        
+        # Handle empty message body
+        message_text = incoming_msg.message_body or ""
+        logger.info(f"[WHATSAPP-AI] Processing incoming message from {lead.name}: {message_text[:50]}...")
+        
+        # Get conversation history (last 10 messages for this lead)
+        conversation_history = []
+        messages = WhatsAppMessage.objects.filter(lead=lead).order_by('-created_at')[:10]
+        
+        for msg in reversed(messages):
+            if msg.id != whatsapp_message_id:  # Exclude current message
+                conversation_history.append({
+                    "role": "user" if msg.direction == "inbound" else "assistant",
+                    "content": msg.message_body or ""
+                })
+        
+        # Get call context from most recent call
+        call_context = {}
+        try:
+            recent_call = CallRecord.objects.filter(lead=lead).order_by('-created_at').first()
+            
+            if recent_call and recent_call.metadata:
+                ai_analysis = recent_call.metadata.get('ai_analysis_result', {})
+                call_context = {
+                    "country": recent_call.metadata.get('country') or lead.country,
+                    "program_interest": recent_call.metadata.get('program_interest'),
+                    "document_status": recent_call.metadata.get('document_status'),
+                    "discussion_points": ai_analysis.get('key_discussion_points', []) if isinstance(ai_analysis, dict) else [],
+                    "pending_followups": recent_call.metadata.get('pending_tasks', []),
+                }
+        except Exception as e:
+            logger.debug(f"[WHATSAPP-AI] Could not fetch call context: {e}")
+        
+        # Generate AI reply
+        assistant = WhatsAppAssistant()
+        reply_result = assistant.generate_reply_to_student(
+            incoming_text=message_text,
+            lead_or_applicant=lead,
+            conversation_history=conversation_history,
+            call_context=call_context
+        )
+        
+        if not reply_result.get("success"):
+            logger.warning(f"[WHATSAPP-AI] Reply generation failed: {reply_result.get('error')}")
+        
+        reply_text = reply_result.get("reply", "Thanks for reaching out! Our team will get back to you shortly. 😊")
+        requires_escalation = reply_result.get("requires_escalation", False)
+        
+        # Send reply
+        send_result = send_text_message(lead.phone, reply_text)
+        
+        # Log reply
+        reply_msg = WhatsAppMessage.objects.create(
+            lead=lead,
+            tenant=lead.tenant,
+            direction="outbound",
+            message_type="text",
+            from_phone=settings.WHATSAPP_PHONE_NUMBER_ID or "",
+            to_phone=lead.phone,
+            message_body=reply_text,
+            message_id=send_result.get("message_id"),
+            status="sent" if send_result.get("success") else "failed",
+            error_message=send_result.get("error") if not send_result.get("success") else None,
+            metadata={
+                "incoming_message_id": whatsapp_message_id,
+                "ai_reply": True,
+                "escalation_needed": requires_escalation,
+                "send_result": send_result
+            }
+        )
+        
+        logger.info(f"[WHATSAPP-AI] Reply sent to {lead.phone} - Escalation: {requires_escalation}")
+        
+        # If escalation needed, create staff notification task
+        if requires_escalation:
+            try:
+                from .models import FollowUp
+                FollowUp.objects.create(
+                    crm_lead=lead,
+                    channel='whatsapp',
+                    status='pending',
+                    due_at=timezone.now(),
+                    notes=f"WhatsApp escalation: Student message requires human review. Original message: {incoming_msg.message_body}",
+                    metadata={
+                        "type": "whatsapp_escalation",
+                        "whatsapp_message_id": whatsapp_message_id,
+                        "reply_message_id": reply_msg.id
+                    }
+                )
+                logger.info(f"[WHATSAPP-AI] Created escalation task for {lead.name}")
+            except Exception as e:
+                logger.error(f"[WHATSAPP-AI] Failed to create escalation task: {e}")
+        
+    except WhatsAppMessage.DoesNotExist:
+        logger.error(f"[WHATSAPP-AI] WhatsAppMessage {whatsapp_message_id} not found")
+    except Exception as e:
+        logger.exception(f"[WHATSAPP-AI] Error in handle_incoming_whatsapp_with_ai_task: {e}")
