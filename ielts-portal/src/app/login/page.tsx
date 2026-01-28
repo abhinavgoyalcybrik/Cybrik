@@ -58,17 +58,32 @@ function LoginPageContent() {
                 return;
             }
 
+            // Check if user is admin-only (staff/superuser without student onboarding)
+            // If so, redirect them to admin login instead
+            if (data.user?.is_staff || data.user?.is_superuser) {
+                // Check if they have a student profile (onboarding data)
+                const hasStudentProfile = data.user?.onboarding_completed || data.user?.purpose || data.user?.test_type;
+                if (!hasStudentProfile) {
+                    setError('This is an admin account. Please use the Admin Login instead.');
+                    setIsSubmitting(false);
+                    // Clear the session cookies since this was a wrong login path
+                    await fetch('/api/ielts/auth/logout/', {
+                        method: 'POST',
+                        credentials: 'include',
+                    });
+                    return;
+                }
+            }
+
             // Update AuthContext with the new user and token
-            // This ensures the rest of the app knows we're logged in immediately
+            // Force role to 'student' for student login page to prevent admin panel access
             if (data.user) {
-                // Assuming the API returns a token if needed, or we rely on the cookie it set.
-                // If it doesn't return a token string, we might use a placeholder or rely on the cookie.
-                // Based on previous code, it set 'ielts_user'. It didn't seem to set 'ielts_token' explicitly from this response
-                // in the previous code, but AuthContext expects one.
-                // Let's check if data.token exists. If not, we might need to rely on the cookie-based flow 
-                // and fetch /api/auth/me or just set 'django-cookie-auth' as the token.
+                const studentUser = {
+                    ...data.user,
+                    role: 'student',  // Force student role even if is_staff is true
+                };
                 const tokenToSet = data.token || 'django-cookie-auth';
-                setAuthState(data.user, tokenToSet);
+                setAuthState(studentUser, tokenToSet);
             }
 
             if (data.user?.onboarding_completed) {
@@ -137,9 +152,28 @@ function LoginPageContent() {
                 return;
             }
 
+            // Check if user is admin-only (staff/superuser without student onboarding)
+            if (data.user?.is_staff || data.user?.is_superuser) {
+                const hasStudentProfile = data.user?.onboarding_completed || data.user?.purpose || data.user?.test_type;
+                if (!hasStudentProfile) {
+                    setError('This is an admin account. Please use the Admin Login instead.');
+                    setIsSubmitting(false);
+                    await fetch('/api/ielts/auth/logout/', {
+                        method: 'POST',
+                        credentials: 'include',
+                    });
+                    return;
+                }
+            }
+
+            // Force student role for student login
             if (data.user) {
+                const studentUser = {
+                    ...data.user,
+                    role: 'student',
+                };
                 const tokenToSet = data.token || 'django-cookie-auth';
-                setAuthState(data.user, tokenToSet);
+                setAuthState(studentUser, tokenToSet);
             }
 
             if (data.user?.onboarding_completed) {
