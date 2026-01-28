@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, Users, CreditCard, Phone, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Phone, Settings, LogOut, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
 import { auth } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 const sidebarItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Tenants', href: '/tenants', icon: Users },
+    { name: 'Usage Monitoring', href: '/usage', icon: BarChart3 },
     { name: 'Billing', href: '/billing', icon: CreditCard },
     { name: 'Settings', href: '/settings', icon: Settings },
 ];

@@ -98,15 +98,25 @@ export default function BillingPage() {
     const handleSaveProduct = async () => {
         setSaving(true);
         try {
+            // Map frontend field names to backend field names
+            const payload = {
+                name: productForm.name,
+                code: productForm.code,
+                description: productForm.description || '',
+                active: productForm.is_active ?? true,
+                feature_flags: productForm.feature_flags || {},
+            };
+            
             if (editingProduct?.id) {
-                await productApi.update(editingProduct.id, productForm);
+                await productApi.update(editingProduct.id, payload);
             } else {
-                await productApi.create(productForm);
+                await productApi.create(payload);
             }
             setShowModal(false);
             fetchProducts();
-        } catch (err) {
+        } catch (err: any) {
             console.error('Failed to save product', err);
+            alert(err?.detail || err?.message || 'Failed to save product');
         } finally {
             setSaving(false);
         }
@@ -116,11 +126,20 @@ export default function BillingPage() {
         if (!selectedProductId) return;
         setSaving(true);
         try {
-            await productApi.createPlan(selectedProductId, planForm);
+            // Convert price from dollars to cents for backend
+            const payload = {
+                name: planForm.name,
+                price_cents: Math.round((planForm.price || 0) * 100),
+                interval: planForm.interval || 'month',
+                currency: 'USD',
+                active: true,
+            };
+            await productApi.createPlan(selectedProductId, payload);
             setShowPlanModal(false);
             fetchProducts();
-        } catch (err) {
+        } catch (err: any) {
             console.error('Failed to save plan', err);
+            alert(err?.detail || err?.message || 'Failed to save plan');
         } finally {
             setSaving(false);
         }
@@ -365,8 +384,13 @@ export default function BillingPage() {
                                         <Input
                                             id="price"
                                             type="number"
-                                            value={planForm.price}
-                                            onChange={(e) => setPlanForm({ ...planForm, price: parseFloat(e.target.value) })}
+                                            min="0"
+                                            step="0.01"
+                                            value={planForm.price ?? 0}
+                                            onChange={(e) => {
+                                                const val = parseFloat(e.target.value);
+                                                setPlanForm({ ...planForm, price: isNaN(val) ? 0 : val });
+                                            }}
                                             className="pl-9"
                                             placeholder="99"
                                         />

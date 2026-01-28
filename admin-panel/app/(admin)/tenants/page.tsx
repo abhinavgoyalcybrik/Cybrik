@@ -49,8 +49,12 @@ export default function TenantsPage() {
         smartflo_numbers_str: string;
         company_name: string;
         primary_color: string;
+        secondary_color: string;
+        accent_color: string;
+        font_family: string;
         custom_domain: string;
         logo: File | null;
+        favicon: File | null;
     }>({
         name: '',
         is_active: true,
@@ -59,8 +63,12 @@ export default function TenantsPage() {
         smartflo_numbers_str: '',
         company_name: '',
         primary_color: '',
+        secondary_color: '',
+        accent_color: '',
+        font_family: 'Inter, system-ui, sans-serif',
         custom_domain: '',
         logo: null,
+        favicon: null,
     });
 
     useEffect(() => {
@@ -168,25 +176,38 @@ export default function TenantsPage() {
     };
 
     // Edit/Manage Handlers
-    const handleManage = (tenant: any) => {
-        setEditingTenant(tenant);
-        setEditFormData({
-            logo: null,
-            name: tenant.name,
-            is_active: tenant.is_active,
-            openai_key: '',
-            elevenlabs_key: '',
-            smartflo_numbers_str: tenant.phone_numbers ? tenant.phone_numbers.join(', ') : '',
-            company_name: tenant.company_name || '',
-            primary_color: tenant.primary_color || '#6366f1',
-            custom_domain: tenant.custom_domain || '',
-        });
+    const handleManage = async (tenant: any) => {
+        try {
+            // Fetch full tenant details with settings
+            const fullTenant: any = await tenantApi.get(tenant.id);
+            
+            setEditingTenant(fullTenant);
+            setEditFormData({
+                logo: null,
+                favicon: null,
+                name: fullTenant.name,
+                is_active: fullTenant.is_active,
+                openai_key: '',
+                elevenlabs_key: '',
+                smartflo_numbers_str: '', // Load from settings if available
+                company_name: fullTenant.settings?.company_name || '',
+                primary_color: fullTenant.settings?.primary_color || '#6366f1',
+                secondary_color: fullTenant.settings?.secondary_color || '#4f46e5',
+                accent_color: fullTenant.settings?.accent_color || '#8b5cf6',
+                font_family: fullTenant.settings?.font_family || 'Inter, system-ui, sans-serif',
+                custom_domain: fullTenant.settings?.custom_domain || '',
+            });
+        } catch (err: any) {
+            console.error('Failed to fetch tenant details:', err);
+            alert('Failed to load tenant details');
+        }
     };
 
     const closeEditModal = () => {
         setEditingTenant(null);
         setEditFormData({
             logo: null,
+            favicon: null,
             name: '',
             is_active: true,
             openai_key: '',
@@ -194,6 +215,9 @@ export default function TenantsPage() {
             smartflo_numbers_str: '',
             company_name: '',
             primary_color: '',
+            secondary_color: '',
+            accent_color: '',
+            font_family: 'Inter, system-ui, sans-serif',
             custom_domain: '',
         });
     };
@@ -202,24 +226,43 @@ export default function TenantsPage() {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const formData = new FormData();
-            formData.append('name', editFormData.name);
-            formData.append('is_active', String(editFormData.is_active));
-            if (editFormData.openai_key) formData.append('openai_key', editFormData.openai_key);
-            if (editFormData.elevenlabs_key) formData.append('elevenlabs_key', editFormData.elevenlabs_key);
+            // Update basic tenant info
+            const tenantData: any = {
+                name: editFormData.name,
+                is_active: editFormData.is_active,
+            };
+            
+            await tenantApi.update(editingTenant.id, tenantData);
+            
+            // Update settings/branding separately using update-settings endpoint
+            const settingsFormData = new FormData();
+            
+            // API keys (if provided)
+            if (editFormData.openai_key) settingsFormData.append('openai_key', editFormData.openai_key);
+            if (editFormData.elevenlabs_key) settingsFormData.append('elevenlabs_api_key', editFormData.elevenlabs_key);
+            
             if (editFormData.smartflo_numbers_str) {
                 const numbers = editFormData.smartflo_numbers_str.split(',').map((s: string) => s.trim()).filter(Boolean);
-                numbers.forEach((num: string) => formData.append('smartflo_numbers', num));
+                settingsFormData.append('smartflo_config', JSON.stringify({ numbers }));
             }
-            if (editFormData.company_name) formData.append('company_name', editFormData.company_name);
-            if (editFormData.primary_color) formData.append('primary_color', editFormData.primary_color);
-            if (editFormData.custom_domain) formData.append('custom_domain', editFormData.custom_domain);
-            if (editFormData.logo) formData.append('logo', editFormData.logo);
+            
+            // White-label branding fields
+            if (editFormData.company_name) settingsFormData.append('company_name', editFormData.company_name);
+            if (editFormData.primary_color) settingsFormData.append('primary_color', editFormData.primary_color);
+            if (editFormData.secondary_color) settingsFormData.append('secondary_color', editFormData.secondary_color);
+            if (editFormData.accent_color) settingsFormData.append('accent_color', editFormData.accent_color);
+            if (editFormData.font_family) settingsFormData.append('font_family', editFormData.font_family);
+            if (editFormData.custom_domain) settingsFormData.append('custom_domain', editFormData.custom_domain);
+            
+            // File uploads
+            if (editFormData.logo) settingsFormData.append('logo', editFormData.logo);
+            if (editFormData.favicon) settingsFormData.append('favicon', editFormData.favicon);
 
-            await tenantApi.update(editingTenant.id, formData);
+            await tenantApi.updateSettings(editingTenant.id, settingsFormData);
             closeEditModal();
             fetchData();
         } catch (err: any) {
+            console.error('Update error:', err);
             alert(err.message || 'Failed to update tenant');
         } finally {
             setSubmitting(false);
@@ -251,7 +294,14 @@ export default function TenantsPage() {
                         <Card key={tenant.id} className="hover:shadow-md transition-shadow">
                             <CardHeader className="pb-3">
                                 <CardTitle className="flex justify-between items-start">
-                                    <span>{tenant.name}</span>
+                                    <div>
+                                        <div className="text-lg font-semibold">{tenant.name}</div>
+                                        {tenant.company_name && tenant.company_name !== tenant.name && (
+                                            <div className="text-sm font-normal text-gray-500 mt-0.5">
+                                                {tenant.company_name}
+                                            </div>
+                                        )}
+                                    </div>
                                     <span className={cn(
                                         "text-xs px-2 py-1 rounded-full",
                                         tenant.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
@@ -261,9 +311,11 @@ export default function TenantsPage() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-sm text-gray-500 space-y-1">
-                                    <p>URL: {tenant.slug}</p>
-                                    <p>Admin: {tenant.admin_email || 'N/A'}</p>
+                                <div className="text-sm text-gray-500 space-y-2">
+                                    <p><span className="font-medium">Slug:</span> {tenant.slug}</p>
+                                    {tenant.products && tenant.products.length > 0 && (
+                                        <p><span className="font-medium">Products:</span> {tenant.products.join(', ')}</p>
+                                    )}
                                     <div className="pt-4 flex gap-2">
                                         <Button
                                             variant="outline"
@@ -575,7 +627,7 @@ export default function TenantsPage() {
                                 </div>
 
                                 <div className="space-y-4 pt-4 border-t border-gray-100">
-                                    <h4 className="font-medium text-sm text-gray-900">White Labeling</h4>
+                                    <h4 className="font-medium text-sm text-gray-900">White Labeling & Branding</h4>
 
                                     <div className="space-y-2">
                                         <Label>Company Name</Label>
@@ -585,31 +637,119 @@ export default function TenantsPage() {
                                             placeholder="e.g. Acme Corp"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>Logo</Label>
-                                        <Input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={e => setEditFormData({ ...editFormData, logo: e.target.files?.[0] || null })}
-                                        />
-                                        <p className="text-xs text-gray-500">Upload a transparent PNG for best results</p>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label>Primary Brand Color</Label>
-                                        <div className="flex gap-2">
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label>Logo</Label>
+                                            {editingTenant?.settings?.logo && !editFormData.logo && (
+                                                <div className="mb-2 p-2 border rounded-md bg-gray-50">
+                                                    <p className="text-xs text-gray-600 mb-1">Current Logo:</p>
+                                                    <img 
+                                                        src={editingTenant.settings.logo} 
+                                                        alt="Current logo" 
+                                                        className="h-12 object-contain"
+                                                    />
+                                                </div>
+                                            )}
                                             <Input
-                                                type="color"
-                                                className="w-12 h-10 p-1 cursor-pointer"
-                                                value={editFormData.primary_color}
-                                                onChange={e => setEditFormData({ ...editFormData, primary_color: e.target.value })}
+                                                type="file"
+                                                accept="image/png,image/jpeg,image/svg+xml"
+                                                onChange={e => setEditFormData({ ...editFormData, logo: e.target.files?.[0] || null })}
                                             />
-                                            <Input
-                                                value={editFormData.primary_color}
-                                                onChange={e => setEditFormData({ ...editFormData, primary_color: e.target.value })}
-                                                placeholder="#6366f1"
-                                                className="flex-1"
-                                            />
+                                            <p className="text-xs text-gray-500">PNG/SVG with transparent background</p>
                                         </div>
+                                        <div className="space-y-2">
+                                            <Label>Favicon</Label>
+                                            {editingTenant?.settings?.favicon && !editFormData.favicon && (
+                                                <div className="mb-2 p-2 border rounded-md bg-gray-50">
+                                                    <p className="text-xs text-gray-600 mb-1">Current Favicon:</p>
+                                                    <img 
+                                                        src={editingTenant.settings.favicon} 
+                                                        alt="Current favicon" 
+                                                        className="h-8 w-8 object-contain"
+                                                    />
+                                                </div>
+                                            )}
+                                            <Input
+                                                type="file"
+                                                accept="image/x-icon,image/png"
+                                                onChange={e => setEditFormData({ ...editFormData, favicon: e.target.files?.[0] || null })}
+                                            />
+                                            <p className="text-xs text-gray-500">ICO or PNG (32x32 or 64x64)</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="space-y-2">
+                                            <Label>Primary Color</Label>
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    type="color"
+                                                    className="w-12 h-10 p-1 cursor-pointer"
+                                                    value={editFormData.primary_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, primary_color: e.target.value })}
+                                                />
+                                                <Input
+                                                    value={editFormData.primary_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, primary_color: e.target.value })}
+                                                    placeholder="#6366f1"
+                                                    className="flex-1"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label>Secondary Color</Label>
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    type="color"
+                                                    className="w-12 h-10 p-1 cursor-pointer"
+                                                    value={editFormData.secondary_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, secondary_color: e.target.value })}
+                                                />
+                                                <Input
+                                                    value={editFormData.secondary_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, secondary_color: e.target.value })}
+                                                    placeholder="#4f46e5"
+                                                    className="flex-1"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label>Accent Color</Label>
+                                            <div className="flex gap-2">
+                                                <Input
+                                                    type="color"
+                                                    className="w-12 h-10 p-1 cursor-pointer"
+                                                    value={editFormData.accent_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, accent_color: e.target.value })}
+                                                />
+                                                <Input
+                                                    value={editFormData.accent_color}
+                                                    onChange={e => setEditFormData({ ...editFormData, accent_color: e.target.value })}
+                                                    placeholder="#8b5cf6"
+                                                    className="flex-1"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label>Font Family</Label>
+                                        <select
+                                            value={editFormData.font_family}
+                                            onChange={e => setEditFormData({ ...editFormData, font_family: e.target.value })}
+                                            className="w-full px-3 py-2 border border-gray-200 rounded-md"
+                                        >
+                                            <option value="Inter, system-ui, sans-serif">Inter (Default)</option>
+                                            <option value="'Roboto', sans-serif">Roboto</option>
+                                            <option value="'Open Sans', sans-serif">Open Sans</option>
+                                            <option value="'Poppins', sans-serif">Poppins</option>
+                                            <option value="'Montserrat', sans-serif">Montserrat</option>
+                                            <option value="'Lato', sans-serif">Lato</option>
+                                            <option value="Georgia, serif">Georgia (Serif)</option>
+                                            <option value="'Times New Roman', serif">Times New Roman</option>
+                                            <option value="'Courier New', monospace">Courier New (Mono)</option>
+                                        </select>
                                     </div>
 
                                     <div className="space-y-2">
@@ -619,6 +759,49 @@ export default function TenantsPage() {
                                             onChange={e => setEditFormData({ ...editFormData, custom_domain: e.target.value })}
                                             placeholder="e.g. portal.acme.com"
                                         />
+                                        <p className="text-xs text-gray-500">Configure DNS CNAME to point to your server</p>
+                                    </div>
+
+                                    {/* Branding Preview */}
+                                    <div className="mt-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                                        <Label className="mb-3 block">Branding Preview</Label>
+                                        <div className="space-y-3">
+                                            <div className="flex gap-2 items-center">
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 rounded-md text-white font-medium text-sm"
+                                                    style={{ 
+                                                        backgroundColor: editFormData.primary_color,
+                                                        fontFamily: editFormData.font_family 
+                                                    }}
+                                                >
+                                                    Primary Button
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 rounded-md text-white font-medium text-sm"
+                                                    style={{ 
+                                                        backgroundColor: editFormData.secondary_color,
+                                                        fontFamily: editFormData.font_family 
+                                                    }}
+                                                >
+                                                    Secondary Button
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 rounded-md text-white font-medium text-sm"
+                                                    style={{ 
+                                                        backgroundColor: editFormData.accent_color,
+                                                        fontFamily: editFormData.font_family 
+                                                    }}
+                                                >
+                                                    Accent Button
+                                                </button>
+                                            </div>
+                                            <p className="text-sm text-gray-600" style={{ fontFamily: editFormData.font_family }}>
+                                                This is how your text will look with the selected font family.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -49,6 +49,17 @@ from .views_tenant_admin import TenantViewSet, ProductViewSet
 router.register(r"admin/tenants", TenantViewSet, basename="admin-tenant")
 router.register(r"admin/products", ProductViewSet, basename="admin-product")
 
+# Usage Tracking (Admin)
+from .views_usage import (
+    UsageLogViewSet, UsageSummaryViewSet,
+    UsageQuotaViewSet, UsageAlertViewSet,
+    tenant_usage_dashboard, tenant_usage_history, tenant_usage_logs
+)
+router.register(r"admin/usage/logs", UsageLogViewSet, basename="admin-usage-logs")
+router.register(r"admin/usage/summaries", UsageSummaryViewSet, basename="admin-usage-summaries")
+router.register(r"admin/usage/quotas", UsageQuotaViewSet, basename="admin-usage-quotas")
+router.register(r"admin/usage/alerts", UsageAlertViewSet, basename="admin-usage-alerts")
+
 urlpatterns = [
     # Lead intake endpoint (must be before router to avoid collision with leads/<pk>/)
     path("leads/portal/", PortalLeadView.as_view(), name="portal-lead"),
@@ -112,6 +123,11 @@ urlpatterns = [
     path("tenant/settings/", views_tenant.tenant_settings, name="tenant-settings"),
     path("tenant/current/", views_tenant.current_tenant, name="current-tenant"),
     path("tenant/usage/", views_tenant.tenant_usage, name="tenant-usage"),
+    
+    # Tenant Usage Tracking
+    path("tenant/usage/dashboard/", tenant_usage_dashboard, name="tenant-usage-dashboard"),
+    path("tenant/usage/history/", tenant_usage_history, name="tenant-usage-history"),
+    path("tenant/usage/logs/", tenant_usage_logs, name="tenant-usage-logs"),
     
     # Smartflo AI Calling endpoints
     path("smartflo/call/initiate/", __import__('crm_app.smartflo_api', fromlist=['initiate_ai_call']).initiate_ai_call, name="smartflo-initiate-call"),

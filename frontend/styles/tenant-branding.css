@@ -1,0 +1,259 @@
+/**
+ * Tenant Branding CSS Variables
+ * 
+ * These variables are automatically set by TenantContext based on the tenant's
+ * branding configuration. Use them throughout your app for consistent theming.
+ */
+
+/* ============================================
+   USAGE EXAMPLES
+   ============================================ */
+
+/* 1. BUTTONS */
+.btn-primary {
+    background-color: var(--tenant-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-family: var(--tenant-font-family);
+}
+
+.btn-primary:hover {
+    /* Using RGB for opacity */
+    background-color: rgba(var(--tenant-primary-rgb), 0.9);
+}
+
+.btn-secondary {
+    background-color: var(--tenant-secondary);
+    color: white;
+}
+
+.btn-accent {
+    background-color: var(--tenant-accent);
+    color: white;
+}
+
+/* 2. LINKS */
+a {
+    color: var(--tenant-primary);
+    font-family: var(--tenant-font-family);
+}
+
+a:hover {
+    color: var(--tenant-accent);
+}
+
+/* 3. BADGES & TAGS */
+.badge-primary {
+    background-color: rgba(var(--tenant-primary-rgb), 0.1);
+    color: var(--tenant-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+}
+
+.badge-accent {
+    background-color: rgba(var(--tenant-accent-rgb), 0.1);
+    color: var(--tenant-accent);
+}
+
+/* 4. CARDS & PANELS */
+.card-header {
+    background-color: var(--tenant-primary);
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.card-highlight {
+    border-left: 4px solid var(--tenant-accent);
+    background-color: rgba(var(--tenant-accent-rgb), 0.05);
+}
+
+/* 5. NAVIGATION */
+.nav-item.active {
+    background-color: rgba(var(--tenant-primary-rgb), 0.1);
+    color: var(--tenant-primary);
+    border-left: 3px solid var(--tenant-primary);
+}
+
+.sidebar {
+    background-color: var(--tenant-secondary);
+    color: white;
+}
+
+/* 6. FORMS */
+.form-input:focus {
+    border-color: var(--tenant-primary);
+    box-shadow: 0 0 0 3px rgba(var(--tenant-primary-rgb), 0.1);
+}
+
+.form-label {
+    color: var(--tenant-secondary);
+    font-family: var(--tenant-font-family);
+    font-weight: 500;
+}
+
+/* 7. ALERTS */
+.alert-info {
+    background-color: rgba(var(--tenant-primary-rgb), 0.1);
+    border-left: 4px solid var(--tenant-primary);
+    color: var(--tenant-secondary);
+    padding: 1rem;
+}
+
+.alert-success {
+    background-color: rgba(var(--tenant-accent-rgb), 0.1);
+    border-left: 4px solid var(--tenant-accent);
+}
+
+/* 8. PROGRESS BARS */
+.progress-bar {
+    background-color: rgba(var(--tenant-primary-rgb), 0.2);
+    height: 0.5rem;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background-color: var(--tenant-primary);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* 9. TABLES */
+.table-header {
+    background-color: var(--tenant-secondary);
+    color: white;
+    font-family: var(--tenant-font-family);
+    font-weight: 600;
+}
+
+.table-row:hover {
+    background-color: rgba(var(--tenant-primary-rgb), 0.05);
+}
+
+.table-row-selected {
+    background-color: rgba(var(--tenant-primary-rgb), 0.1);
+    border-left: 3px solid var(--tenant-primary);
+}
+
+/* 10. TOOLTIPS */
+.tooltip {
+    background-color: var(--tenant-secondary);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-family: var(--tenant-font-family);
+}
+
+/* 11. LOADING SPINNERS */
+.spinner {
+    border: 3px solid rgba(var(--tenant-primary-rgb), 0.2);
+    border-top-color: var(--tenant-primary);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 12. TYPOGRAPHY */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--tenant-font-family);
+    color: var(--tenant-secondary);
+}
+
+.text-primary {
+    color: var(--tenant-primary);
+}
+
+.text-secondary {
+    color: var(--tenant-secondary);
+}
+
+.text-accent {
+    color: var(--tenant-accent);
+}
+
+/* 13. BORDERS */
+.border-primary {
+    border: 2px solid var(--tenant-primary);
+}
+
+.border-accent {
+    border: 2px solid var(--tenant-accent);
+}
+
+/* 14. GRADIENTS */
+.gradient-primary {
+    background: linear-gradient(
+        135deg,
+        var(--tenant-primary),
+        var(--tenant-accent)
+    );
+}
+
+.gradient-overlay {
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--tenant-primary-rgb), 0.8),
+        rgba(var(--tenant-secondary-rgb), 0.9)
+    );
+}
+
+/* 15. SHADOWS */
+.shadow-primary {
+    box-shadow: 0 4px 6px -1px rgba(var(--tenant-primary-rgb), 0.1),
+                0 2px 4px -1px rgba(var(--tenant-primary-rgb), 0.06);
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .card-header {
+        background-color: var(--tenant-secondary);
+    }
+    
+    .btn-primary:hover {
+        background-color: rgba(var(--tenant-primary-rgb), 0.8);
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+    /* Use secondary color for print (usually darker) */
+    .btn-primary,
+    .badge-primary,
+    .nav-item.active {
+        background-color: var(--tenant-secondary) !important;
+        color: white !important;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid var(--tenant-accent);
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .btn-primary {
+        border: 2px solid var(--tenant-secondary);
+    }
+}

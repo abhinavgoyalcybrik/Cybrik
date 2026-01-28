@@ -71,7 +71,7 @@ def get_tenant_branding(request):
             company_name=tenant.name
         )
     
-    serializer = TenantBrandingSerializer(settings_obj)
+    serializer = TenantBrandingSerializer(settings_obj, context={'request': request})
     return Response(serializer.data)
 
 
@@ -80,6 +80,7 @@ def get_tenant_branding(request):
 def tenant_settings(request):
     """
     Get or update tenant settings (requires tenant admin or staff).
+    Supports multipart/form-data for logo/favicon uploads.
     """
     # Get user's tenant
     if not hasattr(request.user, 'profile') or not request.user.profile.tenant:
@@ -97,6 +98,31 @@ def tenant_settings(request):
             {'error': 'Only tenant administrators can access this endpoint'},
             status=status.HTTP_403_FORBIDDEN
         )
+    
+    try:
+        settings_obj = tenant.settings
+    except TenantSettings.DoesNotExist:
+        settings_obj = TenantSettings.objects.create(
+            tenant=tenant,
+            company_name=tenant.name
+        )
+    
+    if request.method == 'GET':
+        serializer = TenantSettingsSerializer(settings_obj, context={'request': request})
+        return Response(serializer.data)
+    
+    elif request.method == 'PATCH':
+        # Support both JSON and multipart/form-data
+        serializer = TenantSettingsSerializer(
+            settings_obj,
+            data=request.data,
+            partial=True,
+            context={'request': request}
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     try:
         settings_obj = tenant.settings

@@ -10,8 +10,11 @@ export interface TenantBranding {
     tenant_id: number | null;
     name: string;
     logo: string | null;
+    favicon: string | null;
     primary_color: string;
     secondary_color: string;
+    accent_color: string;
+    font_family: string;
 }
 
 interface TenantContextType {
@@ -26,8 +29,11 @@ const DEFAULT_BRANDING: TenantBranding = {
     tenant_id: null,
     name: 'CybricHQ',
     logo: null,
+    favicon: null,
     primary_color: '#2563eb',
     secondary_color: '#0f172a',
+    accent_color: '#8b5cf6',
+    font_family: 'Inter, system-ui, sans-serif',
 };
 
 const TenantContext = createContext<TenantContextType>({
@@ -55,9 +61,9 @@ export function TenantProvider({ children }: { children: React.ReactNode }) {
             // Apply CSS custom properties for dynamic theming
             applyBrandingColors(data);
 
-            // Update favicon if logo provided
-            if (data.logo) {
-                updateFavicon(data.logo);
+            // Update favicon if provided
+            if (data.favicon) {
+                updateFavicon(data.favicon);
             }
 
             // Update document title
@@ -98,16 +104,22 @@ function applyBrandingColors(branding: TenantBranding) {
 
     root.style.setProperty('--tenant-primary', branding.primary_color);
     root.style.setProperty('--tenant-secondary', branding.secondary_color);
+    root.style.setProperty('--tenant-accent', branding.accent_color);
+    root.style.setProperty('--tenant-font-family', branding.font_family);
 
     // Also generate RGB values for use with opacity
     const primaryRgb = hexToRgb(branding.primary_color);
     const secondaryRgb = hexToRgb(branding.secondary_color);
+    const accentRgb = hexToRgb(branding.accent_color);
 
     if (primaryRgb) {
         root.style.setProperty('--tenant-primary-rgb', `${primaryRgb.r}, ${primaryRgb.g}, ${primaryRgb.b}`);
     }
     if (secondaryRgb) {
         root.style.setProperty('--tenant-secondary-rgb', `${secondaryRgb.r}, ${secondaryRgb.g}, ${secondaryRgb.b}`);
+    }
+    if (accentRgb) {
+        root.style.setProperty('--tenant-accent-rgb', `${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}`);
     }
 }
 

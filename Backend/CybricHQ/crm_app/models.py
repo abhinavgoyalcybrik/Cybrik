@@ -13,9 +13,37 @@ except AttributeError:
     from django.contrib.postgres.fields import JSONField  # type: ignore
 
 
+# Import usage tracking models
+from crm_app.models_usage import (
+    APIUsageLog,
+    TenantUsageSummary,
+    UsageQuota,
+    UsageAlert
+)
+
+
 # ============================================================================
 # MULTI-TENANT / WHITE-LABEL MODELS  
 # ============================================================================
+
+def tenant_logo_upload_path(instance, filename):
+    """
+    Upload path for tenant logos: media/tenants/{tenant_slug}/logos/{filename}
+    Ensures tenant isolation for uploaded files.
+    """
+    ext = filename.split('.')[-1]
+    filename = f"logo_{instance.tenant.slug}.{ext}"
+    return os.path.join('tenants', instance.tenant.slug, 'logos', filename)
+
+
+def tenant_favicon_upload_path(instance, filename):
+    """
+    Upload path for tenant favicons: media/tenants/{tenant_slug}/favicons/{filename}
+    """
+    ext = filename.split('.')[-1]
+    filename = f"favicon_{instance.tenant.slug}.{ext}"
+    return os.path.join('tenants', instance.tenant.slug, 'favicons', filename)
+
 
 class Tenant(models.Model):
     """
@@ -49,11 +77,36 @@ class TenantSettings(models.Model):
     
     # Branding
     company_name = models.CharField(max_length=255, help_text="Display name for the organization")
-    logo_url = models.URLField(blank=True, null=True, help_text="URL to the tenant's logo")
-    favicon_url = models.URLField(blank=True, null=True, help_text="URL to the tenant's favicon")
+    
+    # Logo and Favicon (proper file uploads)
+    logo = models.ImageField(
+        upload_to=tenant_logo_upload_path,
+        blank=True,
+        null=True,
+        help_text="Tenant logo (PNG/SVG recommended, transparent background)"
+    )
+    favicon = models.ImageField(
+        upload_to=tenant_favicon_upload_path,
+        blank=True,
+        null=True,
+        help_text="Tenant favicon (ICO/PNG, 32x32 or 64x64)"
+    )
+    
+    # Fallback URL fields (if logo is hosted externally)
+    logo_url = models.URLField(blank=True, null=True, help_text="External URL to logo (if not using upload)")
+    favicon_url = models.URLField(blank=True, null=True, help_text="External URL to favicon (if not using upload)")
+    
+    # Brand Colors
     primary_color = models.CharField(max_length=7, default='#6366f1', help_text="Primary brand color (hex)")
     secondary_color = models.CharField(max_length=7, default='#4f46e5', help_text="Secondary brand color (hex)")
     accent_color = models.CharField(max_length=7, default='#8b5cf6', help_text="Accent color (hex)")
+    
+    # Typography
+    font_family = models.CharField(
+        max_length=100,
+        default='Inter, system-ui, sans-serif',
+        help_text="Font family for the tenant's branding"
+    )
     
     # Custom Domain (for white-labeling)
     custom_domain = models.CharField(

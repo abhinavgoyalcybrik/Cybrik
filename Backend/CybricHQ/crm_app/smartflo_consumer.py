@@ -180,6 +180,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         self.chunk_number = 0
         self.elevenlabs_ws = None
         
+        # Tenant context for API key isolation
+        self.tenant = None
+        
         # New counters for fixed audio handling
         self.elevenlabs_audio_chunk_count = 0
         self.smartflo_chunk_number = 0
@@ -201,7 +204,7 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         self.elevenlabs_output_format = 'pcm_16000'  # Default, often overridden by ElevenLabs
 
     async def connect(self):
-        """Accept WebSocket connection from Smartflo"""
+        """Accept WebSocket connection from Smartflo with tenant validation"""
         try:
             # Log scope details for debugging
             scope = self.scope
@@ -220,7 +223,29 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                 except Exception as he:
                     logger.error(f"[DEBUG] Error decoding header: {he}")
             
-            # Accept the connection
+            # CRITICAL: Extract and validate tenant from authenticated user
+            user = scope.get('user')
+            if user and user.is_authenticated:
+                try:
+                    # Extract tenant from user profile
+                    tenant = await self._get_user_tenant(user)
+                    if tenant and tenant.is_active:
+                        self.tenant = tenant
+                        logger.info(f"[TENANT] Tenant resolved for WebSocket: {tenant.slug} (ID: {tenant.id})")
+                    else:
+                        logger.error(f"[TENANT] User {user.username} has no active tenant - rejecting connection")
+                        await self.close(code=4001)  # Custom close code for no tenant
+                        return
+                except Exception as e:
+                    logger.error(f"[TENANT] Failed to resolve tenant: {e}")
+                    await self.close(code=4002)  # Custom close code for tenant resolution error
+                    return
+            else:
+                logger.error("[TENANT] Unauthenticated WebSocket connection attempt - rejecting")
+                await self.close(code=4003)  # Custom close code for unauthenticated
+                return
+            
+            # Accept the connection only after tenant validation
             await self.accept()
             logger.info("[DEBUG] " + "=" * 50)
             logger.info("[SMARTFLO] WebSocket CONNECTED and ACCEPTED - Waiting for audio stream...")
@@ -230,6 +255,31 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         except Exception as e:
             logger.exception(f"[DEBUG] CRITICAL: Error in connect(): {e}")
             raise
+    
+    @database_sync_to_async
+    def _get_user_tenant(self, user):
+        """Get tenant from user profile - database sync to async wrapper"""
+        from crm_app.models import UserProfile
+        try:
+            profile = UserProfile.objects.select_related('tenant').filter(user=user).first()
+            if profile and profile.tenant:
+                return profile.tenant
+            return None
+        except Exception as e:
+            logger.error(f"[TENANT] Error fetching user profile: {e}")
+            return None
+    
+    @database_sync_to_async
+    def _get_tenant_settings(self):
+        """Get tenant settings for API key retrieval - database sync to async wrapper"""
+        from crm_app.models import TenantSettings
+        try:
+            if self.tenant:
+                return TenantSettings.objects.filter(tenant=self.tenant).first()
+            return None
+        except Exception as e:
+            logger.error(f"[TENANT] Error fetching tenant settings: {e}")
+            return None
         
     async def disconnect(self, close_code):
         """Handle WebSocket disconnection"""
@@ -801,15 +851,45 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
         
     async def connect_elevenlabs_agent(self):
         """
-        Connect to ElevenLabs Conversational AI Agent.
+        Connect to ElevenLabs Conversational AI Agent using tenant-specific API keys.
         
         This agent already has your knowledge base and handles the full conversation.
         We pass lead context as dynamic variables.
         """
         import websockets
         
-        api_key = getattr(settings, 'ELEVENLABS_API_KEY', None)
-        agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
+        # TENANT-AWARE: Get API keys from tenant settings instead of global settings
+        api_key = None
+        agent_id = None
+        followup_agent_id = None
+        
+        if self.tenant:
+            try:
+                # Retrieve tenant-specific configuration
+                tenant_settings = await self._get_tenant_settings()
+                if tenant_settings:
+                    api_key = tenant_settings.elevenlabs_api_key
+                    # Get agent IDs from tenant config JSON
+                    elevenlabs_config = tenant_settings.elevenlabs_config or {}
+                    agent_id = tenant_settings.elevenlabs_agent_id or elevenlabs_config.get('agent_id')
+                    followup_agent_id = elevenlabs_config.get('followup_agent_id')
+                    logger.info(f"[TENANT-API] Using tenant-specific ElevenLabs keys for: {self.tenant.slug}")
+                else:
+                    logger.error(f"[TENANT-API] No settings found for tenant: {self.tenant.slug}")
+            except Exception as e:
+                logger.error(f"[TENANT-API] Failed to get tenant ElevenLabs settings: {e}")
+        else:
+            logger.error("[TENANT-API] No tenant context - cannot get API keys")
+        
+        # Fallback to global settings if tenant keys not configured (for backward compatibility)
+        if not api_key:
+            api_key = getattr(settings, 'ELEVENLABS_API_KEY', None)
+            logger.warning("[TENANT-API] Falling back to global ELEVENLABS_API_KEY (not recommended)")
+        if not agent_id:
+            agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', None)
+            logger.warning("[TENANT-API] Falling back to global ELEVENLABS_AGENT_ID (not recommended)")
+        if not followup_agent_id:
+            followup_agent_id = getattr(settings, 'ELEVENLABS_FOLLOWUP_AGENT_ID', None)
         
         # ====== DEBUG: Log configuration ======
 

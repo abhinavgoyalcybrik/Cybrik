@@ -26,6 +26,12 @@ class TenantMiddleware(MiddlewareMixin):
             tenant = None
             host = request.get_host().split(':')[0]  # Remove port if present
             
+            # Skip tenant resolution for admin panel and health checks
+            path = request.path
+            if path.startswith('/admin/') or path in ['/health/', '/ping/']:
+                request.tenant = None
+                return None
+            
             # 1. Try custom domain match first (highest priority)
             try:
                 settings_obj = TenantSettings.objects.select_related('tenant').filter(
@@ -34,7 +40,7 @@ class TenantMiddleware(MiddlewareMixin):
                 ).first()
                 if settings_obj:
                     tenant = settings_obj.tenant
-                    logger.debug(f"Resolved tenant from custom domain {host}: {tenant.slug}")
+                    logger.info(f"✓ Resolved tenant from custom domain {host}: {tenant.slug}")
             except Exception as e:
                 logger.debug(f"Custom domain lookup failed: {e}")
             
@@ -53,7 +59,7 @@ class TenantMiddleware(MiddlewareMixin):
                                 is_active=True
                             ).first()
                             if tenant:
-                                logger.debug(f"Resolved tenant from subdomain: {tenant.slug}")
+                                logger.info(f"✓ Resolved tenant from subdomain: {tenant.slug}")
                         except Exception as e:
                             logger.debug(f"Subdomain lookup failed: {e}")
             
@@ -90,7 +96,7 @@ class TenantMiddleware(MiddlewareMixin):
                         
                         if profile and profile.tenant:
                             tenant = profile.tenant
-                            logger.debug(f"Resolved tenant from user {user.username}'s profile: {tenant.slug}")
+                            logger.info(f"✓ Resolved tenant from user {user.username}'s profile: {tenant.slug}")
                         else:
                             logger.debug(f"User {user.username} has no profile or no tenant assigned")
                     except Exception as e:
@@ -99,11 +105,11 @@ class TenantMiddleware(MiddlewareMixin):
             # Set tenant on request for downstream use
             request.tenant = tenant
             
-            # Also set on request for debugging
+            # Security: Log tenant resolution for audit
             if tenant:
-                logger.debug(f"Final tenant set on request: {tenant.slug} (id={tenant.id})")
+                logger.info(f"[TENANT-RESOLVED] host={host} → tenant={tenant.slug} (id={tenant.id})")
             else:
-                logger.debug(f"No tenant resolved for host={host}")
+                logger.warning(f"[NO-TENANT] host={host}, path={path}, user={request.user if request.user.is_authenticated else 'anonymous'}")
 
         except Exception as e:
             logger.error(f"CRITICAL: TenantMiddleware crashed: {e}")

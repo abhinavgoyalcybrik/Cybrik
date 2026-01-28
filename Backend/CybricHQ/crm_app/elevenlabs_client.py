@@ -24,10 +24,17 @@ ELEVEN_DEFAULT_PHONE_ID = getattr(settings, "ELEVENLABS_PHONE_ID", os.environ.ge
 ELEVEN_FOLLOWUP_AGENT_ID = getattr(settings, "ELEVENLABS_FOLLOWUP_AGENT_ID", os.environ.get("ELEVENLABS_FOLLOWUP_AGENT_ID", None))
 
 
-def _headers() -> Dict[str, str]:
+def _headers(api_key: Optional[str] = None) -> Dict[str, str]:
+    """
+    Generate headers for ElevenLabs API requests.
+    
+    Args:
+        api_key: Optional tenant-specific API key. If not provided, uses global ELEVEN_API_KEY.
+    """
     h: Dict[str, str] = {"Content-Type": "application/json"}
-    if ELEVEN_API_KEY:
-        h["xi-api-key"] = ELEVEN_API_KEY
+    key_to_use = api_key or ELEVEN_API_KEY
+    if key_to_use:
+        h["xi-api-key"] = key_to_use
     return h
 
 
@@ -64,6 +71,7 @@ def create_outbound_call(
     post_call_extraction: bool = False,
     extraction_spec: Optional[Dict[str, Any]] = None,
     is_followup: bool = False,
+    tenant_api_key: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Instruct ElevenLabs to place an outbound Twilio call.
@@ -72,6 +80,9 @@ def create_outbound_call(
     This function will use provided arguments, or fall back to ELEVENLABS_AGENT_ID and ELEVENLABS_PHONE_ID from settings/env.
     
     When is_followup=True, uses ELEVENLABS_FOLLOWUP_AGENT_ID for dedicated follow-up conversations.
+    
+    Args:
+        tenant_api_key: Optional tenant-specific API key for multi-tenancy support.
 
     Returns a serializable dict with 'ok' and diagnostics.
     """
@@ -128,7 +139,8 @@ def create_outbound_call(
         payload.update(extra_payload)
 
     try:
-        resp = requests.post(url, json=payload, headers=_headers(), timeout=timeout)
+        # Use tenant-specific API key if provided
+        resp = requests.post(url, json=payload, headers=_headers(api_key=tenant_api_key), timeout=timeout)
     except Exception as exc:
         logger.exception("Network error calling ElevenLabs create_outbound_call")
         return {"ok": False, "error": "network_error", "exc": str(exc)}

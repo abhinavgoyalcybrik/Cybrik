@@ -4,12 +4,14 @@ ViewSets for tenant management (admin functionality).
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from django.utils.text import slugify
 
 from crm_app.models import Tenant, TenantSettings
 from crm_app.serializers_tenant import TenantSerializer, TenantSettingsSerializer
 from billing.models import Product, Plan, Subscription
+from billing.serializers import PlanSerializer
 
 
 class TenantAdminSerializer:
@@ -178,13 +180,22 @@ class TenantCreateSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    """Product listing for subscription assignment"""
-    plans = serializers.SerializerMethodField()
-    features = serializers.JSONField(source='feature_flags')
+    """Product serializer for full CRUD operations"""
+    plans = serializers.SerializerMethodField(read_only=True)
+    features = serializers.JSONField(source='feature_flags', required=False)
+    is_active = serializers.BooleanField(source='active', required=False, default=True)
     
     class Meta:
         model = Product
-        fields = ['id', 'code', 'name', 'description', 'active', 'features', 'plans']
+        fields = ['id', 'code', 'name', 'description', 'active', 'is_active', 'features', 'feature_flags', 'plans']
+        read_only_fields = ['id', 'plans']
+        extra_kwargs = {
+            'code': {'required': True},
+            'name': {'required': True},
+            'description': {'required': False, 'default': ''},
+            'active': {'required': False, 'default': True},
+            'feature_flags': {'required': False, 'default': dict},
+        }
     
     def get_plans(self, obj):
         return [{
@@ -208,9 +219,12 @@ class TenantViewSet(viewsets.ModelViewSet):
             return TenantCreateSerializer
         return TenantDetailSerializer
     
-    @action(detail=True, methods=['patch'], url_path='update-settings')
+    @action(detail=True, methods=['patch'], url_path='update-settings', parser_classes=[MultiPartParser, FormParser, JSONParser])
     def update_settings(self, request, pk=None):
-        """Update tenant branding settings"""
+        """
+        Update tenant branding settings (including logo/favicon uploads).
+        Accepts multipart/form-data for file uploads or JSON for text fields.
+        """
         tenant = self.get_object()
         
         try:
@@ -221,7 +235,13 @@ class TenantViewSet(viewsets.ModelViewSet):
                 company_name=tenant.name
             )
         
-        serializer = TenantSettingsSerializer(settings_obj, data=request.data, partial=True)
+        # Handle file uploads + text fields
+        serializer = TenantSettingsSerializer(
+            settings_obj, 
+            data=request.data, 
+            partial=True,
+            context={'request': request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -288,10 +308,117 @@ class TenantViewSet(viewsets.ModelViewSet):
             return Response({'message': 'Subscription canceled'})
         except Subscription.DoesNotExist:
             return Response({'error': 'Subscription not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    @action(detail=False, methods=['get'], url_path='dashboard_stats')
+    def dashboard_stats(self, request):
+        """
+        Return dashboard statistics for admin overview.
+        Returns total tenants, new tenants in last 30 days, active subscriptions, and MRR.
+        """
+        from datetime import timedelta
+        from django.utils import timezone
+        from django.db.models import Sum, Count
+        
+        now = timezone.now()
+        thirty_days_ago = now - timedelta(days=30)
+        
+        # Total tenants
+        total_tenants = Tenant.objects.count()
+        
+        # New tenants in last 30 days
+        new_tenants_30d = Tenant.objects.filter(created_at__gte=thirty_days_ago).count()
+        
+        # Active subscriptions
+        active_subscriptions = Subscription.objects.filter(
+            status__in=['active', 'trialing']
+        ).count()
+        
+        # MRR calculation (sum of all active monthly recurring revenue)
+        active_subs = Subscription.objects.filter(status__in=['active', 'trialing'])
+        mrr = 0
+        for sub in active_subs:
+            if sub.plan:
+                # Convert to monthly amount based on billing period
+                if sub.plan.billing_period == 'monthly':
+                    mrr += float(sub.plan.price)
+                elif sub.plan.billing_period == 'yearly':
+                    mrr += float(sub.plan.price) / 12
+        
+        # System status (simple check - can be expanded)
+        system_status = 'Operational'
+        if total_tenants == 0:
+            system_status = 'No Tenants'
+        
+        return Response({
+            'total_tenants': total_tenants,
+            'new_tenants_30d': new_tenants_30d,
+            'active_subscriptions': active_subscriptions,
+            'mrr': round(mrr, 2),
+            'system_status': system_status,
+        })
 
 
-class ProductViewSet(viewsets.ReadOnlyModelViewSet):
-    """Read-only viewset for products (for subscription selection)"""
-    queryset = Product.objects.filter(active=True).order_by('name')
+class ProductViewSet(viewsets.ModelViewSet):
+    """Full CRUD viewset for products (for subscription/billing management)"""
+    queryset = Product.objects.all().order_by('name')
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # TODO: Add IsAdminUser for production
+    
+    def get_queryset(self):
+        """Return all products for admin, optionally filter by active status"""
+        qs = Product.objects.all().order_by('name')
+        active_only = self.request.query_params.get('active', None)
+        if active_only and active_only.lower() == 'true':
+            qs = qs.filter(active=True)
+        return qs
+    
+    @action(detail=True, methods=['post'], url_path='plans')
+    def create_plan(self, request, pk=None):
+        """Create a new plan for this product"""
+        product = self.get_object()
+        
+        # Simple validation for plan creation
+        name = request.data.get('name')
+        price_cents = request.data.get('price_cents', 0)
+        interval = request.data.get('interval', 'month')
+        currency = request.data.get('currency', 'USD')
+        active = request.data.get('active', True)
+        
+        if not name:
+            return Response({'error': 'Plan name is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            price_cents = int(price_cents)
+        except (ValueError, TypeError):
+            return Response({'error': 'Invalid price'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        plan = Plan.objects.create(
+            product=product,
+            name=name,
+            price_cents=price_cents,
+            interval=interval,
+            currency=currency,
+            active=active,
+        )
+        
+        return Response({
+            'id': str(plan.id),
+            'name': plan.name,
+            'price': plan.price_cents / 100,
+            'currency': plan.currency,
+            'interval': plan.interval,
+            'active': plan.active,
+        }, status=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['delete'], url_path='plans/(?P<plan_id>[^/.]+)')
+    def delete_plan(self, request, pk=None, plan_id=None):
+        """Delete a plan from this product"""
+        product = self.get_object()
+        
+        try:
+            plan = Plan.objects.get(id=plan_id, product=product)
+            plan.delete()
+            return Response({'message': 'Plan deleted'}, status=status.HTTP_204_NO_CONTENT)
+        except Plan.DoesNotExist:
+            return Response({'error': 'Plan not found'}, status=status.HTTP_404_NOT_FOUND)
+

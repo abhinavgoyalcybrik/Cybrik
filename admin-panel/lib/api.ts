@@ -53,6 +53,13 @@ export const tenantApi = {
         const config = data instanceof FormData ? { headers: { 'Content-Type': undefined } } : {};
         return api.patch(`/admin/tenants/${id}/`, data, config);
     },
+    updateSettings: (id: string, data: any) => {
+        // Update tenant settings/branding (separate endpoint)
+        const config = data instanceof FormData ? { 
+            headers: { 'Content-Type': 'multipart/form-data' }
+        } : {};
+        return api.patch(`/admin/tenants/${id}/update-settings/`, data, config);
+    },
     delete: (id: string) => api.delete(`/admin/tenants/${id}/`),
     addSubscription: (id: string, planId: string) => api.post(`/admin/tenants/${id}/add_subscription/`, { plan_id: planId }),
     getProducts: () => api.get('/admin/products/'),
@@ -84,3 +91,21 @@ export const telephonyApi = {
     updateConfig: (id: string, data: any) => api.patch(`/tenant/telephony-config/${id}/`, data),
     deleteConfig: (id: string) => api.delete(`/tenant/telephony-config/${id}/`),
 };
+
+// Usage Tracking API
+export const usageApi = {
+    // Admin endpoints (view all tenants)
+    getSummaries: (params?: any) => api.get('/admin/usage/summaries/', { params }),
+    getLogs: (params?: any) => api.get('/admin/usage/logs/', { params }),
+    getAlerts: (params?: any) => api.get('/admin/usage/alerts/', { params }),
+    getQuotas: () => api.get('/admin/usage/quotas/'),
+    createQuota: (data: any) => api.post('/admin/usage/quotas/', data),
+    updateQuota: (id: string, data: any) => api.patch(`/admin/usage/quotas/${id}/`, data),
+    acknowledgeAlert: (id: string) => api.post(`/admin/usage/alerts/${id}/acknowledge/`),
+    
+    // Tenant endpoints (own usage only)
+    getTenantDashboard: () => api.get('/tenant/usage/dashboard/'),
+    getTenantHistory: (months: number = 6) => api.get('/tenant/usage/history/', { params: { months } }),
+    getTenantLogs: (params?: any) => api.get('/tenant/usage/logs/', { params }),
+};
+
