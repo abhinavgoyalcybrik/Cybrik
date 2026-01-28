@@ -850,12 +850,3 @@ class WhatsAppMessageSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ("id", "created_at", "updated_at")
-
-        fields = [
-            'id', 'integration', 'platform', 'platform_display',
-            'external_campaign_id', 'name', 'status', 'status_display', 'objective',
-            'daily_budget', 'lifetime_budget', 'total_spend', 'currency',
-            'impressions', 'clicks', 'conversions', 'ctr', 'cpc', 'cpm', 'cost_per_conversion',
-            'start_date', 'end_date', 'last_synced_at', 'created_at', 'updated_at'
-        ]
-        read_only_fields = ('id', 'created_at', 'updated_at', 'last_synced_at')
