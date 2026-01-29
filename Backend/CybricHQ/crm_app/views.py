@@ -2475,194 +2475,224 @@ class ReportsSummary(APIView):
         tenant_id = request.GET.get('tenant_id', None)
         country = request.GET.get('country', None)
         
-        # Build base filters
-        lead_filters = Q()
-        app_filters = Q()
+        # Support multiple countries via countries[] parameter
+        countries = request.GET.getlist('countries[]') or (request.GET.getlist('countries') if not country else [country])
         
-        if tenant_id:
-            lead_filters &= Q(tenant_id=tenant_id)
-            app_filters &= Q(tenant_id=tenant_id)
-        
-        if country:
-            lead_filters &= Q(country__iexact=country)
-            # For applications, filter via applicant's country preference
-            app_filters &= Q(applicant__country__iexact=country)
-
-        # 1. Application Growth (Last 6 Months)
-        six_months_ago = timezone.now() - timedelta(days=180)
-        monthly_apps = (
-            Application.objects.filter(app_filters, created_at__gte=six_months_ago)
-            .annotate(month=TruncMonth('created_at'))
-            .values('month')
-            .annotate(count=Count('id'))
-            .order_by('month')
-        )
-        
-        application_growth = []
-        for entry in monthly_apps:
-            application_growth.append({
-                "label": entry['month'].strftime("%b"),
-                "value": entry['count']
-            })
+        # Helper function to compute metrics for a specific country filter
+        def get_country_metrics(country_filter=None):
+            """Generate all metrics for a specific country or all countries"""
+            # Build base filters
+            lead_filters = Q()
+            app_filters = Q()
             
-        if not application_growth:
-            for i in range(5, -1, -1):
-                d = timezone.now() - timedelta(days=i*30)
-                application_growth.append({"label": d.strftime("%b"), "value": 0})
-
-        # 2. Call Outcomes (This Month) - filtered by lead filters
-        this_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        
-        # Build call filters based on lead filters
-        call_filters = Q(created_at__gte=this_month_start)
-        if tenant_id:
-            call_filters &= Q(lead__tenant_id=tenant_id)
-        if country:
-            call_filters &= Q(lead__country__iexact=country)
-        
-        call_stats = (
-            CallRecord.objects.filter(call_filters)
-            .values('status')
-            .annotate(count=Count('id'))
-        )
-        
-        call_outcomes = []
-        status_colors = {
-            "completed": "#6FB63A", # Green
-            "no-answer": "#F59E0B", # Amber
-            "failed": "#EF4444",    # Red
-            "busy": "#EF4444",
-            "initiated": "#3B82F6"  # Blue
-        }
-        
-        for stat in call_stats:
-            status = stat['status'] or "unknown"
-            call_outcomes.append({
-                "label": status.title(),
-                "value": stat['count'],
-                "color": status_colors.get(status, "#9CA3AF")
-            })
-            
-        if not call_outcomes:
-             call_outcomes = [{"label": "No Calls", "value": 0, "color": "#E5E7EB"}]
-
-        # 3. Lead Sources - filtered by tenant and country
-        lead_source_stats = (
-            Lead.objects.filter(lead_filters)
-            .values('source')
-            .annotate(count=Count('id'))
-            .order_by('-count')
-        )
-        lead_sources = []
-        source_colors = ["#0B1F3A", "#6FB63A", "#3B82F6", "#F59E0B", "#8B5CF6"]
-        for i, stat in enumerate(lead_source_stats):
-            lead_sources.append({
-                "label": stat['source'] or "Unknown",
-                "value": stat['count'],
-                "color": source_colors[i % len(source_colors)]
-            })
-        if not lead_sources:
-            lead_sources = [{"label": "No Data", "value": 0, "color": "#E5E7EB"}]
-
-        # 4. Conversion Funnel - filtered
-        total_leads = Lead.objects.filter(lead_filters).count()
-        total_applicants = Applicant.objects.filter(lead_filters if not tenant_id else Q(tenant_id=tenant_id)).count()
-        total_applications = Application.objects.filter(app_filters).count()
-        total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
-        
-        conversion_funnel = [
-            {"label": "Total Leads", "value": total_leads, "color": "#3B82F6"},
-            {"label": "Applicants", "value": total_applicants, "color": "#8B5CF6"},
-            {"label": "Applications", "value": total_applications, "color": "#F59E0B"},
-            {"label": "Enrolled", "value": total_enrolled, "color": "#6FB63A"},
-        ]
-
-        # 5. Counselor Performance - filtered
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        
-        counselor_stats = []
-        users = User.objects.all()
-        for user in users:
-            assigned_leads = Lead.objects.filter(lead_filters, assigned_to=user).count()
-            
-            # Build call filters for this counselor
-            counselor_call_filters = Q(lead__assigned_to=user)
             if tenant_id:
-                counselor_call_filters &= Q(lead__tenant_id=tenant_id)
-            if country:
-                counselor_call_filters &= Q(lead__country__iexact=country)
-            calls_made = CallRecord.objects.filter(counselor_call_filters).count()
+                lead_filters &= Q(tenant_id=tenant_id)
+                app_filters &= Q(tenant_id=tenant_id)
             
-            # Build app filters for this counselor
-            counselor_app_filters = Q(assigned_to=user)
-            if tenant_id:
-                counselor_app_filters &= Q(tenant_id=tenant_id)
-            if country:
-                counselor_app_filters &= Q(applicant__country__iexact=country)
-            apps_managed = Application.objects.filter(counselor_app_filters).count()
+            if country_filter:
+                lead_filters &= Q(country__iexact=country_filter)
+                app_filters &= Q(applicant__country__iexact=country_filter)
+
+            if country_filter:
+                lead_filters &= Q(country__iexact=country_filter)
+                app_filters &= Q(applicant__country__iexact=country_filter)
+
+            # 1. Application Growth (Last 6 Months)
+            six_months_ago = timezone.now() - timedelta(days=180)
+            monthly_apps = (
+                Application.objects.filter(app_filters, created_at__gte=six_months_ago)
+                .annotate(month=TruncMonth('created_at'))
+                .values('month')
+                .annotate(count=Count('id'))
+                .order_by('month')
+            )
             
-            if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
-                counselor_stats.append({
-                    "name": f"{user.first_name} {user.last_name}".strip() or user.username,
-                    "leads_assigned": assigned_leads,
-                    "calls_made": calls_made,
-                    "applications": apps_managed,
-                    "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0
+            application_growth = []
+            for entry in monthly_apps:
+                application_growth.append({
+                    "label": entry['month'].strftime("%b"),
+                    "value": entry['count']
                 })
-        
-        counselor_stats.sort(key=lambda x: x['calls_made'], reverse=True)
+                
+            if not application_growth:
+                for i in range(5, -1, -1):
+                    d = timezone.now() - timedelta(days=i*30)
+                    application_growth.append({"label": d.strftime("%b"), "value": 0})
 
-        # 6. AI Usage Metrics - filtered
-        ai_call_filters = Q(ai_analyzed=True)
-        if tenant_id:
-            ai_call_filters &= Q(lead__tenant_id=tenant_id)
-        if country:
-            ai_call_filters &= Q(lead__country__iexact=country)
-        
-        ai_calls = CallRecord.objects.filter(ai_call_filters)
-        total_cost = ai_calls.aggregate(Sum('cost'))['cost__sum'] or 0.0
-        total_duration = ai_calls.aggregate(Sum('duration_seconds'))['duration_seconds__sum'] or 0
-        avg_duration = ai_calls.aggregate(Avg('duration_seconds'))['duration_seconds__avg'] or 0
-        
-        ai_usage = {
-            "total_cost": round(total_cost, 2),
-            "total_duration_mins": round(total_duration / 60, 1),
-            "avg_duration_secs": round(avg_duration, 0),
-            "total_analyzed_calls": ai_calls.count()
-        }
+            # 2. Call Outcomes (This Month)
+            this_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            
+            call_filters = Q(created_at__gte=this_month_start)
+            if tenant_id:
+                call_filters &= Q(lead__tenant_id=tenant_id)
+            if country_filter:
+                call_filters &= Q(lead__country__iexact=country_filter)
+            
+            call_stats = (
+                CallRecord.objects.filter(call_filters)
+                .values('status')
+                .annotate(count=Count('id'))
+            )
+            
+            call_outcomes = []
+            status_colors = {
+                "completed": "#6FB63A",
+                "no-answer": "#F59E0B",
+                "failed": "#EF4444",
+                "busy": "#EF4444",
+                "initiated": "#3B82F6"
+            }
+            
+            for stat in call_stats:
+                status = stat['status'] or "unknown"
+                call_outcomes.append({
+                    "label": status.title(),
+                    "value": stat['count'],
+                    "color": status_colors.get(status, "#9CA3AF")
+                })
+                
+            if not call_outcomes:
+                call_outcomes = [{"label": "No Calls", "value": 0, "color": "#E5E7EB"}]
 
-        # 7. Demographics (City/Country) - filtered
-        city_stats = Lead.objects.filter(lead_filters).values('city').annotate(count=Count('id')).order_by('-count')[:5]
-        demographics = []
-        for stat in city_stats:
-            if stat['city']:
-                demographics.append({"label": stat['city'], "value": stat['count']})
-        
-        # 8. Document Status - filtered
-        doc_filters = Q()
-        if tenant_id:
-            doc_filters &= Q(applicant__tenant_id=tenant_id)
-        if country:
-            doc_filters &= Q(applicant__country__iexact=country)
-        
-        doc_stats = Document.objects.filter(doc_filters).values('status').annotate(count=Count('id'))
-        document_status = []
-        for stat in doc_stats:
-            document_status.append({"label": stat['status'].title(), "value": stat['count']})
+            # 3. Lead Sources
+            lead_source_stats = (
+                Lead.objects.filter(lead_filters)
+                .values('source')
+                .annotate(count=Count('id'))
+                .order_by('-count')
+            )
+            lead_sources = []
+            source_colors = ["#0B1F3A", "#6FB63A", "#3B82F6", "#F59E0B", "#8B5CF6"]
+            for i, stat in enumerate(lead_source_stats):
+                lead_sources.append({
+                    "label": stat['source'] or "Unknown",
+                    "value": stat['count'],
+                    "color": source_colors[i % len(source_colors)]
+                })
+            if not lead_sources:
+                lead_sources = [{"label": "No Data", "value": 0, "color": "#E5E7EB"}]
 
-        # 9. Task Completion - filtered
-        task_filters = Q()
-        if tenant_id:
-            task_filters &= Q(lead__tenant_id=tenant_id)
-        if country:
-            task_filters &= Q(lead__country__iexact=country)
+            # 4. Conversion Funnel
+            total_leads = Lead.objects.filter(lead_filters).count()
+            total_applicants = Applicant.objects.filter(lead_filters if not tenant_id else Q(tenant_id=tenant_id)).count()
+            total_applications = Application.objects.filter(app_filters).count()
+            total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
+            
+            conversion_funnel = [
+                {"label": "Total Leads", "value": total_leads, "color": "#3B82F6"},
+                {"label": "Applicants", "value": total_applicants, "color": "#8B5CF6"},
+                {"label": "Applications", "value": total_applications, "color": "#F59E0B"},
+                {"label": "Enrolled", "value": total_enrolled, "color": "#6FB63A"},
+            ]
+
+            # 5. Counselor Performance
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            
+            counselor_stats = []
+            users = User.objects.all()
+            for user in users:
+                assigned_leads = Lead.objects.filter(lead_filters, assigned_to=user).count()
+                
+                counselor_call_filters = Q(lead__assigned_to=user)
+                if tenant_id:
+                    counselor_call_filters &= Q(lead__tenant_id=tenant_id)
+                if country_filter:
+                    counselor_call_filters &= Q(lead__country__iexact=country_filter)
+                calls_made = CallRecord.objects.filter(counselor_call_filters).count()
+                
+                counselor_app_filters = Q(assigned_to=user)
+                if tenant_id:
+                    counselor_app_filters &= Q(tenant_id=tenant_id)
+                if country_filter:
+                    counselor_app_filters &= Q(applicant__country__iexact=country_filter)
+                apps_managed = Application.objects.filter(counselor_app_filters).count()
+                
+                if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
+                    counselor_stats.append({
+                        "name": f"{user.first_name} {user.last_name}".strip() or user.username,
+                        "leads_assigned": assigned_leads,
+                        "calls_made": calls_made,
+                        "applications": apps_managed,
+                        "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0
+                    })
+            
+            counselor_stats.sort(key=lambda x: x['calls_made'], reverse=True)
+
+            # 6. AI Usage Metrics
+            ai_call_filters = Q(ai_analyzed=True)
+            if tenant_id:
+                ai_call_filters &= Q(lead__tenant_id=tenant_id)
+            if country_filter:
+                ai_call_filters &= Q(lead__country__iexact=country_filter)
+            
+            ai_calls = CallRecord.objects.filter(ai_call_filters)
+            total_cost = ai_calls.aggregate(Sum('cost'))['cost__sum'] or 0.0
+            total_duration = ai_calls.aggregate(Sum('duration_seconds'))['duration_seconds__sum'] or 0
+            avg_duration = ai_calls.aggregate(Avg('duration_seconds'))['duration_seconds__avg'] or 0
+            
+            ai_usage = {
+                "total_cost": round(total_cost, 2),
+                "total_duration_mins": round(total_duration / 60, 1),
+                "avg_duration_secs": round(avg_duration, 0),
+                "total_analyzed_calls": ai_calls.count()
+            }
+
+            # 7. Demographics
+            city_stats = Lead.objects.filter(lead_filters).values('city').annotate(count=Count('id')).order_by('-count')[:5]
+            demographics = []
+            for stat in city_stats:
+                if stat['city']:
+                    demographics.append({"label": stat['city'], "value": stat['count']})
+            
+            # 8. Document Status
+            doc_filters = Q()
+            if tenant_id:
+                doc_filters &= Q(applicant__tenant_id=tenant_id)
+            if country_filter:
+                doc_filters &= Q(applicant__country__iexact=country_filter)
+            
+            doc_stats = Document.objects.filter(doc_filters).values('status').annotate(count=Count('id'))
+            document_status = []
+            for stat in doc_stats:
+                document_status.append({"label": stat['status'].title(), "value": stat['count']})
+
+            # 9. Task Completion
+            task_filters = Q()
+            if tenant_id:
+                task_filters &= Q(lead__tenant_id=tenant_id)
+            if country_filter:
+                task_filters &= Q(lead__country__iexact=country_filter)
+            
+            task_stats = FollowUp.objects.filter(task_filters).values('completed').annotate(count=Count('id'))
+            task_completion = []
+            for stat in task_stats:
+                label = "Completed" if stat['completed'] else "Pending"
+                task_completion.append({"label": label, "value": stat['count']})
+
+            return {
+                "application_growth": application_growth,
+                "call_outcomes": call_outcomes,
+                "lead_sources": lead_sources,
+                "conversion_funnel": conversion_funnel,
+                "counselor_stats": counselor_stats,
+                "ai_usage": ai_usage,
+                "demographics": demographics,
+                "document_status": document_status,
+                "task_completion": task_completion,
+                "total_applications": Application.objects.filter(app_filters).count(),
+                "total_leads": total_leads,
+            }
         
-        task_stats = FollowUp.objects.filter(task_filters).values('completed').annotate(count=Count('id'))
-        task_completion = []
-        for stat in task_stats:
-            label = "Completed" if stat['completed'] else "Pending"
-            task_completion.append({"label": label, "value": stat['count']})
+        # Generate overall metrics (filtered by tenant and single country if specified)
+        overall_metrics = get_country_metrics(country)
+        
+        # Generate per-country breakdowns if multiple countries requested
+        country_breakdown = {}
+        if countries:
+            for country_name in countries:
+                if country_name:  # Skip empty strings
+                    country_breakdown[country_name] = get_country_metrics(country_name)
 
         # 10. Available Reports (Mocked)
         available_reports = [
@@ -2676,7 +2706,7 @@ class ReportsSummary(APIView):
         companies = list(Tenant.objects.filter(is_active=True).values('id', 'name').order_by('name'))
         
         # Get list of unique countries from leads for filter dropdown
-        countries = list(
+        all_countries = list(
             Lead.objects.values_list('country', flat=True)
             .distinct()
             .exclude(country__isnull=True)
@@ -2684,25 +2714,23 @@ class ReportsSummary(APIView):
             .order_by('country')
         )
 
-        return Response({
-            "application_growth": application_growth,
-            "call_outcomes": call_outcomes,
-            "lead_sources": lead_sources,
-            "conversion_funnel": conversion_funnel,
-            "counselor_stats": counselor_stats,
-            "ai_usage": ai_usage,
-            "demographics": demographics,
-            "document_status": document_status,
-            "task_completion": task_completion,
+        # Build final response combining overall metrics with country-specific breakdowns
+        response_data = {
+            **overall_metrics,
             "available_reports": available_reports,
-            "total_applications": Application.objects.filter(app_filters).count(),
             "companies": companies,
-            "countries": countries,
-        })    
+            "countries": all_countries,
+        }
+        
+        # Add country breakdowns if requested
+        if country_breakdown:
+            response_data["country_breakdown"] = country_breakdown
+
+        return Response(response_data)    
     def post(self, request):
         """
         Generate PDF report with filters.
-        Accepts: tenant_id, country in request body
+        Accepts: tenant_id, country (single), countries (multiple) in request body
         Returns: PDF file download
         """
         from django.http import HttpResponse
@@ -2722,6 +2750,13 @@ class ReportsSummary(APIView):
         # Get filters from request body
         tenant_id = request.data.get('tenant_id', None)
         country = request.data.get('country', None)
+        countries = request.data.get('countries', [])
+        
+        # If multiple countries requested, generate multi-country report
+        if countries and len(countries) > 0:
+            return self._generate_multi_country_pdf(request, tenant_id, countries)
+        
+        # Single country report (original logic)
         
         # Build filters (same as GET method)
         lead_filters = Q()
@@ -2930,6 +2965,161 @@ class ReportsSummary(APIView):
         # Create response
         response = HttpResponse(pdf_file.read(), content_type='application/pdf')
         filename = f"CRM_Report_{tenant_name.replace(' ', '_')}_{timezone.now().strftime('%Y%m%d')}.pdf"
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+        
+        return response
+    
+    def _generate_multi_country_pdf(self, request, tenant_id, countries):
+        """Generate PDF with separate sections for each country"""
+        from django.http import HttpResponse
+        from io import BytesIO
+        from weasyprint import HTML
+        from django.db.models import Sum, Avg, Count, Q
+        from .models import Lead, Application, Tenant
+        
+        # Get tenant name
+        tenant_name = "All Companies"
+        if tenant_id:
+            try:
+                tenant = Tenant.objects.get(id=tenant_id)
+                tenant_name = tenant.name
+            except Tenant.DoesNotExist:
+                pass
+        
+        # Build HTML for each country
+        country_sections = []
+        for country in countries:
+            if not country:
+                continue
+                
+            # Filters for this country
+            lead_filters = Q(country__iexact=country)
+            app_filters = Q(applicant__country__iexact=country)
+            
+            if tenant_id:
+                lead_filters &= Q(tenant_id=tenant_id)
+                app_filters &= Q(tenant_id=tenant_id)
+            
+            # Gather stats
+            total_leads = Lead.objects.filter(lead_filters).count()
+            total_applications = Application.objects.filter(app_filters).count()
+            total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
+            conversion_rate = round((total_applications / total_leads * 100), 1) if total_leads > 0 else 0
+            
+            lead_source_stats = Lead.objects.filter(lead_filters).values('source').annotate(count=Count('id')).order_by('-count')[:5]
+            
+            # Build HTML section for this country
+            country_section = f"""
+            <div class="country-section" style="page-break-before: always; margin-top: 40px;">
+                <h2 style="color: #0B1F3A; border-left: 4px solid #6FB63A; padding-left: 10px; font-size: 24px;">
+                    {country}
+                </h2>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                        <div>
+                            <div style="font-size: 12px; color: #666;">Total Leads</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_leads}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666;">Applications</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_applications}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666;">Enrolled</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_enrolled}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; color: #666;">Conversion Rate</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #6FB63A;">{conversion_rate}%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="color: #0B1F3A; margin-top: 25px; font-size: 18px;">Top Lead Sources</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background: #0B1F3A;">
+                            <th style="padding: 12px; text-align: left; color: white; border-bottom: 2px solid #ddd;">Source</th>
+                            <th style="padding: 12px; text-align: center; color: white; border-bottom: 2px solid #ddd;">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {''.join([f'<tr style="border-bottom: 1px solid #e0e0e0;"><td style="padding: 12px;">{stat["source"] or "Unknown"}</td><td style="padding: 12px; text-align: center; font-weight: bold;">{stat["count"]}</td></tr>' for stat in lead_source_stats])}
+                    </tbody>
+                </table>
+            </div>
+            """
+            country_sections.append(country_section)
+        
+        # Build complete HTML
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Multi-Country Report - {tenant_name}</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 40px;
+                    color: #333;
+                }}
+                h1 {{
+                    color: #0B1F3A;
+                    border-bottom: 3px solid #6FB63A;
+                    padding-bottom: 10px;
+                    text-align: center;
+                }}
+                .header {{
+                    text-align: center;
+                    margin-bottom: 40px;
+                }}
+                .country-section {{
+                    margin-bottom: 40px;
+                }}
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                }}
+                th, td {{
+                    padding: 12px;
+                    text-align: left;
+                }}
+                th {{
+                    background: #0B1F3A;
+                    color: white;
+                    font-weight: bold;
+                }}
+                tr:nth-child(even) {{
+                    background: #f9f9f9;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>CRM Multi-Country Report</h1>
+                <p><strong>Company:</strong> {tenant_name}</p>
+                <p><strong>Countries:</strong> {', '.join(countries)}</p>
+                <p><strong>Generated:</strong> {timezone.now().strftime('%B %d, %Y at %I:%M %p')}</p>
+            </div>
+            
+            {''.join(country_sections)}
+            
+            <div style="margin-top: 50px; text-align: center; color: #999; font-size: 12px;">
+                <p>This report was generated automatically by Cybrik CRM</p>
+            </div>
+        </body>
+        </html>
+        """
+        
+        # Generate PDF
+        pdf_file = BytesIO()
+        HTML(string=html_content).write_pdf(pdf_file)
+        pdf_file.seek(0)
+        
+        # Create response
+        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+        filename = f"CRM_MultiCountry_Report_{tenant_name.replace(' ', '_')}_{timezone.now().strftime('%Y%m%d')}.pdf"
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
         
         return response

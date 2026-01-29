@@ -18,8 +18,10 @@ interface ReportData {
     task_completion: { label: string; value: number }[];
     available_reports: { name: string; date: string; size: string; type: string }[];
     total_applications: number;
+    total_leads?: number;
     companies: { id: string; name: string }[];
     countries: string[];
+    country_breakdown?: { [country: string]: Omit<ReportData, 'companies' | 'countries' | 'available_reports' | 'country_breakdown'> };
 }
 
 export default function ReportsPage() {
@@ -28,14 +30,22 @@ export default function ReportsPage() {
     const [showFilters, setShowFilters] = useState(false);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-    // Filter state with company and country
+    // Filter state with company and multiple countries
     const [filters, setFilters] = useState({
         dateRange: "Last 30 Days",
         counselor: "All Counselors",
         source: "All Sources",
         company: "",  // tenant_id
-        country: ""
+        countries: [] as string[]  // Multiple countries
     });
+
+    // Country selection state
+    const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+    const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
+
+    // Country selection state
+    const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+    const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +53,11 @@ export default function ReportsPage() {
                 // Build query params based on filters
                 const params = new URLSearchParams();
                 if (filters.company) params.append('tenant_id', filters.company);
-                if (filters.country) params.append('country', filters.country);
+                
+                // Add multiple countries as array
+                selectedCountries.forEach(country => {
+                    params.append('countries[]', country);
+                });
                 
                 const response = await apiFetch(`/api/reports/summary/?${params.toString()}`);
                 setData(response);
@@ -54,7 +68,28 @@ export default function ReportsPage() {
             }
         };
         fetchData();
-    }, [filters.company, filters.country]);  // Refetch when company or country changes
+    }, [filters.company, selectedCountries]);  // Refetch when company or countries change
+
+    const handleAddCountry = (country: string) => {
+        if (country && !selectedCountries.includes(country)) {
+            setSelectedCountries([...selectedCountries, country]);
+            setExpandedCountries({ ...expandedCountries, [country]: true });
+        }
+    };
+
+    const handleRemoveCountry = (country: string) => {
+        setSelectedCountries(selectedCountries.filter(c => c !== country));
+        const newExpanded = { ...expandedCountries };
+        delete newExpanded[country];
+        setExpandedCountries(newExpanded);
+    };
+
+    const toggleCountryExpand = (country: string) => {
+        setExpandedCountries({
+            ...expandedCountries,
+            [country]: !expandedCountries[country]
+        });
+    };
 
     const handleGeneratePDF = async () => {
         setIsGeneratingPDF(true);
@@ -62,7 +97,7 @@ export default function ReportsPage() {
             // Build request body with filters
             const body: any = {};
             if (filters.company) body.tenant_id = filters.company;
-            if (filters.country) body.country = filters.country;
+            if (selectedCountries.length > 0) body.countries = selectedCountries;
             
             const response = await fetch('/api/reports/summary/', {
                 method: 'POST',
@@ -149,68 +184,300 @@ export default function ReportsPage() {
 
                 {/* Filter Panel */}
                 {showFilters && (
-                    <div className="card p-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-in slide-in-from-top-2 duration-200">
+                    <div className="card p-4 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label className="label-text text-xs font-bold mb-1 block">Company</label>
+                                <select
+                                    className="select select-bordered select-sm w-full"
+                                    value={filters.company}
+                                    onChange={(e) => setFilters({ ...filters, company: e.target.value })}
+                                >
+                                    <option value="">All Companies</option>
+                                    {data?.companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="label-text text-xs font-bold mb-1 block">Date Range</label>
+                                <select
+                                    className="select select-bordered select-sm w-full"
+                                    value={filters.dateRange}
+                                    onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
+                                >
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last Quarter</option>
+                                    <option>This Year</option>
+                                    <option>Custom Range</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="label-text text-xs font-bold mb-1 block">Counselor</label>
+                                <select
+                                    className="select select-bordered select-sm w-full"
+                                    value={filters.counselor}
+                                    onChange={(e) => setFilters({ ...filters, counselor: e.target.value })}
+                                >
+                                    <option>All Counselors</option>
+                                    {data?.counselor_stats.map(c => <option key={c.name}>{c.name}</option>)}
+                                </select>
+                            </div>
+                            <div className="flex items-end">
+                                <button 
+                                    className="btn btn-sm btn-ghost w-full"
+                                    onClick={() => {
+                                        setFilters({
+                                            dateRange: "Last 30 Days",
+                                            counselor: "All Counselors",
+                                            source: "All Sources",
+                                            company: "",
+                                            countries: []
+                                        });
+                                        setSelectedCountries([]);
+                                    }}
+                                >
+                                    Reset Filters
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {/* Country Multi-Select */}
                         <div>
-                            <label className="label-text text-xs font-bold mb-1 block">Company</label>
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={filters.company}
-                                onChange={(e) => setFilters({ ...filters, company: e.target.value })}
-                            >
-                                <option value="">All Companies</option>
-                                {data?.companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                            </select>
+                            <label className="label-text text-xs font-bold mb-2 block">Countries (Multi-Select)</label>
+                            <div className="flex gap-2 items-center">
+                                <select
+                                    className="select select-bordered select-sm flex-1"
+                                    onChange={(e) => {
+                                        if (e.target.value) {
+                                            handleAddCountry(e.target.value);
+                                            e.target.value = "";
+                                        }
+                                    }}
+                                    defaultValue=""
+                                >
+                                    <option value="">+ Add Country</option>
+                                    {data?.countries?.filter(c => !selectedCountries.includes(c)).map(c => 
+                                        <option key={c} value={c}>{c}</option>
+                                    )}
+                                </select>
+                            </div>
+                            
+                            {/* Selected Countries Tags */}
+                            {selectedCountries.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-3">
+                                    {selectedCountries.map(country => (
+                                        <div
+                                            key={country}
+                                            className="badge badge-lg bg-[var(--cy-primary)] text-white gap-2 px-3 py-3"
+                                        >
+                                            {country}
+                                            <button
+                                                onClick={() => handleRemoveCountry(country)}
+                                                className="ml-1 hover:text-red-200"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                        <div>
-                            <label className="label-text text-xs font-bold mb-1 block">Country</label>
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={filters.country}
-                                onChange={(e) => setFilters({ ...filters, country: e.target.value })}
-                            >
-                                <option value="">All Countries</option>
-                                {data?.countries?.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
+                    </div>
+                )}
+
+                {/* Country-Specific Widget Panels */}
+                {selectedCountries.length > 0 && data?.country_breakdown && (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-2xl font-bold text-[var(--cy-navy)]">Country-Specific Reports</h2>
+                            <span className="text-sm text-[var(--cy-text-muted)]">{selectedCountries.length} {selectedCountries.length === 1 ? 'country' : 'countries'} selected</span>
                         </div>
-                        <div>
-                            <label className="label-text text-xs font-bold mb-1 block">Date Range</label>
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={filters.dateRange}
-                                onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
-                            >
-                                <option>Last 7 Days</option>
-                                <option>Last 30 Days</option>
-                                <option>Last Quarter</option>
-                                <option>This Year</option>
-                                <option>Custom Range</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="label-text text-xs font-bold mb-1 block">Counselor</label>
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={filters.counselor}
-                                onChange={(e) => setFilters({ ...filters, counselor: e.target.value })}
-                            >
-                                <option>All Counselors</option>
-                                {data?.counselor_stats.map(c => <option key={c.name}>{c.name}</option>)}
-                            </select>
-                        </div>
-                        <div className="flex items-end">
-                            <button 
-                                className="btn btn-sm btn-ghost w-full"
-                                onClick={() => setFilters({
-                                    dateRange: "Last 30 Days",
-                                    counselor: "All Counselors",
-                                    source: "All Sources",
-                                    company: "",
-                                    country: ""
-                                })}
-                            >
-                                Reset Filters
-                            </button>
-                        </div>
+                        
+                        {selectedCountries.map(country => {
+                            const countryData = data.country_breakdown![country];
+                            if (!countryData) return null;
+                            
+                            const isExpanded = expandedCountries[country];
+                            
+                            return (
+                                <div key={country} className="card overflow-hidden border-l-4 border-l-[var(--cy-lime)]">
+                                    {/* Country Header */}
+                                    <div 
+                                        className="p-6 bg-gradient-to-r from-[var(--cy-navy)] to-blue-900 text-white cursor-pointer hover:brightness-110 transition-all"
+                                        onClick={() => toggleCountryExpand(country)}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <div className="text-4xl">🌍</div>
+                                                <div>
+                                                    <h3 className="text-2xl font-bold">{country}</h3>
+                                                    <p className="text-blue-100 text-sm mt-1">
+                                                        {countryData.total_applications} applications · {countryData.total_leads} leads
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-6">
+                                                <div className="text-right">
+                                                    <div className="text-xs text-blue-200">Conversion Rate</div>
+                                                    <div className="text-2xl font-bold">
+                                                        {countryData.total_leads > 0 
+                                                            ? ((countryData.total_applications / countryData.total_leads) * 100).toFixed(1) 
+                                                            : 0}%
+                                                    </div>
+                                                </div>
+                                                <button className="text-white hover:text-[var(--cy-lime)] transition-colors">
+                                                    {isExpanded ? (
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Country Details (Collapsible) */}
+                                    {isExpanded && (
+                                        <div className="p-6 space-y-6 bg-gray-50 animate-in slide-in-from-top-2 duration-300">
+                                            {/* Country KPIs */}
+                                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                                <div className="card p-4 bg-white">
+                                                    <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">Applications</div>
+                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">{countryData.total_applications}</div>
+                                                </div>
+                                                <div className="card p-4 bg-white">
+                                                    <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">Total Leads</div>
+                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">{countryData.total_leads}</div>
+                                                </div>
+                                                <div className="card p-4 bg-white">
+                                                    <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">AI Calls</div>
+                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">{countryData.ai_usage.total_analyzed_calls}</div>
+                                                </div>
+                                                <div className="card p-4 bg-white">
+                                                    <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">AI Cost</div>
+                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">${countryData.ai_usage.total_cost}</div>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Country Charts */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {/* Application Growth */}
+                                                <div className="card p-4 bg-white">
+                                                    <h4 className="font-bold text-sm mb-3 text-[var(--cy-navy)]">Application Growth</h4>
+                                                    <div className="h-40">
+                                                        {countryData.application_growth.length > 0 ? (
+                                                            <BarChart data={countryData.application_growth} height={160} />
+                                                        ) : (
+                                                            <div className="flex items-center justify-center h-full text-xs text-[var(--cy-text-muted)]">No data</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Lead Sources */}
+                                                <div className="card p-4 bg-white">
+                                                    <h4 className="font-bold text-sm mb-3 text-[var(--cy-navy)]">Lead Sources</h4>
+                                                    {countryData.lead_sources.length > 0 ? (
+                                                        <div className="space-y-2">
+                                                            {countryData.lead_sources.slice(0, 5).map((item, i) => (
+                                                                <div key={i}>
+                                                                    <div className="flex justify-between text-xs mb-1">
+                                                                        <span>{item.label}</span>
+                                                                        <span className="font-bold">{item.value}</span>
+                                                                    </div>
+                                                                    <div className="w-full bg-gray-100 rounded-full h-2">
+                                                                        <div
+                                                                            className="h-full rounded-full"
+                                                                            style={{ 
+                                                                                width: `${(item.value / Math.max(...countryData.lead_sources.map(s => s.value))) * 100}%`, 
+                                                                                backgroundColor: item.color 
+                                                                            }}
+                                                                        ></div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center justify-center h-32 text-xs text-[var(--cy-text-muted)]">No data</div>
+                                                    )}
+                                                </div>
+                                                
+                                                {/* Conversion Funnel */}
+                                                <div className="card p-4 bg-white">
+                                                    <h4 className="font-bold text-sm mb-3 text-[var(--cy-navy)]">Conversion Funnel</h4>
+                                                    <div className="space-y-3">
+                                                        {countryData.conversion_funnel.map((step, i) => {
+                                                            const maxVal = Math.max(...countryData.conversion_funnel.map(d => d.value));
+                                                            return (
+                                                                <div key={i}>
+                                                                    <div className="flex justify-between items-end mb-1">
+                                                                        <span className="text-xs font-medium">{step.label}</span>
+                                                                        <span className="text-xs font-bold">{step.value}</span>
+                                                                    </div>
+                                                                    <div className="w-full bg-gray-100 rounded-full h-2">
+                                                                        <div
+                                                                            className="h-full rounded-full transition-all"
+                                                                            style={{
+                                                                                width: `${maxVal > 0 ? (step.value / maxVal) * 100 : 0}%`,
+                                                                                backgroundColor: step.color
+                                                                            }}
+                                                                        ></div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Counselor Performance for this country */}
+                                            {countryData.counselor_stats.length > 0 && (
+                                                <div className="card bg-white overflow-hidden">
+                                                    <div className="p-4 border-b border-[var(--cy-border)]">
+                                                        <h4 className="font-bold text-sm text-[var(--cy-navy)]">Counselor Performance - {country}</h4>
+                                                    </div>
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-sm">
+                                                            <thead className="bg-gray-50 text-xs">
+                                                                <tr>
+                                                                    <th className="px-4 py-2 text-left">Counselor</th>
+                                                                    <th className="px-4 py-2 text-center">Leads</th>
+                                                                    <th className="px-4 py-2 text-center">Calls</th>
+                                                                    <th className="px-4 py-2 text-center">Applications</th>
+                                                                    <th className="px-4 py-2 text-center">Conv. Rate</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-[var(--cy-border)]">
+                                                                {countryData.counselor_stats.slice(0, 5).map((c, i) => (
+                                                                    <tr key={i} className="hover:bg-gray-50">
+                                                                        <td className="px-4 py-2 font-medium text-xs">{c.name}</td>
+                                                                        <td className="px-4 py-2 text-center text-xs">{c.leads_assigned}</td>
+                                                                        <td className="px-4 py-2 text-center text-xs">{c.calls_made}</td>
+                                                                        <td className="px-4 py-2 text-center text-xs">{c.applications}</td>
+                                                                        <td className="px-4 py-2 text-center">
+                                                                            <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                                                                c.conversion_rate > 20 ? 'bg-green-100 text-green-700' :
+                                                                                c.conversion_rate > 10 ? 'bg-blue-100 text-blue-700' :
+                                                                                'bg-gray-100 text-gray-700'
+                                                                            }`}>
+                                                                                {c.conversion_rate}%
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
 
