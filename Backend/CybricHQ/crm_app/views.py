@@ -2683,11 +2683,26 @@ class ReportsSummary(APIView):
         # Generate overall metrics (filtered by tenant and single country if specified)
         overall_metrics = get_country_metrics(country)
         
-        # Generate per-country breakdowns if multiple countries requested
+        # Generate per-country breakdowns
         country_breakdown = {}
         if countries:
+            # If specific countries are requested, show only those
             for country_name in countries:
                 if country_name:  # Skip empty strings
+                    country_breakdown[country_name] = get_country_metrics(country_name)
+        else:
+            # If no countries specified, show breakdown for ALL available countries
+            # Get unique countries from leads (limited to top countries for performance)
+            top_countries = Lead.objects.filter(
+                Q(tenant_id=tenant_id) if tenant_id else Q(),
+                country__isnull=False
+            ).exclude(country='').values('country').annotate(
+                count=Count('id')
+            ).order_by('-count')[:10]  # Top 10 countries by lead volume
+            
+            for country_stat in top_countries:
+                country_name = country_stat['country']
+                if country_name:
                     country_breakdown[country_name] = get_country_metrics(country_name)
 
         # 10. Available Reports (Mocked)
