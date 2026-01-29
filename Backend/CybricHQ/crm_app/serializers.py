@@ -662,22 +662,23 @@ class LeadSerializer(serializers.ModelSerializer):
             'consent_given',
             'visit_type',
             'assigned_to',
-            # Applicant-like profile fields
-            'first_name',
-            'last_name',
-            'dob',
-            'passport_number',
-            'address',
-            'preferred_country',
+            # Stage and profile fields
             'stage',
             'profile_completeness_score',
             'qualification_status',
             'counseling_notes',
             'metadata',
+            # Walk-in fields
+            'is_manual_only',
+            'walked_in_at',
+            'receptionist',
             # Qualification fields for ElevenLabs
             'highest_qualification',
             'qualification_marks',
             'english_test_scores',
+            # Visa consultancy fields
+            'enquiry_type',
+            'exam_type',
             # System fields
             'raw_payload', 
             'status', 

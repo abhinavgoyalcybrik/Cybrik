@@ -493,10 +493,10 @@ def country_wise_stats(request):
     
     available_countries = list(
         countries_base_qs.exclude(
-            preferred_country__isnull=True
+            country__isnull=True
         ).exclude(
-            preferred_country=""
-        ).values_list("preferred_country", flat=True).distinct().order_by("preferred_country")
+            country=""
+        ).values_list("country", flat=True).distinct().order_by("country")
     )
     
     return Response({
