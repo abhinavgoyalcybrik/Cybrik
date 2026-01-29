@@ -641,6 +641,9 @@ class LeadSerializer(serializers.ModelSerializer):
     applications = serializers.SerializerMethodField(read_only=True)
     whatsapp_messages = serializers.SerializerMethodField(read_only=True)
     
+    # Override source field to disable strict choice validation
+    source = serializers.CharField(max_length=128, required=False, allow_blank=True, allow_null=True)
+    
     class Meta:
         model = Lead
         fields = [
