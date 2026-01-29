@@ -109,3 +109,24 @@ export const usageApi = {
     getTenantLogs: (params?: any) => api.get('/tenant/usage/logs/', { params }),
 };
 
+// Generic admin API helper for any endpoint
+export const adminApi = async (endpoint: string, options?: RequestInit) => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const url = `${baseUrl}${endpoint}`;
+    
+    const response = await fetch(url, {
+        ...options,
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            ...options?.headers,
+        },
+    });
+    
+    if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+    }
+    
+    return response.json();
+};
+
