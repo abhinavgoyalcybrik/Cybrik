@@ -2491,7 +2491,7 @@ class ReportsSummary(APIView):
             
             if country_filter:
                 lead_filters &= Q(country__iexact=country_filter)
-                app_filters &= Q(applicant__country__iexact=country_filter)
+                app_filters &= Q(applicant__preferred_country__iexact=country_filter)
 
             # 1. Application Growth (Last 6 Months)
             six_months_ago = timezone.now() - timedelta(days=180)
@@ -2601,7 +2601,7 @@ class ReportsSummary(APIView):
                 if tenant_id:
                     counselor_app_filters &= Q(tenant_id=tenant_id)
                 if country_filter:
-                    counselor_app_filters &= Q(applicant__country__iexact=country_filter)
+                    counselor_app_filters &= Q(applicant__preferred_country__iexact=country_filter)
                 apps_managed = Application.objects.filter(counselor_app_filters).count()
                 
                 if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
@@ -2646,9 +2646,7 @@ class ReportsSummary(APIView):
             if tenant_id:
                 doc_filters &= Q(applicant__tenant_id=tenant_id)
             if country_filter:
-                doc_filters &= Q(applicant__country__iexact=country_filter)
-            
-            doc_stats = Document.objects.filter(doc_filters).values('status').annotate(count=Count('id'))
+                doc_filters &= Q(applicant__preferred_country__iexact=country_filter)
             document_status = []
             for stat in doc_stats:
                 document_status.append({"label": stat['status'].title(), "value": stat['count']})
@@ -2807,7 +2805,7 @@ class ReportsSummary(APIView):
         
         if country:
             lead_filters &= Q(country__iexact=country)
-            app_filters &= Q(applicant__country__iexact=country)
+            app_filters &= Q(applicant__preferred_country__iexact=country)
         
         # Get tenant name for report header
         tenant_name = "All Companies"
@@ -2842,7 +2840,7 @@ class ReportsSummary(APIView):
             if tenant_id:
                 counselor_app_filters &= Q(tenant_id=tenant_id)
             if country:
-                counselor_app_filters &= Q(applicant__country__iexact=country)
+                counselor_app_filters &= Q(applicant__preferred_country__iexact=country)
             apps_managed = Application.objects.filter(counselor_app_filters).count()
             
             if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
@@ -3033,7 +3031,7 @@ class ReportsSummary(APIView):
                 
             # Filters for this country
             lead_filters = Q(country__iexact=country)
-            app_filters = Q(applicant__country__iexact=country)
+            app_filters = Q(applicant__preferred_country__iexact=country)
             
             if tenant_id:
                 lead_filters &= Q(tenant_id=tenant_id)
