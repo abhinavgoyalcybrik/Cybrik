@@ -482,28 +482,28 @@ export default function ReportsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <StatCard
                         title="Total Applications"
-                        value={data.total_applications}
+                        value={data.total_applications || 0}
                         trend="+12% growth"
                         trendDirection="up"
                         context="vs last month"
                     />
                     <StatCard
                         title="Calls Analyzed"
-                        value={data.ai_usage.total_analyzed_calls}
+                        value={data.ai_usage?.total_analyzed_calls || 0}
                         trend="98% coverage"
                         trendDirection="neutral"
                         context="of total calls"
                     />
                     <StatCard
                         title="Avg Call Duration"
-                        value={`${data.ai_usage.avg_duration_secs}s`}
+                        value={`${data.ai_usage?.avg_duration_secs || 0}s`}
                         trend="↓ 5s faster"
                         trendDirection="up" // Interpreted as improvement
                         context="industry avg: 52s"
                     />
                     <StatCard
                         title="AI Cost Efficiency"
-                        value={`$${(data.ai_usage.total_cost / (data.ai_usage.total_analyzed_calls || 1)).toFixed(2)}`}
+                        value={`$${(data.ai_usage?.total_cost && data.ai_usage?.total_analyzed_calls ? (data.ai_usage.total_cost / data.ai_usage.total_analyzed_calls).toFixed(2) : '0.00')}`}
                         trend="Stable"
                         trendDirection="neutral"
                         context="per analyzed call"
@@ -572,7 +572,7 @@ export default function ReportsPage() {
                             </div>
                         </div>
                         <div className="flex-1 min-h-[250px] relative">
-                            {data.application_growth.length === 0 ? (
+                            {!data.application_growth || data.application_growth.length === 0 ? (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-[var(--cy-text-muted)] bg-gray-50/50 rounded-xl border border-dashed border-gray-200">
                                     <TrendingUp size={32} className="mb-2 opacity-20" />
                                     <p>No growth data for this period.</p>
@@ -590,7 +590,7 @@ export default function ReportsPage() {
                     {/* Lead Sources */}
                     <div className="card p-6">
                         <h3 className="h3 mb-6">Lead Sources</h3>
-                        {data.lead_sources.length === 0 ? (
+                        {!data.lead_sources || data.lead_sources.length === 0 ? (
                             <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No data</div>
                         ) : data.lead_sources.length < 5 ? (
                             // Use Bar Chart for few items
@@ -632,11 +632,15 @@ export default function ReportsPage() {
                     {/* Call Outcomes */}
                     <div className="card p-6">
                         <h3 className="h3 mb-6">Call Outcomes</h3>
-                        <div className="flex justify-center">
-                            <DonutChart data={data.call_outcomes} size={180} />
-                        </div>
-                        <div className="mt-6 space-y-2">
-                            {data.call_outcomes.map((item, i) => (
+                        {!data.call_outcomes || data.call_outcomes.length === 0 ? (
+                            <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No call data</div>
+                        ) : (
+                            <>
+                                <div className="flex justify-center">
+                                    <DonutChart data={data.call_outcomes} size={180} />
+                                </div>
+                                <div className="mt-6 space-y-2">
+                                    {data.call_outcomes.map((item, i) => (
                                 <div key={i} className="flex items-center justify-between text-xs border-b border-gray-50 pb-2 last:border-0">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></div>
@@ -648,12 +652,14 @@ export default function ReportsPage() {
                                 </div>
                             ))}
                         </div>
+                            </>
+                        )}
                     </div>
 
                     {/* Top Cities */}
                     <div className="card p-6">
                         <h3 className="h3 mb-6">Top Cities</h3>
-                        {data.demographics.length === 0 ? (
+                        {!data.demographics || data.demographics.length === 0 ? (
                             <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No demographic data</div>
                         ) : (
                             <HorizontalBarChart
@@ -684,7 +690,7 @@ export default function ReportsPage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[var(--cy-border)]">
-                                {data.counselor_stats.map((c, i) => (
+                                {data.counselor_stats && data.counselor_stats.map((c, i) => (
                                     <tr key={i} className="hover:bg-[var(--cy-bg-page)] transition-colors">
                                         <td className="px-6 py-4 font-medium text-[var(--cy-navy)]">{c.name}</td>
                                         <td className="px-6 py-4 text-center">{c.leads_assigned}</td>
@@ -700,7 +706,7 @@ export default function ReportsPage() {
                                         </td>
                                     </tr>
                                 ))}
-                                {data.counselor_stats.length === 0 && (
+                                {(!data.counselor_stats || data.counselor_stats.length === 0) && (
                                     <tr>
                                         <td colSpan={5} className="px-6 py-8 text-center text-[var(--cy-text-muted)]">
                                             No performance data available yet.

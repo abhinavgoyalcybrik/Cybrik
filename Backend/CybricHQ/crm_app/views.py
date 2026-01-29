@@ -2493,10 +2493,6 @@ class ReportsSummary(APIView):
                 lead_filters &= Q(country__iexact=country_filter)
                 app_filters &= Q(applicant__country__iexact=country_filter)
 
-            if country_filter:
-                lead_filters &= Q(country__iexact=country_filter)
-                app_filters &= Q(applicant__country__iexact=country_filter)
-
             # 1. Application Growth (Last 6 Months)
             six_months_ago = timezone.now() - timedelta(days=180)
             monthly_apps = (
