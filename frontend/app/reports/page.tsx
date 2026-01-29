@@ -930,8 +930,8 @@ export default function ReportsPage() {
                                                         </div>
                                                         <div className="text-center">
                                                             <div className="text-lg font-bold text-green-600">
-                                                                {countryData.total_leads > 0 
-                                                                    ? ((countryData.total_applications / countryData.total_leads) * 100).toFixed(1)
+                                                                {(countryData.total_leads ?? 0) > 0 
+                                                                    ? (((countryData.total_applications ?? 0) / (countryData.total_leads ?? 1)) * 100).toFixed(1)
                                                                     : "0"}%
                                                             </div>
                                                             <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
@@ -1002,7 +1002,7 @@ export default function ReportsPage() {
                                                     <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-100">
                                                         <div className="text-center">
                                                             <div className="text-lg font-bold text-[var(--cy-navy)]">
-                                                                {countryData.total_leads || 0}
+                                                                {countryData.total_leads ?? 0}
                                                             </div>
                                                             <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
                                                                 Total Leads
@@ -1010,7 +1010,7 @@ export default function ReportsPage() {
                                                         </div>
                                                         <div className="text-center">
                                                             <div className="text-lg font-bold text-[var(--cy-navy)]">
-                                                                {countryData.total_applications || 0}
+                                                                {countryData.total_applications ?? 0}
                                                             </div>
                                                             <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
                                                                 Applications
