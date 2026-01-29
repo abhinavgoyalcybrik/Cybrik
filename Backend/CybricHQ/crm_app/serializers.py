@@ -720,9 +720,29 @@ class LeadSerializer(serializers.ModelSerializer):
         return WhatsAppMessageSerializer(qs.all(), many=True, context=self.context).data
 
     def validate_source(self, value):
-        """Strip whitespace from source field to handle frontend issues"""
-        if value:
-            return value.strip()
+        """
+        Strip whitespace and normalize source field.
+        Accept both choice values ('website') and display labels ('Website').
+        """
+        if not value:
+            return value
+        
+        # Strip whitespace
+        value = value.strip()
+        
+        # Create a mapping of display labels to choice values (case-insensitive)
+        from .models import Lead
+        label_to_value = {
+            label.lower(): choice_value 
+            for choice_value, label in Lead.LEAD_SOURCE_CHOICES
+        }
+        
+        # If the value matches a display label (case-insensitive), convert to choice value
+        value_lower = value.lower()
+        if value_lower in label_to_value:
+            return label_to_value[value_lower]
+        
+        # Otherwise, return the value as-is (it should be a valid choice value)
         return value
 
     def create(self, validated_data):
