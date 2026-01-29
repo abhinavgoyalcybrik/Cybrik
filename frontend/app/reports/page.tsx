@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { BarChart, DonutChart, HorizontalBarChart } from "@/components/dashboard/Charts";
 import apiFetch from "@/lib/api";
-import { Download, FileText, Filter, TrendingUp } from "lucide-react";
+import { Download, FileText, Filter, TrendingUp, X, Globe } from "lucide-react";
 
 interface ReportData {
     application_growth: { label: string; value: number }[];
@@ -29,6 +29,13 @@ export default function ReportsPage() {
     const [loading, setLoading] = useState(true);
     const [showFilters, setShowFilters] = useState(false);
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+    const [showBreakdownDialog, setShowBreakdownDialog] = useState(false);
+    const [selectedMetric, setSelectedMetric] = useState<{ 
+        title: string; 
+        dataKey: keyof Omit<ReportData, 'companies' | 'countries' | 'available_reports' | 'country_breakdown' | 'ai_usage' | 'total_applications' | 'total_leads'>;
+        label?: string;
+        value?: number;
+    } | null>(null);
 
     // Filter state with company and multiple countries
     const [filters, setFilters] = useState({
@@ -528,7 +535,13 @@ export default function ReportsPage() {
 
                                 return (
                                     <div key={i} className="relative group">
-                                        <div className="flex justify-between items-end mb-1">
+                                        <div 
+                                            className="flex justify-between items-end mb-1 cursor-pointer hover:opacity-80 transition-opacity"
+                                            onClick={() => {
+                                                setSelectedMetric({ title: 'Conversion Funnel', dataKey: 'conversion_funnel', label: step.label, value: step.value });
+                                                setShowBreakdownDialog(true);
+                                            }}
+                                        >
                                             <span className="text-sm font-medium text-[var(--cy-navy)]">{step.label}</span>
                                             <div className="text-right">
                                                 <span className="text-sm font-bold block">{step.value}</span>
@@ -537,7 +550,13 @@ export default function ReportsPage() {
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                        <div 
+                                            className="w-full bg-gray-100 rounded-full h-3 overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+                                            onClick={() => {
+                                                setSelectedMetric({ title: 'Conversion Funnel', dataKey: 'conversion_funnel', label: step.label, value: step.value });
+                                                setShowBreakdownDialog(true);
+                                            }}
+                                        >
                                             <div
                                                 className="h-full rounded-full transition-all duration-1000 relative"
                                                 style={{
@@ -588,8 +607,17 @@ export default function ReportsPage() {
                 {/* Breakdown Charts Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Lead Sources */}
-                    <div className="card p-6">
-                        <h3 className="h3 mb-6">Lead Sources</h3>
+                    <div 
+                        className="card p-6 cursor-pointer hover:shadow-lg transition-shadow"
+                        onClick={() => {
+                            setSelectedMetric({ title: 'Lead Sources', dataKey: 'lead_sources' });
+                            setShowBreakdownDialog(true);
+                        }}
+                    >
+                        <h3 className="h3 mb-6 flex items-center justify-between">
+                            Lead Sources
+                            <span className="text-xs font-normal text-[var(--cy-text-muted)]">Click to view by country</span>
+                        </h3>
                         {!data.lead_sources || data.lead_sources.length === 0 ? (
                             <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No data</div>
                         ) : data.lead_sources.length < 5 ? (
@@ -630,8 +658,17 @@ export default function ReportsPage() {
                     </div>
 
                     {/* Call Outcomes */}
-                    <div className="card p-6">
-                        <h3 className="h3 mb-6">Call Outcomes</h3>
+                    <div 
+                        className="card p-6 cursor-pointer hover:shadow-lg transition-shadow"
+                        onClick={() => {
+                            setSelectedMetric({ title: 'Call Outcomes', dataKey: 'call_outcomes' });
+                            setShowBreakdownDialog(true);
+                        }}
+                    >
+                        <h3 className="h3 mb-6 flex items-center justify-between">
+                            Call Outcomes
+                            <span className="text-xs font-normal text-[var(--cy-text-muted)]">Click to view by country</span>
+                        </h3>
                         {!data.call_outcomes || data.call_outcomes.length === 0 ? (
                             <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No call data</div>
                         ) : (
@@ -657,8 +694,17 @@ export default function ReportsPage() {
                     </div>
 
                     {/* Top Cities */}
-                    <div className="card p-6">
-                        <h3 className="h3 mb-6">Top Cities</h3>
+                    <div 
+                        className="card p-6 cursor-pointer hover:shadow-lg transition-shadow"
+                        onClick={() => {
+                            setSelectedMetric({ title: 'Top Cities', dataKey: 'demographics' });
+                            setShowBreakdownDialog(true);
+                        }}
+                    >
+                        <h3 className="h3 mb-6 flex items-center justify-between">
+                            Top Cities
+                            <span className="text-xs font-normal text-[var(--cy-text-muted)]">Click to view by country</span>
+                        </h3>
                         {!data.demographics || data.demographics.length === 0 ? (
                             <div className="flex items-center justify-center h-48 bg-gray-50 rounded text-sm text-[var(--cy-text-muted)]">No demographic data</div>
                         ) : (
@@ -764,6 +810,247 @@ export default function ReportsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Country-wise Breakdown Dialog */}
+            {showBreakdownDialog && selectedMetric && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden animate-in fade-in duration-200">
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-[var(--cy-primary)] to-[var(--cy-secondary)] p-6 text-white">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
+                                        <Globe className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold">{selectedMetric.title}</h3>
+                                        {selectedMetric.label && <p className="text-xl font-semibold mt-1">{selectedMetric.label}</p>}
+                                        <p className="text-white/80 text-sm mt-1">Country-wise Distribution</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowBreakdownDialog(false)}
+                                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                            
+                            {/* Total Count Badge - for specific metrics */}
+                            {selectedMetric.value && (
+                                <div className="mt-4 inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+                                    <span className="text-white/80 text-sm">Total:</span>
+                                    <span className="text-2xl font-bold">{selectedMetric.value}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
+                            {data?.country_breakdown && Object.keys(data.country_breakdown).length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {Object.entries(data.country_breakdown).map(([country, countryData]) => {
+                                        const metricData = countryData[selectedMetric.dataKey];
+                                        
+                                        if (!metricData) return null;
+
+                                        // For conversion_funnel, find specific step
+                                        if (selectedMetric.dataKey === 'conversion_funnel' && selectedMetric.label) {
+                                            const countryStep = (metricData as any[]).find(
+                                                (step: any) => step.label === selectedMetric.label
+                                            );
+                                            
+                                            if (!countryStep) return null;
+
+                                            const percentage = selectedMetric.value && selectedMetric.value > 0 
+                                                ? ((countryStep.value / selectedMetric.value) * 100).toFixed(1)
+                                                : "0";
+
+                                            return (
+                                                <div 
+                                                    key={country}
+                                                    className="card p-5 border-2 border-gray-100 hover:border-[var(--cy-primary)] hover:shadow-lg transition-all duration-200 group"
+                                                >
+                                                    {/* Country Header */}
+                                                    <div className="flex items-center justify-between mb-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="bg-gradient-to-br from-[var(--cy-primary)] to-[var(--cy-secondary)] p-2 rounded-lg">
+                                                                <span className="text-2xl">🌍</span>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="font-bold text-lg text-[var(--cy-navy)]">{country}</h4>
+                                                                <p className="text-xs text-[var(--cy-text-muted)]">{percentage}% of total</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <div className="text-3xl font-extrabold text-[var(--cy-primary)] group-hover:scale-110 transition-transform">
+                                                                {countryStep.value}
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wider mt-1">
+                                                                {selectedMetric.label}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Progress Bar */}
+                                                    <div className="relative">
+                                                        <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                                            <div
+                                                                className="h-full rounded-full transition-all duration-500 relative overflow-hidden"
+                                                                style={{
+                                                                    width: `${percentage}%`,
+                                                                    backgroundColor: countryStep.color || 'var(--cy-primary)'
+                                                                }}
+                                                            >
+                                                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-[10px] text-[var(--cy-text-muted)] mt-1 text-right">
+                                                            {percentage}% of total volume
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Quick Stats */}
+                                                    <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t border-gray-100">
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-bold text-[var(--cy-navy)]">
+                                                                {countryData.total_leads || 0}
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
+                                                                Total Leads
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-center border-x border-gray-100">
+                                                            <div className="text-lg font-bold text-[var(--cy-navy)]">
+                                                                {countryData.total_applications || 0}
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
+                                                                Applications
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-bold text-green-600">
+                                                                {countryData.total_leads > 0 
+                                                                    ? ((countryData.total_applications / countryData.total_leads) * 100).toFixed(1)
+                                                                    : "0"}%
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
+                                                                Conv. Rate
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        
+                                        // For other array metrics (lead_sources, call_outcomes, demographics, etc.)
+                                        if (Array.isArray(metricData)) {
+                                            const totalValue = (metricData as any[]).reduce((sum, item) => sum + (item.value || 0), 0);
+                                            
+                                            return (
+                                                <div 
+                                                    key={country}
+                                                    className="card p-5 border-2 border-gray-100 hover:border-[var(--cy-primary)] hover:shadow-lg transition-all duration-200"
+                                                >
+                                                    {/* Country Header */}
+                                                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="bg-gradient-to-br from-[var(--cy-primary)] to-[var(--cy-secondary)] p-2 rounded-lg">
+                                                                <span className="text-2xl">🌍</span>
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="font-bold text-lg text-[var(--cy-navy)]">{country}</h4>
+                                                                <p className="text-xs text-[var(--cy-text-muted)]">Total: {totalValue}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Data Items */}
+                                                    <div className="space-y-3 max-h-64 overflow-y-auto">
+                                                        {(metricData as any[]).slice(0, 10).map((item, idx) => {
+                                                            const itemPercentage = totalValue > 0 ? ((item.value / totalValue) * 100).toFixed(1) : "0";
+                                                            return (
+                                                                <div key={idx}>
+                                                                    <div className="flex justify-between items-center mb-1">
+                                                                        <span className="text-sm font-medium text-[var(--cy-navy)] flex items-center gap-2">
+                                                                            <div 
+                                                                                className="w-2 h-2 rounded-full"
+                                                                                style={{ backgroundColor: item.color || 'var(--cy-primary)' }}
+                                                                            ></div>
+                                                                            {item.label}
+                                                                        </span>
+                                                                        <div className="text-right">
+                                                                            <span className="text-sm font-bold">{item.value}</span>
+                                                                            <span className="text-[10px] text-[var(--cy-text-muted)] ml-2">({itemPercentage}%)</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="w-full bg-gray-100 rounded-full h-2">
+                                                                        <div
+                                                                            className="h-full rounded-full transition-all"
+                                                                            style={{
+                                                                                width: `${itemPercentage}%`,
+                                                                                backgroundColor: item.color || 'var(--cy-primary)'
+                                                                            }}
+                                                                        ></div>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+
+                                                    {/* Quick Stats */}
+                                                    <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-gray-100">
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-bold text-[var(--cy-navy)]">
+                                                                {countryData.total_leads || 0}
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
+                                                                Total Leads
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-lg font-bold text-[var(--cy-navy)]">
+                                                                {countryData.total_applications || 0}
+                                                            </div>
+                                                            <div className="text-[10px] text-[var(--cy-text-muted)] uppercase tracking-wide">
+                                                                Applications
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                        
+                                        return null;
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <div className="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Globe className="w-8 h-8 text-gray-400" />
+                                    </div>
+                                    <p className="text-[var(--cy-text-muted)] text-sm">
+                                        No country-specific data available. Select countries from the filters above to view breakdown.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer */}
+                        <div className="border-t border-gray-200 p-4 bg-gray-50">
+                            <div className="flex items-center justify-between text-xs text-[var(--cy-text-muted)]">
+                                <span>💡 Click on any chart or metric to view detailed country breakdown</span>
+                                <button
+                                    onClick={() => setShowBreakdownDialog(false)}
+                                    className="btn btn-sm btn-primary"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </DashboardLayout>
     );
 }
