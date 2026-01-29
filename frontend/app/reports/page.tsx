@@ -63,6 +63,8 @@ export default function ReportsPage() {
                 });
                 
                 const response = await apiFetch(`/api/reports/summary/?${params.toString()}`);
+                console.log('Reports API Response:', response);
+                console.log('Country Breakdown:', response.country_breakdown);
                 setData(response);
             } catch (error) {
                 console.error("Failed to fetch reports data:", error);

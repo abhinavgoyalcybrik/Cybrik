@@ -2468,7 +2468,7 @@ class ReportsSummary(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        from django.db.models import Sum, Avg, Count, Q
+        from django.db.models import Sum, Avg, Count, Q, F
         from .models import Lead, Applicant, Application, CallRecord, Document, FollowUp, Transcript, Tenant
 
         # Get filter parameters
@@ -2692,18 +2692,49 @@ class ReportsSummary(APIView):
                     country_breakdown[country_name] = get_country_metrics(country_name)
         else:
             # If no countries specified, show breakdown for ALL available countries
-            # Get unique countries from leads (limited to top countries for performance)
-            top_countries = Lead.objects.filter(
+            # Get unique countries from BOTH leads and applicants (limited to top countries)
+            from django.db.models import Value
+            from django.db.models.functions import Coalesce
+            
+            # Get countries from Leads
+            lead_countries = Lead.objects.filter(
                 Q(tenant_id=tenant_id) if tenant_id else Q(),
                 country__isnull=False
             ).exclude(country='').values('country').annotate(
                 count=Count('id')
-            ).order_by('-count')[:10]  # Top 10 countries by lead volume
+            )
             
-            for country_stat in top_countries:
-                country_name = country_stat['country']
+            # Get countries from Applicants (using preferred_country field)
+            applicant_countries = Applicant.objects.filter(
+                Q(tenant_id=tenant_id) if tenant_id else Q(),
+                preferred_country__isnull=False
+            ).exclude(preferred_country='').values(
+                country=F('preferred_country')
+            ).annotate(
+                count=Count('id')
+            )
+            
+            # Combine and get top countries
+            all_countries_dict = {}
+            for item in lead_countries:
+                country = item['country']
+                all_countries_dict[country] = all_countries_dict.get(country, 0) + item['count']
+            
+            for item in applicant_countries:
+                country = item['country']
+                all_countries_dict[country] = all_countries_dict.get(country, 0) + item['count']
+            
+            # Sort by count and get top 10
+            top_countries = sorted(all_countries_dict.items(), key=lambda x: x[1], reverse=True)[:10]
+            
+            print(f"[DEBUG] Found {len(top_countries)} countries for breakdown: {[c[0] for c in top_countries]}")
+            
+            for country_name, count in top_countries:
                 if country_name:
+                    print(f"[DEBUG] Processing country: {country_name} with {count} records")
                     country_breakdown[country_name] = get_country_metrics(country_name)
+            
+            print(f"[DEBUG] Final country_breakdown has {len(country_breakdown)} entries")
 
         # 10. Available Reports (Mocked)
         available_reports = [
