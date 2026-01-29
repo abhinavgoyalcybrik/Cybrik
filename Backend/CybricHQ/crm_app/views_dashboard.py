@@ -432,17 +432,17 @@ def country_wise_stats(request):
     else:
         leads_qs = Lead.objects.none()
     
-    # Optional country filter (case-insensitive)
+    # Optional country filter (case-insensitive) - using 'country' field
     country_filter = request.query_params.get("country")
     if country_filter:
-        leads_qs = leads_qs.filter(preferred_country__iexact=country_filter)
+        leads_qs = leads_qs.filter(country__iexact=country_filter)
     
-    # Country distribution with status breakdown
+    # Country distribution with status breakdown (using 'country' field)
     country_stats = leads_qs.exclude(
-        preferred_country__isnull=True
+        country__isnull=True
     ).exclude(
-        preferred_country=""
-    ).values("preferred_country").annotate(
+        country=""
+    ).values("country").annotate(
         total=Count("id"),
         new=Count("id", filter=Q(status="new")),
         contacted=Count("id", filter=Q(status="contacted")),
@@ -455,7 +455,7 @@ def country_wise_stats(request):
     # Build response
     country_distribution = [
         {
-            "country": item["preferred_country"],
+            "country": item["country"],
             "total": item["total"],
             "new": item["new"],
             "contacted": item["contacted"],

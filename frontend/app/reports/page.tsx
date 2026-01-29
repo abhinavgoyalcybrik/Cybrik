@@ -18,24 +18,34 @@ interface ReportData {
     task_completion: { label: string; value: number }[];
     available_reports: { name: string; date: string; size: string; type: string }[];
     total_applications: number;
+    companies: { id: string; name: string }[];
+    countries: string[];
 }
 
 export default function ReportsPage() {
     const [data, setData] = useState<ReportData | null>(null);
     const [loading, setLoading] = useState(true);
     const [showFilters, setShowFilters] = useState(false);
+    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-    // Mock filter state
+    // Filter state with company and country
     const [filters, setFilters] = useState({
         dateRange: "Last 30 Days",
         counselor: "All Counselors",
-        source: "All Sources"
+        source: "All Sources",
+        company: "",  // tenant_id
+        country: ""
     });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiFetch('/api/reports/summary/');
+                // Build query params based on filters
+                const params = new URLSearchParams();
+                if (filters.company) params.append('tenant_id', filters.company);
+                if (filters.country) params.append('country', filters.country);
+                
+                const response = await apiFetch(`/api/reports/summary/?${params.toString()}`);
                 setData(response);
             } catch (error) {
                 console.error("Failed to fetch reports data:", error);
@@ -44,7 +54,46 @@ export default function ReportsPage() {
             }
         };
         fetchData();
-    }, []);
+    }, [filters.company, filters.country]);  // Refetch when company or country changes
+
+    const handleGeneratePDF = async () => {
+        setIsGeneratingPDF(true);
+        try {
+            // Build request body with filters
+            const body: any = {};
+            if (filters.company) body.tenant_id = filters.company;
+            if (filters.country) body.country = filters.country;
+            
+            const response = await fetch('/api/reports/summary/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+                credentials: 'include',
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to generate PDF');
+            }
+            
+            // Download the PDF
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CRM_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error("Failed to generate PDF:", error);
+            alert("Failed to generate PDF. Please try again.");
+        } finally {
+            setIsGeneratingPDF(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -85,8 +134,12 @@ export default function ReportsPage() {
                             <button className="px-4 py-2.5 bg-white/10 text-white border border-white/20 rounded-xl font-medium hover:bg-white/20 transition-all flex items-center gap-2">
                                 <Download size={16} /> Export
                             </button>
-                            <button className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2">
-                                <FileText size={16} /> Generate PDF
+                            <button 
+                                className="px-5 py-3 bg-[var(--cy-lime)] text-[var(--cy-navy)] rounded-xl font-bold hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onClick={handleGeneratePDF}
+                                disabled={isGeneratingPDF}
+                            >
+                                <FileText size={16} /> {isGeneratingPDF ? 'Generating...' : 'Generate PDF'}
                             </button>
                         </div>
                     </div>
@@ -96,7 +149,29 @@ export default function ReportsPage() {
 
                 {/* Filter Panel */}
                 {showFilters && (
-                    <div className="card p-4 grid grid-cols-1 md:grid-cols-4 gap-4 animate-in slide-in-from-top-2 duration-200">
+                    <div className="card p-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-in slide-in-from-top-2 duration-200">
+                        <div>
+                            <label className="label-text text-xs font-bold mb-1 block">Company</label>
+                            <select
+                                className="select select-bordered select-sm w-full"
+                                value={filters.company}
+                                onChange={(e) => setFilters({ ...filters, company: e.target.value })}
+                            >
+                                <option value="">All Companies</option>
+                                {data?.companies?.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                            </select>
+                        </div>
+                        <div>
+                            <label className="label-text text-xs font-bold mb-1 block">Country</label>
+                            <select
+                                className="select select-bordered select-sm w-full"
+                                value={filters.country}
+                                onChange={(e) => setFilters({ ...filters, country: e.target.value })}
+                            >
+                                <option value="">All Countries</option>
+                                {data?.countries?.map(c => <option key={c} value={c}>{c}</option>)}
+                            </select>
+                        </div>
                         <div>
                             <label className="label-text text-xs font-bold mb-1 block">Date Range</label>
                             <select
@@ -122,21 +197,19 @@ export default function ReportsPage() {
                                 {data?.counselor_stats.map(c => <option key={c.name}>{c.name}</option>)}
                             </select>
                         </div>
-                        <div>
-                            <label className="label-text text-xs font-bold mb-1 block">Lead Source</label>
-                            <select
-                                className="select select-bordered select-sm w-full"
-                                value={filters.source}
-                                onChange={(e) => setFilters({ ...filters, source: e.target.value })}
-                            >
-                                <option>All Sources</option>
-                                <option>Google Ads</option>
-                                <option>Facebook</option>
-                                <option>Referral</option>
-                            </select>
-                        </div>
                         <div className="flex items-end">
-                            <button className="btn btn-sm btn-ghost w-full">Reset Filters</button>
+                            <button 
+                                className="btn btn-sm btn-ghost w-full"
+                                onClick={() => setFilters({
+                                    dateRange: "Last 30 Days",
+                                    counselor: "All Counselors",
+                                    source: "All Sources",
+                                    company: "",
+                                    country: ""
+                                })}
+                            >
+                                Reset Filters
+                            </button>
                         </div>
                     </div>
                 )}
