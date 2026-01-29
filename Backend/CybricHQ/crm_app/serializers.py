@@ -719,6 +719,11 @@ class LeadSerializer(serializers.ModelSerializer):
             return []
         return WhatsAppMessageSerializer(qs.all(), many=True, context=self.context).data
 
+    def validate_source(self, value):
+        """Strip whitespace from source field to handle frontend issues"""
+        if value:
+            return value.strip()
+        return value
 
     def create(self, validated_data):
         if not validated_data.get('external_id'):

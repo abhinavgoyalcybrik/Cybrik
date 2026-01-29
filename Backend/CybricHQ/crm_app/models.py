@@ -596,28 +596,17 @@ class Lead(models.Model):
         ('lost', 'Lost'),
     ]
     
-    # Lead source choices with walk-in option
+    # Lead source choices
     LEAD_SOURCE_CHOICES = [
         ('website', 'Website'),
         ('facebook', 'Facebook Lead Ad'),
         ('google', 'Google Ads'),
+        ('meta_ads', 'Meta Ads'),
         ('walk-in', 'Walk-in'),
         ('referral', 'Referral'),
         ('phone', 'Phone Inquiry'),
         ('email', 'Email'),
         ('whatsapp', 'WhatsApp'),
-        ('social_media', 'Social Media'),
-        ('advertisement', 'Advertisement'),
-        ('other', 'Other'),
-    ]
-    
-    # Lead source choices with walk-in option
-    LEAD_SOURCE_CHOICES = [
-        ('website', 'Website'),
-        ('referral', 'Referral'),
-        ('walk-in', 'Walk-in'),
-        ('phone', 'Phone'),
-        ('email', 'Email'),
         ('social_media', 'Social Media'),
         ('advertisement', 'Advertisement'),
         ('other', 'Other'),
