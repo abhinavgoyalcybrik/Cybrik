@@ -2762,12 +2762,9 @@ class ReportsSummary(APIView):
             "available_reports": available_reports,
             "companies": companies,
             "countries": all_countries,
+            "country_breakdown": country_breakdown,  # ADD THIS LINE
         }
         
-        # Add country breakdowns if requested
-        if country_breakdown:
-            response_data["country_breakdown"] = country_breakdown
-
         return Response(response_data)    
     def post(self, request):
         """
