@@ -29,7 +29,7 @@ type Lead = {
   dob?: string;
   passport_number?: string;
   address?: string;
-  preferred_country?: string;
+  country?: string;
   stage?: string;
   metadata?: any;
   academic_records?: any[];
@@ -587,7 +587,7 @@ export default function LeadDetailPage() {
                   { label: "Stage", value: currentStage.label },
                   { label: "Joined", value: lead.received_at ? new Date(lead.received_at).toLocaleDateString() : "N/A" },
                   { label: "Address", value: lead.address || "Not available" },
-                  { label: "Preferred Country", value: lead.preferred_country || "Not specified" },
+                  { label: "Country", value: lead.country || "Not specified" },
                 ].map((item, idx) => (
                   <div key={idx} className="flex flex-col">
                     <span className="text-xs font-medium text-[var(--cy-text-muted)] uppercase tracking-wider mb-1">{item.label}</span>

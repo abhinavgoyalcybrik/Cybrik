@@ -20,7 +20,7 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
         phone: '',
         message: '',
         source: 'meta_ads' as LeadSource,
-        preferred_country: '',
+        country: '',
         highest_qualification: '',
         qualification_marks: '',
         english_test_scores: '',
@@ -61,7 +61,7 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
                         phone: '',
                         message: '',
                         source: 'meta_ads',
-                        preferred_country: '',
+                        country: '',
                         highest_qualification: '',
                         qualification_marks: '',
                         english_test_scores: '',
@@ -197,15 +197,15 @@ export default function LeadCaptureModal({ isOpen, onClose, onSuccess }: LeadCap
 
                                         <div className="space-y-1.5">
                                             <label className="text-sm font-semibold text-[var(--cy-navy)]">
-                                                Preferred Country
+                                                Country
                                             </label>
                                             <select
-                                                name="preferred_country"
-                                                value={formData.preferred_country}
+                                                name="country"
+                                                value={formData.country}
                                                 onChange={handleChange}
                                                 className="input w-full"
                                             >
-                                                <option value="">Select preferred country</option>
+                                                <option value="">Select country</option>
                                                 <option value="USA">USA</option>
                                                 <option value="UK">United Kingdom</option>
                                                 <option value="Canada">Canada</option>
