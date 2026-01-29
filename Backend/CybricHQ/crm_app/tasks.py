@@ -763,33 +763,20 @@ def analyze_call_transcript(call_record_id):
                 lead = call.lead
                 lead_updates = []
                 
-                # 1. Personal Details
+                # 1. Personal Details - Lead model only has 'name' field, not first_name/last_name/dob/passport_number/address/preferred_country
+                # These fields exist on the Applicant model, not Lead
                 personal = analysis.get('personal_details', {})
                 if personal:
-                    if personal.get('first_name') and not lead.first_name:
-                        lead.first_name = personal.get('first_name')
-                        lead_updates.append('first_name')
-                    if personal.get('last_name') and not lead.last_name:
-                        lead.last_name = personal.get('last_name')
-                        lead_updates.append('last_name')
-                    if personal.get('dob') and not lead.dob:
-                        lead.dob = personal.get('dob')
-                        lead_updates.append('dob')
-                    if personal.get('passport_number') and not lead.passport_number:
-                        lead.passport_number = personal.get('passport_number')
-                        lead_updates.append('passport_number')
-                    if personal.get('address') and not lead.address:
-                        lead.address = personal.get('address')
-                        lead_updates.append('address')
+                    # Update name if provided and lead has no name
+                    if personal.get('first_name') and not lead.name:
+                        lead.name = f"{personal.get('first_name')} {personal.get('last_name', '')}".strip()
+                        lead_updates.append('name')
                     if personal.get('city') and not lead.city:
                         lead.city = personal.get('city')
                         lead_updates.append('city')
                     if personal.get('country') and not lead.country:
                         lead.country = personal.get('country')
                         lead_updates.append('country')
-                    if personal.get('preferred_country') and not lead.preferred_country:
-                        lead.preferred_country = personal.get('preferred_country')
-                        lead_updates.append('preferred_country')
                 
                 # 2. Academic History -> highest_qualification, qualification_marks
                 academic_history = analysis.get('academic_history', [])
@@ -824,10 +811,8 @@ def analyze_call_transcript(call_record_id):
                     lead.qualification_gap = analysis.get('qualification_gap')
                     lead_updates.append('qualification_gap')
                 
-                # preferred_country from top-level analysis (not nested in personal_details)
-                if analysis.get('preferred_country') and not lead.preferred_country:
-                    lead.preferred_country = analysis.get('preferred_country')
-                    lead_updates.append('preferred_country')
+                # Note: preferred_country doesn't exist on Lead model (only on Applicant)
+                # The Lead model uses 'country' field instead
                 
                 # 5. Store full analysis in metadata for reference
                 if not lead.metadata:

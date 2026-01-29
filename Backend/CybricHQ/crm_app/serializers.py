@@ -281,7 +281,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         if obj.applicant:
             return f"{obj.applicant.first_name} {obj.applicant.last_name or ''}".strip()
         elif obj.lead:
-            return f"{obj.lead.first_name or obj.lead.name or ''} {obj.lead.last_name or ''}".strip()
+            return obj.lead.name or "Unknown"
         return "Unknown"
 
     def get_applicant_email(self, obj):
@@ -601,16 +601,13 @@ class FollowUpSerializer(serializers.ModelSerializer):
 
     def get_applicant_name(self, obj):
         if obj.lead:
-            return f"{obj.lead.first_name} {obj.lead.last_name}".strip()
+            return obj.lead.name or None
         return None
         
     def get_crm_lead_name(self, obj):
         if obj.crm_lead:
-            # Prefer first/last name if available, else name field
-            name = f"{obj.crm_lead.first_name or ''} {obj.crm_lead.last_name or ''}".strip()
-            if not name:
-                name = obj.crm_lead.name or f"Lead #{obj.crm_lead.id}"
-            return name
+            # Lead model only has 'name' field (not first_name/last_name)
+            return obj.crm_lead.name or f"Lead #{obj.crm_lead.id}"
         return None
 
 

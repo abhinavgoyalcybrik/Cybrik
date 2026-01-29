@@ -728,7 +728,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                 # Build dynamic variables for ElevenLabs agent (via SmartFlow WebSocket)
                 dynamic_vars = {
                     "counsellorName": "Cybric Assistant",
-                    "name": lead.name or lead.first_name or "Student",
+                    "name": lead.name or "Student",
                     "preferredCountry": lead.country or "",
                     "highestQualification": lead.highest_qualification or "",
                     "marksHighestQualification": lead.qualification_marks or "",
@@ -745,7 +745,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
                     provider="smartflo",
                     metadata={
                         "lead_id": str(lead.id),
-                        "name": lead.name or lead.first_name,
+                        "name": lead.name,
                         "source": lead.source,
                         "dynamic_variables": dynamic_vars
                     }
@@ -918,32 +918,23 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
             logger.debug("Initializing CallAnalyzer...")
             analyzer = CallAnalyzer()
             logger.debug("Sending to AI...")
-            analysis = analyzer.analyze_transcript(full_transcript, metadata={"lead_id": lead.id, "name": lead.first_name or lead.name})
+            analysis = analyzer.analyze_transcript(full_transcript, metadata={"lead_id": lead.id, "name": lead.name})
             logger.info(f"AI Analysis Result: {analysis}")
             
             # ====== AUTO-UPDATE LEAD PROFILE ======
             # Ported from tasks.py analyze_call_transcript to ensure immediate update
+            # Note: Lead model only has 'name' field, not first_name/last_name/dob/passport_number/address
+            # These fields exist on the Applicant model, not Lead
             try:
                 lead_updates = []
                 
-                # 1. Personal Details
+                # 1. Personal Details - only update fields that exist on Lead model
                 personal = analysis.get('personal_details', {})
                 if personal:
-                    if personal.get('first_name') and not lead.first_name:
-                        lead.first_name = personal.get('first_name')
-                        lead_updates.append('first_name')
-                    if personal.get('last_name') and not lead.last_name:
-                        lead.last_name = personal.get('last_name')
-                        lead_updates.append('last_name')
-                    if personal.get('dob') and not lead.dob:
-                        lead.dob = personal.get('dob')
-                        lead_updates.append('dob')
-                    if personal.get('passport_number') and not lead.passport_number:
-                        lead.passport_number = personal.get('passport_number')
-                        lead_updates.append('passport_number')
-                    if personal.get('address') and not lead.address:
-                        lead.address = personal.get('address')
-                        lead_updates.append('address')
+                    # Update name if provided and lead has no name
+                    if personal.get('first_name') and not lead.name:
+                        lead.name = f"{personal.get('first_name')} {personal.get('last_name', '')}".strip()
+                        lead_updates.append('name')
                     if personal.get('city') and not lead.city:
                         lead.city = personal.get('city')
                         lead_updates.append('city')
@@ -1106,7 +1097,7 @@ class LeadViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         
         overview_data = {
             "lead_id": lead.id,
-            "lead_name": lead.name or f"{lead.first_name} {lead.last_name or ''}".strip(),
+            "lead_name": lead.name or f"Lead #{lead.id}",
             "summary": None,
             "call_status": None,
             "call_outcome": None,
@@ -1545,7 +1536,7 @@ class FollowUpViewSet(TenantQuerySetMixin, viewsets.ModelViewSet):
         
         applicant_name = None
         if task.lead:
-            applicant_name = f"{task.lead.first_name} {task.lead.last_name}"
+            applicant_name = task.lead.name or f"Lead #{task.lead.id}"
         
         return Response({
             "ok": True,
@@ -1593,7 +1584,7 @@ class ScheduleAICallView(APIView):
         try:
             crm_lead = Lead.objects.get(id=lead_id)
             phone = crm_lead.phone
-            name = crm_lead.first_name or crm_lead.name or f"Lead #{crm_lead.id}"
+            name = crm_lead.name or f"Lead #{crm_lead.id}"
         except (Lead.DoesNotExist, ValueError):
             return Response({"error": "Lead not found"}, status=status.HTTP_404_NOT_FOUND)
         
