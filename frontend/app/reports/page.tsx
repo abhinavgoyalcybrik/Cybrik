@@ -308,7 +308,7 @@ export default function ReportsPage() {
                                                 <div>
                                                     <h3 className="text-2xl font-bold">{country}</h3>
                                                     <p className="text-blue-100 text-sm mt-1">
-                                                        {countryData.total_applications} applications · {countryData.total_leads} leads
+                                                        {countryData.total_applications} applications · {countryData.total_leads || 0} leads
                                                     </p>
                                                 </div>
                                             </div>
@@ -316,8 +316,8 @@ export default function ReportsPage() {
                                                 <div className="text-right">
                                                     <div className="text-xs text-blue-200">Conversion Rate</div>
                                                     <div className="text-2xl font-bold">
-                                                        {countryData.total_leads > 0 
-                                                            ? ((countryData.total_applications / countryData.total_leads) * 100).toFixed(1) 
+                                                        {(countryData.total_leads ?? 0) > 0 
+                                                            ? ((countryData.total_applications / (countryData.total_leads ?? 1)) * 100).toFixed(1) 
                                                             : 0}%
                                                     </div>
                                                 </div>
@@ -347,7 +347,7 @@ export default function ReportsPage() {
                                                 </div>
                                                 <div className="card p-4 bg-white">
                                                     <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">Total Leads</div>
-                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">{countryData.total_leads}</div>
+                                                    <div className="text-2xl font-bold text-[var(--cy-navy)]">{countryData.total_leads || 0}</div>
                                                 </div>
                                                 <div className="card p-4 bg-white">
                                                     <div className="text-xs font-bold text-[var(--cy-text-secondary)] uppercase mb-1">AI Calls</div>
