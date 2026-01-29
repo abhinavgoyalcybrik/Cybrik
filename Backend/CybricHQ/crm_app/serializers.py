@@ -745,6 +745,38 @@ class LeadSerializer(serializers.ModelSerializer):
         # Otherwise, return the value as-is (it should be a valid choice value)
         return value
 
+    def validate_email(self, value):
+        """Clean and validate email - accept empty strings as None"""
+        if not value or value.strip() == '':
+            return None
+        value = value.strip()
+        # Let Django's EmailField validator handle the actual validation
+        return value
+
+    def validate_phone(self, value):
+        """Clean phone number - accept various formats"""
+        if not value or value.strip() == '':
+            return None
+        # Remove common formatting characters
+        value = value.strip()
+        # Just store as-is, no strict validation
+        return value
+
+    def validate(self, data):
+        """
+        Object-level validation with user-friendly error messages.
+        Clean up any empty string fields that should be None.
+        """
+        # Convert empty strings to None for nullable fields
+        nullable_fields = ['email', 'phone', 'city', 'country', 'message', 
+                          'preferred_language', 'interested_service', 'source']
+        
+        for field in nullable_fields:
+            if field in data and isinstance(data[field], str) and data[field].strip() == '':
+                data[field] = None
+        
+        return data
+
     def create(self, validated_data):
         if not validated_data.get('external_id'):
             import uuid

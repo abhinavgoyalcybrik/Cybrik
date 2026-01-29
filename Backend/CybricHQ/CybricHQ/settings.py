@@ -151,6 +151,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
+    "EXCEPTION_HANDLER": "crm_app.exceptions.custom_exception_handler",
     "DEFAULT_THROTTLE_RATES": {
             "lead_webhook": "10/minute",  # adjust as needed
             "anon": "100/day",
