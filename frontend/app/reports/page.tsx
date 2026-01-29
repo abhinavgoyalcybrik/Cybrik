@@ -43,10 +43,6 @@ export default function ReportsPage() {
     const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
     const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
 
-    // Country selection state
-    const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-    const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
-
     useEffect(() => {
         const fetchData = async () => {
             try {
