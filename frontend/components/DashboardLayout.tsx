@@ -9,6 +9,7 @@ import { useTenant } from '@/context/TenantContext';
 import apiFetch from '@/lib/api';
 import { clearCompleteSession } from '@/lib/clearSession';
 import SessionTimeout from './SessionTimeout';
+import CounselorTargetNotification from './CounselorTargetNotification';
 
 
 interface DashboardLayoutProps {
@@ -336,6 +337,11 @@ export default function DashboardLayout({ children, user: initialUser }: Dashboa
 
                 {/* Floating Bubbles - Top Right */}
                 <div className="absolute top-4 right-4 z-30 flex items-center gap-3">
+
+                    {/* Target Notification (for counselors) */}
+                    {user && (user.role === 'counsellor' || user.role === 'admissions') && (
+                        <CounselorTargetNotification />
+                    )}
 
                     {/* Search Bubble */}
                     <div className="relative group">

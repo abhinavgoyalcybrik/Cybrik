@@ -199,3 +199,55 @@ def log_followup_save(sender, instance, created, **kwargs):
         data={"channel": instance.channel, "notes": instance.notes},
         notes=f"FollowUp {action}: {instance.channel}"
     )
+
+
+@receiver(post_save, sender=Application)
+def update_counselor_target_on_enrollment(sender, instance, created, **kwargs):
+    """
+    Automatically update counselor target progress when application reaches 'enrolled' status.
+    Only updates when status changes to 'enrolled' (not on initial creation).
+    """
+    # Only process if status is 'enrolled'
+    if instance.status != 'enrolled':
+        return
+    
+    # Check if status just changed to enrolled (avoid duplicate counts)
+    if not created and hasattr(instance, '_old_state'):
+        if instance._old_state and instance._old_state.status == 'enrolled':
+            # Already was enrolled, don't count again
+            return
+    
+    # Get the counselor assigned to this application
+    counselor = instance.assigned_to
+    if not counselor:
+        return
+    
+    # Find active targets for this counselor
+    from .models import CounselorTarget
+    from django.utils import timezone
+    
+    today = timezone.now().date()
+    active_targets = CounselorTarget.objects.filter(
+        counselor=counselor,
+        status='active',
+        start_date__lte=today,
+        end_date__gte=today
+    )
+    
+    # Update progress for all active targets
+    for target in active_targets:
+        target.completed_enrollments += 1
+        target.update_status()
+        logger.info(f"Updated target {target.id} for counselor {counselor.username}: {target.completed_enrollments}/{target.target_enrollments}")
+
+
+@receiver(pre_save, sender=Application)
+def capture_application_old_state(sender, instance, **kwargs):
+    """Capture old state before saving to detect status changes"""
+    if instance.pk:
+        try:
+            instance._old_state = Application.objects.get(pk=instance.pk)
+        except Application.DoesNotExist:
+            instance._old_state = None
+    else:
+        instance._old_state = None

@@ -1011,3 +1011,125 @@ class WhatsAppMessage(models.Model):
     
     def __str__(self):
         return f"{self.direction}: {self.to_phone} ({self.status})"
+
+
+# ============================================================================
+# COUNSELOR TARGET SYSTEM
+# ============================================================================
+
+class CounselorTarget(models.Model):
+    """
+    Target assignments for counselors to track enrollment goals.
+    Targets are completed when applications reach 'enrolled' status.
+    """
+    PERIOD_CHOICES = [
+        ('daily', 'Daily'),
+        ('weekly', 'Weekly'),
+        ('monthly', 'Monthly'),
+        ('quarterly', 'Quarterly'),
+        ('yearly', 'Yearly'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('completed', 'Completed'),
+        ('overdue', 'Overdue'),
+        ('cancelled', 'Cancelled'),
+    ]
+    
+    # Tenant for data isolation
+    tenant = models.ForeignKey(
+        Tenant, 
+        on_delete=models.CASCADE,
+        related_name='counselor_targets',
+        null=True, 
+        blank=True
+    )
+    
+    # Counselor this target is assigned to
+    counselor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='targets'
+    )
+    
+    # Target details
+    target_enrollments = models.IntegerField(
+        help_text="Number of enrollments required to complete this target"
+    )
+    completed_enrollments = models.IntegerField(
+        default=0,
+        help_text="Number of enrollments achieved so far"
+    )
+    
+    # Time period
+    period_type = models.CharField(
+        max_length=20,
+        choices=PERIOD_CHOICES,
+        default='monthly'
+    )
+    start_date = models.DateField()
+    end_date = models.DateField()
+    
+    # Status
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
+    
+    # Admin who assigned this target
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='targets_assigned'
+    )
+    
+    # Notes
+    notes = models.TextField(blank=True, null=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['counselor', 'status']),
+            models.Index(fields=['start_date', 'end_date']),
+        ]
+    
+    def __str__(self):
+        counselor_name = f"{self.counselor.first_name} {self.counselor.last_name}".strip() or self.counselor.username
+        return f"{counselor_name}: {self.completed_enrollments}/{self.target_enrollments} ({self.period_type})"
+    
+    @property
+    def progress_percentage(self):
+        """Calculate progress as percentage"""
+        if self.target_enrollments == 0:
+            return 0
+        return min(100, (self.completed_enrollments / self.target_enrollments) * 100)
+    
+    @property
+    def is_completed(self):
+        """Check if target is completed"""
+        return self.completed_enrollments >= self.target_enrollments
+    
+    @property
+    def remaining_enrollments(self):
+        """Calculate remaining enrollments needed"""
+        return max(0, self.target_enrollments - self.completed_enrollments)
+    
+    def update_status(self):
+        """Update status based on completion and dates"""
+        from django.utils import timezone
+        today = timezone.now().date()
+        
+        if self.is_completed and self.status != 'cancelled':
+            self.status = 'completed'
+        elif today > self.end_date and not self.is_completed and self.status == 'active':
+            self.status = 'overdue'
+        
+        self.save()

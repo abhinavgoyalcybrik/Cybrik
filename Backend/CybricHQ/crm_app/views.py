@@ -3160,3 +3160,177 @@ class ReportsSummary(APIView):
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
         
         return response
+
+
+# ============================================================================
+# COUNSELOR TARGET MANAGEMENT VIEWS
+# ============================================================================
+
+class CounselorTargetViewSet(viewsets.ModelViewSet):
+    """
+    API endpoints for counselor target management.
+    Admins can create, view, update targets.
+    Counselors can view their own targets.
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        from .models import CounselorTarget
+        user = self.request.user
+        
+        # Admins can see all targets, counselors only their own
+        if user.is_staff or user.is_superuser:
+            queryset = CounselorTarget.objects.all()
+        else:
+            queryset = CounselorTarget.objects.filter(counselor=user)
+        
+        # Apply tenant filter if provided
+        tenant_id = self.request.query_params.get('tenant_id')
+        if tenant_id:
+            queryset = queryset.filter(tenant_id=tenant_id)
+        
+        return queryset.select_related('counselor', 'assigned_by', 'tenant')
+    
+    def get_serializer_class(self):
+        from rest_framework import serializers
+        from .models import CounselorTarget
+        
+        class CounselorTargetSerializer(serializers.ModelSerializer):
+            counselor_name = serializers.SerializerMethodField()
+            assigned_by_name = serializers.SerializerMethodField()
+            progress_percentage = serializers.ReadOnlyField()
+            remaining_enrollments = serializers.ReadOnlyField()
+            is_completed = serializers.ReadOnlyField()
+            
+            class Meta:
+                model = CounselorTarget
+                fields = [
+                    'id', 'counselor', 'counselor_name', 'target_enrollments',
+                    'completed_enrollments', 'period_type', 'start_date', 'end_date',
+                    'status', 'assigned_by', 'assigned_by_name', 'notes',
+                    'progress_percentage', 'remaining_enrollments', 'is_completed',
+                    'created_at', 'updated_at', 'tenant'
+                ]
+                read_only_fields = ['completed_enrollments', 'status', 'created_at', 'updated_at']
+            
+            def get_counselor_name(self, obj):
+                return f"{obj.counselor.first_name} {obj.counselor.last_name}".strip() or obj.counselor.username
+            
+            def get_assigned_by_name(self, obj):
+                if obj.assigned_by:
+                    return f"{obj.assigned_by.first_name} {obj.assigned_by.last_name}".strip() or obj.assigned_by.username
+                return None
+        
+        return CounselorTargetSerializer
+    
+    def perform_create(self, serializer):
+        """Set assigned_by to current user when creating target"""
+        serializer.save(assigned_by=self.request.user)
+    
+    @action(detail=False, methods=['get'])
+    def my_targets(self, request):
+        """Get current user's active and pending targets"""
+        from .models import CounselorTarget
+        from django.utils import timezone
+        
+        today = timezone.now().date()
+        targets = CounselorTarget.objects.filter(
+            counselor=request.user,
+            status__in=['active', 'overdue'],
+            start_date__lte=today,
+            end_date__gte=today
+        ).select_related('assigned_by')
+        
+        serializer = self.get_serializer(targets, many=True)
+        
+        # Calculate summary statistics
+        total_targets = targets.count()
+        total_target_enrollments = sum(t.target_enrollments for t in targets)
+        total_completed = sum(t.completed_enrollments for t in targets)
+        pending = total_target_enrollments - total_completed
+        
+        return Response({
+            'targets': serializer.data,
+            'summary': {
+                'total_targets': total_targets,
+                'total_target_enrollments': total_target_enrollments,
+                'total_completed': total_completed,
+                'pending': pending,
+                'completion_rate': (total_completed / total_target_enrollments * 100) if total_target_enrollments > 0 else 0
+            }
+        })
+    
+    @action(detail=False, methods=['get'])
+    def overview(self, request):
+        """Admin overview of all counselor targets"""
+        from .models import CounselorTarget
+        from django.db.models import Sum, Avg
+        
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response(
+                {'error': 'Only admins can access target overview'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Get filter parameters
+        tenant_id = request.query_params.get('tenant_id')
+        period_type = request.query_params.get('period_type')
+        
+        queryset = CounselorTarget.objects.all()
+        
+        if tenant_id:
+            queryset = queryset.filter(tenant_id=tenant_id)
+        if period_type:
+            queryset = queryset.filter(period_type=period_type)
+        
+        # Aggregate statistics
+        stats = queryset.aggregate(
+            total_targets=Count('id'),
+            total_target_enrollments=Sum('target_enrollments'),
+            total_completed=Sum('completed_enrollments'),
+            avg_completion_rate=Avg('completed_enrollments') * 100.0 / Avg('target_enrollments')
+        )
+        
+        # Group by counselor
+        from django.db.models import F
+        counselor_stats = queryset.values(
+            'counselor__id',
+            'counselor__first_name',
+            'counselor__last_name',
+            'counselor__username'
+        ).annotate(
+            total_targets=Count('id'),
+            target_enrollments=Sum('target_enrollments'),
+            completed_enrollments=Sum('completed_enrollments'),
+            active_targets=Count('id', filter=Q(status='active')),
+            completed_targets=Count('id', filter=Q(status='completed'))
+        ).order_by('-completed_enrollments')
+        
+        return Response({
+            'overview': stats,
+            'counselor_stats': list(counselor_stats)
+        })
+    
+    @action(detail=True, methods=['post'])
+    def update_progress(self, request, pk=None):
+        """Manually update target progress (admin only)"""
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response(
+                {'error': 'Only admins can manually update progress'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        target = self.get_object()
+        completed = request.data.get('completed_enrollments')
+        
+        if completed is not None:
+            target.completed_enrollments = int(completed)
+            target.update_status()
+            
+            serializer = self.get_serializer(target)
+            return Response(serializer.data)
+        
+        return Response(
+            {'error': 'completed_enrollments is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )

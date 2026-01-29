@@ -43,6 +43,7 @@ router.register(r"user-profiles", UserProfileViewSet, basename="userprofile")
 router.register(r"notifications", views_notifications.NotificationViewSet, basename="notification")
 router.register(r"integrations", AdIntegrationViewSet, basename="integration")
 router.register(r"campaigns", AdCampaignViewSet, basename="campaign")
+router.register(r"counselor-targets", views.CounselorTargetViewSet, basename="counselor-target")
 
 # Tenant Admin
 from .views_tenant_admin import TenantViewSet, ProductViewSet
