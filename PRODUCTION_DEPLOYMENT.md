@@ -28,15 +28,30 @@ python manage.py dumpdata > backup_$(date +%Y%m%d_%H%M%S).json
 ```
 
 ### **3. Run Migrations**
+
+**⚠️ IMPORTANT: Production Database Has Conflicts!**
+
+The production database has columns that migrations want to re-add. Use the fix script:
+
 ```bash
-# Check pending migrations
+# Option A: Use automated fix script (RECOMMENDED)
+chmod +x fix_production_migrations.sh
+./fix_production_migrations.sh
+
+# Option B: Manual fix
 python manage.py showmigrations crm_app
 
-# Apply all pending migrations
-python manage.py migrate
+# Fake migrations 0018-0021 (they try to add existing columns)
+python manage.py migrate crm_app 0018 --fake
+python manage.py migrate crm_app 0019 --fake
+python manage.py migrate crm_app 0020 --fake
+python manage.py migrate crm_app 0021 --fake
 
-# Expected output:
-# Applying crm_app.0022_alter_lead_walked_in_at... OK
+# Now apply the critical migration
+python manage.py migrate crm_app 0022
+
+# Apply all remaining migrations
+python manage.py migrate
 ```
 
 ### **4. Verify Schema**
@@ -92,6 +107,27 @@ ADD COLUMN receptionist_id INTEGER REFERENCES auth_user(id);
 ---
 
 ## ⚠️ **Troubleshooting**
+
+### **Issue: Migration fails with "column already exists" (PRODUCTION)**
+
+**Error:** `column "logo" of relation "crm_app_tenantsettings" already exists`
+
+**Cause:** Production database has columns that migrations want to re-add.
+
+**Solution:**
+```bash
+# Use the automated fix script
+chmod +x fix_production_migrations.sh
+./fix_production_migrations.sh
+
+# OR manually fake the conflicting migrations
+python manage.py migrate crm_app 0018 --fake
+python manage.py migrate crm_app 0019 --fake
+python manage.py migrate crm_app 0020 --fake
+python manage.py migrate crm_app 0021 --fake
+python manage.py migrate crm_app 0022
+python manage.py migrate
+```
 
 ### **Issue: Migration fails with "column already exists"**
 ```bash
