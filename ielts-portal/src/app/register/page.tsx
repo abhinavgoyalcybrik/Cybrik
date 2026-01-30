@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, Check } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
     const router = useRouter();
+    const { setAuthState } = useAuth();
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
@@ -66,7 +68,12 @@ export default function RegisterPage() {
                 return;
             }
 
-            localStorage.setItem('ielts_user', JSON.stringify(data.user));
+            // Properly set auth state with user and token
+            const studentUser = {
+                ...data.user,
+                role: 'student' as const,
+            };
+            setAuthState(studentUser, data.token || 'django-cookie-auth');
             router.push('/onboarding');
         } catch (err) {
             setError('Network error. Please try again.');
@@ -114,7 +121,12 @@ export default function RegisterPage() {
                 return;
             }
 
-            localStorage.setItem('ielts_user', JSON.stringify(data.user));
+            // Properly set auth state with user and token
+            const studentUser = {
+                ...data.user,
+                role: 'student' as const,
+            };
+            setAuthState(studentUser, data.token || 'django-cookie-auth');
 
             if (data.user.onboarding_completed) {
                 router.push('/dashboard');

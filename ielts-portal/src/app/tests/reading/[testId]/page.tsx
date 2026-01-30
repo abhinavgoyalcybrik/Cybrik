@@ -17,6 +17,7 @@ import {
 import { evaluateReading, ReadingEvaluationResult } from '@/services/evaluatorApi';
 import ReadingTestRenderer from '@/components/ReadingTestRenderer';
 import AIChatBot from '@/components/AIChatBot';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Question {
     id: string;
@@ -80,6 +81,7 @@ interface PageProps {
 export default function ReadingTestPage({ params }: PageProps) {
     const { testId } = use(params);
     const searchParams = useSearchParams();
+    const { user } = useAuth();
     const [test, setTest] = useState<ReadingTest | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -615,7 +617,7 @@ export default function ReadingTestPage({ params }: PageProps) {
                 <div className="flex items-center gap-4">
                     <div className="text-right hidden sm:block">
                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Candidate</div>
-                        <div className="font-bold text-slate-700">Guest Candidate</div>
+                        <div className="font-bold text-slate-700">{user?.name || 'Guest Candidate'}</div>
                     </div>
                     <button
                         onClick={handleSubmit}
