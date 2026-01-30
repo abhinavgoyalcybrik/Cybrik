@@ -326,7 +326,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 logout,
                 refreshUser,
                 isAuthenticated: !!user,
-                isAdmin: user?.role === 'admin' || user?.is_staff === true,
+                isAdmin: user?.role === 'admin',
                 token,
                 setAuthState,
             }}

@@ -88,8 +88,9 @@ export default function AdminLayout({ children, title, subtitle, actions }: Admi
         await logout();
     };
 
-    // Show admin nav only if user is explicitly an admin, otherwise show student nav
-    const isAdmin = user?.role === 'admin' || user?.is_staff === true;
+    // Show admin nav only if user has explicit admin role, not just staff permissions
+    // This prevents staff users who log in via student login from seeing admin UI
+    const isAdmin = user?.role === 'admin';
     const items = isAdmin ? navItems : studentNavItems;
     const portalTitle = isAdmin ? "Admin Panel" : "Student Portal";
     const roleTitle = isAdmin ? "Administrator" : "Student";
