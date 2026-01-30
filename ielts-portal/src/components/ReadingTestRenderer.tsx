@@ -165,7 +165,7 @@ export default function ReadingTestRenderer({
         if (!container?.rich) return null;
 
         return (
-            <div className="text-slate-800 text-lg leading-loose font-medium">
+            <div className="text-slate-800 text-sm leading-relaxed font-medium">
                 {container.rich.map((element, idx) => {
                     if (element.t === 'text') {
                         const text = element.v?.replace(/\n+/g, ' ') || '';
@@ -326,7 +326,7 @@ export default function ReadingTestRenderer({
                         {group.questions.map((question) => (
                             <div key={question.id} className="pl-2">
                                 <span className="inline-block px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded mb-2">Q{question.order}</span>
-                                <p className="mb-4 text-lg font-medium text-slate-800">{question.question_text}</p>
+                                <p className="mb-4 text-sm font-medium text-slate-800">{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => (
                                         <label key={optIdx} className="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 cursor-pointer transition-all group">
@@ -428,19 +428,19 @@ export default function ReadingTestRenderer({
                 <div className="w-1/2 flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
                     <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
                         <div className="max-w-2xl mx-auto">
-                            <h2 className="font-bold text-slate-900 text-3xl mb-8 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
+                            <h2 className="font-bold text-slate-900 text-2xl mb-6 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
                                 {currentPart.title}
                             </h2>
-                            <div className="text-slate-700 leading-loose text-justify font-serif text-lg whitespace-pre-wrap">
+                            <div className="text-slate-700 leading-relaxed text-justify font-serif text-sm whitespace-pre-wrap">
                                 {currentPart.content.split('\n').map((para, idx) => {
                                     const trimmed = para.trim();
-                                    if (!trimmed) return null;
+                                    if (!trimmed) return <div key={idx} className="h-4" />;
                                     const isHeading = trimmed.length < 80 && !trimmed.endsWith('.') && !trimmed.endsWith(',') && !trimmed.endsWith(';');
 
                                     if (isHeading) {
-                                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-xl mt-8 mb-4">{trimmed}</h3>;
+                                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-base mt-6 mb-3">{trimmed}</h3>;
                                     }
-                                    return <p key={idx} className="mb-6 indent-8">{trimmed}</p>;
+                                    return <p key={idx} className="mb-4 indent-8">{trimmed}</p>;
                                 })}
                             </div>
                         </div>
@@ -458,14 +458,14 @@ export default function ReadingTestRenderer({
                                 <div key={group.id} className="mb-12">
                                     <div className="mb-8">
                                         <div className="flex items-baseline justify-between border-b border-slate-200 pb-2 mb-4">
-                                            <h3 className="text-lg font-bold text-slate-900">
+                                            <h3 className="text-base font-bold text-slate-900">
                                                 Questions {group.questions[0]?.order}–{group.questions[group.questions.length - 1]?.order}
                                             </h3>
                                         </div>
 
                                         {group.instructions && (
                                             <div className="mb-6 p-5 bg-blue-50/50 rounded-xl border border-blue-100/50 text-blue-900">
-                                                <p className="text-base font-semibold whitespace-pre-wrap leading-relaxed">
+                                                <p className="text-sm font-semibold whitespace-pre-wrap leading-relaxed">
                                                     {group.instructions}
                                                 </p>
                                             </div>
