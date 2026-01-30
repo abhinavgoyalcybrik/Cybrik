@@ -49,9 +49,12 @@ export default function Dashboard() {
   });
 
   // Authentication check - verify with backend to prevent redirect loop
-  const [authVerified, setAuthVerified] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
+    // Only run once
+    if (authChecked) return;
+
     const verifySession = async () => {
       // Check localStorage first for onboarding status (client-side source of truth)
       const localUserStr = localStorage.getItem('ielts_user');
@@ -70,15 +73,12 @@ export default function Dashboard() {
           return;
         }
         // User is authenticated and onboarding is completed - stay on dashboard
+        setAuthChecked(true);
         return;
       }
 
       // If still loading auth state, wait
       if (isLoading) return;
-
-      // Prevent multiple verification attempts
-      if (authVerified) return;
-      setAuthVerified(true);
 
       // Check backend session before redirecting to login
       try {
@@ -102,24 +102,25 @@ export default function Dashboard() {
               return;
             }
 
-            // Update auth context without full page reload to prevent loop
-            if (window.location.pathname === '/dashboard') {
-              window.location.reload();
-            }
+            // Don't reload - just mark as checked and let context update naturally
+            setAuthChecked(true);
             return;
           }
         }
 
         // Not authenticated, redirect to login
+        setAuthChecked(true);
         router.push('/login');
       } catch (err) {
         // Error checking session, redirect to login
+        setAuthChecked(true);
         router.push('/login');
       }
     };
 
     verifySession();
-  }, [isLoading, user, router, authVerified]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Fetch test counts from JSON files and backend
   useEffect(() => {
