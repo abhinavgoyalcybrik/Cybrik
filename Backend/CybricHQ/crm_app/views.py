@@ -2570,7 +2570,13 @@ class ReportsSummary(APIView):
 
             # 4. Conversion Funnel
             total_leads = Lead.objects.filter(lead_filters).count()
-            total_applicants = Applicant.objects.filter(lead_filters if not tenant_id else Q(tenant_id=tenant_id)).count()
+            # Build applicant_filters separately since Applicant uses preferred_country, not country
+            applicant_filters = Q()
+            if tenant_id:
+                applicant_filters &= Q(tenant_id=tenant_id)
+            if country_filter:
+                applicant_filters &= Q(preferred_country__iexact=country_filter)
+            total_applicants = Applicant.objects.filter(applicant_filters).count()
             total_applications = Application.objects.filter(app_filters).count()
             total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
             
@@ -2647,6 +2653,8 @@ class ReportsSummary(APIView):
                 doc_filters &= Q(applicant__tenant_id=tenant_id)
             if country_filter:
                 doc_filters &= Q(applicant__preferred_country__iexact=country_filter)
+            
+            doc_stats = Document.objects.filter(doc_filters).values('status').annotate(count=Count('id'))
             document_status = []
             for stat in doc_stats:
                 document_status.append({"label": stat['status'].title(), "value": stat['count']})
@@ -2656,7 +2664,9 @@ class ReportsSummary(APIView):
             if tenant_id:
                 task_filters &= Q(lead__tenant_id=tenant_id)
             if country_filter:
-                task_filters &= Q(lead__country__iexact=country_filter)
+                # FollowUp.lead is ForeignKey to Applicant, not Lead model
+                # Applicant has preferred_country, not country
+                task_filters &= Q(lead__preferred_country__iexact=country_filter)
             
             task_stats = FollowUp.objects.filter(task_filters).values('completed').annotate(count=Count('id'))
             task_completion = []
