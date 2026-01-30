@@ -133,8 +133,6 @@ export default function ReadingTestPage({ params }: PageProps) {
         //     }
         // };
         // checkCompletion();
-        };
-        checkCompletion();
     }, [testId, searchParams]);
 
     useEffect(() => {
