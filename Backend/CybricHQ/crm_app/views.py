@@ -2570,6 +2570,7 @@ class ReportsSummary(APIView):
 
             # 4. Conversion Funnel
             total_leads = Lead.objects.filter(lead_filters).count()
+            total_converted_leads = Lead.objects.filter(lead_filters, status='converted').count()
             # Build applicant_filters separately since Applicant uses preferred_country, not country
             applicant_filters = Q()
             if tenant_id:
@@ -2686,6 +2687,7 @@ class ReportsSummary(APIView):
                 "task_completion": task_completion,
                 "total_applications": Application.objects.filter(app_filters).count(),
                 "total_leads": total_leads,
+                "total_converted_leads": total_converted_leads,
             }
         
         # Generate overall metrics (filtered by tenant and single country if specified)

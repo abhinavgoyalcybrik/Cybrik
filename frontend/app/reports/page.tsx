@@ -19,10 +19,31 @@ interface ReportData {
     available_reports: { name: string; date: string; size: string; type: string }[];
     total_applications: number;
     total_leads?: number;
+    total_converted_leads?: number;
     companies: { id: string; name: string }[];
     countries: string[];
     country_breakdown?: { [country: string]: Omit<ReportData, 'companies' | 'countries' | 'available_reports' | 'country_breakdown'> };
 }
+
+const formatLeadSourceLabel = (label: string) => {
+    if (!label) return "Unknown";
+    if (label === "No Data") return label;
+
+    const normalized = label.toLowerCase().replace(/\s+/g, "_").replace(/-/g, "_");
+    const map: Record<string, string> = {
+        meta_ads: "Meta Ads",
+        google_ads: "Google Ads",
+        organic: "Organic",
+        referral: "Referral",
+        walk_in: "Walk-in",
+        walkin: "Walk-in",
+        website: "Website",
+        other: "Other",
+        whatsapp: "WhatsApp",
+    };
+
+    return map[normalized] || label.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+};
 
 export default function ReportsPage() {
     const [data, setData] = useState<ReportData | null>(null);
@@ -423,7 +444,7 @@ export default function ReportsPage() {
                                                             {countryData.lead_sources.slice(0, 5).map((item, i) => (
                                                                 <div key={i}>
                                                                     <div className="flex justify-between text-xs mb-1">
-                                                                        <span>{item.label}</span>
+                                                                        <span>{formatLeadSourceLabel(item.label)}</span>
                                                                         <span className="font-bold">{item.value}</span>
                                                                     </div>
                                                                     <div className="w-full bg-gray-100 rounded-full h-2">
@@ -661,7 +682,7 @@ export default function ReportsPage() {
                                 {data.lead_sources.map((item, i) => (
                                     <div key={i}>
                                         <div className="flex justify-between text-xs mb-1">
-                                            <span>{item.label}</span>
+                                            <span>{formatLeadSourceLabel(item.label)}</span>
                                             <span className="font-bold">{item.value}</span>
                                         </div>
                                         <div className="w-full bg-gray-100 rounded-full h-2">
@@ -683,7 +704,7 @@ export default function ReportsPage() {
                                     {data.lead_sources.map((item, i) => (
                                         <div key={i} className="flex items-center gap-2 text-xs p-1 hover:bg-gray-50 rounded">
                                             <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }}></div>
-                                            <span className="text-[var(--cy-text-secondary)] truncate flex-1">{item.label}</span>
+                                            <span className="text-[var(--cy-text-secondary)] truncate flex-1">{formatLeadSourceLabel(item.label)}</span>
                                             <span className="font-bold">{item.value}</span>
                                         </div>
                                     ))}
@@ -887,8 +908,8 @@ export default function ReportsPage() {
                                     {Object.entries(data.country_breakdown).map(([country, countryData]) => {
                                         // Calculate conversion stats
                                         const totalLeads = countryData.total_leads ?? 0;
-                                        const totalApps = countryData.total_applications ?? 0;
-                                        const conversionRate = totalLeads > 0 ? ((totalApps / totalLeads) * 100).toFixed(2) : "0.00";
+                                        const convertedLeads = countryData.total_converted_leads ?? 0;
+                                        const conversionRate = totalLeads > 0 ? ((convertedLeads / totalLeads) * 100).toFixed(2) : "0.00";
                                         
                                         // Get conversion funnel data
                                         const funnel = countryData.conversion_funnel || [];
@@ -911,7 +932,7 @@ export default function ReportsPage() {
                                                     {/* Conversion Summary - like your dashboard */}
                                                     <div className="flex items-center gap-4 text-sm">
                                                         <div className="flex items-center gap-2">
-                                                            <span className="text-green-600 font-bold">{totalApps} Converted</span>
+                                                            <span className="text-green-600 font-bold">{convertedLeads} Converted</span>
                                                             <span className="text-gray-400">•</span>
                                                             <span className="text-[var(--cy-navy)] font-bold">{totalLeads} Leads</span>
                                                         </div>
@@ -967,7 +988,7 @@ export default function ReportsPage() {
                                                     <div className="p-4 border-t border-gray-100 bg-gray-50">
                                                         <h5 className="font-bold text-xs text-[var(--cy-text-muted)] uppercase mb-3">{selectedMetric.title}</h5>
                                                         <div className="space-y-2 max-h-48 overflow-y-auto">
-                                                            {Array.isArray(countryData[selectedMetric.dataKey]) && 
+                                                                    {Array.isArray(countryData[selectedMetric.dataKey]) && 
                                                                 (countryData[selectedMetric.dataKey] as any[]).slice(0, 5).map((item, idx) => (
                                                                     <div key={idx} className="flex items-center justify-between text-xs">
                                                                         <span className="flex items-center gap-2">
@@ -975,7 +996,7 @@ export default function ReportsPage() {
                                                                                 className="w-2 h-2 rounded-full"
                                                                                 style={{ backgroundColor: item.color || 'var(--cy-primary)' }}
                                                                             ></div>
-                                                                            {item.label}
+                                                                            {selectedMetric.dataKey === 'lead_sources' ? formatLeadSourceLabel(item.label) : item.label}
                                                                         </span>
                                                                         <span className="font-bold text-[var(--cy-navy)]">{item.value}</span>
                                                                     </div>
