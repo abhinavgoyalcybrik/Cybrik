@@ -67,31 +67,37 @@ def process_reading_tests():
             print(f"❌ Error reading {filename}: {e}")
             continue
         
-        # Get book name
+        # Get book name (keep for reference but don't use in title)
         book_name = BOOK_NAMES.get(book_num, f"Cambridge IELTS {int(book_num)}")
         
-        # Create test object with metadata
+        # Store temporarily - we'll assign sequential numbers after sorting
         test_obj = {
             "id": filename,
-            "title": f"{book_name} Test {int(test_num)}",
-            "description": f"IELTS Academic Reading Test from {book_name}",
+            "title": "",  # Will be set later with sequential number
+            "description": "IELTS Academic Reading Test",
             "book": book_name,
+            "book_num": int(book_num),
             "test_number": int(test_num),
             "passages": test_data.get("passages", [])
         }
         
         tests.append(test_obj)
-        print(f"✅ Processed: {test_obj['title']}")
     
-    # Sort tests by book and test number
-    tests.sort(key=lambda x: (x['id'][:2], x['test_number']))
+    # Sort tests by book and test number to maintain order
+    tests.sort(key=lambda x: (x['book_num'], x['test_number']))
+    
+    # Assign sequential test numbers
+    for idx, test in enumerate(tests, start=1):
+        test['title'] = f"Reading Test {idx}"
+        test['sequential_number'] = idx
+        print(f"✅ Processed: {test['title']} (from {test['book']} Test {test['test_number']})")
     
     # Create final structure
     output_data = {
         "metadata": {
             "total_tests": len(tests),
             "generated_at": "2026-01-30",
-            "description": "Cambridge IELTS Academic Reading Tests",
+            "description": "IELTS Academic Reading Tests",
             "books_included": list(set([t['book'] for t in tests]))
         },
         "tests": tests
