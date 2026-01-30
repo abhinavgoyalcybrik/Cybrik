@@ -904,13 +904,12 @@ export default function ReportsPage() {
                         {/* Content */}
                         <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-170px)]">
                             {data?.country_breakdown && Object.keys(data.country_breakdown).length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
+                                <div className="space-y-4">
                                     {Object.entries(data.country_breakdown).map(([country, countryData]) => {
                                         // Calculate conversion stats
                                         const totalLeads = countryData.total_leads ?? 0;
-                                        const convertedLeads = countryData.total_converted_leads ?? 0;
                                         const totalApps = countryData.total_applications ?? 0;
-                                        const conversionRate = totalLeads > 0 ? ((convertedLeads / totalLeads) * 100).toFixed(2) : "0.00";
+                                        const conversionRate = totalLeads > 0 ? ((totalApps / totalLeads) * 100).toFixed(2) : "0.00";
                                         
                                         // Get conversion funnel data
                                         const funnel = countryData.conversion_funnel || [];
@@ -918,55 +917,47 @@ export default function ReportsPage() {
                                         return (
                                             <div 
                                                 key={country}
-                                                className="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-lg hover:border-[var(--cy-primary)] transition-all duration-200"
+                                                className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all"
                                             >
-                                                {/* Country Header */}
-                                                <div className="p-5 border-b border-gray-100 bg-gradient-to-r from-slate-50 via-blue-50 to-indigo-50">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl">🌍</div>
-                                                        <div className="flex-1">
-                                                            <h4 className="font-bold text-lg text-[var(--cy-navy)]">{country}</h4>
-                                                            <p className="text-xs text-[var(--cy-text-muted)]">Country performance snapshot</p>
-                                                        </div>
-                                                        <div className="px-3 py-1 rounded-full text-xs font-semibold bg-white/70 text-[var(--cy-navy)] border border-white/60">
-                                                            {conversionRate}%
+                                                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                                    <div className="flex items-center gap-3 min-w-[180px]">
+                                                        <div className="w-9 h-9 rounded-full bg-blue-50 text-xl flex items-center justify-center">🌍</div>
+                                                        <div>
+                                                            <div className="font-semibold text-[var(--cy-navy)]">{country}</div>
+                                                            <div className="text-xs text-[var(--cy-text-muted)]">{totalLeads} leads • {totalApps} applications</div>
                                                         </div>
                                                     </div>
-                                                    <div className="mt-4 grid grid-cols-3 gap-3">
-                                                        <div className="rounded-xl bg-white/70 border border-white/60 px-3 py-2">
+
+                                                    <div className="grid grid-cols-3 gap-3 flex-1">
+                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
                                                             <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Converted</p>
-                                                            <p className="text-lg font-bold text-green-700">{convertedLeads}</p>
+                                                            <p className="text-base font-bold text-green-700">{totalApps}</p>
                                                         </div>
-                                                        <div className="rounded-xl bg-white/70 border border-white/60 px-3 py-2">
+                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
                                                             <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Total Leads</p>
-                                                            <p className="text-lg font-bold text-[var(--cy-navy)]">{totalLeads}</p>
+                                                            <p className="text-base font-bold text-[var(--cy-navy)]">{totalLeads}</p>
                                                         </div>
-                                                        <div className="rounded-xl bg-white/70 border border-white/60 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Applications</p>
-                                                            <p className="text-lg font-bold text-[var(--cy-navy)]">{totalApps}</p>
+                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Conv. Rate</p>
+                                                            <p className="text-base font-bold text-[var(--cy-navy)]">{conversionRate}%</p>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                {/* Conversion Funnel */}
-                                                <div className="p-5">
-                                                    <div className="flex items-center justify-between mb-4">
-                                                        <h5 className="font-bold text-sm text-[var(--cy-navy)]">Conversion Funnel</h5>
-                                                        <span className="text-xs text-[var(--cy-text-muted)]">Lead → Enrolled</span>
-                                                    </div>
-                                                    <div className="space-y-3">
+                                                {selectedMetric.dataKey === 'conversion_funnel' ? (
+                                                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                                         {funnel.map((step, idx) => {
                                                             const maxValue = Math.max(...funnel.map(s => s.value));
                                                             const widthPercent = maxValue > 0 ? (step.value / maxValue) * 100 : 0;
                                                             return (
-                                                                <div key={idx}>
-                                                                    <div className="flex items-center justify-between text-xs">
+                                                                <div key={idx} className="rounded-lg bg-white border border-gray-100 px-3 py-2">
+                                                                    <div className="flex items-center justify-between text-xs mb-1">
                                                                         <span className="font-medium text-[var(--cy-navy)]">{step.label}</span>
                                                                         <span className="font-bold text-[var(--cy-navy)]">{step.value}</span>
                                                                     </div>
-                                                                    <div className="mt-1 h-2.5 w-full rounded-full bg-gray-100">
+                                                                    <div className="h-2 w-full rounded-full bg-gray-100">
                                                                         <div
-                                                                            className="h-2.5 rounded-full transition-all duration-500"
+                                                                            className="h-2 rounded-full transition-all duration-500"
                                                                             style={{
                                                                                 width: `${widthPercent}%`,
                                                                                 backgroundColor: step.color || 'var(--cy-primary)'
@@ -977,40 +968,21 @@ export default function ReportsPage() {
                                                             );
                                                         })}
                                                     </div>
-
-                                                    <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
-                                                        <span className="text-xs font-semibold uppercase tracking-wider text-[var(--cy-text-muted)]">Conversion Rate</span>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-2xl font-extrabold text-[var(--cy-navy)]">{conversionRate}%</span>
-                                                            <div className="text-green-600">
-                                                                <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path d="M10 3l7 7-1.4 1.4L11 6.8V17H9V6.8l-4.6 4.6L3 10l7-7z"/>
-                                                                </svg>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* Additional Metrics */}
-                                                {selectedMetric.dataKey !== 'conversion_funnel' && (
-                                                    <div className="p-4 border-t border-gray-100 bg-gray-50">
-                                                        <h5 className="font-bold text-xs text-[var(--cy-text-muted)] uppercase mb-3">{selectedMetric.title}</h5>
-                                                        <div className="space-y-2 max-h-48 overflow-y-auto">
-                                                                    {Array.isArray(countryData[selectedMetric.dataKey]) && 
-                                                                (countryData[selectedMetric.dataKey] as any[]).slice(0, 5).map((item, idx) => (
-                                                                    <div key={idx} className="flex items-center justify-between text-xs">
-                                                                        <span className="flex items-center gap-2">
-                                                                            <div 
-                                                                                className="w-2 h-2 rounded-full"
-                                                                                style={{ backgroundColor: item.color || 'var(--cy-primary)' }}
-                                                                            ></div>
-                                                                            {selectedMetric.dataKey === 'lead_sources' ? formatLeadSourceLabel(item.label) : item.label}
-                                                                        </span>
-                                                                        <span className="font-bold text-[var(--cy-navy)]">{item.value}</span>
-                                                                    </div>
-                                                                ))
-                                                            }
-                                                        </div>
+                                                ) : (
+                                                    <div className="mt-4 flex flex-wrap gap-2">
+                                                        {Array.isArray(countryData[selectedMetric.dataKey]) &&
+                                                            (countryData[selectedMetric.dataKey] as any[]).slice(0, 6).map((item, idx) => (
+                                                                <span key={idx} className="inline-flex items-center gap-2 rounded-full bg-gray-50 border border-gray-100 px-3 py-1 text-xs">
+                                                                    <span
+                                                                        className="w-2 h-2 rounded-full"
+                                                                        style={{ backgroundColor: item.color || 'var(--cy-primary)' }}
+                                                                    ></span>
+                                                                    <span className="text-[var(--cy-text-secondary)]">
+                                                                        {selectedMetric.dataKey === 'lead_sources' ? formatLeadSourceLabel(item.label) : item.label}
+                                                                    </span>
+                                                                    <span className="font-bold text-[var(--cy-navy)]">{item.value}</span>
+                                                                </span>
+                                                            ))}
                                                     </div>
                                                 )}
                                             </div>
