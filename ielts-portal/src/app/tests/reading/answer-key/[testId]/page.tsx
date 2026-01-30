@@ -439,7 +439,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                         {question.order}
                                     </span>
                                     <div className="flex-1">
-                                        <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '18px'}}>{question.question_text}</p>
+                                        <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '14px'}}>{question.question_text}</p>
                                         <div className="flex gap-3 flex-wrap">
                                             {question.options.map((option, optIdx) => {
                                                 let optKey = option.key;
@@ -540,7 +540,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                         {group.questions.map((question) => (
                             <div key={question.id} className="pl-2">
                                 <span className="inline-block px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded mb-2">Q{question.order}</span>
-                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '18px'}}>{question.question_text}</p>
+                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '14px'}}>{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => {
                                         const optKey = option.key;
@@ -603,7 +603,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                     <div key={question.id} className="flex gap-4 items-baseline bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <span className="font-bold text-slate-500 w-6 text-right">{question.order}</span>
                         <div className="flex-1">
-                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '18px'}}>{question.question_text}</p>
+                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '14px'}}>{question.question_text}</p>
                             <div className="relative">
                                 <input
                                     type="text"

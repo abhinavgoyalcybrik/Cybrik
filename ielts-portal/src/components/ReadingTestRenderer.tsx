@@ -248,7 +248,7 @@ export default function ReadingTestRenderer({
                                     {question.order}
                                 </span>
                                 <div className="flex-1">
-                                    <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '18px'}}>
+                                    <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '14px'}}>
                                         {question.question_text}
                                     </p>
                                     <div className="flex gap-3">
@@ -330,7 +330,7 @@ export default function ReadingTestRenderer({
                         {group.questions.map((question) => (
                             <div key={question.id} className="pl-2">
                                 <span className="inline-block px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded mb-2">Q{question.order}</span>
-                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '18px'}}>{question.question_text}</p>
+                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '14px'}}>{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => (
                                         <label key={optIdx} className="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 cursor-pointer transition-all group">
@@ -393,7 +393,7 @@ export default function ReadingTestRenderer({
                     <div key={question.id} className="flex gap-4 items-baseline bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <span className="font-bold text-slate-500 w-6 text-right">{question.order}</span>
                         <div className="flex-1">
-                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '18px'}}>{question.question_text}</p>
+                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '14px'}}>{question.question_text}</p>
                             <input
                                 type="text"
                                 value={answers[question.id] || ''}
