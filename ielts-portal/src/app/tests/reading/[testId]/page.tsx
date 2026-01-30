@@ -131,7 +131,18 @@ export default function ReadingTestPage({ params }: PageProps) {
         const view = searchParams.get('view');
         const sessionId = searchParams.get('sessionId');
         const attemptId = searchParams.get('attemptId');
+        const retake = searchParams.get('retake');
 
+        // If retake=true parameter is present, reset test state and don't load results
+        if (retake === 'true') {
+            setTestCompleted(false);
+            setEvaluationResult(null);
+            setScore(0);
+            setAnswers({});
+            return;
+        }
+
+        // Only load results if explicitly requested with view=result AND sessionId parameters
         if (view === 'result' && sessionId) {
             const loadResult = async () => {
                 try {
@@ -573,6 +584,12 @@ export default function ReadingTestPage({ params }: PageProps) {
                             className="px-6 py-3 rounded-xl bg-white text-slate-600 font-medium hover:bg-slate-50 transition-colors shadow"
                         >
                             Back to Tests
+                        </Link>
+                        <Link
+                            href={`/tests/reading/${test.id}?retake=true`}
+                            className="px-6 py-3 rounded-xl bg-white text-blue-600 font-medium border border-blue-200 hover:bg-blue-50 transition-colors shadow"
+                        >
+                            Retake Test
                         </Link>
                         <Link
                             href={`/tests/reading/answer-key/${test.id}`}
