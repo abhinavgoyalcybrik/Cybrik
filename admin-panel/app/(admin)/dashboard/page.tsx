@@ -34,7 +34,7 @@ export default function DashboardPage() {
                     adminApi("/api/counselor-targets/overview/").catch(() => null)
                 ]);
                 
-                setStats(dashboardData as DashboardStats);
+                setStats(dashboardData as unknown as DashboardStats);
                 if (targetsData) {
                     setTargetStats(targetsData.overview);
                 }
