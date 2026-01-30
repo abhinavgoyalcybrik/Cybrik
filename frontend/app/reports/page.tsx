@@ -872,20 +872,20 @@ export default function ReportsPage() {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[85vh] overflow-hidden animate-in fade-in duration-200">
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-[var(--cy-navy)] to-[var(--cy-primary)] p-4 sm:p-6 text-white">
+                        <div className="bg-[var(--cy-navy)] p-4 sm:p-6 text-white border-b border-[var(--cy-navy-light)]">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm border border-white/10">
-                                        <img src="/logo.png" alt="Cybrik Logo" className="h-8 w-auto brightness-0 invert" />
+                                        <img src="/logo.png" alt="Cybrik Logo" className="h-8 w-auto brightness-0 invert opacity-90" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold tracking-tight">Global Performance Report</h3>
-                                        <p className="text-white/70 text-sm">Real-time country breakdown</p>
+                                        <h3 className="text-xl font-bold tracking-tight text-white">Global Performance Report</h3>
+                                        <p className="text-[var(--cy-text-muted)] text-sm">Real-time country breakdown</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setShowBreakdownDialog(false)}
-                                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/70 hover:text-white"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -893,7 +893,7 @@ export default function ReportsPage() {
                         </div>
 
                         {/* Content */}
-                        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-170px)] bg-gray-50/50">
+                        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-170px)] bg-[var(--cy-bg-page)]">
                             {data?.country_breakdown && Object.keys(data.country_breakdown).length > 0 ? (
                                 <div className="space-y-4">
                                     {Object.entries(data.country_breakdown).map(([country, countryData]) => {
@@ -909,29 +909,29 @@ export default function ReportsPage() {
                                         return (
                                             <div 
                                                 key={country}
-                                                className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all"
+                                                className="rounded-xl border border-[var(--cy-border)] bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all group"
                                             >
                                                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                                     <div className="flex items-center gap-3 min-w-[200px]">
-                                                        <div className="w-10 h-10 rounded-full bg-blue-50 text-xl flex items-center justify-center shadow-sm border border-blue-100">🌍</div>
+                                                        <div className="w-10 h-10 rounded-full bg-[var(--cy-bg-page)] text-xl flex items-center justify-center border border-[var(--cy-border)] group-hover:border-[var(--cy-lime)] transition-colors">🌍</div>
                                                         <div>
                                                             <div className="font-bold text-[var(--cy-navy)] text-lg">{country}</div>
-                                                            <div className="text-xs text-[var(--cy-text-muted)] mt-0.5">{totalLeads} leads • {convertedLeads} converted</div>
+                                                            <div className="text-xs text-[var(--cy-text-secondary)] mt-0.5">{totalLeads} leads • {convertedLeads} converted</div>
                                                         </div>
                                                     </div>
 
                                                     <div className="grid grid-cols-3 gap-3 flex-1 lg:max-w-xl">
-                                                        <div className="rounded-lg bg-emerald-50/50 border border-emerald-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-emerald-600 font-semibold mb-1">Converted</p>
-                                                            <p className="text-xl font-bold text-emerald-700">{convertedLeads}</p>
+                                                        <div className="rounded-lg bg-[var(--cy-lime-light)]/50 border border-[var(--cy-lime)]/20 px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-lime-hover)] font-bold mb-1">Converted</p>
+                                                            <p className="text-xl font-bold text-[var(--cy-navy)]">{convertedLeads}</p>
                                                         </div>
-                                                        <div className="rounded-lg bg-blue-50/50 border border-blue-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-blue-600 font-semibold mb-1">Total Leads</p>
-                                                            <p className="text-xl font-bold text-blue-700">{totalLeads}</p>
+                                                        <div className="rounded-lg bg-[var(--cy-bg-page)] border border-[var(--cy-border)] px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-secondary)] font-semibold mb-1">Total Leads</p>
+                                                            <p className="text-xl font-bold text-[var(--cy-navy)]">{totalLeads}</p>
                                                         </div>
-                                                        <div className="rounded-lg bg-indigo-50/50 border border-indigo-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-indigo-600 font-semibold mb-1">Conv. Rate</p>
-                                                            <p className="text-xl font-bold text-indigo-700">{conversionRate}%</p>
+                                                        <div className="rounded-lg bg-[var(--cy-bg-page)] border border-[var(--cy-border)] px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-secondary)] font-semibold mb-1">Conv. Rate</p>
+                                                            <p className="text-xl font-bold text-[var(--cy-navy)]">{conversionRate}%</p>
                                                         </div>
                                                     </div>
                                                 </div>
