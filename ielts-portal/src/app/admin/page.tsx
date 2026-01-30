@@ -68,18 +68,15 @@ export default function AdminDashboard() {
         Promise.all([
             fetch('/data/writing_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
             fetch('/data/speaking_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
-            fetch('/api/ielts/tests/?module_type=listening').then(r => r.json()).catch(() => []),
-            fetch('/api/ielts/tests/?module_type=reading').then(r => r.json()).catch(() => []),
+            fetch('/data/listening_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
+            fetch('/data/reading_tests.json').then(r => r.json()).catch(() => ({ tests: [] })),
             fetch('/api/ielts/admin/students/count/', { credentials: 'include' }).then(r => r.json()).catch(() => ({ count: 0 })),
         ]).then(([writing, speaking, listening, reading, studentsData]) => {
-            const listeningCount = Array.isArray(listening) ? listening.length : (listening.results?.length || listening.length || 0);
-            const readingCount = Array.isArray(reading) ? reading.length : (reading.results?.length || reading.length || 0);
-
             setCounts({
                 writing: writing.tests?.length || 0,
                 speaking: speaking.tests?.length || 0,
-                listening: listeningCount,
-                reading: readingCount,
+                listening: listening.tests?.length || 0,
+                reading: reading.tests?.length || 0,
                 students: studentsData.count || 0,
             });
         });

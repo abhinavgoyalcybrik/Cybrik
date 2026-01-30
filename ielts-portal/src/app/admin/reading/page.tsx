@@ -44,12 +44,22 @@ export default function AdminReadingPage() {
                 id: t.id,
                 title: t.title || `Reading Test ${t.id}`,
                 description: t.description || 'IELTS Academic Reading Test',
+                sequential_number: t.sequential_number || 0,
                 active: true,
                 created_at: new Date().toISOString(),
             }));
 
-            // Sort by title
-            loadedTests.sort((a: any, b: any) => a.title.localeCompare(b.title));
+            // Sort by sequential number for proper order (1, 2, 3... 48)
+            loadedTests.sort((a: any, b: any) => {
+                // If we have sequential_number, use that
+                if (a.sequential_number && b.sequential_number) {
+                    return a.sequential_number - b.sequential_number;
+                }
+                // Otherwise extract number from title "Reading Test X"
+                const numA = parseInt(a.title.match(/\d+/)?.[0] || '0');
+                const numB = parseInt(b.title.match(/\d+/)?.[0] || '0');
+                return numA - numB;
+            });
             setTests(loadedTests);
             setLoading(false);
         } catch (err: any) {
