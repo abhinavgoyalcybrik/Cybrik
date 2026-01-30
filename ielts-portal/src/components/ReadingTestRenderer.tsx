@@ -165,7 +165,7 @@ export default function ReadingTestRenderer({
         if (!container?.rich) return null;
 
         return (
-            <div className="text-slate-800 text-sm leading-relaxed font-medium">
+            <div className="text-slate-800 text-[13px] leading-relaxed font-medium">
                 {container.rich.map((element, idx) => {
                     if (element.t === 'text') {
                         const text = element.v?.replace(/\n+/g, ' ') || '';
@@ -425,22 +425,22 @@ export default function ReadingTestRenderer({
             {/* Main Split View */}
             <div className="flex-1 flex overflow-hidden bg-slate-50/50">
                 {/* Left Column: Passage */}
-                <div className="w-1/2 flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
-                    <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
-                        <div className="max-w-2xl mx-auto">
-                            <h2 className="font-bold text-slate-900 text-2xl mb-6 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
+                <div className="w-[55%] flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
+                    <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-12 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                        <div className="max-w-full">
+                            <h2 className="font-bold text-slate-900 text-xl mb-5 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
                                 {currentPart.title}
                             </h2>
-                            <div className="text-slate-700 leading-relaxed text-justify font-serif text-sm whitespace-pre-wrap">
+                            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px] whitespace-pre-wrap">
                                 {currentPart.content.split('\n').map((para, idx) => {
                                     const trimmed = para.trim();
                                     if (!trimmed) return <div key={idx} className="h-4" />;
                                     const isHeading = trimmed.length < 80 && !trimmed.endsWith('.') && !trimmed.endsWith(',') && !trimmed.endsWith(';');
 
                                     if (isHeading) {
-                                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-base mt-6 mb-3">{trimmed}</h3>;
+                                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-sm mt-5 mb-2">{trimmed}</h3>;
                                     }
-                                    return <p key={idx} className="mb-4 indent-8">{trimmed}</p>;
+                                    return <p key={idx} className="mb-3 indent-8">{trimmed}</p>;
                                 })}
                             </div>
                         </div>
@@ -451,9 +451,9 @@ export default function ReadingTestRenderer({
                 <div className="w-1 bg-slate-100 hover:bg-emerald-400 cursor-col-resize flex-shrink-0 transition-colors" />
 
                 {/* Right Column: Questions */}
-                <div className="w-1/2 flex flex-col bg-slate-50/50">
-                    <div ref={questionsPanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
-                        <div className="max-w-2xl mx-auto pb-20">
+                <div className="w-[45%] flex flex-col bg-slate-50/50">
+                    <div ref={questionsPanelRef} className="flex-1 overflow-y-auto px-10 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                        <div className="max-w-full pb-20">
                             {currentPart.groups.map((group) => (
                                 <div key={group.id} className="mb-12">
                                     <div className="mb-8">
