@@ -246,10 +246,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (res.ok) {
                 const data = await res.json();
                 if (data.user) {
+                    // Check localStorage for onboarding completion
+                    const localOnboardingCompleted = localStorage.getItem('ielts_onboarding_completed') === 'true';
+                    
                     // Merge fresh data with existing user, preserving role info
                     const updatedUser: User = {
                         ...user,
                         ...data.user,
+                        // Ensure onboarding status is properly set
+                        onboarding_completed: data.user.onboarding_completed || localOnboardingCompleted,
                         role: user?.role || 'student',
                         is_staff: user?.is_staff || false,
                     };

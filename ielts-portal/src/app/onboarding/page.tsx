@@ -21,6 +21,7 @@ import {
     Calendar,
     Sparkles
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface OnboardingData {
     targetScore: number | null;
@@ -35,6 +36,7 @@ const TOTAL_STEPS = 6;
 
 export default function OnboardingPage() {
     const router = useRouter();
+    const { refreshUser } = useAuth();
     const [currentStep, setCurrentStep] = useState(1);
     const [data, setData] = useState<OnboardingData>({
         targetScore: null,
@@ -98,22 +100,38 @@ export default function OnboardingPage() {
                     body: JSON.stringify(data),
                 });
 
-                // Update user object in localStorage with onboarding_completed flag
-                const savedUserStr = localStorage.getItem('ielts_user');
-                if (savedUserStr) {
-                    try {
-                        const savedUser = JSON.parse(savedUserStr);
-                        savedUser.onboarding_completed = true;
-                        localStorage.setItem('ielts_user', JSON.stringify(savedUser));
-                    } catch (e) {
-                        // ignore parse errors
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Update user object in localStorage with onboarding_completed flag
+                    const savedUserStr = localStorage.getItem('ielts_user');
+                    if (savedUserStr) {
+                        try {
+                            const savedUser = JSON.parse(savedUserStr);
+                            savedUser.onboarding_completed = true;
+                            // Merge with server data if available
+                            if (result.user) {
+                                Object.assign(savedUser, result.user);
+                            }
+                            localStorage.setItem('ielts_user', JSON.stringify(savedUser));
+                        } catch (e) {
+                            // ignore parse errors
+                        }
                     }
-                }
 
-                localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
-                localStorage.setItem('ielts_onboarding_completed', 'true');
-                router.push('/dashboard');
+                    localStorage.setItem('ielts_onboarding_data', JSON.stringify(data));
+                    localStorage.setItem('ielts_onboarding_completed', 'true');
+                    
+                    // Refresh user context to get updated data
+                    await refreshUser();
+                    
+                    // Navigate to dashboard
+                    router.push('/dashboard');
+                } else {
+                    throw new Error('Failed to save onboarding');
+                }
             } catch (error) {
+                console.error('Onboarding save error:', error);
                 // Fallback - still update localStorage and redirect
                 const savedUserStr = localStorage.getItem('ielts_user');
                 if (savedUserStr) {

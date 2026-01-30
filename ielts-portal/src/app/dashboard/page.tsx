@@ -63,13 +63,13 @@ export default function Dashboard() {
 
       // If user is already set in context, check onboarding status
       if (user) {
-        setAuthVerified(true);
         // Check BOTH context and localStorage - if either says completed, don't redirect
         const isCompleted = user.onboarding_completed === true || localOnboardingCompleted || localUser?.onboarding_completed === true;
         if (!isCompleted) {
           router.push('/onboarding');
           return;
         }
+        // User is authenticated and onboarding is completed - stay on dashboard
         return;
       }
 
@@ -102,8 +102,10 @@ export default function Dashboard() {
               return;
             }
 
-            // Reload to update user context
-            window.location.href = '/dashboard';
+            // Update auth context without full page reload to prevent loop
+            if (window.location.pathname === '/dashboard') {
+              window.location.reload();
+            }
             return;
           }
         }
