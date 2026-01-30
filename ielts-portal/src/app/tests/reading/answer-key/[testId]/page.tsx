@@ -82,15 +82,15 @@ function renderHighlightedText(text: string, withHighlights: Array<{ start: numb
     if (!withHighlights || !withHighlights.length) {
         // Just return paragraphs if no highlights
         return (
-            <div className="text-slate-700 leading-loose text-justify font-serif text-lg">
+            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px]">
                 {text.split('\n').map((para, idx) => {
                     const trimmed = para.trim();
-                    if (!trimmed) return null;
+                    if (!trimmed) return <div key={idx} className="h-4" />;
                     const isHeading = trimmed.length < 80 && !trimmed.endsWith('.') && !trimmed.endsWith(',') && !trimmed.endsWith(';');
                     if (isHeading) {
-                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-xl mt-8 mb-4">{trimmed}</h3>;
+                        return <h3 key={idx} className="font-sans font-bold text-slate-800 text-sm mt-5 mb-2">{trimmed}</h3>;
                     }
-                    return <p key={idx} className="mb-6 indent-8">{trimmed}</p>;
+                    return <p key={idx} className="mb-3 indent-8">{trimmed}</p>;
                 })}
             </div>
         );
@@ -149,7 +149,7 @@ function renderHighlightedText(text: string, withHighlights: Array<{ start: numb
 
     // Wrap in typographical container
     return (
-        <div className="text-slate-700 leading-loose text-justify font-serif text-lg whitespace-pre-wrap">
+        <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px] whitespace-pre-wrap">
             {parts}
         </div>
     );
@@ -688,24 +688,24 @@ export default function AnswerKeyPage({ params }: PageProps) {
             {/* Main Content Split View */}
             <div className="flex-1 flex overflow-hidden bg-slate-50/50">
                 {/* Left: Passage */}
-                <div className="w-1/2 flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
-                    <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
-                        <div className="max-w-2xl mx-auto">
-                            <h2 className="font-bold text-slate-900 text-2xl mb-6 border-b-2 border-emerald-500 inline-block pb-2">{currentPart?.title}</h2>
+                <div className="w-[55%] flex flex-col border-r border-slate-200 bg-white shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-10">
+                    <div ref={passagePanelRef} className="flex-1 overflow-y-auto px-12 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                        <div className="max-w-full">
+                            <h2 className="font-bold text-slate-900 text-xl mb-5 border-b-2 border-emerald-500 inline-block pb-2">{currentPart?.title}</h2>
                             {renderHighlightedText(currentPart?.content, currentHighlights)}
                         </div>
                     </div>
                 </div>
 
                 {/* Right: Answer Key */}
-                <div className="w-1/2 flex flex-col bg-slate-50/50">
-                    <div ref={questionsPanelRef} className="flex-1 overflow-y-auto px-8 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
-                        <div className="max-w-2xl mx-auto pb-20">
+                <div className="w-[45%] flex flex-col bg-slate-50/50">
+                    <div ref={questionsPanelRef} className="flex-1 overflow-y-auto px-10 py-8 scrollbar-thin scrollbar-thumb-slate-200 hover:scrollbar-thumb-slate-300">
+                        <div className="max-w-full pb-20">
                             {currentPart?.groups.map((group, gIdx) => (
                                 <div key={group.id} className="mb-12">
                                     <div className="mb-6">
                                         <div className="flex items-baseline justify-between border-b border-slate-200 pb-2 mb-4">
-                                            <h3 className="text-lg font-bold text-slate-900">
+                                            <h3 className="text-base font-bold text-slate-900">
                                                 Questions {group.questions[0]?.order}–{group.questions[group.questions.length - 1]?.order}
                                             </h3>
                                         </div>
