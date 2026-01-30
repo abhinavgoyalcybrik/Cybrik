@@ -49,6 +49,7 @@ export default function ReportsPage() {
     // Country selection state
     const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
     const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
+    const [countrySelectValue, setCountrySelectValue] = useState<string>("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -63,8 +64,6 @@ export default function ReportsPage() {
                 });
                 
                 const response = await apiFetch(`/api/reports/summary/?${params.toString()}`);
-                console.log('Reports API Response:', response);
-                console.log('Country Breakdown:', response.country_breakdown);
                 setData(response);
             } catch (error) {
                 console.error("Failed to fetch reports data:", error);
@@ -77,13 +76,15 @@ export default function ReportsPage() {
 
     const handleAddCountry = (country: string) => {
         if (country && !selectedCountries.includes(country)) {
-            setSelectedCountries([...selectedCountries, country]);
+            const newCountries = [...selectedCountries, country];
+            setSelectedCountries(newCountries);
             setExpandedCountries({ ...expandedCountries, [country]: true });
         }
     };
 
     const handleRemoveCountry = (country: string) => {
-        setSelectedCountries(selectedCountries.filter(c => c !== country));
+        const newCountries = selectedCountries.filter(c => c !== country);
+        setSelectedCountries(newCountries);
         const newExpanded = { ...expandedCountries };
         delete newExpanded[country];
         setExpandedCountries(newExpanded);
@@ -239,6 +240,7 @@ export default function ReportsPage() {
                                             countries: []
                                         });
                                         setSelectedCountries([]);
+                                        setCountrySelectValue("");
                                     }}
                                 >
                                     Reset Filters
@@ -248,17 +250,19 @@ export default function ReportsPage() {
                         
                         {/* Country Multi-Select */}
                         <div>
-                            <label className="label-text text-xs font-bold mb-2 block">Countries (Multi-Select)</label>
+                            <label className="block text-sm font-bold text-gray-700 mb-2">Countries (Multi-Select)</label>
+                            
                             <div className="flex gap-2 items-center">
                                 <select
-                                    className="select select-bordered select-sm flex-1"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={countrySelectValue}
                                     onChange={(e) => {
-                                        if (e.target.value) {
-                                            handleAddCountry(e.target.value);
-                                            e.target.value = "";
+                                        const value = e.target.value;
+                                        if (value) {
+                                            handleAddCountry(value);
+                                            setCountrySelectValue("");
                                         }
                                     }}
-                                    defaultValue=""
                                 >
                                     <option value="">+ Add Country</option>
                                     {data?.countries?.filter(c => !selectedCountries.includes(c)).map(c => 
@@ -273,14 +277,15 @@ export default function ReportsPage() {
                                     {selectedCountries.map(country => (
                                         <div
                                             key={country}
-                                            className="badge badge-lg bg-[var(--cy-primary)] text-white gap-2 px-3 py-3"
+                                            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow-sm hover:bg-blue-700 transition-colors"
                                         >
-                                            {country}
+                                            <span>🌍 {country}</span>
                                             <button
                                                 onClick={() => handleRemoveCountry(country)}
-                                                className="ml-1 hover:text-red-200"
+                                                className="ml-1 hover:text-red-200 font-bold text-lg leading-none"
+                                                type="button"
                                             >
-                                                ✕
+                                                ×
                                             </button>
                                         </div>
                                     ))}
@@ -291,16 +296,44 @@ export default function ReportsPage() {
                 )}
 
                 {/* Country-Specific Widget Panels */}
-                {selectedCountries.length > 0 && data?.country_breakdown && (
+                {selectedCountries.length > 0 && (
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-bold text-[var(--cy-navy)]">Country-Specific Reports</h2>
-                            <span className="text-sm text-[var(--cy-text-muted)]">{selectedCountries.length} {selectedCountries.length === 1 ? 'country' : 'countries'} selected</span>
+                        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                            <div>
+                                <h2 className="text-2xl font-bold text-blue-900">Country-Specific Reports</h2>
+                                <p className="text-sm text-blue-700 mt-1">
+                                    Showing data for: {selectedCountries.join(', ')}
+                                </p>
+                            </div>
+                            <span className="text-sm font-semibold text-blue-700 bg-white px-3 py-1 rounded-full">
+                                {selectedCountries.length} {selectedCountries.length === 1 ? 'country' : 'countries'} selected
+                            </span>
                         </div>
                         
-                        {selectedCountries.map(country => {
+                        {!data?.country_breakdown && (
+                            <div className="p-8 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+                                <p className="text-yellow-800 font-medium">Loading country-specific data...</p>
+                                <p className="text-yellow-600 text-sm mt-2">If this persists, the backend may not be returning country breakdown data.</p>
+                            </div>
+                        )}
+                        
+                        {data?.country_breakdown && Object.keys(data.country_breakdown).length === 0 && (
+                            <div className="p-8 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+                                <p className="text-yellow-800 font-medium">No data available for selected countries</p>
+                                <p className="text-yellow-600 text-sm mt-2">The selected countries may not have any data in the system yet.</p>
+                            </div>
+                        )}
+                        
+                        {data?.country_breakdown && selectedCountries.map(country => {
                             const countryData = data.country_breakdown![country];
-                            if (!countryData) return null;
+                            if (!countryData) {
+                                return (
+                                    <div key={country} className="p-6 bg-red-50 border border-red-200 rounded-lg">
+                                        <p className="text-red-800 font-medium">⚠️ No data found for {country}</p>
+                                        <p className="text-red-600 text-sm mt-1">This country was selected but has no data in the breakdown.</p>
+                                    </div>
+                                );
+                            }
                             
                             const isExpanded = expandedCountries[country];
                             
