@@ -1,0 +1,829 @@
+{
+  "passages": [
+    {
+      "passage_id": "P1",
+      "title": "THE STORY OF SILK",
+      "text": "The history of the world's most luxurious fabric, from ancient China to the present day\n\nSilk is a fine, smooth material produced from the cocoons — soft protective shells — that are made by mulberry silkworms\n(insect larvae). Legend has it that it was Lei Tzu, wife of the Yellow Emperor, ruler of China in about 3000 BC, who discovered silkworms. One account of the story goes that as she was taking a walk in her husband's gardens, she discovered that silkworms were responsible for the destrucöon of several mulberry trees. She collected a number of cocoons and sat down to have a rest. It just so happened that while she was sipping some tea, one of the cocoons that she had collected landed in the hot tea and started to unravel into a fine thread. Lei Tzu found that she could wind this thread around her fingers. Subsequently, she persuaded her husband to allow her to rear silkworms on a gove of mulberry trees. She also devised a special reel to draw the fibres from the cocoon into a single thread so that they would be strong enough to be woven into fabric. While it is unknown just how much of this is true, it is certainly Imown that silk cultivation has existed in China for several millennia.\n\n1)\n\nOriginally, silkworm farming was solely restricted to women, and it was they who were responsible for the growing, harvesting and weaving. Silk quickly grew into a symbol of status, and originally, only royalty were entitled to have clothes made of silk. The rules were gradually relaxed over the years until finally during the Qing Dynasty (1644—1911 AD), even peasants, the lowest caste, were also enötled to wear silk. Some time during the Han Dynasty (206 BC-220 AD), silk was so prized that it also used a unit of currency. Government officials were paid their sala.w in silk, and farmers paid their taxes in gain silk. Silk was also used as diplomatic Sfts by the emperor. Fishing lines, bowsfi•ings, musical instruments and paper were all made using silk, The earliest indication of silk paper being used was discovered in the tomb of a noble who is estimated to have died around 168 AD.\n\nDemand for this exotic fabric eventually created the trade route now known as the Silk Road, taking silk westward and bringing gold, silver and wool to the East. It was named the Silk Road after its most precious commodity, which was considered to be worth more than gold. The Silk Road stretched over 6,000 Idlometres from Eastem China to the Mediterranean Sea, following the Great Wall of China, climbing the Pamir mountain range, crossing modem-day Afghanistan and going on to the Middle\nEast, with a major trading market in Damascus. From there, the merchandise was shipped across the Mediterranean Sea. Few merchants travelled the entire route; goods were handled mostly by a series of middlemen.\n\nWith the mulberry silkworm being native to China, the country was the world's sole producer of silk for many hundreds of years. The secret of silk-making eventually reached the rest of the world via the Byzantine Empire, which ruled over the\nMediterranean region of southern Europe, North Africa and the Middle East during the period 330-1453 AD. According to another legend, monks working for the Byzantine emperor Justinian smuggled silkworm eggs to Constantinople (Istanbul in modem-day Turkey) in 550 AD, concealed inside hollow bamboo walking canes. The Byzantines were as secretive as the Chinese, however, and for many centuries the weaving and trading of silk fabric was a strict imperial monopoly. Then in the seventh century, the Arabs conquered Persia, capturing their mauüficent silks in the process. Silk production thus spread through\nAfrica, Sicily and Spain as the Arabs\nswept through these lands. Andalusia in southern Spain was Europe's main silkproducing in the tenth century. By the thirteenth century, however, Italy had become Europe's leader in silk producäon and export. Venetian merchants traded extensively in silk and encouraged silk gowers to settle in Italy. Even now, silk processed in the province of Como in northern Italy enjoys an esteemed reputation.\n\nThe nineteenth century and industrialisation saw the downfall of the European silk industry. Cheaper Japanese silk, trade in which was greatly facilitated by the opening of the Suez Canal, was one of the many factors driving the trend. Then in the twentieth century, new manmade fibres, such as nylon, started to be used in what had traditionally been silk products, such as stockings and parachutes. The two world wars, which interrupted the supply of raw material from Japan, also stifled the European silk industry. After the Second World War, Japan's silk production was restored, with improved production and quality of raw silk. Japan was to remain the world's biggest producer of raw silk, and practically the only exporter of raw silk, until the 1970s. However, in more recent decades, China has gradually recaptured its position as the world's biggest producer and exporter of raw silk and silk yarn. Today, around 125,000 metric tons of silk are produced in the world, and almost two thirds of that production takes place in China.",
+      "groups": [
+        {
+          "group_id": "P1-G1",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 1-8\n\nComplete the summary below. Choose ONE WORD ONLY from the passage for each answer and write them in boxes 1-8 on your answer sheet.",
+          "constraints": {
+            "from_options": false
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Early silk production in China\n\nAround 3000 BC, according to legend: a silkworm cocoon fell into the emperor's wife's "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q1"
+              },
+              {
+                "t": "text",
+                "v": "; the emperor's wife invented a "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q2"
+              },
+              {
+                "t": "text",
+                "v": " to pull out silk fibres.\n\nOnly "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q3"
+              },
+              {
+                "t": "text",
+                "v": " were allowed to produce silk, and only "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q4"
+              },
+              {
+                "t": "text",
+                "v": " were allowed to wear silk.\n\nSilk was used as a form of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q5"
+              },
+              {
+                "t": "text",
+                "v": " and for many purposes, e.g. evidence of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q6"
+              },
+              {
+                "t": "text",
+                "v": " made from silk around 168 AD.\n\nMerchants used the Silk Road to take silk westward and bring back materials such as "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q7"
+              },
+              {
+                "t": "text",
+                "v": ". In 550 AD, "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q8"
+              },
+              {
+                "t": "text",
+                "v": " hid silkworm eggs in canes and took them to Constantinople."
+              }
+            ]
+          },
+          "options": [],
+          "items": [
+            {
+              "item_id": "P1-G1-Q1",
+              "number": 1,
+              "answer": {
+                "type": "TEXT",
+                "value": "tea",
+                "start_index": 591,
+                "stop_index": 754
+              }
+            },
+            {
+              "item_id": "P1-G1-Q2",
+              "number": 2,
+              "answer": {
+                "type": "TEXT",
+                "value": "reel",
+                "start_index": 921,
+                "stop_index": 1069
+              }
+            },
+            {
+              "item_id": "P1-G1-Q3",
+              "number": 3,
+              "answer": {
+                "type": "TEXT",
+                "value": "women",
+                "start_index": 1214,
+                "stop_index": 1352
+              }
+            },
+            {
+              "item_id": "P1-G1-Q4",
+              "number": 4,
+              "answer": {
+                "type": "TEXT",
+                "value": "royalty",
+                "start_index": 1353,
+                "stop_index": 1468
+              }
+            },
+            {
+              "item_id": "P1-G1-Q5",
+              "number": 5,
+              "answer": {
+                "type": "TEXT",
+                "value": "currency",
+                "start_index": 1636,
+                "stop_index": 1742
+              }
+            },
+            {
+              "item_id": "P1-G1-Q6",
+              "number": 6,
+              "answer": {
+                "type": "TEXT",
+                "value": "paper",
+                "start_index": 1977,
+                "stop_index": 2108
+              }
+            },
+            {
+              "item_id": "P1-G1-Q7",
+              "number": 7,
+              "answer": {
+                "type": "TEXT",
+                "value": "wool",
+                "start_index": 2110,
+                "stop_index": 2271
+              }
+            },
+            {
+              "item_id": "P1-G1-Q8",
+              "number": 8,
+              "answer": {
+                "type": "TEXT",
+                "value": "monks",
+                "start_index": 3160,
+                "stop_index": 3367
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G2",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 9-13\n\nDo the following statements agree with the information in Reading Passage 1? In boxes 9-13 write\n\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "items": [
+            {
+              "item_id": "P1-G2-Q9",
+              "number": 9,
+              "prompt": "20th century: nylon and other manmade fibres cause decline in silk production.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 4336,
+                "stop_index": 4500
+              }
+            },
+            {
+              "item_id": "P1-G2-Q10",
+              "number": 10,
+              "prompt": "Gold was the most valuable material transported along the Silk Road.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 2272,
+                "stop_index": 2382
+              }
+            },
+            {
+              "item_id": "P1-G2-Q11",
+              "number": 11,
+              "prompt": "Most tradesmen only went along certain sections of the Silk Road.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 2718,
+                "stop_index": 2811
+              }
+            },
+            {
+              "item_id": "P1-G2-Q12",
+              "number": 12,
+              "prompt": "The Byzantines spread the practice of silk production across the West.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 3368,
+                "stop_index": 3519
+              }
+            },
+            {
+              "item_id": "P1-G2-Q13",
+              "number": 13,
+              "prompt": "Silk yarn makes up the majority of silk currently exported from China.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 5010,
+                "stop_index": 5141
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P2",
+      "title": "Great Migrations",
+      "text": "Animal migration, however it is defined, is far more than just the movement of animals. It can loosely be described as travel that takes place at regular intervals — often in an annual cycle — that may involve many members of a species, and is rewarded only after a long journey. Et suggests inherited instinct. The biologist Hugh Dingle has identified five characteristics that apply, in varying degrees and combinations, to all migrations. They are prolonged movements that carry animals outside familiar habitats; they tend to be linear, not zigzaggy; they involve special behaviours concerning preparation (such as overfeeding) and arrival; they demand special allocations of energy And one more: migrating animals maintain an intense attentiveness to the greater mission, which keeps them undistracted by temptations and undeterred by challenges that would turn other animals aside.\n\nAn arctic tern, on its 20,000 km flight from the extreme south of South America to the Arctic circle, will take no notice of a nice smelly herring offered from a bird-watcher's boat along the way. While local gulls will dive voraciously for such handouts, the tern flies on. Why? The arctic tern resists distraction because it is driven at that moment by an instinctive sense of something we humans find admirable: larger purpose. In other words, it is determined to reach Its destination. The bird senses that it can eat, rest and mate later. Right now it is totally focused on\n ;tn urney; its undivided intent is arrival.\n\n1)\n\nReaching some gravelly coastline in the Arctic, upon which other arctic terns have converged, will serve its larger purpose as shaped by evolution. finding a place, a time, and a set of circumstances in which it can successfully hatch and rear offspring.\n\nBut migration is a complex issue, and biologists define it differently, depending in part on what sorts of animals they study. Joel Berger, of the University of Montana, who works on the American pronghorn and other large terrestrial mammals, prefers what he calls a simple, practical definition suited to his beasts: 'movements from a seasonal home area away to another home area and back again'. Generally the reason for such seasonal back-and-forth movement is to seek resources that aren't available within a single area year-round \n\nBut daily vertical movements by zooplankton in the ocean — upward by night to seek food, downward by day to escape predators — can also be considered migration. So can the movement of aphids when, having depleted the young leaves on one food plant, their offspring then fly onward to a different host plant, with no one aphid ever returning to where it started.\n\nDingle is an evolutionary biologist who studies insects. His definition is more intricate than Berger's, citing those five features that distinguish migration from other forms of movement. They allow for the fact that, for example, aphids will become sensitive to blue light (from the sky) when it's time for takeoff on their big journey, and sensitive to yellow light (reflected from tender young leaves) when it's appropriate to land. Birds will fatten themselves with heavy feeding in advance of a long migrational flight. The value of his definition, Dingle argues, is that it focuses attention on what the phenomenon of wildebeest migration shares with the phenomenon of the aphids, and therefore helps guide researchers towards understanding how evolution has produced them alt.\n\nHuman behaviour, however, is having a detrimental impact on animal migration. The pronghorn, which resembles an antelope, though they are unrelated, is the fastest land mammal of the New World. One population, which spends the summer in the mountainous Grand Teton National Park of the western USA, follows a narrow route from its summer range in the mountains, across a river, and down onto the plains. Here they wait out the frozen months, feeding mainly on sagebrush blown clear of snow. These pronghorn are notable for the invariance of their migration route and the severity of its constriction at three bottlenecks- If they can't pass through each of the three during their spring migration, they can't reach their bounty of summer grazing; if they can't\npass through again in autumn, escaping south onto those windblown plains, they are likely to die trying to overwinter in the deep snow. Pronghorn, dependent on distance vision and speed to keep safe from predators, traverse high, open shoulders of land, where they can see and run. At one of the bottlenecks, forested hills rise to form a V, leaving a corridor of open ground only about 150 metres wide, filled with private homes. Increasing development is leading toward a crisis for the pronghorn, threatening to choke off their passageway.\n\nConservation scientists, along with some biologists and land managers within the USA's National Park Service and other agencies, are now working to preserve migrational behaviours, not just species and habitats. A National Forest has recognised the path of the pronghorn, much of which passes across its land, as a protected migration corridor. But neither the Forest Service nor the Park Service can control what happens on private land at a bottleneck. And with certain other migrating species, the challenge is complicated further — by vastly greater distances traversed, more jurisdictions, more borders, more dangers along the way. We will require wisdom and resoluteness to ensure that migrating species can continue their journeying a while longer.",
+      "groups": [
+        {
+          "group_id": "P2-G1",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 14-18\n\nDo the following statements agree with the information given in Reading Passage 2? In boxes 14-18 write\n\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "items": [
+            {
+              "item_id": "P2-G1-Q14",
+              "number": 14,
+              "prompt": "Local gulls and migrating arctic terns behave in the same way when offered food.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 1086,
+                "stop_index": 1163
+              }
+            },
+            {
+              "item_id": "P2-G1-Q15",
+              "number": 15,
+              "prompt": "Experts' definitions of migration tend to vary according to their area of study.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 1774,
+                "stop_index": 1900
+              }
+            },
+            {
+              "item_id": "P2-G1-Q16",
+              "number": 16,
+              "prompt": "Very few experts agree that the movement of aphids can be considered migration.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 2312,
+                "stop_index": 2472
+              }
+            },
+            {
+              "item_id": "P2-G1-Q17",
+              "number": 17,
+              "prompt": "Aphids' journeys are affected by changes in the light that they perceive.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 2864,
+                "stop_index": 3012
+              }
+            },
+            {
+              "item_id": "P2-G1-Q18",
+              "number": 18,
+              "prompt": "Dingle's aim is to distinguish between the migratory behaviours of different species.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 3201,
+                "stop_index": 3361
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G2",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 19-22\n\nComplete each sentence with the correct ending, A-G, below. Write the correct letter, A-G, in boxes 19-22 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P2-G2-Q19",
+              "number": 19,
+              "prompt": "According to Dingle, migratory routes are likely to",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "be discouraged by difficulties."
+                },
+                {
+                  "key": "B",
+                  "text": "travel on open land where they can look out for predators."
+                },
+                {
+                  "key": "C",
+                  "text": "eat more than they need for immediate purposes."
+                },
+                {
+                  "key": "D",
+                  "text": "be repeated daily."
+                },
+                {
+                  "key": "E",
+                  "text": "ignore distractions."
+                },
+                {
+                  "key": "F",
+                  "text": "be governed by the availability of water."
+                },
+                {
+                  "key": "G",
+                  "text": "follow a straight line."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 517,
+                "stop_index": 553
+              }
+            },
+            {
+              "item_id": "P2-G2-Q20",
+              "number": 20,
+              "prompt": "To prepare for migration, animals are likely to",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "be discouraged by difficulties."
+                },
+                {
+                  "key": "B",
+                  "text": "travel on open land where they can look out for predators."
+                },
+                {
+                  "key": "C",
+                  "text": "eat more than they need for immediate purposes."
+                },
+                {
+                  "key": "D",
+                  "text": "be repeated daily."
+                },
+                {
+                  "key": "E",
+                  "text": "ignore distractions."
+                },
+                {
+                  "key": "F",
+                  "text": "be governed by the availability of water."
+                },
+                {
+                  "key": "G",
+                  "text": "follow a straight line."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 555,
+                "stop_index": 643
+              }
+            },
+            {
+              "item_id": "P2-G2-Q21",
+              "number": 21,
+              "prompt": "During migration, animals are unlikely to",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "be discouraged by difficulties."
+                },
+                {
+                  "key": "B",
+                  "text": "travel on open land where they can look out for predators."
+                },
+                {
+                  "key": "C",
+                  "text": "eat more than they need for immediate purposes."
+                },
+                {
+                  "key": "D",
+                  "text": "be repeated daily."
+                },
+                {
+                  "key": "E",
+                  "text": "ignore distractions."
+                },
+                {
+                  "key": "F",
+                  "text": "be governed by the availability of water."
+                },
+                {
+                  "key": "G",
+                  "text": "follow a straight line."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 701,
+                "stop_index": 821
+              }
+            },
+            {
+              "item_id": "P2-G2-Q22",
+              "number": 22,
+              "prompt": "Arctic terns illustrate migrating animals' ability to",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "be discouraged by difficulties."
+                },
+                {
+                  "key": "B",
+                  "text": "travel on open land where they can look out for predators."
+                },
+                {
+                  "key": "C",
+                  "text": "eat more than they need for immediate purposes."
+                },
+                {
+                  "key": "D",
+                  "text": "be repeated daily."
+                },
+                {
+                  "key": "E",
+                  "text": "ignore distractions."
+                },
+                {
+                  "key": "F",
+                  "text": "be governed by the availability of water."
+                },
+                {
+                  "key": "G",
+                  "text": "follow a straight line."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 1169,
+                "stop_index": 1319
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G3",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 23-26\n\nComplete the summary below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 23-26 on your answer sheet.",
+          "constraints": {
+            "from_options": false
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "The migration of pronghorns\n\nPronghorns rely on their eyesight and "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G3-Q23"
+              },
+              {
+                "t": "text",
+                "v": " to avoid predators. One particular population's summer habitat is a national park, and their winter home is on the "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G3-Q24"
+              },
+              {
+                "t": "text",
+                "v": " where they go to avoid the danger presented by the snow at that time of year. However, their route between these two areas contains three "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G3-Q25"
+              },
+              {
+                "t": "text",
+                "v": ". One problem is the construction of new homes in a narrow "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G3-Q26"
+              },
+              {
+                "t": "text",
+                "v": " of land on the pronghorns' route."
+              }
+            ]
+          },
+          "options": [],
+          "items": [
+            {
+              "item_id": "P2-G3-Q23",
+              "number": 23,
+              "answer": {
+                "type": "TEXT",
+                "value": "speed",
+                "start_index": 4358,
+                "stop_index": 4474
+              }
+            },
+            {
+              "item_id": "P2-G3-Q24",
+              "number": 24,
+              "answer": {
+                "type": "TEXT",
+                "value": "plains",
+                "start_index": 3865,
+                "stop_index": 3951
+              }
+            },
+            {
+              "item_id": "P2-G3-Q25",
+              "number": 25,
+              "answer": {
+                "type": "TEXT",
+                "value": "bottlenecks",
+                "start_index": 3952,
+                "stop_index": 4081
+              }
+            },
+            {
+              "item_id": "P2-G3-Q26",
+              "number": 26,
+              "answer": {
+                "type": "TEXT",
+                "value": "corridor",
+                "start_index": 4504,
+                "stop_index": 4624
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P3",
+      "title": "Preface to 'How the other half thinks: Adventures in mathematical reasoning'",
+      "text": "A\tOccasionally, in some difficult musical compositions, there are beautiful, but easy parts — parts so simple a beginner could play them. So it is with mathematics as well. There are some discoveries in advanced mathematics that do not depend  specialized knowledge, not even algebra, geometry, or trigonometry. Instead they may involve, at most, a little arithmetic, such as 'the sum of two odd numbers is even', and common sense. Each of the eight chapters in this book illustrates this phenomenon. Anyone can understand every step in the reasoning.\nThe thinking in each chapter uses at most only elementary arithmetic, and sometimes not even that. Thus all readers will have the chance to participate in a mathematical experience, to appreciate the beauty of mathematics, and to become familiar with its logical, yet intuitive, style of thinking.\n\nB\tOne of my purposes in writing this book is to give readers who haven't had the opportunity to see and enjoy real mathematics the chance to appreciate the mathematical way of thinking. I want to reveal not only some of the fascinating discoveries, but, more importantly, the reasoning behind them.\nIn that respect, this book differs from most books on mathematics written for the general public. Some present the lives of colorful mathematicians. Others describe important applications of mathematics. Yet others go into mathematical procedures, but assume that the reader is adept in using algebra.\n\nC\tI hope this book will help bridge that notorious gap that separates the two cultures: the humanities and the sciences, or should say the right brain (intuitive) and the left brain (analytical, numerical). As the chapters will illustrate, mathematics is not restricted to the analytical and numerical; intuition plays a significant role. The alleged gap can be narrowed or completely overcome by anyone, in part because each of us is far from using the full capacity of either side of the brain. To illustrate our human potential, I cite a structural engineer who is an artist, an electrical engineer who is an opera singer, an opera singer who published mathematical research, and a mathematician who publishes short stories.\n\nD\tOther scientists have written books to explain their fields to non-scientists, but have necessarily had to omit the mathematics, although it provides the foundation of their theories. The reader must remain a tantalized spectator rather than an involved participant, since the appropriate language for describing the details in much of science is mathematics, whether the subject is expanding universe, subatomic particles, or chromosomes. Though the broad outline of a scientific theory can be\nsketched intuitively, when a part of the physical universe is finally understood, its description often looks like a page in a mathematics text.\n\nE\tStill, the non-mathematical reader can go far in understanding mathematical reasoning. This book presents the details that illustrate the mathematical style of thinking, which involves sustained, step-by-step analysis, experiments, and insights. You will turn these pages much more slowly than when reading a novel or a newspaper. It may help to have a pencil and paper ready to check claims and carry out experiments.\n\nF\tAs I wrote, I kept in mind two types of readers: those who enjoyed mathematics until they were turned off by an unpleasant episode, usually around fifth grade, and mathematics aficionados, who will find much that is new throughout the book.\nThis book also serves readers who simply want to sharpen their analytical skills. Many careers, such as law and medicine, require extended, precise analysis. Each chapter offers practice in following a sustained and closely argued line of thought. That mathematics can develop this skill is shown by these two testimonials:\n\nG\tA physician wrote, 'The discipline of analytical thought processes (in mathematics] prepared me extremely well for medicat school. In medicine one is faced with a problem which must be thoroughly analyzed before a solution can be found. The process is similar to doing mathematics.'\nA lawyer made the same point, 'Although I had no background in law — not even one political sciente course — I did well at one of the best law schools. I attribute much of my success there to having learned, through the study of mathematics, and, in particular, theorems, how to analyze complicated principles. Lawyers who have studied mathematics can master the legal principles in a way that most others cannot.'\nI hope you will share my delight in watching as simple, even naïve, questions lead to remarkable solutions and purely theoretical discoveries find unanticipated applications.",
+      "groups": [
+        {
+          "group_id": "P3-G1",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 27-34\n\nReading Passage 3 has seven sections, A–G. Which section contains the following information? Write the correct letter, A–G, in boxes 27–34 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "options": [
+            {
+              "key": "A",
+              "text": "Section A"
+            },
+            {
+              "key": "B",
+              "text": "Section B"
+            },
+            {
+              "key": "C",
+              "text": "Section C"
+            },
+            {
+              "key": "D",
+              "text": "Section D"
+            },
+            {
+              "key": "E",
+              "text": "Section E"
+            },
+            {
+              "key": "F",
+              "text": "Section F"
+            },
+            {
+              "key": "G",
+              "text": "Section G"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P3-G1-Q27",
+              "number": 27,
+              "prompt": "a reference to books that assume a lack of mathematical knowledge",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 173,
+                "stop_index": 311
+              }
+            },
+            {
+              "item_id": "P3-G1-Q28",
+              "number": 28,
+              "prompt": "the way in which this is not a typical book about mathematics",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1150,
+                "stop_index": 1247
+              }
+            },
+            {
+              "item_id": "P3-G1-Q29",
+              "number": 29,
+              "prompt": "personal examples of being helped by mathematics",
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 3817,
+                "stop_index": 3947
+              }
+            },
+            {
+              "item_id": "P3-G1-Q30",
+              "number": 30,
+              "prompt": "examples of people who each had abilities that seemed incompatible",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 1950,
+                "stop_index": 2077
+              }
+            },
+            {
+              "item_id": "P3-G1-Q31",
+              "number": 31,
+              "prompt": "mention of different focuses of books about mathematics",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1248,
+                "stop_index": 1353
+              }
+            },
+            {
+              "item_id": "P3-G1-Q32",
+              "number": 32,
+              "prompt": "a contrast between reading this book and reading other kinds of publication",
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 3073,
+                "stop_index": 3157
+              }
+            },
+            {
+              "item_id": "P3-G1-Q33",
+              "number": 33,
+              "prompt": "a claim that the whole of the book is accessible to everybody",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 501,
+                "stop_index": 551
+              }
+            },
+            {
+              "item_id": "P3-G1-Q34",
+              "number": 34,
+              "prompt": "a reference to different categories of intended readers of this book",
+              "answer": {
+                "type": "OPTION",
+                "value": "F",
+                "start_index": 3249,
+                "stop_index": 3296
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G2",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 35-40\n\nComplete the sentences below. Choose ONE WORD ONLY from the passage for each answer. Write your answers in boxes 35-40 on your answer sheet.",
+          "constraints": {
+            "from_options": false
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "35 Some areas of both music and mathematics are suitable for someone who is a "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q35"
+              },
+              {
+                "t": "text",
+                "v": ".\n\n36 It is sometimes possible to understand advanced mathematics using no more than a limited knowledge of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q36"
+              },
+              {
+                "t": "text",
+                "v": ".\n\n37 The writer intends to show that mathematics requires "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q37"
+              },
+              {
+                "t": "text",
+                "v": " thinking, as well as analytical skills.\n\n38 Some books written by "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q38"
+              },
+              {
+                "t": "text",
+                "v": " have had to leave out the mathematics that is central to their theories.\n\n39 The writer advises non-mathematical readers to perform "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q39"
+              },
+              {
+                "t": "text",
+                "v": " while reading the book.\n\n40 A lawyer found that studying "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G2-Q40"
+              },
+              {
+                "t": "text",
+                "v": " helped even more than other areas of mathematics in the study of law."
+              }
+            ]
+          },
+          "options": [],
+          "items": [
+            {
+              "item_id": "P3-G2-Q35",
+              "number": 35,
+              "answer": {
+                "type": "TEXT",
+                "value": "beginner",
+                "start_index": 56,
+                "stop_index": 137
+              }
+            },
+            {
+              "item_id": "P3-G2-Q36",
+              "number": 36,
+              "answer": {
+                "type": "TEXT",
+                "value": "arithmetic",
+                "start_index": 312,
+                "stop_index": 366
+              }
+            },
+            {
+              "item_id": "P3-G2-Q37",
+              "number": 37,
+              "answer": {
+                "type": "TEXT",
+                "value": "intuitive",
+                "start_index": 1693,
+                "stop_index": 1791
+              }
+            },
+            {
+              "item_id": "P3-G2-Q38",
+              "number": 38,
+              "answer": {
+                "type": "TEXT",
+                "value": "scientists",
+                "start_index": 2184,
+                "stop_index": 2261
+              }
+            },
+            {
+              "item_id": "P3-G2-Q39",
+              "number": 39,
+              "answer": {
+                "type": "TEXT",
+                "value": "experiments",
+                "start_index": 3158,
+                "stop_index": 3245
+              }
+            },
+            {
+              "item_id": "P3-G2-Q40",
+              "number": 40,
+              "answer": {
+                "type": "TEXT",
+                "value": "theorems",
+                "start_index": 4252,
+                "stop_index": 4370
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,587 @@
+{
+  "passages": [
+    {
+      "passage_id": "P1",
+      "title": "The secret of staying young",
+      "text": "Pheidole dentata, a native ant of the south-eastern U.S., isn't immortal. But scientists have found that it doesn't seem to show any signs of aging. Old worker ants can do everything just as well as the youngsters, and their brains appear just as sharp. 'We get a picture that these ants really don't decline,' says Ysabel Giraldo, who studied the ants for her doctoral thesis at Boston University.\n\nSuch age-defying feats are rare in the animal kingdom. Naked mole rats can live for almost 30 years and stay fit for nearly their entire lives. They can still reproduce even when old, and they never get cancer.  But the vast majority of animals deteriorate with age just like people do.  Like the naked mole rat, ants are social creatures that usually live in highly organised colonies. 'It's this social complexity that makes P. dentata useful for studying aging in people,' says Giraldo, now at the California Institute of Technology.  Humans are also highly social, a trait that has been connected to healthier aging. By contrast, most animal studies of aging use mice, worms or fruit flies, which all lead much more isolated lives.\n\nIn the lab, P. dentata worker ants typically live for around 140 days.  Giraldo focused on ants at four age ranges: 20 to 22 days, 45 to 47 days, 95 to 97 days and 120 to 122 days. Unlike all previous studies, which only estimated how old the ants were, her work tracked the ants from the time the pupae became adults, so she knew their exact ages. Then she put them through a range of tests.\n\nGiraldo watched how well the ants took care of the young of the colony, recording how often each ant attended to, carried and fed them. She compared how well 20-day-old and 95-day-old ants followed the telltale scent that the insects usually leave to mark a trail to food. She tested how ants responded to light and also measured how active they were by counting how often ants in a small dish walked across a line.  And she experimented with how ants react to live prey:  a tethered fruit fly.  Giraldo expected the older ants to perform poorly in all these tasks.  But the elderly insects were all good caretakers and trail-followers-the 95-day-old ants could track the scent even longer than their younger counterparts.  They all responded to light well, and the older ants were more active. And when it came to reacting to prey, the older ants attacked the poor fruit fly just as aggressively as the young ones did, flaring their mandibles or pulling at the fly's legs.\n\nThen Giraldo compared the brains of 20-day-old and 95-day-old ants, identifying any cells that were close to death. She saw no major differences with age, nor was there any difference in the location of the dying cells, showing that age didn't seem to affect specific brain functions.  Ants and other insects have structures in their brains called mushroom bodies, which are important for processing information, learning and memory. She also wanted to see if aging affects the density of synaptic complexes within these structures-regions where neurons come together.  Again, the answer was no.  What was more, the old ants didn't experience any drop in the levels of either serotonin or dopamine-brain chemicals whose decline often coincides with aging. In humans, for example, a decrease in serotonin has been linked to Alzheimer's disease.\n\n'This is the first time anyone has looked at both behavioral and neural changes in these ants so thoroughly,' says Giraldo, who recently published the findings in the Proceedings of the Royal Society B. Scientists have looked at some similar aspects in bees, but the results of recent bee studies were mixed-some studies showed age-related declines, which biologists call senescence, and others didn't. 'For now, the study raises more questions than it answers,' Giraldo says, 'including how P. dentata stays in such good shape. '\n\nAlso, if the ants don't deteriorate with age, why do they die at all? Out in the wild, the ants probably don't live for a full 140 days thanks to predators, disease and just being in an environment that's much harsher than the comforts of the lab. 'The lucky ants that do live into old age may suffer a steep decline just before dying,' Giraldo says, but she can't say for sure because her study wasn't designed to follow an ant's final moments.\n\n'It will be important to extend these findings to other species of social insects,' says Gene E. Robinson, an entomologist at the University of Illinois at Urbana-Champaign.  This ant might be unique, or it might represent a broader pattern among other social bugs with possible clues to the science of aging in larger animals. Either way, it seems that for these ants, age really doesn't matter.",
+      "groups": [
+        {
+          "group_id": "P1-G1",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 1-8\n\nComplete the notes below.  Choose ONE WORD ONLY from the passage for each answer.",
+          "constraints": {
+            "from_options": false
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Ysabel Giraldo's research\n\nFocused on a total of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q1"
+              },
+              {
+                "t": "text",
+                "v": " different age groups of ants, analysing\n\nBehavior:\n\n· how well ants looked after their "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q2"
+              },
+              {
+                "t": "text",
+                "v": "\n\n· their ability to locate "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q3"
+              },
+              {
+                "t": "text",
+                "v": "\nusing a scent trail\n\n· the effect that "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q4"
+              },
+              {
+                "t": "text",
+                "v": "\nhad on them\n\n· how "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q5"
+              },
+              {
+                "t": "text",
+                "v": "\nthey attacked prey\n\nBrains:\n\n· comparison between age and the "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q6"
+              },
+              {
+                "t": "text",
+                "v": "\nof dying cells in the\nbrains of ants\n\n· condition of synaptic complexes (areas in which "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q7"
+              },
+              {
+                "t": "text",
+                "v": "\nmeet) in the brain's 'mushroom bodies'\n\n· level of two "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q8"
+              },
+              {
+                "t": "text",
+                "v": "\nin the brain associated with ageing"
+              }
+            ]
+          },
+          "options": [],
+          "items": [
+            {
+              "item_id": "P1-G1-Q1",
+              "number": 1,
+              "answer": {
+                "type": "TEXT",
+                "value": "four",
+                "start_index": 0,
+                "stop_index": 73
+              }
+            },
+            {
+              "item_id": "P1-G1-Q2",
+              "number": 2,
+              "answer": {
+                "type": "TEXT",
+                "value": "young",
+                "start_index": 74,
+                "stop_index": 148
+              }
+            },
+            {
+              "item_id": "P1-G1-Q3",
+              "number": 3,
+              "answer": {
+                "type": "TEXT",
+                "value": "food",
+                "start_index": 149,
+                "stop_index": 253
+              }
+            },
+            {
+              "item_id": "P1-G1-Q4",
+              "number": 4,
+              "answer": {
+                "type": "TEXT",
+                "value": "light",
+                "start_index": 400,
+                "stop_index": 454
+              }
+            },
+            {
+              "item_id": "P1-G1-Q5",
+              "number": 5,
+              "answer": {
+                "type": "TEXT",
+                "value": "aggressively",
+                "start_index": 455,
+                "stop_index": 543
+              }
+            },
+            {
+              "item_id": "P1-G1-Q6",
+              "number": 6,
+              "answer": {
+                "type": "TEXT",
+                "value": "location",
+                "start_index": 688,
+                "stop_index": 786
+              }
+            },
+            {
+              "item_id": "P1-G1-Q7",
+              "number": 7,
+              "answer": {
+                "type": "TEXT",
+                "value": "neurons",
+                "start_index": 1137,
+                "stop_index": 1207
+              }
+            },
+            {
+              "item_id": "P1-G1-Q8",
+              "number": 8,
+              "answer": {
+                "type": "TEXT",
+                "value": "chemicals",
+                "start_index": 1209,
+                "stop_index": 1317
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G2",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 9-13\n\nDo the following statements agree with the information given in Reading Passage 1?\n\nMatch each statement with TRUE, FALSE, or NOT GIVEN.",
+          "options": [
+            {
+              "key": "A",
+              "text": "TRUE"
+            },
+            {
+              "key": "B",
+              "text": "FALSE"
+            },
+            {
+              "key": "C",
+              "text": "NOT GIVEN"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P1-G2-Q9",
+              "number": 9,
+              "prompt": "Pheidole dentata ants are the only known animals which remain active for almost their whole lives.",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1318,
+                "stop_index": 1485
+              }
+            },
+            {
+              "item_id": "P1-G2-Q10",
+              "number": 10,
+              "prompt": "Ysabel Giraldo was the first person to study Pheidole dentata ants using precise data about the insects' ages.",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 2027,
+                "stop_index": 2096
+              }
+            },
+            {
+              "item_id": "P1-G2-Q11",
+              "number": 11,
+              "prompt": "The ants in Giraldo's experiments behaved as she had predicted that they would.",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 2098,
+                "stop_index": 2166
+              }
+            },
+            {
+              "item_id": "P1-G2-Q12",
+              "number": 12,
+              "prompt": "The recent studies of bees used different methods of measuring age-related decline.",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 2506,
+                "stop_index": 2621
+              }
+            },
+            {
+              "item_id": "P1-G2-Q13",
+              "number": 13,
+              "prompt": "Pheidole dentata ants kept in laboratory conditions tend to live longer lives.",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 4658,
+                "stop_index": 4726
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P2",
+      "title": "Why zoos are good Scientist David Hone makes the case for zoos",
+      "text": " A In my view, it is perfectly possible for many species of animals living in zoos or wildlife parks to have a quality of life as high as, or higher than, in the wild. Animals in good zoos get a varied and high-quality diet with all the supplements required, and any illnesses they might have will be treated. Their movement might be somewhat restricted, but they have a safe environment in which to live, and they are spared bullying and social ostracism by others of their kind. They do not suffer from the threat or stress of predators, or the irritation and pain of parasites or injuries. The average captive animal will have a greater life expectancy compared with its wild counterpart, and will not die of drought, of starvation or in the jaws of a predator. A lot of very nasty things happen to truly 'wild' animals that simply don't happen in good zoos, and to view a life that is 'free' as one that is automatically 'good' is, I think, an error. Furthermore, zoos serve several key purposes.\n\nB Firstly, zoos aid conservation.  Colossal numbers of species are becoming extinct across the world, and many more are increasingly threatened and therefore risk extinction. Moreover, some of these collapses have been sudden, dramatic and unexpected, or were simply discovered very late in the day. A species protected in captivity can be bred up to provide a reservoir population against a population crash or extinction in the wild. A good number of species only exist in captivity, with many of these living in zoos. Still more only exist in the wild because they have been reintroduced from zoos, or have wild populations that have been boosted by captive bred animals. Without these efforts there would be fewer species alive today. Although reintroduction successes are few and far between, the numbers are increasing, and the very fact that species have been saved or reintroduced as a result of captive breeding proves the value of such initiatives.\n\nC Zoos also provide education. Many children and adults, especially those in cities, will never see a wild animal beyond a fox or pigeon. While it is true that television documentaries are becoming ever more detailed and impressive, and many natural history specimens are on display in museums, there really is nothing to compare with seeing a living creature in the flesh, hearing it, smelling it, watching what it does and having the time to absorb details.  That alone will bring a greater understanding and perspective to many, and hopefully give them a greater appreciation for wildlife, conservation efforts and how they can contribute.\n\n D In addition to this, there is also the education that can take place in zoos through signs, talks and presentations which directly communicate information to visitors about the animals they are seeing and their place in the world. This was an area where zoos used to be lacking, but they are now increasingly sophisticated in their communication and outreach work.  Many zoos also work directly to educate conservation workers in other countries, or send their animal keepers abroad to contribute their knowledge and skills to those working in zoos and reserves, thereby helping to improve conditions and reintroductions all over the world.\n\n E Zoos also play a key role in research. If we are to save wild species and restore and repair ecosystems we need to know about how key species live, act and react. Being able to undertake research on animals in zoos where there is less risk and fewer variables means real changes can be effected on wild populations. Finding out about, for example, the oestrus cycle of an animal or its breeding rate helps us manage wild populations.  Procedures such as capturing and moving at-risk or dangerous individuals are bolstered by knowledge gained in zoos about doses for anaesthetics, and by experience in handling and transporting animals.  This can make a real difference to conservation efforts and to the reduction of human-animal conflicts, and can provide a knowledge base for helping with the increasing threats of habitat destruction and other problems.\n\n F In conclusion, considering the many ongoing global threats to the environment, it is hard for me to see zoos as anything other than essential to the long-term survival of numerous species. They are vital not just in terms of protecting animals, but as a means of learning about them to aid those still in the wild, as well as educating and informing the general population about these animals and their world so that they can assist or at least accept the need to be more environmentally conscious. Without them, the world would be, and would increasingly become, a much poorer place.",
+      "groups": [
+        {
+          "group_id": "P2-G1",
+          "type": "MATCHING_PARAGRAPHS",
+          "instructions": "Questions 14-17\n\nReading Passage 2 has six paragraphs, A-F.\n\nWhich paragraph contains the following information? ",
+          "items": [
+            {
+              "item_id": "P2-G1-Q14",
+              "number": 14,
+              "prompt": "a reference to how quickly animal species can die out",
+              "answer": {
+                "type": "ENUM",
+                "value": "B",
+                "start_index": 1037,
+                "stop_index": 1176
+              }
+            },
+            {
+              "item_id": "P2-G1-Q15",
+              "number": 15,
+              "prompt": "reasons why it is preferable to study animals in captivity rather than in the wild",
+              "answer": {
+                "type": "ENUM",
+                "value": "E",
+                "start_index": 3417,
+                "stop_index": 3569
+              }
+            },
+            {
+              "item_id": "P2-G1-Q16",
+              "number": 16,
+              "prompt": "mention of two ways of learning about animals other than visiting them in zoos",
+              "answer": {
+                "type": "ENUM",
+                "value": "C",
+                "start_index": 2100,
+                "stop_index": 2334
+              }
+            },
+            {
+              "item_id": "P2-G1-Q17",
+              "number": 17,
+              "prompt": "reasons why animals in zoos may be healthier than those in the wild",
+              "answer": {
+                "type": "ENUM",
+                "value": "A",
+                "start_index": 168,
+                "stop_index": 309
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G2",
+          "type": "TRUE_FALSE_NOT_GIVEN",
+          "instructions": "Questions 18-22\n\nDo the following statements agree with the information given in Reading Passage 2?\n\nWrite TRUE, FALSE, or NOT GIVEN.",
+          "items": [
+            {
+              "item_id": "P2-G2-Q18",
+              "number": 18,
+              "prompt": "An animal is likely to live longer in a zoo than in the wild.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 593,
+                "stop_index": 690
+              }
+            },
+            {
+              "item_id": "P2-G2-Q19",
+              "number": 19,
+              "prompt": "There are some species in zoos which can no longer be found in the wild.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 1438,
+                "stop_index": 1522
+              }
+            },
+            {
+              "item_id": "P2-G2-Q20",
+              "number": 20,
+              "prompt": "Improvements in the quality of TV wildlife documentaries have resulted in increased numbers of zoo visitors.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN"
+              }
+            },
+            {
+              "item_id": "P2-G2-Q21",
+              "number": 21,
+              "prompt": "Zoos have always excelled at transmitting information about animals to the public.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 2840,
+                "stop_index": 2973
+              }
+            },
+            {
+              "item_id": "P2-G2-Q22",
+              "number": 22,
+              "prompt": "Studying animals in zoos is less stressful for the animals than studying them in the wild.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN"
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 23-24\n\nChoose TWO letters, A-E.\n\nWhich TWO of the following are stated about zoo staff in the text?",
+          "items": [
+            {
+              "item_id": "P2-G3-Q23",
+              "number": 23,
+              "prompt": "Which of the following are stated about zoo staff? ",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Some take part in television documentaries about animals."
+                },
+                {
+                  "key": "B",
+                  "text": "Some travel to overseas locations to join teams in zoos."
+                },
+                {
+                  "key": "C",
+                  "text": "Some get experience with species in the wild before taking up zoo jobs."
+                },
+                {
+                  "key": "D",
+                  "text": "Some teach people who are involved with conservation projects."
+                },
+                {
+                  "key": "E",
+                  "text": "Some specialise in caring for species which are under threat."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 2975,
+                "stop_index": 3054
+              }
+            },
+            {
+              "item_id": "P2-G3-Q24",
+              "number": 24,
+              "prompt": "Which of the following are stated about zoo staff? ",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Some take part in television documentaries about animals."
+                },
+                {
+                  "key": "B",
+                  "text": "Some travel to overseas locations to join teams in zoos."
+                },
+                {
+                  "key": "C",
+                  "text": "Some get experience with species in the wild before taking up zoo jobs."
+                },
+                {
+                  "key": "D",
+                  "text": "Some teach people who are involved with conservation projects."
+                },
+                {
+                  "key": "E",
+                  "text": "Some specialise in caring for species which are under threat."
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 2975,
+                "stop_index": 3170
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G4",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 25-26\n\nChoose TWO letters, A-E.\n\nWhich TWO of these beliefs about zoos does the writer mention in the text?",
+          "options": [
+            {
+              "key": "A",
+              "text": "They can help children overcome their fears of wild animals."
+            },
+            {
+              "key": "B",
+              "text": "They can increase public awareness of environmental issues."
+            },
+            {
+              "key": "C",
+              "text": "They can provide employment for a range of professional people."
+            },
+            {
+              "key": "D",
+              "text": "They can generate income to support wildlife conservation projects."
+            },
+            {
+              "key": "E",
+              "text": "They can raise animals which can later be released into the wild."
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P2-G4-Q25",
+              "number": 25,
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1013,
+                "stop_index": 1035
+              }
+            },
+            {
+              "item_id": "P2-G4-Q26",
+              "number": 26,
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 1523,
+                "stop_index": 1676
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P3",
+      "title": "Microplastics Research",
+      "text": "A Organisation is big business. Whether it is of our lives – all those inboxes and calendars – or how companies are structured, a multi-billion dollar industry helps to meet this need.\n\nWe have more strategies for time management, project management and self-organisation than at any other time in human history. We are told that we ought to organise our company, our home life, our week, our day and even our sleep, all as a means to becoming more productive. Every week, countless seminars and workshops take place around the world to tell a paying public that they ought to structure their lives in order to achieve this.\n\nThis rhetoric has also crept into the thinking of business leaders and entrepreneurs, much to the delight of self-proclaimed perfectionists with the need to get everything right. The number of business schools and graduates has massively increased over the past 50 years, essentially teaching people how to organise well.\n\nB Ironically, however, the number of businesses that fail has also steadily increased. Work-related stress has increased. A large proportion of workers from all demographics claim to be dissatisfied with the way their work is structured and the way they are managed.\n\nThis begs the question: what has gone wrong? Why is it that on paper the drive for organisation seems a sure shot for increasing productivity, but in reality falls well short of what is expected?\n\nC This has been a problem for a while now. Frederick Taylor was one of the forefathers of scientific management. Writing in the first half of the 20th century, he designed a number of principles to improve the efficiency of the work process, which have since become widespread in modern companies. So the approach has been around for a while.\n\nD New research suggests that this obsession with efficiency is misguided. The problem is not necessarily the management theories or strategies we use to organise our work; it’s the basic assumptions we hold in approaching how we work. Here it’s the assumption that order is a necessary condition for productivity. This assumption has also fostered the idea that disorder must be detrimental to organisational productivity. The result is that businesses and people spend time and money organising themselves for the sake of organising, rather than actually looking at the end goal and usefulness of such an effort.\n\nE What’s more, recent studies show that order actually has diminishing returns. Order does increase productivity to a certain extent, but eventually the usefulness of the process of organisation, and the benefit it yields, reduce until the point where any further increase in order reduces productivity. Some argue that in a business, if the cost of formally structuring something outweighs the benefit of doing it, then that thing ought not to be formally structured. Instead, the resources involved can be better used elsewhere.\n\nF In fact, research shows that, when innovating, the best approach is to create an environment devoid of structure and hierarchy and enable everyone involved to engage as one organic group. These environments can lead to new solutions that, under conventionally structured environments (filled with bottlenecks in terms of information flow, power structures, rules, and routines) would never be reached.\n\nG In recent times companies have slowly started to embrace this disorganisation. Many of them embrace it in terms of perception (embracing the idea of disorder, as opposed to fearing it) and in terms of process (putting mechanisms in place to reduce structure).\n\nFor example, Oticon, a large Danish manufacturer of hearing aids, used what it called a ‘spaghetti’ structure in order to reduce the organisation’s rigid hierarchies. This involved scrapping formal job titles and giving staff huge amounts of ownership over their own time and projects. This approach proved to be highly successful initially, with clear improvements in worker productivity in all facets of the business.\n\nIn similar fashion, the former chairman of General Electric embraced disorganisation, putting forward the idea of the ‘boundaryless’ organisation. Again, it involves breaking down the barriers between different parts of a company and encouraging virtual collaboration and flexible working. Google and a number of other tech companies have embraced (at least in part) these kinds of flexible structures, facilitated by technology and strong company values which glue people together.\n\nH A word of warning to others thinking of jumping on this bandwagon: the evidence so far suggests disorder, much like order, also seems to have diminishing utility, and can also have detrimental effects on performance if overused. Like order, disorder should be embraced only so far as it is useful. But we should not fear it – nor venerate one over the other. This research also shows that we should continually question whether or not our existing assumptions work.",
+      "groups": [
+        {
+          "group_id": "P3-G2",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 34-39\n\nComplete the summary.  Choose ONE WORD ONLY from the passage for each answer.",
+          "items": [
+            {
+              "item_id": "P3-G2-Q34",
+              "number": 34,
+              "prompt": "bits of debris that were ____ (harmful to animals)",
+              "answer": {
+                "type": "TEXT",
+                "value": "ingested",
+                "start_index": 1217,
+                "stop_index": 1261
+              }
+            },
+            {
+              "item_id": "P3-G2-Q35",
+              "number": 35,
+              "prompt": "There was little research on ____ e.g. from synthetic fibres",
+              "answer": {
+                "type": "TEXT",
+                "value": "microplastics",
+                "start_index": 1760,
+                "stop_index": 1831
+              }
+            },
+            {
+              "item_id": "P3-G2-Q36",
+              "number": 36,
+              "prompt": "most of them focused on individual animals, not entire ____",
+              "answer": {
+                "type": "TEXT",
+                "value": "populations",
+                "start_index": 1993,
+                "stop_index": 2071
+              }
+            },
+            {
+              "item_id": "P3-G2-Q37",
+              "number": 37,
+              "prompt": "the ____ of plastic used in the lab did not always reflect those in the ocean",
+              "answer": {
+                "type": "TEXT",
+                "value": "types",
+                "start_index": 2453,
+                "stop_index": 2676
+              }
+            },
+            {
+              "item_id": "P3-G2-Q38",
+              "number": 38,
+              "prompt": "the impact of a reduction in numbers on the ____ of that species",
+              "answer": {
+                "type": "TEXT",
+                "value": "survival",
+                "start_index": 2907,
+                "stop_index": 3094
+              }
+            },
+            {
+              "item_id": "P3-G2-Q39",
+              "number": 39,
+              "prompt": "Rochman says more information is needed on the possible impact of future ____ (e.g. involving oil)",
+              "answer": {
+                "type": "TEXT",
+                "value": "spills",
+                "start_index": 3095,
+                "stop_index": 3308
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Question 40",
+          "items": [
+            {
+              "item_id": "P3-G3-Q40",
+              "number": 40,
+              "prompt": "What would be the best title for this passage?",
+              "answer": {
+                "type": "ENUM",
+                "value": "A",
+                "start_index": 4709,
+                "stop_index": 4777
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

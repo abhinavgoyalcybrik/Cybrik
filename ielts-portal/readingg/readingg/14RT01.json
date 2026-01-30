@@ -1,0 +1,744 @@
+{
+  "passages": [
+    {
+      "passage_id": "P1",
+      "title": "The importance of children's play",
+      "text": "Brick by brick, six-year-old Alice is building a magical kingdom.  Imagining fairy-tale turrets and fire-breathing dragons, wicked witches and gallant heroes, she's creating an enchanting world.  Although she isn't aware of it, this fantasy is helping her take her first steps towards her capacity for creativity and so it will have important repercussions in her adult life.\n\nMinutes later, Alice has abandoned the kingdom in favour of playing schools with her younger brother. When she bosses him around as his 'teacher', she's practising how to regulate her emotions through pretence. Later on, when they tire of this and settle down with a board game, she's learning about the need to follow rules and take turns with a partner.\n\n'Play in all its rich variety is one of the highest achievements of the human species,' says Dr David Whitebread from the Faculty of Education at the University of Cambridge, UK. 'It underpins how we develop as intellectual, problem-solving adults and is crucial to our success as a highly adaptable species. '\n\nRecognising the importance of play is not new:  over two millennia ago, the Greek philosopher Plato extolled its virtues as a means of developing skills for adult life, and ideas about play-based learning have been developing since the 19th century.\n\nBut we live in changing times, and Whitebread is mindful of a worldwide decline in play, pointing out that over half the people in the world now live in cities. 'The opportunities for free play, which I experienced almost every day of my childhood, are becoming increasingly scarce,' he says.  Outdoor play is curtailed by perceptions of risk to do with traffic, as well as parents' increased wish to protect their children from being the victims of crime, and by the emphasis on 'earlier is better' which is leading to greater competition in academic learning and schools.\n\nInternational bodies like the United Nations and the European Union have begun to develop policies concerned with children's right to play, and to consider implications for leisure facilities and educational programmes. But what they often lack is the evidence to base policies on.\n\n'The type of play we are interested in is child-initiated, spontaneous and unpredictable - but, as soon as you ask a five-year-old \"to play\", then you as the researcher have intervened,' explains Dr Sara Baker.  'And we want to know what the long-term impact of play is.  It's a real challenge. '\n\nDr Jenny Gibson agrees, pointing out that although some of the steps in the puzzle of how and why play is important have been looked at, there is very little data on the impact it has on the child's later life.\n\nNow, thanks to the university's new Centre for Research on Play in Education, Development and Learning (PEDAL), Whitebread, Baker, Gibson and a team of researchers hope to provide evidence on the role played by play in how a child develops.\n\n'A strong possibility is that play supports the early development of children's self-control,' explains Baker. 'This is our ability to develop awareness of our own thinking processes - it influences how effectively we go about undertaking challenging activities. '\n\nIn a study carried out by Baker with toddlers and young pre-schoolers, she found that children with greater self-control solved problems more quickly when exploring an unfamiliar set-up requiring scientific reasoning. 'This sort of evidence makes us think that giving children the chance to play will make them more successful problem-solvers in the long run. '\n\nIf playful experiences do facilitate this aspect of development, say the researchers, it could be extremely significant for educational practices, because the ability to self-regulate has been shown to be a key predictor of academic performance.\n\nGibson adds: 'Playful behaviour is also an important indicator of healthy social and emotional development. In my previous research, I investigated how observing children at play can give us important clues about their well-being and can even be useful in the diagnosis of neurodevelopmental disorders like autism.'\n\nWhitebread's recent research has involved developing a play-based approach to supporting children's writing.  'Many primary school children find writing difficult, but we showed in a previous study that a playful stimulus was far more effective than an instructional one.' Children wrote longer and better-structured stories when they first played with dolls representing characters in the story.  In the latest study, children first created their story with Lego, with similar results.  'Many teachers commented that they had always previously had children saying they didn't know what to write about.  With the Lego building, however, not a single child said this through the whole year of the project.'\n\nWhitebread, who directs PEDAL, trained as a primary school teacher in the early 1970s, when, as he describes, 'the teaching of young children was largely a quiet backwater, untroubled by any serious intellectual debate or controversy.' Now, the landscape is very different, with hotly debated topics such as school starting age.\n\n'Somehow the importance of play has been lost in recent decades.  It's regarded as something trivial, or even as something negative that contrasts with \"work\". Let's not lose sight of its benefits, and the fundamental contributions it makes to human achievements in the arts, sciences and technology.  Let's make sure children have a rich diet of play experiences.'",
+      "groups": [
+        {
+          "group_id": "P1-G1",
+          "type": "NOTE_COMPLETION",
+          "instructions": "Questions 1-8\n\nComplete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.\n\nWrite your answers in boxes 1-8 on your answer sheet.",
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Children's play\n\nUses of children's play\n\nbuilding a 'magical kingdom' may help develop "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q1"
+              },
+              {
+                "t": "text",
+                "v": "\n\nboard games involve "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q2"
+              },
+              {
+                "t": "text",
+                "v": " and turn-taking\n\nRecent changes affecting children's play\n\npopulations of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q3"
+              },
+              {
+                "t": "text",
+                "v": " have grown\n\nopportunities for free play are limited due to\n- fear of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q4"
+              },
+              {
+                "t": "text",
+                "v": "\n- fear of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q5"
+              },
+              {
+                "t": "text",
+                "v": "\n- increased "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q6"
+              },
+              {
+                "t": "text",
+                "v": " in schools\n\nInternational policies on children's play\n\nit is difficult to find "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q7"
+              },
+              {
+                "t": "text",
+                "v": " to support new policies\n\nresearch needs to study the impact of play on the rest of the child's "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q8"
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P1-G1-Q1",
+              "number": 1,
+              "answer": {
+                "type": "TEXT",
+                "value": "creativity",
+                "start_index": 196,
+                "stop_index": 375
+              }
+            },
+            {
+              "item_id": "P1-G1-Q2",
+              "number": 2,
+              "answer": {
+                "type": "TEXT",
+                "value": "rules",
+                "start_index": 588,
+                "stop_index": 732
+              }
+            },
+            {
+              "item_id": "P1-G1-Q3",
+              "number": 3,
+              "answer": {
+                "type": "TEXT",
+                "value": "cities",
+                "start_index": 1297,
+                "stop_index": 1457
+              }
+            },
+            {
+              "item_id": "P1-G1-Q4",
+              "number": 4,
+              "answer": {
+                "type": "TEXT",
+                "value": "traffic",
+                "start_index": 1591,
+                "stop_index": 1870
+              }
+            },
+            {
+              "item_id": "P1-G1-Q5",
+              "number": 5,
+              "answer": {
+                "type": "TEXT",
+                "value": "crime",
+                "start_index": 1591,
+                "stop_index": 1870
+              }
+            },
+            {
+              "item_id": "P1-G1-Q6",
+              "number": 6,
+              "answer": {
+                "type": "TEXT",
+                "value": "competition",
+                "start_index": 1591,
+                "stop_index": 1870
+              }
+            },
+            {
+              "item_id": "P1-G1-Q7",
+              "number": 7,
+              "answer": {
+                "type": "TEXT",
+                "value": "evidence",
+                "start_index": 2092,
+                "stop_index": 2153
+              }
+            },
+            {
+              "item_id": "P1-G1-Q8",
+              "number": 8,
+              "answer": {
+                "type": "TEXT",
+                "value": "life",
+                "start_index": 2368,
+                "stop_index": 2425
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G2",
+          "type": "TRUE_FALSE_NOT_GIVEN",
+          "instructions": "Questions 9-13\n\nDo the following statements agree with the information given in Reading Passage 1?\n\nIn boxes 9-13 on your answer sheet, write\n\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "items": [
+            {
+              "item_id": "P1-G2-Q9",
+              "number": 9,
+              "prompt": "Children with good self-control are known to be likely to do well at school later on.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 3536,
+                "stop_index": 3781
+              }
+            },
+            {
+              "item_id": "P1-G2-Q10",
+              "number": 10,
+              "prompt": "The way a child plays may provide information about possible medical problems.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 3783,
+                "stop_index": 3890
+              }
+            },
+            {
+              "item_id": "P1-G2-Q11",
+              "number": 11,
+              "prompt": "Playing with dolls was found to benefit girls' writing more than boys' writing.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 4278,
+                "stop_index": 4379
+              }
+            },
+            {
+              "item_id": "P1-G2-Q12",
+              "number": 12,
+              "prompt": "Children had problems thinking up ideas when they first created the story with Lego.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 4704,
+                "stop_index": 4804
+              }
+            },
+            {
+              "item_id": "P1-G2-Q13",
+              "number": 13,
+              "prompt": "People nowadays regard children's play as less significant than they did in the past.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 5138,
+                "stop_index": 5201
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P2",
+      "title": "The growth of bike-sharing schemes around the world",
+      "text": "The original idea for an urban bike-sharing scheme dates back to a summer's day in Amsterdam in 1965.  Provo, the organisation that came up with the idea, was a group of Dutch activists who wanted to change society.  They believed the scheme, which was known as the Witte Fietsenplan, was an answer to the perceived threats of air pollution and consumerism. In the centre of Amsterdam, they painted a small number of used bikes white.  They also distributed leaflets describing the dangers of cars and inviting people to use the white bikes.  The bikes were then left unlocked at various locations around the city, to be used by anyone in need of transport.\n\nLuud Schimmelpennink, a Dutch industrial engineer who still lives and cycles in Amsterdam, was heavily involved in the original scheme. He recalls how the scheme succeeded in attracting a great deal of attention - particularly when it came to publicising Provo's aims - but struggled to get off the ground. The police were opposed to Provo's initiatives and almost as soon as the white bikes were distributed around the city, they removed them. However, for Schimmelpennink and for bike-sharing schemes in general, this was just the beginning. 'The first Witte Fietsenplan was just a symbolic thing,' he says. 'We painted a few bikes white, that was all. Things got more serious when I became a member of the Amsterdam city council two years later.'\n\nSchimmelpennink seized this opportunity to present a more elaborate Witte Fietsenplan to the city council. 'My idea was that the municipality of Amsterdam would distribute 10,000 white bikes over the city, for everyone to use,' he explains. 'I made serious calculations.  It turned out that a white bicycle - per person, per kilometre - would cost the municipality only 10% of what it contributed to public transport per person per kilometre.' Nevertheless, the council unanimously rejected the plan. 'They said that the bicycle belongs to the past.  They saw a glorious future for the car,' says Schimmelpennink. But he was not in the least discouraged.\n\nSchimmelpennink never stopped believing in bike-sharing, and in the mid-90s, two Danes asked for his help to set up a system in Copenhagen. The result was the world's first large-scale bike-share programme.  It worked on a deposit:  'You dropped a coin in the bike and when you returned it, you got your money back.' After setting up the Danish system, Schimmelpennink decided to try his luck again in the Netherlands - and this time he succeeded in arousing the interest of the Dutch Ministry of Transport. 'Times had changed,' he recalls. 'People had become more environmentally conscious, and the Danish experiment had proved that bike-sharing was a real possibility.' A new Witte Fietsenplan was launched in 1999 in Amsterdam.  However, riding a white bike was no longer free; it cost one guilder per trip and payment was made with a chip card developed by the Dutch bank Postbank.  Schimmelpennink designed conspicuous, sturdy white bikes locked in special racks which could be opened with the chip card - the plan started with 250 bikes, distributed over five stations.\n\nTheo Molenaar, who was a system designer for the project, worked alongside Schimmelpennink.  'I remember when we were testing the bike racks, he announced that he had already designed better ones. But of course, we had to go through with the ones we had.' The system, however, was prone to vandalism and theft. 'After every weekend there would always be a couple of bikes missing,' Molenaar says. 'I really have no idea what people did with them, because they could instantly be recognised as white bikes.' But the biggest blow came when Postbank decided to abolish the chip card, because it wasn't profitable.  'That chip card was pivotal to the system,' Molenaar says. 'To continue the project we would have needed to set up another system, but the business partner had lost interest. '\n\nSchimmelpennink was disappointed, but - characteristically - not for long. In 2002 he got a call from the French advertising corporation JC Decaux, who wanted to set up his bike-sharing scheme in Vienna. 'That went really well.  After Vienna, they set up a system in Lyon.  Then in 2007, Paris followed.  That was a decisive moment in the history of bike-sharing.' The huge and unexpected success of the Parisian bike-sharing programme, which now boasts more than 20,000 bicycles, inspired cities all over the world to set up their own schemes, all modelled on Schimmelpennink's.  'It's wonderful that this happened,' he says. 'But financially I didn't really benefit from it, because I never filed for a patent. '\n\nIn Amsterdam today, 38% of all trips are made by bike and, along with Copenhagen, it is regarded as one of the two most cycle-friendly capitals in the world - but the city never got another Witte Fietsenplan. Molenaar believes this may be because everybody in Amsterdam already has a bike.  Schimmelpennink, however, cannot see that this changes Amsterdam's need for a bike-sharing scheme. 'People who travel on the underground don't carry their bikes around.  But often they need additional transport to reach their final destination.' Although he thinks it is strange that a city like Amsterdam does not have a successful bike-sharing scheme, he is optimistic about the future. 'In the '60s we didn't stand a chance because people were prepared to give their lives to keep cars in the city. But that mentality has totally changed. Today everybody longs for cities that are not dominated by cars.'",
+      "groups": [
+        {
+          "group_id": "P2-G1",
+          "type": "MATCHING_INFORMATION",
+          "instructions": "Questions 14-18\n\nReading Passage 2 has seven paragraphs, A-G.\n\nWhich paragraph contains the following information?\n\nWrite the correct letter, A-G, in boxes 14-18 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "items": [
+            {
+              "item_id": "P2-G1-Q14",
+              "number": 14,
+              "prompt": "a description of how people misused a bike-sharing scheme",
+              "answer": {
+                "type": "TEXT",
+                "value": "E",
+                "start_index": 3454,
+                "stop_index": 3539
+              }
+            },
+            {
+              "item_id": "P2-G1-Q15",
+              "number": 15,
+              "prompt": "an explanation of why a proposed bike-sharing scheme was turned down",
+              "answer": {
+                "type": "TEXT",
+                "value": "C",
+                "start_index": 1911,
+                "stop_index": 2023
+              }
+            },
+            {
+              "item_id": "P2-G1-Q16",
+              "number": 16,
+              "prompt": "a reference to a person being unable to profit from their work",
+              "answer": {
+                "type": "TEXT",
+                "value": "F",
+                "start_index": 4561,
+                "stop_index": 4645
+              }
+            },
+            {
+              "item_id": "P2-G1-Q17",
+              "number": 17,
+              "prompt": "an explanation of the potential savings a bike-sharing scheme would bring",
+              "answer": {
+                "type": "TEXT",
+                "value": "C",
+                "start_index": 1682,
+                "stop_index": 1852
+              }
+            },
+            {
+              "item_id": "P2-G1-Q18",
+              "number": 18,
+              "prompt": "a reference to the problems a bike-sharing scheme was intended to solve",
+              "answer": {
+                "type": "TEXT",
+                "value": "A",
+                "start_index": 217,
+                "stop_index": 357
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G2",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 19 and 20\n\nChoose TWO letters, A-E.\n\nWrite the correct letters in boxes 19 and 20 on your answer sheet.\n\nWhich TWO of the following statements are made in the text about the Amsterdam bike-sharing scheme of 1999? ",
+          "options": [
+            {
+              "key": "A",
+              "text": "It was initially opposed by a government department."
+            },
+            {
+              "key": "B",
+              "text": "It failed when a partner in the scheme withdrew support."
+            },
+            {
+              "key": "C",
+              "text": "It aimed to be more successful than the Copenhagen scheme."
+            },
+            {
+              "key": "D",
+              "text": "It was made possible by a change in people's attitudes."
+            },
+            {
+              "key": "E",
+              "text": "It attracted interest from a range of bike designers."
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P2-G2-Q19",
+              "number": 19,
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 3650,
+                "stop_index": 3753
+              }
+            },
+            {
+              "item_id": "P2-G2-Q20",
+              "number": 20,
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 2574,
+                "stop_index": 2737
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 21 and 22\n\nChoose TWO letters, A-E.\n\nWrite the correct letters in boxes 21 and 22 on your answer sheet.\n\nWhich TWO of the following statements are made in the text about Amsterdam today?",
+          "options": [
+            {
+              "key": "A",
+              "text": "The majority of residents would like to prevent all cars from entering the city."
+            },
+            {
+              "key": "B",
+              "text": "There is little likelihood of the city having another bike-sharing scheme."
+            },
+            {
+              "key": "C",
+              "text": "More trips in the city are made by bike than by any other form of transport."
+            },
+            {
+              "key": "D",
+              "text": "A bike-sharing scheme would benefit residents who use public transport."
+            },
+            {
+              "key": "E",
+              "text": "The city has a reputation as a place that welcomes cyclists."
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P2-G3-Q21",
+              "number": 21,
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 5040,
+                "stop_index": 5108
+              }
+            },
+            {
+              "item_id": "P2-G3-Q22",
+              "number": 22,
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 4649,
+                "stop_index": 4805
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G4",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 23-26\n\nComplete the summary below.\n\nChoose ONE WORD ONLY from the passage for each answer.\n\nWrite your answers in boxes 23-26 on your answer sheet.",
+          "constraints": {
+            "from_passage": true,
+            "max_words": 1
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "The first urban bike-sharing scheme\n\nThe first bike-sharing scheme was the idea of the Dutch group Provo.  The people who belonged to this group were "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G4-Q23"
+              },
+              {
+                "t": "text",
+                "v": ". They were concerned about damage to the environment and about "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G4-Q24"
+              },
+              {
+                "t": "text",
+                "v": ", and believed that the bike-sharing scheme would draw attention to these issues. As well as painting some bikes white, they handed out "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G4-Q25"
+              },
+              {
+                "t": "text",
+                "v": " that condemned the use of cars.\n\nHowever, the scheme was not a great success:  almost as quickly as Provo left the bikes around the city, the "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G4-Q26"
+              },
+              {
+                "t": "text",
+                "v": " took them away. According to Schimmelpennink, the scheme was intended to be symbolic.  The idea was to get people thinking about the issues."
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P2-G4-Q23",
+              "number": 23,
+              "answer": {
+                "type": "TEXT",
+                "value": "activists",
+                "start_index": 103,
+                "stop_index": 215
+              }
+            },
+            {
+              "item_id": "P2-G4-Q24",
+              "number": 24,
+              "answer": {
+                "type": "TEXT",
+                "value": "consumerism",
+                "start_index": 217,
+                "stop_index": 357
+              }
+            },
+            {
+              "item_id": "P2-G4-Q25",
+              "number": 25,
+              "answer": {
+                "type": "TEXT",
+                "value": "leaflets",
+                "start_index": 436,
+                "stop_index": 541
+              }
+            },
+            {
+              "item_id": "P2-G4-Q26",
+              "number": 26,
+              "answer": {
+                "type": "TEXT",
+                "value": "police",
+                "start_index": 966,
+                "stop_index": 1103
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P3",
+      "title": "Motivational factors and the hospitality industry",
+      "text": "A critical aspect of the success of any business relates to staffing, and it is important to retain effective staff while at the same time ensuring they remain motivated throughout the time they spend with the organization.\n\nThe hospitality industry has historically been plagued by high employee turnover, which has a strongly negative impact both on customer satisfaction and on business performance generally (Poulston, 2008; Karatepe and Kilic, 2007). Among the many factors thought to be involved in this high turnover rate, motivation is widely believed to play a major part, although in reality little research has been conducted on employee motivation in this particular sector (Denvir and McMahon, 1992).\n\nResearch into employee motivation goes back to the early twentieth century and a number of theories relevant to this area have been advanced over the years. These theories have commonly been applied to the hospitality industry, as this review will demonstrate, and the researchers involved have drawn them on to understand employee attitudes and behaviour.\n\nA study by Pfeffer (1994) found that those firms which employ good workplace practices report significantly better financial results than those that don't, and moreover that the adoption of 'high commitment' practices by firms can result in measurably enhanced operational performance (Huselid, 1995). A more recent study by Lucas (2003) has underscored the view that HRM (human resource management) practices used in the hospitality industry cannot automatically be imported from the manufacturing sector.  However, studies have shown that the underlying principles on which HRM practices are based cannot be treated as universal; because the hospitality industry is, when viewed in comparison with manufacturing, made up of units which are typically much smaller in size, and this is one of several facets which distinguish it (Lucas, 2004). Furthermore, the high turnover of staff in the hospitality sector as well as the associated factor of relatively poor levels of skill among employees, places strains on both employers and managers, ultimately acting as a limiting factor on organizational performance (Poulston, 2008; Kusluvan et al., 2010).\n\nWhitman et al. (1999) suggest that work-related stress can impact highly on intention to leave.  The fact that stressed employees with less job satisfaction and less commitment to the organisation are more likely to leave has led to the direct correlation between employees' psychological well-being and organizational commitment (Carmeli and Weisberg, 2006). Additionally, in the hospitality industry, which typically involves shift work and long, irregular hours, employees also suffer from high degrees of work-family conflict (Zhao and Qu, 2009); and lack of career progression opportunities is another demotivating factor influencing the decision of employees to leave their jobs (Kusluvan et al., 2010).\n\nA study by Poulston (2009) concluded that good pay was a main motivating factor for many employees, but that other satisfiers such as achievement, recognition and responsibility were also important. What emerged, in other words, is that not only extrinsic but also intrinsic motivating factors were found to be important to employees. Interestingly, however, Poulston goes on to point out that whereas 75% of employees surveyed felt they had something to complain about in relation to their jobs, less than 20% of the total sample actually complained about low pay. It is evident therefore that other dissatisfiers apart from low financial reward were perceived by employees to be of sufficient importance to warrant something to complain about in relation to their workplace (Poulston, 2009). There is a strong link between the perceptions of employees and particular factors of their work environment that are separate from the work itself, including company policies, salary and vacations.\n\nSuch conditions are particularly troubling for the luxury hotel market, where high-quality service, requiring a sophisticated approach to HRM, is recognized as a critical source of competitive advantage (Maroudas et al., 2008). In a real sense, the services of hotel employees represent their industry (Schneider and Bowen, 1993). This representation has commonly been limited to guest experiences.  This suggests that there has been a dichotomy between the guest environment provided in luxury hotels and the working conditions of their employees.\n\nIt is therefore essential for hotel management to develop HRM practices that enable them to inspire and retain competent employees. This requires an understanding of what motivates employees at different levels of management and different stages of their careers (Enz and Siguaw, 2000). This implies that it is beneficial for hotel managers to understand what practices are most favorable to increase employee satisfaction and retention.\n\nHerzberg (1966) proposes that people have two major types of needs, the first being extrinsic motivation factors relating to the context in which work is performed, rather than the work itself. These include working conditions and job security. When these factors are unfavorable, job dissatisfaction may result.  Significantly, though, just fulfilling these needs does not result in satisfaction, but only in the reduction of dissatisfaction (Maroudas et al., 2008).\n\nEmployees also have intrinsic motivation needs or motivators, which include such factors as achievement and recognition. Unlike extrinsic factors, motivator factors may ideally result in job satisfaction (Maroudas et al., 2008). Herzberg's (1966) theory discusses the need for a 'balance' of these two types of needs.\n\nThe impact of fun as a motivating factor at work has also been explored. For example, Tews, Michel and Stafford (2013) conducted a study focusing on staff from a chain of themed restaurants in the United States.  It was found that fun activities had a favorable impact on performance and manager support for fun had a favorable impact in reducing turnover. Their findings support the view that fun may indeed have a beneficial effect, but the framing of that fun must be carefully aligned with both organizational goals and employee characteristics.  'Managers must learn how to achieve the delicate balance of allowing employees the freedom to enjoy themselves at work while simultaneously maintaining high levels of performance' (Tews et al., 2013).\n\nDeery (2008) has recommended several actions that can be adopted at the organizational level to retain good staff as well as assist in balancing work and family life. Those particularly appropriate to the hospitality industry include allowing adequate breaks during the working day, staff functions that involve families, and providing health and well-being opportunities.",
+      "groups": [
+        {
+          "group_id": "P3-G1",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 27-31\n\nLook at the following statements (Questions 27-31) and the list of researchers below.\n\nMatch each statement with the correct researcher, A-F.\n\nWrite the correct letter, A-F, in boxes 27-31 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "options": [
+            {
+              "key": "A",
+              "text": "Pfeffer"
+            },
+            {
+              "key": "B",
+              "text": "Lucas"
+            },
+            {
+              "key": "C",
+              "text": "Maroudas et al."
+            },
+            {
+              "key": "D",
+              "text": "Ng and Sorensen"
+            },
+            {
+              "key": "E",
+              "text": "Enz and Siguaw"
+            },
+            {
+              "key": "F",
+              "text": "Deery"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P3-G1-Q27",
+              "number": 27,
+              "prompt": "Hotel managers need to know what would encourage good staff to remain.",
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 4613,
+                "stop_index": 4743
+              }
+            },
+            {
+              "item_id": "P3-G1-Q28",
+              "number": 28,
+              "prompt": "The actions of managers may make staff feel they shouldn't move to a different employer.",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 1073,
+                "stop_index": 1227
+              }
+            },
+            {
+              "item_id": "P3-G1-Q29",
+              "number": 29,
+              "prompt": "Little is done in the hospitality industry to help workers improve their skills.",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1581,
+                "stop_index": 1703
+              }
+            },
+            {
+              "item_id": "P3-G1-Q30",
+              "number": 30,
+              "prompt": "Staff are less likely to change jobs if cooperation is encouraged.",
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 2226,
+                "stop_index": 2321
+              }
+            },
+            {
+              "item_id": "P3-G1-Q31",
+              "number": 31,
+              "prompt": "Dissatisfaction with pay is not the only reason why hospitality workers change jobs.",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 3272,
+                "stop_index": 3502
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G2",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 32-35\n\nDo the following statements agree with the claims of the writer in Reading Passage 3?\n\nIn boxes 32-35 on your answer sheet, write\n\nYES if the statement agrees with the claims of the writer\nNO if the statement contradicts the claims of the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+          "items": [
+            {
+              "item_id": "P3-G2-Q32",
+              "number": 32,
+              "prompt": "One reason for high staff turnover in the hospitality industry is poor morale.",
+              "answer": {
+                "type": "ENUM",
+                "value": "YES",
+                "start_index": 225,
+                "stop_index": 411
+              }
+            },
+            {
+              "item_id": "P3-G2-Q33",
+              "number": 33,
+              "prompt": "Research has shown that staff have a tendency to dislike their workplace.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 2897,
+                "stop_index": 3092
+              }
+            },
+            {
+              "item_id": "P3-G2-Q34",
+              "number": 34,
+              "prompt": "An improvement in working conditions and job security makes staff satisfied with their jobs.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NO",
+                "start_index": 5234,
+                "stop_index": 5362
+              }
+            },
+            {
+              "item_id": "P3-G2-Q35",
+              "number": 35,
+              "prompt": "Staff should be allowed to choose when they take breaks during the working day.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 4532,
+                "stop_index": 4669
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G3",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 36-40\n\nComplete the summary below.\n\nChoose ONE WORD ONLY from the passage for each answer.\n\nWrite your answers in boxes 36-40 on your answer sheet.",
+          "constraints": {
+            "from_passage": true,
+            "max_words": 1
+          },
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Fun at work\n\nTews, Michel and Stafford carried out research on staff in an American chain of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G3-Q36"
+              },
+              {
+                "t": "text",
+                "v": ". They discovered that activities designed for staff to have fun improved their "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G3-Q37"
+              },
+              {
+                "t": "text",
+                "v": " and that management involvement led to lower staff "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G3-Q38"
+              },
+              {
+                "t": "text",
+                "v": ". They also found that the activities needed to fit with both the company's "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G3-Q39"
+              },
+              {
+                "t": "text",
+                "v": " and the "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P3-G3-Q40"
+              },
+              {
+                "t": "text",
+                "v": " of the staff. A balance was required between a degree of freedom and maintaining work standards."
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P3-G3-Q36",
+              "number": 36,
+              "answer": {
+                "type": "TEXT",
+                "value": "restaurants",
+                "start_index": 5781,
+                "stop_index": 5919
+              }
+            },
+            {
+              "item_id": "P3-G3-Q37",
+              "number": 37,
+              "answer": {
+                "type": "TEXT",
+                "value": "performance",
+                "start_index": 5921,
+                "stop_index": 5991
+              }
+            },
+            {
+              "item_id": "P3-G3-Q38",
+              "number": 38,
+              "answer": {
+                "type": "TEXT",
+                "value": "turnover",
+                "start_index": 5921,
+                "stop_index": 6064
+              }
+            },
+            {
+              "item_id": "P3-G3-Q39",
+              "number": 39,
+              "answer": {
+                "type": "TEXT",
+                "value": "goals",
+                "start_index": 6065,
+                "stop_index": 6257
+              }
+            },
+            {
+              "item_id": "P3-G3-Q40",
+              "number": 40,
+              "answer": {
+                "type": "TEXT",
+                "value": "characteristics",
+                "start_index": 6065,
+                "stop_index": 6257
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

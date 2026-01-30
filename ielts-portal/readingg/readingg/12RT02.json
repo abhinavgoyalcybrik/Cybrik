@@ -1,0 +1,812 @@
+{
+  "passages": [
+    {
+      "passage_id": "P1",
+      "title": "The risks agriculture faces in developing countries",
+      "text": "Two things distinguish food production from all other productive activities: first, every single person needs food each day and has a right to it; and second, it is hugely dependent on nature.  These two unique aspects, one political, the other natural, make food production highly vulnerable and different from any other business.  At the same time, cultural values are highly entrenched in food and agricultural systems worldwide.\n\nFarmers everywhere face major risks, including extreme weather, long-term climate change, and price volatility in input and product markets. However, smallholder farmers in developing countries must in addition deal with adverse environments, both natural, in terms of soil quality, rainfall, etc., and human, in terms of infrastructure, financial systems, markets, knowledge and technology. Counter-intuitively, hunger is prevalent among many smallholder farmers in the developing world.\n\nParticipants in the online debate argued that our biggest challenge is to address the underlying causes of the agricultural system's inability to ensure sufficient food for all, and they identified as drivers of this problem our dependency on fossil fuels and unsupportive government policies.\n\nOn the question of mitigating the risks farmers face, most essayists called for greater state intervention.  In his essay, Kanayo F. Nwanze, President of the International Fund for Agricultural Development, argued that governments can significantly reduce risks for farmers by providing basic services like roads to get produce more efficiently to markets, or water and food storage facilities to reduce losses.  Sophia Murphy, senior advisor to the Institute for Agriculture and Trade Policy, suggested that the procurement and holding of stocks by governments can also help mitigate wild swings in food prices by alleviating uncertainties about market supply.\n\nShenggen Fan, Director General of the International Food Policy Research Institute, held up social safety nets and public welfare programmes in Ethiopia, Brazil and Mexico as valuable ways to address poverty among farming families and reduce their vulnerability to agriculture shocks. However, some commentators responded that cash transfers to poor families do not necessarily translate into increased food security, as these programmes do not always strengthen food production or raise incomes. Regarding state subsidies for agriculture, Rokeya Kabir, Executive Director of Bangladesh Nari Progati Sangha, commented in her essay that these 'have not compensated for the stranglehold exercised by private traders.  In fact, studies show that sixty percent of beneficiaries of subsidies are not poor, but rich landowners and non-farmer traders. '\n\nNwanze, Murphy and Fan argued that private risk management tools, like private insurance, commodity futures markets, and rural finance can help small-scale producers mitigate risk and allow for investment in improvements.  Kabir warned that financial support schemes often encourage the adoption of high-input agricultural practices, which in the medium term may raise production costs beyond the value of their harvests. Murphy noted that when futures markets become excessively financialised they can contribute to short-term price volatility, which increases farmers' food insecurity.  Many participants and commentators emphasised that greater transparency in markets is needed to mitigate the impact of volatility, and make evident whether adequate stocks and supplies are available.  Others contended that agribusiness companies should be held responsible for paying for negative side effects.\n\nMany essayists mentioned climate change and its consequences for small-scale agriculture. Fan explained that 'in addition to reducing crop yields, climate change increases the magnitude and the frequency of extreme weather events, which increase smallholder vulnerability.' The growing unpredictability of weather patterns increases farmers' difficulty in managing weather-related risks. According to this author, one solution would be to develop crop varieties that are more resilient to new climate trends and extreme weather patterns. Accordingly, Pat Mooney, co-founder and executive director of the ETC Group, suggested that 'if we are to survive climate change, we must adopt policies that let peasants diversify the plant and animal species and varieties/breeds that make up our menus.'\n\nSome participating authors and commentators argued in favour of community-based and autonomous risk management strategies through collective action groups, co-operatives or producers' groups. Such groups enhance market opportunities for small-scale producers, reduce marketing costs and synchronise buying and selling with seasonal price conditions. According to Murphy, 'collective action offers an important way for farmers to strengthen their political and economic bargaining power, and to reduce their business risks.' One commentator, Giel Ton, warned that collective action does not come as a free good.  It takes time, effort and money to organise, build trust and to experiment.  Others, like Marcel Vernooij and Marcel Beukeboom, suggested that in order to 'apply what we already know', all stakeholders, including business, government, scientists and civil society, must work together, starting at the beginning of the value chain.\n\nSome participants explained that market price volatility is often worsened by the presence of intermediary purchasers who, taking advantage of farmers' vulnerability, dictate prices. One commentator suggested farmers can gain greater control over prices and minimise price volatility by selling directly to consumers.  Similarly, Sonali Bisht, founder and advisor to the Institute of Himalayan Environmental Research and Education (INHERE), India, wrote that community-supported agriculture, where consumers invest in local farmers by subscription and guarantee producers a fair price, is a risk-sharing model worth more attention. Direct food distribution systems not only encourage small-scale agriculture but also give consumers more control over the food they consume, she wrote.",
+      "groups": [
+        {
+          "group_id": "P1-G1",
+          "type": "MATCHING_INFORMATION",
+          "instructions": "Questions 1-3\n\nReading Passage 1 has nine paragraphs, A-I.\n\nWhich paragraph contains the following information?\n\nWrite the correct letter, A-I, in boxes 1-3 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P1-G1-Q1",
+              "number": 1,
+              "prompt": "a reference to characteristics that only apply to food production",
+              "answer": {
+                "type": "TEXT",
+                "value": "A",
+                "start_index": 0,
+                "stop_index": 192
+              }
+            },
+            {
+              "item_id": "P1-G1-Q2",
+              "number": 2,
+              "prompt": "a reference to challenges faced only by farmers in certain parts of the world",
+              "answer": {
+                "type": "TEXT",
+                "value": "B",
+                "start_index": 575,
+                "stop_index": 825
+              }
+            },
+            {
+              "item_id": "P1-G1-Q3",
+              "number": 3,
+              "prompt": "a reference to difficulties in bringing about co-operation between farmers",
+              "answer": {
+                "type": "TEXT",
+                "value": "H",
+                "start_index": 5038,
+                "stop_index": 5113
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G2",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 4-9\n\nLook at the following statements (Questions 4-9) and the list of people below.\n\nMatch each statement with the correct person, A-G.\n\nWrite the correct letter, A-G, in boxes 4-9 on your answer sheet.\n\nNB You may use any letter more than once.",
+          "options": [
+            {
+              "key": "A",
+              "text": "Kanayo F. Nwanze"
+            },
+            {
+              "key": "B",
+              "text": "Sophia Murphy"
+            },
+            {
+              "key": "C",
+              "text": "Shenggen Fan"
+            },
+            {
+              "key": "D",
+              "text": "Rokeya Kabir"
+            },
+            {
+              "key": "E",
+              "text": "Pat Mooney"
+            },
+            {
+              "key": "F",
+              "text": "Giel Ton"
+            },
+            {
+              "key": "G",
+              "text": "Sonali Bisht"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P1-G2-Q4",
+              "number": 4,
+              "prompt": "Financial assistance from the government does not always go to the farmers who most need it.",
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 2598,
+                "stop_index": 2726
+              }
+            },
+            {
+              "item_id": "P1-G2-Q5",
+              "number": 5,
+              "prompt": "Farmers can benefit from collaborating as a group.",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 4776,
+                "stop_index": 4949
+              }
+            },
+            {
+              "item_id": "P1-G2-Q6",
+              "number": 6,
+              "prompt": "Financial assistance from the government can improve the standard of living of farmers.",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 1882,
+                "stop_index": 2166
+              }
+            },
+            {
+              "item_id": "P1-G2-Q7",
+              "number": 7,
+              "prompt": "Farmers may be helped if there is financial input by the same individuals who buy from them.",
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 5689,
+                "stop_index": 6001
+              }
+            },
+            {
+              "item_id": "P1-G2-Q8",
+              "number": 8,
+              "prompt": "Governments can help to reduce variation in prices.",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 1632,
+                "stop_index": 1880
+              }
+            },
+            {
+              "item_id": "P1-G2-Q9",
+              "number": 9,
+              "prompt": "Improvements to infrastructure can have a major impact on risk for farmers.",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 1328,
+                "stop_index": 1630
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 10 and 11\n\nChoose TWO letters, A-E.\n\nWrite the correct letters in boxes 10 and 11 on your answer sheet.\n\nWhich TWO problems are mentioned which affect farmers with small farms in developing countries? ",
+          "options": [
+            {
+              "key": "A",
+              "text": "lack of demand for locally produced food"
+            },
+            {
+              "key": "B",
+              "text": "lack of irrigation programmes"
+            },
+            {
+              "key": "C",
+              "text": "being unable to get insurance"
+            },
+            {
+              "key": "D",
+              "text": "the effects of changing weather patterns"
+            },
+            {
+              "key": "E",
+              "text": "having to sell their goods to intermediary buyers"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P1-G3-Q10",
+              "number": 10,
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 3631,
+                "stop_index": 3720
+              }
+            },
+            {
+              "item_id": "P1-G3-Q11",
+              "number": 11,
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 5370,
+                "stop_index": 5552
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G4",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 12 and 13\n\nChoose TWO letters, A-E.\n\nWrite the correct letters in boxes 12 and 13 on your answer sheet.\n\nWhich TWO actions are recommended for improving conditions for farmers? ",
+          "options": [
+            {
+              "key": "A",
+              "text": "reducing the size of food stocks"
+            },
+            {
+              "key": "B",
+              "text": "attempting to ensure that prices rise at certain times of the year"
+            },
+            {
+              "key": "C",
+              "text": "organising co-operation between a wide range of interested parties"
+            },
+            {
+              "key": "D",
+              "text": "encouraging consumers to take a financial stake in farming"
+            },
+            {
+              "key": "E",
+              "text": "making customers aware of the reasons for changing food prices"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P1-G4-Q12",
+              "number": 12,
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 5115,
+                "stop_index": 5368
+              }
+            },
+            {
+              "item_id": "P1-G4-Q13",
+              "number": 13,
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 5689,
+                "stop_index": 6001
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P2",
+      "title": "The Lost City",
+      "text": "When the US explorer and academic Hiram Bingham arrived in South America in 1911, he was ready for what was to be the greatest achievement of his life:  the exploration of the remote hinterland to the west of Cusco, the old capital of the Inca empire in the Andes mountains of Peru. His goal was to locate the remains of a city called Vitcos, the last capital of the Inca civilisation.  Cusco lies on a high plateau at an elevation of more than 3,000 metres, and Bingham's plan was to descend from this plateau along the valley of the Urubamba river, which takes a circuitous route down to the Amazon and passes through an area of dramatic canyons and mountain ranges.\n\nWhen Bingham and his team set off down the Urubamba in late July, they had an advantage over travellers who had preceded them:  a track had recently been blasted down the valley canyon to enable rubber to be brought up by mules from the jungle. Almost all previous travellers had left the river at Ollantaytambo and taken a high pass across the mountains to rejoin the river lower down, thereby cutting a substantial corner, but also therefore never passing through the area around Machu Picchu.\n\nOn 24 July they were a few days into their descent of the valley.  The day began slowly, with Bingham trying to arrange sufficient mules for the next stage of the trek. His companions showed no interest in accompanying him up the nearby hill to see some ruins that a local farmer, Melchor Arteaga, had told them about the night before. The morning was dull and damp, and Bingham also seems to have been less than keen on the prospect of climbing the hill.  In his book Lost City of the Incas, he relates that he made the ascent without having the least expectation that he would find anything at the top.\n\nBingham writes about the approach in vivid style in his book.  First, as he climbs up the hill, he describes the ever-present possibility of deadly snakes, 'capable of making considerable springs when in pursuit of their prey'; not that he sees any.  Then there's a sense of mounting discovery as he comes across great sweeps of terraces, then a mausoleum, followed by monumental staircases and, finally, the grand ceremonial buildings of Machu Picchu.  'It seemed like an unbelievable dream ...  the sight held me spellbound .. .' he wrote.\n\nWe should remember, however, that Lost City of the Incas is a work of hindsight, not written until 1948, many years after his journey. His journal entries of the time reveal a much more gradual appreciation of his achievement. He spent the afternoon at the ruins noting down the dimensions of some of the buildings, then descended and rejoined his companions, to whom he seems to have said little about his discovery. At this stage, Bingham didn't realise the extent or the importance of the site, nor did he realise what use he could make of the discovery.\n\nHowever, soon after returning it occurred to him that he could make a name for himself from this discovery. When he came to write the National Geographic magazine article that broke the story to the world in April 1913, he knew he had to produce a big idea. He wondered whether it could have been the birthplace of the very first Inca, Manco the Great, and whether it could also have been what chroniclers described as 'the last city of the Incas'.  This term refers to Vilcabamba, the settlement where the Incas had fled from Spanish invaders in the 1530s.  Bingham made desperate attempts to prove this belief for nearly 40 years.  Sadly, his vision of the site as both the beginning and end of the Inca civilisation, while a magnificent one, is inaccurate. We now know that Vilcabamba actually lies 65 kilometres away in the depths of the jungle.\n\nOne question that has perplexed visitors, historians and archaeologists alike ever since Bingham, is why the site seems to have been abandoned before the Spanish Conquest. There are no references to it by any of the Spanish chroniclers - and if they had known of its existence so close to Cusco they would certainly have come in search of gold.  An idea which has gained wide acceptance over the past few years is that Machu Picchu was a moya, a country estate built by an Inca emperor to escape the cold winters of Cusco, where the elite could enjoy monumental architecture and spectacular views.  Furthermore, the particular architecture of Machu Picchu suggests that it was constructed at the time of the greatest of all the Incas, the emperor Pachacuti (c. 1438-71). By custom, Pachacuti's descendants built other similar estates for their own use, and so Machu Picchu would have been abandoned after his death, some 50 years before the Spanish Conquest.",
+      "groups": [
+        {
+          "group_id": "P2-G1",
+          "type": "MATCHING_HEADINGS",
+          "instructions": "Questions 14-20\n\nReading Passage 2 has seven paragraphs, A-G.\n\nChoose the correct heading for each paragraph from the list of headings below.\n\nWrite the correct number, i-viii, in boxes 14-20 on your answer sheet.",
+          "options": [
+            {
+              "key": "i",
+              "text": "Different accounts of the same journey"
+            },
+            {
+              "key": "ii",
+              "text": "Bingham gains support"
+            },
+            {
+              "key": "iii",
+              "text": "A common belief"
+            },
+            {
+              "key": "iv",
+              "text": "The aim of the trip"
+            },
+            {
+              "key": "v",
+              "text": "A dramatic description"
+            },
+            {
+              "key": "vi",
+              "text": "A new route"
+            },
+            {
+              "key": "vii",
+              "text": "Bingham publishes his theory"
+            },
+            {
+              "key": "viii",
+              "text": "Bingham's lack of enthusiasm"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P2-G1-Q14",
+              "number": 14,
+              "prompt": "Paragraph A",
+              "answer": {
+                "type": "OPTION",
+                "value": "iv",
+                "start_index": 283,
+                "stop_index": 385
+              }
+            },
+            {
+              "item_id": "P2-G1-Q15",
+              "number": 15,
+              "prompt": "Paragraph B",
+              "answer": {
+                "type": "OPTION",
+                "value": "vi",
+                "start_index": 670,
+                "stop_index": 914
+              }
+            },
+            {
+              "item_id": "P2-G1-Q16",
+              "number": 16,
+              "prompt": "Paragraph C",
+              "answer": {
+                "type": "OPTION",
+                "value": "viii",
+                "start_index": 1503,
+                "stop_index": 1622
+              }
+            },
+            {
+              "item_id": "P2-G1-Q17",
+              "number": 17,
+              "prompt": "Paragraph D",
+              "answer": {
+                "type": "OPTION",
+                "value": "v",
+                "start_index": 2024,
+                "stop_index": 2225
+              }
+            },
+            {
+              "item_id": "P2-G1-Q18",
+              "number": 18,
+              "prompt": "Paragraph E",
+              "answer": {
+                "type": "OPTION",
+                "value": "i",
+                "start_index": 2316,
+                "stop_index": 2450
+              }
+            },
+            {
+              "item_id": "P2-G1-Q19",
+              "number": 19,
+              "prompt": "Paragraph F",
+              "answer": {
+                "type": "OPTION",
+                "value": "vii",
+                "start_index": 2983,
+                "stop_index": 3132
+              }
+            },
+            {
+              "item_id": "P2-G1-Q20",
+              "number": 20,
+              "prompt": "Paragraph G",
+              "answer": {
+                "type": "OPTION",
+                "value": "iii",
+                "start_index": 4072,
+                "stop_index": 4247
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G2",
+          "type": "TRUE_FALSE_NOT_GIVEN",
+          "instructions": "Questions 21-24\n\nDo the following statements agree with the information given in Reading Passage 2?\n\nIn boxes 21-24 on your answer sheet, write\n\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "items": [
+            {
+              "item_id": "P2-G2-Q21",
+              "number": 21,
+              "prompt": "Bingham went to South America in search of an Inca city.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 0,
+                "stop_index": 282
+              }
+            },
+            {
+              "item_id": "P2-G2-Q22",
+              "number": 22,
+              "prompt": "Bingham chose a particular route down the Urubamba valley because it was the most common route used by travellers.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 915,
+                "stop_index": 1055
+              }
+            },
+            {
+              "item_id": "P2-G2-Q23",
+              "number": 23,
+              "prompt": "Bingham understood the significance of Machu Picchu as soon as he saw it.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 2734,
+                "stop_index": 2873
+              }
+            },
+            {
+              "item_id": "P2-G2-Q24",
+              "number": 24,
+              "prompt": "Bingham returned to Machu Picchu in order to find evidence to support his theory.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 3621,
+                "stop_index": 3777
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G3",
+          "type": "SENTENCE_COMPLETION",
+          "instructions": "Questions 25-26\n\nComplete the sentences below.\n\nChoose ONE WORD ONLY from the passage for each answer.\n\nWrite your answers in boxes 25-26 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P2-G3-Q25",
+              "number": 25,
+              "prompt": "The track that took Bingham down the Urubamba valley had been created for the transportation of",
+              "answer": {
+                "type": "TEXT",
+                "value": "rubber",
+                "start_index": 798,
+                "stop_index": 913
+              }
+            },
+            {
+              "item_id": "P2-G3-Q26",
+              "number": 26,
+              "prompt": "Bingham found out about the ruins of Machu Picchu from a ........ .... in the Urubamba valley.",
+              "answer": {
+                "type": "TEXT",
+                "value": "farmer",
+                "start_index": 1432,
+                "stop_index": 1463
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P3",
+      "title": "The Benefits of Being Bilingual",
+      "text": "According to the latest figures, the majority of the world's population is now bilingual or multilingual, having grown up speaking two or more languages. In the past, such children were considered to be at a disadvantage compared with their monolingual peers. Over the past few decades, however, technological advances have allowed researchers to look more deeply at how bilingualism interacts with and changes the cognitive and neurological systems, thereby identifying several clear benefits of being bilingual.\n\nResearch shows that when a bilingual person uses one language, the other is active at the same time. When we hear a word, we don't hear the entire word all at once:  the sounds arrive in sequential order. Long before the word is finished, the brain's language system begins to guess what that word might be. If you hear 'can', you will likely activate words like 'candy' and 'candle' as well, at least during the earlier stages of word recognition. For bilingual people, this activation is not limited to a single language; auditory input activates corresponding words regardless of the language to which they belong.  Some of the most compelling evidence for this phenomenon, called 'language co-activation', comes from studying eye movements. A Russian-English bilingual asked to 'pick up a marker' from a set of objects would look more at a stamp than someone who doesn't know Russian, because the Russian word for 'stamp', marka, sounds like the English word he or she heard, 'marker'. In cases like this, language co-activation occurs because what the listener hears could map onto words in either language.\n\nHaving to deal with this persistent linguistic competition can result in difficulties, however. For instance, knowing more than one language can cause speakers to name pictures more slowly, and can increase 'tip-of-the-tongue states', when you can almost, but not quite, bring a word to mind. As a result, the constant juggling of two languages creates a need to control how much a person accesses a language at any given time. For this reason, bilingual people often perform better on tasks that require conflict management.  In the classic Stroop Task, people see a word and are asked to name the colour of the word's font. When the colour and the word match (i.e., the word 'red' printed in red), people correctly name the colour more quickly than when the colour and the word don't match (i.e., the word 'red' printed in blue). This occurs because the word itself ('red') and its font colour (blue) conflict.  Bilingual people often excel at tasks such as this, which tap into the ability to ignore competing perceptual information and focus on the relevant aspects of the input.  Bilinguals are also better at switching between two tasks; for example, when bilinguals have to switch from categorizing objects by colour (red or green) to categorizing them by shape (circle or triangle), they do so more quickly than monolingual people, reflecting better cognitive control when having to make rapid changes of strategy.\n\nIt also seems that the neurological roots of the bilingual advantage extend to brain areas more traditionally associated with sensory processing. When monolingual and bilingual adolescents listen to simple speech sounds without any intervening background noise, they show highly similar brain stem responses.  When researchers play the same sound to both groups in the presence of background noise, however, the bilingual listeners' neural response is considerably larger, reflecting better encoding of the sound's fundamental frequency, a feature of sound closely related to pitch perception.\n\nSuch improvements in cognitive and sensory processing may help a bilingual person to process information in the environment, and help explain why bilingual adults acquire a third language better than monolingual adults master a second language. This advantage may be rooted in the skill of focussing on information about the new language while reducing interference from the languages they already know.\n\nResearch also indicates that bilingual experience may help to keep the cognitive mechanisms sharp by recruiting alternate brain networks to compensate for those that become damaged during aging.  Older bilinguals enjoy improved memory relative to monolingual people, which can lead to real-world health benefits. In a study of over 200 patients with Alzheimer's disease, a degenerative brain disease, bilingual patients reported showing initial symptoms of the disease an average of five years later than monolingual patients. In a follow-up study, researchers compared the brains of bilingual and monolingual patients matched on the severity of Alzheimer's symptoms. Surprisingly, the bilinguals' brains had more physical signs of disease than their monolingual counterparts, even though their outward behaviour and abilities were the same. If the brain is an engine, bilingualism may help it to go farther on the same amount of fuel.\n\nFurthermore, the benefits associated with bilingual experience seem to start very early.  In one study, researchers taught seven-month-old babies growing up in monolingual or bilingual homes that when they heard a tinkling sound, a puppet appeared on one side of a screen.  Halfway through the study, the puppet began appearing on the opposite side of the screen. In order to get a reward, the infants had to adjust the rule they'd learned; only the bilingual babies were able to successfully learn the new rule. This suggests that for very young children, as well as for older people, navigating a multilingual environment imparts advantages that transfer far beyond language.",
+      "groups": [
+        {
+          "group_id": "P3-G1",
+          "type": "TABLE_COMPLETION",
+          "instructions": "Questions 27-31\n\nComplete the table below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.\n\nWrite your answers in boxes 27-31 on your answer sheet.",
+          "container": {
+            "kind": "table",
+            "cols": [
+              "Test",
+              "Findings"
+            ],
+            "rows": [
+              {
+                "r": 0,
+                "cells": [
+                  {
+                    "c": 0,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "Observing the "
+                      },
+                      {
+                        "t": "slot",
+                        "slot_id": "P3-G1-Q27"
+                      },
+                      {
+                        "t": "text",
+                        "v": " of Russian-English bilingual people when asked to select certain objects"
+                      }
+                    ]
+                  },
+                  {
+                    "c": 1,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "Bilingual people engage both languages simultaneously:  a mechanism known as "
+                      },
+                      {
+                        "t": "slot",
+                        "slot_id": "P3-G1-Q28"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "r": 1,
+                "cells": [
+                  {
+                    "c": 0,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "A test called the "
+                      },
+                      {
+                        "t": "slot",
+                        "slot_id": "P3-G1-Q29"
+                      },
+                      {
+                        "t": "text",
+                        "v": " focusing on naming colours"
+                      }
+                    ]
+                  },
+                  {
+                    "c": 1,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "Bilingual people are more able to handle tasks involving a skill called "
+                      },
+                      {
+                        "t": "slot",
+                        "slot_id": "P3-G1-Q30"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "r": 2,
+                "cells": [
+                  {
+                    "c": 0,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "A test involving switching between tasks"
+                      }
+                    ]
+                  },
+                  {
+                    "c": 1,
+                    "rich": [
+                      {
+                        "t": "text",
+                        "v": "When changing strategies, bilingual people have superior "
+                      },
+                      {
+                        "t": "slot",
+                        "slot_id": "P3-G1-Q31"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P3-G1-Q27",
+              "number": 27,
+              "answer": {
+                "type": "TEXT",
+                "value": "eye movements",
+                "start_index": 1134,
+                "stop_index": 1259
+              }
+            },
+            {
+              "item_id": "P3-G1-Q28",
+              "number": 28,
+              "answer": {
+                "type": "TEXT",
+                "value": "language co-activation",
+                "start_index": 1134,
+                "stop_index": 1259
+              }
+            },
+            {
+              "item_id": "P3-G1-Q29",
+              "number": 29,
+              "answer": {
+                "type": "TEXT",
+                "value": "Stroop Task",
+                "start_index": 2156,
+                "stop_index": 2254
+              }
+            },
+            {
+              "item_id": "P3-G1-Q30",
+              "number": 30,
+              "answer": {
+                "type": "TEXT",
+                "value": "conflict management",
+                "start_index": 2057,
+                "stop_index": 2154
+              }
+            },
+            {
+              "item_id": "P3-G1-Q31",
+              "number": 31,
+              "answer": {
+                "type": "TEXT",
+                "value": "cognitive control",
+                "start_index": 2714,
+                "stop_index": 2771
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G2",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 32-36\n\nDo the following statements agree with the claims of the writer in Reading Passage 3?\n\nIn boxes 32-36 on your answer sheet, write\n\nYES if the statement agrees with the claims of the writer\nNO if the statement contradicts the claims of the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+          "items": [
+            {
+              "item_id": "P3-G2-Q32",
+              "number": 32,
+              "prompt": "Attitudes towards bilingualism have changed in recent years.",
+              "answer": {
+                "type": "ENUM",
+                "value": "YES",
+                "start_index": 260,
+                "stop_index": 513
+              }
+            },
+            {
+              "item_id": "P3-G2-Q33",
+              "number": 33,
+              "prompt": "Bilingual people are better than monolingual people at guessing correctly what words are before they are finished.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 542,
+                "stop_index": 660
+              }
+            },
+            {
+              "item_id": "P3-G2-Q34",
+              "number": 34,
+              "prompt": "Bilingual people consistently name images faster than monolingual people.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NO",
+                "start_index": 1725,
+                "stop_index": 1921
+              }
+            },
+            {
+              "item_id": "P3-G2-Q35",
+              "number": 35,
+              "prompt": "Bilingual people's brains process single sounds more efficiently than monolingual people in all situations.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NO",
+                "start_index": 3363,
+                "stop_index": 3524
+              }
+            },
+            {
+              "item_id": "P3-G2-Q36",
+              "number": 36,
+              "prompt": "Fewer bilingual people than monolingual people suffer from brain disease in old age.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 826,
+                "stop_index": 931
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 37-40\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 37-40 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P3-G3-Q37",
+              "number": 37,
+              "prompt": "Question 37",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Option A"
+                },
+                {
+                  "key": "B",
+                  "text": "Option B"
+                },
+                {
+                  "key": "C",
+                  "text": "Option C"
+                },
+                {
+                  "key": "D",
+                  "text": "Option D"
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 3648,
+                "stop_index": 3892
+              }
+            },
+            {
+              "item_id": "P3-G3-Q38",
+              "number": 38,
+              "prompt": "Question 38",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Option A"
+                },
+                {
+                  "key": "B",
+                  "text": "Option B"
+                },
+                {
+                  "key": "C",
+                  "text": "Option C"
+                },
+                {
+                  "key": "D",
+                  "text": "Option D"
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 4053,
+                "stop_index": 4247
+              }
+            },
+            {
+              "item_id": "P3-G3-Q39",
+              "number": 39,
+              "prompt": "Question 39",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Option A"
+                },
+                {
+                  "key": "B",
+                  "text": "Option B"
+                },
+                {
+                  "key": "C",
+                  "text": "Option C"
+                },
+                {
+                  "key": "D",
+                  "text": "Option D"
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 4895,
+                "stop_index": 4988
+              }
+            },
+            {
+              "item_id": "P3-G3-Q40",
+              "number": 40,
+              "prompt": "Question 40",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Option A"
+                },
+                {
+                  "key": "B",
+                  "text": "Option B"
+                },
+                {
+                  "key": "C",
+                  "text": "Option C"
+                },
+                {
+                  "key": "D",
+                  "text": "Option D"
+                }
+              ],
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 5503,
+                "stop_index": 5667
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

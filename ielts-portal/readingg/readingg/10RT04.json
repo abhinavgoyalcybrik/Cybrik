@@ -1,0 +1,676 @@
+{
+  "passages": [
+    {
+      "passage_id": "P1",
+      "title": "The megafires of California",
+      "text": "Drought, housing expansion, and oversupply of tinder make for\nbigger, hotter fires in the western United States\n\nWildfires are becoming an increasing\nmenace in the western United States,\nwith Southern California being the\nhardest hit area. There's a reason fire\nsquads battling more frequent blazes\nin Southern California are having such\ndifficulty containing the flames, despite\nbetter preparedness than ever and\ndecades of experience fighting fires\nfanned by the 'Santa Ana Winds'. The\nwildfires themselves, experts say, are\ngenerally hotter, faster, and spread more\nerratically than in the past.\n\nMegafires, also called 'siege fires',\nare the increasingly frequent blazes that\nburn 500,000 acres or more - 10 times\nthe size of the average forest fire of 20\nyears ago. Some recent wildfires are\namong the biggest ever in California in\nterms of acreage burned, according to\nstate figures and news reports.\n\nOne explanation for the trend to\nmore superhot fires is that the region,\nwhich usually has dry summers, has had\nsignificantly below normal precipitation\nin many recent years. Another reason,\nexperts say, is related to the century-\nlong policy of the US Forest Service to\nstop wildfires as quickly as possible.\nThe unintentional consequence has\n\nbeen to halt the natural eradication of\nunderbrush, now the primary fuel for\nmegafires.\n\nThree other factors contribute to the\ntrend, they add. First is climate change,\nmarked by a 1-degree Fahrenheit rise in\naverage yearly temperature across the\nwestern states. Second is fire seasons\nthat on average are 78 days longer\nthan they were 20 years ago. Third\nis increased construction of homes in\nwooded areas.\n\n'We are increasingly building our\nhomes in fire-prone ecosystems,' says\nDominik Kulakowski, adjunct professor\nof biology at Clark University Graduate\nSchool of Geography in Worcester,\nMassachusetts. 'Doing that in many\nof the forests of the western US is like\nbuilding homes on the side of an active\nvolcano.'\n\nIn California, where population\ngrowth has averaged more than 600,000\na year for at least a decade, more\nresidential housing is being built. 'What\nonce was open space is now residential\nhomes providing fuel to make fires\nburn with greater intensity,' says Terry\nMcHale of the California Department\nof Forestry firefighters' union. 'With so\n\nmuch dryness, so many communities\nto catch fire, so many fronts to fight, it\nbecomes an almost incredible job.'\n\nThat said, many experts give\nCalifornia high marks for making\nprogress on preparedness in recent\nyears, after some of the largest fires\nin state history scorched thousands\nof acres, burned thousands of homes,\nand killed numerous people. Stung in\nthe past by criticism of bungling that\nallowed fires to spread when they\nmight have been contained, personnel\nare meeting the peculiar challenges of\nneighborhood - and canyon- hopping\nfires better than previously, observers\nsay.\n\nState promises to provide more\nup-to-date engines, planes, and\nhelicopters to fight fires have been\nfulfilled. Firefighters' unions that in\nthe past complained of dilapidated\nequipment, old fire engines, and\ninsufficient blueprints for fire safety are\nnow praising the state's commitment,\nnoting that funding for firefighting has\nincreased, despite huge cuts in many\nother programs. 'We are pleased that\nthe current state administration has\nbeen very proactive in its support of us,\nand [has] come through with budgetary\nsupport of the infrastructure needs we\nhave long sought,' says Mr. McHale of\nthe firefighters' union.\n\nBesides providing money to upgrade\nthe fire engines that must traverse\nthe mammoth state and wind along\nserpentine canyon roads, the state has\n\ninvested in better command-and-control\nfacilities as well as in the strategies\nto run them. 'In the fire sieges of\nearlier years, we found that other\njurisdictions and states were willing\nto offer mutual-aid help, but we were\nnot able to communicate adequately\nwith them,' says Kim Zagaris, chief\nof the state's Office of Emergency\nServices Fire and Rescue Branch.\nAfter a commission examined and\nrevamped communications procedures,\nthe statewide response 'has become\nfar more professional and responsive,'\nhe says. There is a sense among both\ngovernment officials and residents that\nthe speed, dedication, and coordination\nof firefighters from several states and\njurisdictions are resulting in greater\nefficiency than in past 'siege fire'\nsituations.\n\nIn recent years, the Southern\nCalifornia region has improved building\ncodes, evacuation procedures, and\nprocurement of new technology. 'I\nam extraordinarily impressed by the\nimprovements we have witnessed,' says\nRandy Jacobs, a Southern California-\nbased lawyer who has had to evacuate\nboth his home and business to escape\nwildfires. 'Notwithstanding all the\ndamage that will continue to be caused\nby wildfires, we will no longer suffer the\nloss of life endured in the past because\nof the fire prevention and firefighting\nmeasures that have been put in place,'\nhe says.",
+      "groups": [
+        {
+          "group_id": "P1-G1",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 1-6\n\nComplete the notes below.\n\nChoose ONE WORD AND/OR A NUMBER from the passage for each answer.\n\nWrite your answers in boxes 1-6 on your answer sheet.",
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Wildfires\n\n· Characteristics of wildfires and wildfire conditions today compared to the past:\n\n- occurrence: more frequent\n\n- temperature: hotter\n\n- speed: faster\n\n- movement: "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q1"
+              },
+              {
+                "t": "text",
+                "v": " more unpredictably\n\n- size of fires: "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q2"
+              },
+              {
+                "t": "text",
+                "v": " greater on average than two decades ago\n\n· Reasons wildfires cause more damage today compared to the past:\n\n- rainfall: "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q3"
+              },
+              {
+                "t": "text",
+                "v": " average\n\n- more brush to act as "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q4"
+              },
+              {
+                "t": "text",
+                "v": "\n\n- increase in yearly temperature\n\n- extended fire "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q5"
+              },
+              {
+                "t": "text",
+                "v": "\n\n- more building of "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P1-G1-Q6"
+              },
+              {
+                "t": "text",
+                "v": " in vulnerable places"
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P1-G1-Q1",
+              "number": 1,
+              "answer": {
+                "type": "TEXT",
+                "value": "spread",
+                "start_index": 484,
+                "stop_index": 598
+              }
+            },
+            {
+              "item_id": "P1-G1-Q2",
+              "number": 2,
+              "answer": {
+                "type": "TEXT",
+                "value": "10/ten times",
+                "start_index": 600,
+                "stop_index": 770
+              }
+            },
+            {
+              "item_id": "P1-G1-Q3",
+              "number": 3,
+              "answer": {
+                "type": "TEXT",
+                "value": "below",
+                "start_index": 908,
+                "stop_index": 1082
+              }
+            },
+            {
+              "item_id": "P1-G1-Q4",
+              "number": 4,
+              "answer": {
+                "type": "TEXT",
+                "value": "fuel",
+                "start_index": 1218,
+                "stop_index": 1340
+              }
+            },
+            {
+              "item_id": "P1-G1-Q5",
+              "number": 5,
+              "answer": {
+                "type": "TEXT",
+                "value": "seasons",
+                "start_index": 1516,
+                "stop_index": 1602
+              }
+            },
+            {
+              "item_id": "P1-G1-Q6",
+              "number": 6,
+              "answer": {
+                "type": "TEXT",
+                "value": "homes/housing",
+                "start_index": 1603,
+                "stop_index": 1660
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P1-G2",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 7-13\n\nDo the following statements agree with the information given in Reading Passage 1?\n\nIn boxes 7-13 on your answer sheet, write\n\nTRUE if the statement agrees with the information\nFALSE if the statement contradicts the information\nNOT GIVEN if there is no information on this",
+          "items": [
+            {
+              "item_id": "P1-G2-Q7",
+              "number": 7,
+              "prompt": "The amount of open space in California has diminished over the last ten years.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 2115,
+                "stop_index": 2221
+              }
+            },
+            {
+              "item_id": "P1-G2-Q8",
+              "number": 8,
+              "prompt": "Many experts believe California has made little progress in readying itself to fight fires.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 2427,
+                "stop_index": 2663
+              }
+            },
+            {
+              "item_id": "P1-G2-Q9",
+              "number": 9,
+              "prompt": "Personnel in the past have been criticised for mishandling fire containment.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 2664,
+                "stop_index": 2901
+              }
+            },
+            {
+              "item_id": "P1-G2-Q10",
+              "number": 10,
+              "prompt": "California has replaced a range of firefighting tools.",
+              "answer": {
+                "type": "ENUM",
+                "value": "TRUE",
+                "start_index": 2903,
+                "stop_index": 3013
+              }
+            },
+            {
+              "item_id": "P1-G2-Q11",
+              "number": 11,
+              "prompt": "More firefighters have been hired to improve fire-fighting capacity.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 2501,
+                "stop_index": 2633
+              }
+            },
+            {
+              "item_id": "P1-G2-Q12",
+              "number": 12,
+              "prompt": "Citizens and government groups disapprove of the efforts of different states and agencies working together.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 4187,
+                "stop_index": 4422
+              }
+            },
+            {
+              "item_id": "P1-G2-Q13",
+              "number": 13,
+              "prompt": "Randy Jacobs believes that loss of life from fires will continue at the same levels, despite changes made.",
+              "answer": {
+                "type": "ENUM",
+                "value": "FALSE",
+                "start_index": 4758,
+                "stop_index": 4993
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P2",
+      "title": "Second nature",
+      "text": "Your personality isn’t necessarily set in stone. With a little experimentation, people can reshape their temperaments and inject passion, optimism, joy and courage into their lives.\n\nA\nPsychologists have long held that a person’s character cannot undergo a transformation in any meaningful way and that the key traits of personality are determined at a very young age. However, researchers have begun looking more closely at ways we can change. Positive psychologists have identified 24 qualities they admire, such as loyalty and kindness, and are studying them to find out why they come so naturally to some people. What they’re discovering is that many of these qualities amount to habits of behaviour that determine the way we respond to the world. The good news is that all this can be learned.\n\nSome qualities are less challenging to develop than others, optimism being one of them. However, developing qualities requires mastering a range of skills which are diverse and sometimes surprising. For example, to bring more joy and passion into your life, you must be open to experiencing negative emotions. Cultivating such qualities will help you realise your full potential.\n\nB\n‘The evidence is good that most personality traits can be altered,’ says Christopher Peterson, professor of psychology at the University of Michigan, who cites himself as an example. Inherently introverted, he realised early on that as an academic, his reticence would prove disastrous in the lecture hall. So he learned to be more outgoing and to entertain his classes. ‘Now my extroverted behaviour is spontaneous,’ he says.\n\nC\nDavid Fajgenbaum had to make a similar transition. He was preparing for university, when he had an accident that put an end to his sports career. On campus, he quickly found that beyond ordinary counselling, the university had no services for students who were undergoing physical rehabilitation and suffering from depression like him. He therefore launched a support group to help others in similar situations. He took decisive action despite his own pain – a typical response of an optimist.\n\nD\nSuzanne Segerstrom, professor of psychology at the University of Kentucky, believes that the key to increasing optimism is through cultivating optimism itself through behaviour, rather than positive thinking. She recommends you train yourself to pay attention to good fortune by writing down three positive things that come about each day. This will help you convince yourself that favourable outcomes actually happen all the time, making it easier to begin taking action.\n\nE\nYou can recognise a person who is passionate about a pursuit by the way they are so strongly involved in it. Tanya Streeter’s passion is freediving – the sport of plunging deep into the water without tanks or other breathing equipment. Beginning in 1998, she set nine world records and can hold her breath for six minutes. The physical stamina required for this sport is intense but the psychological demands are even more overwhelming. Streeter learned to untangle her fears from her judgement of what her body and mind could do. ‘In my career as a competitive freediver, there was a limit to what I could do – but it wasn’t anywhere near what I thought it was,’ she says.\n\nF\nFinding a pursuit that excites you can improve anyone’s life. The secret about pursuing passions, though, according to psychologist Paul Silvia of the University of North Carolina, is that ‘they require discipline, hard work and ability, which is why they are so rewarding.’ Psychologist Todd Kashdan has advice for those people taking up a new passion: ‘As a newcomer, you also have to tolerate and laugh at your own ignorance. You must be willing to accept the negative feelings that come your way,’ he says.\n\nG\nIn 2004, physician-scientist Mauro Zappaterra began his PhD research at Harvard Medical School. Unfortunately, he was miserable as his research wasn’t compatible with his curiosity about healing. He finally took a break and during a stint in Santa Fe, Zappaterra learned about alternative healing techniques not taught at Harvard. When he got back, he switched his research focus to studying cerebrospinal fluid nourishing the developing nervous system. He also vowed to look for the joy in everything, including failure, as this could help him learn about his research and himself.\n\nOne thing that can hold you back is a person’s concentration on avoiding failure rather than their looking forward to doing something well. ‘Focusing on being safe might get in the way of reaching your goals,’ explains Kashdan. For example, are you hoping to get through a business lunch without embarrassing yourself, or are you thinking about how fascinating the conversation might be?\n\nH\nUsually, we think of courage in physical terms but ordinary life demands something else. For marketing executive Kenneth Pedeleose, it meant speaking out against something he thought was ethically wrong. The new manager was intimidating staff so Pedeleose carefully recorded each instance of bullying and eventually took the evidence to a senior director, knowing his own job security would be threatened. Eventually the manager was the one to go. According to Cynthia Pury, a psychologist at Clemson University, Pedeleose’s story proves the point that courage requires people to activate fearlessness, but by moral obligation. Pury also believes that people need courage to change. Many of her students said that faced with a risky situation, they first tried to calm themselves down, then looked for a way to mitigate the danger, just as Pedeleose did by documenting his allegations.\n\nOver the long term, picking up a new character trait may help you move toward being the person you want to be. And in the short term, the effort itself could be surprisingly rewarding, a kind of internal adventure.",
+      "groups": [
+        {
+          "group_id": "P2-G1",
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "Questions 14-18\n\nComplete the summary below.\n\nChoose NO MORE THAN TWO WORDS from the passage for each answer.\n\nWrite your answers in boxes 14-18 on your answer sheet.",
+          "container": {
+            "kind": "richtext",
+            "rich": [
+              {
+                "t": "text",
+                "v": "Psychologists have traditionally believed that a personality "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G1-Q14"
+              },
+              {
+                "t": "text",
+                "v": " was impossible and that by a "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G1-Q15"
+              },
+              {
+                "t": "text",
+                "v": ", a person's character tends to be fixed. This is not true according to positive psychologists, who say that our personal qualities can be seen as habitual behaviour. One of the easiest qualities to acquire is "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G1-Q16"
+              },
+              {
+                "t": "text",
+                "v": ". However, regardless of the quality, it is necessary to learn a wide variety of different "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G1-Q17"
+              },
+              {
+                "t": "text",
+                "v": " in order for a new quality to develop; for example, a person must understand and feel some "
+              },
+              {
+                "t": "slot",
+                "slot_id": "P2-G1-Q18"
+              },
+              {
+                "t": "text",
+                "v": " in order to increase their happiness."
+              }
+            ]
+          },
+          "items": [
+            {
+              "item_id": "P2-G1-Q14",
+              "number": 14,
+              "answer": {
+                "type": "TEXT",
+                "value": "transformation/change",
+                "start_index": 185,
+                "stop_index": 368
+              }
+            },
+            {
+              "item_id": "P2-G1-Q15",
+              "number": 15,
+              "answer": {
+                "type": "TEXT",
+                "value": "young age",
+                "start_index": 185,
+                "stop_index": 368
+              }
+            },
+            {
+              "item_id": "P2-G1-Q16",
+              "number": 16,
+              "answer": {
+                "type": "TEXT",
+                "value": "optimism",
+                "start_index": 800,
+                "stop_index": 887
+              }
+            },
+            {
+              "item_id": "P2-G1-Q17",
+              "number": 17,
+              "answer": {
+                "type": "TEXT",
+                "value": "skills/techniques",
+                "start_index": 888,
+                "stop_index": 998
+              }
+            },
+            {
+              "item_id": "P2-G1-Q18",
+              "number": 18,
+              "answer": {
+                "type": "TEXT",
+                "value": "negative emotions / feelings",
+                "start_index": 999,
+                "stop_index": 1109
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G2",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 19-22\n\nLook at the following statements (Questions 19-22) and the list of people below.\n\nMatch each statement with the correct person, A-G.\n\nWrite the correct letter, A-G, in boxes 19-22 on your answer sheet.",
+          "options": [
+            {
+              "key": "A",
+              "text": "Christopher Peterson"
+            },
+            {
+              "key": "B",
+              "text": "David Fajgenbaum"
+            },
+            {
+              "key": "C",
+              "text": "Suzanne Segerstrom"
+            },
+            {
+              "key": "D",
+              "text": "Tanya Streeter"
+            },
+            {
+              "key": "E",
+              "text": "Todd Kashdan"
+            },
+            {
+              "key": "F",
+              "text": "Kenneth Pedeleose"
+            },
+            {
+              "key": "G",
+              "text": "Cynthia Pury"
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P2-G2-Q19",
+              "number": 19,
+              "prompt": "People must accept that they do not know much when first trying something new.",
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 3617,
+                "stop_index": 3691
+              }
+            },
+            {
+              "item_id": "P2-G2-Q20",
+              "number": 20,
+              "prompt": "It is important for people to actively notice when good things happen.",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 2319,
+                "stop_index": 2449
+              }
+            },
+            {
+              "item_id": "P2-G2-Q21",
+              "number": 21,
+              "prompt": "Courage can be learned once its origins in a sense of responsibility are understood.",
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 5200,
+                "stop_index": 5379
+              }
+            },
+            {
+              "item_id": "P2-G2-Q22",
+              "number": 22,
+              "prompt": "It is possible to overcome shyness when faced with the need to speak in public.",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 1366,
+                "stop_index": 1489
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P2-G3",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 23-26\n\nReading Passage 2 has eight sections, A-H.\n\nWhich section contains the following information?\n\nWrite the correct letter, A-H, in boxes 23-26 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P2-G3-Q23",
+              "number": 23,
+              "prompt": "a mention of how rational thinking enabled someone to achieve physical goals",
+              "answer": {
+                "type": "OPTION",
+                "value": "E",
+                "start_index": 3023,
+                "stop_index": 3116
+              }
+            },
+            {
+              "item_id": "P2-G3-Q24",
+              "number": 24,
+              "prompt": "an account of how someone overcame a sad experience",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 1664,
+                "stop_index": 1758
+              }
+            },
+            {
+              "item_id": "P2-G3-Q25",
+              "number": 25,
+              "prompt": "a description of how someone decided to rethink their academic career path",
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 4108,
+                "stop_index": 4230
+              }
+            },
+            {
+              "item_id": "P2-G3-Q26",
+              "number": 26,
+              "prompt": "an example of how someone risked his career out of a sense of duty",
+              "answer": {
+                "type": "OPTION",
+                "value": "H",
+                "start_index": 4841,
+                "stop_index": 4955
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "passage_id": "P3",
+      "title": "When evolution runs backwards",
+      "text": "Evolution isn't supposed to run backwards - yet an increasing number\nof examples show that it does and that it can sometimes represent the\nfuture of a species\n\nThe description of any animal as an\n'evolutionary throwback' is controversial.\nFor the better part of a century, most\nbiologists have been reluctant to use those\nwords, mindful of a principle of evolution\nthat says 'evolution cannot run backwards'.\nBut as more and more examples come to\nlight and modern genetics enters the scene,\nthat principle is having to be rewritten. Not\nonly are evolutionary throwbacks possible,\nthey sometimes play an important role in the\nforward march of evolution.\n\nThe technical term for an evolutionary\nthrowback is an 'atavism', from the Latin\natavus, meaning forefather. The word has\nugly connotations thanks largely to Cesare\nLombroso, a 19th-century Italian medic who\nargued that criminals were born not made\nand could be identified by certain physical\nfeatures that were throwbacks to a primitive,\nsub-human state.\n\nWhile Lombroso was measuring\ncriminals, a Belgian palaeontologist called\nLouis Dollo was studying fossil records\nand coming to the opposite conclusion.\nIn 1890 he proposed that evolution was\nirreversible: that 'an organism is unable to\nreturn, even partially, to a previous stage\nalready realised in the ranks of its ancestors'\nEarly 20th-century biologists came to a\nsimilar conclusion, though they qualified it\n\nin terms of probability, stating that there is no\nreason why evolution cannot run backwards\n- it is just very unlikely. And so the idea of\nirreversibility in evolution stuck and came to\nbe known as 'Dollo's law'.\n\nIf Dollo's law is right, atavisms should\noccur only very rarely, if at all. Yet almost\nsince the idea took root, exceptions have\nbeen cropping up. In 1919, for example,\na humpback whale with a pair of leg-like\nappendages over a metre long, complete\nwith a full set of limb bones, was caught\noff Vancouver Island in Canada. Explorer\nRoy Chapman Andrews argued at the time\nthat the whale must be a throwback to a\nland-living ancestor. 'I can see no other\nexplanation,' he wrote in 1921.\n\nSince then, so many other examples\nhave been discovered that it no longer\nmakes sense to say that evolution is as good\nas irreversible. And this poses a puzzle:\nhow can characteristics that disappeared\nmillions of years ago suddenly reappear?\nIn 1994, Rudolf Raff and colleagues at\nIndiana University in the USA decided\nto use genetics to put a number on the\nprobability of evolution going into reverse.\nThey reasoned that while some evolutionary\nchanges involve the loss of genes and are\ntherefore irreversible, others may be the\nresult of genes being switched off. If these\n\nsilent genes are somehow switched back\non, they argued, long-lost traits could\nreappear.\n\nRaff's team went on to calculate the\nlikelihood of it happening. Silent genes\naccumulate random mutations, they\nreasoned, eventually rendering them useless.\nSo how long can a gene survive in a species\nif it is no longer used? The team calculated\nthat there is a good chance of silent genes\nsurviving for up to 6 million years in at least\na few individuals in a population, and that\nsome might survive as long as 10 million\nyears. In other words, throwbacks are\npossible, but only to the relatively recent\nevolutionary past.\n\nAs a possible example, the team pointed\nto the mole salamanders of Mexico and\nCalifornia. Like most amphibians these\nbegin life in a juvenile 'tadpole' state, then\nmetamorphose into the adult form - except\nfor one species, the axolotl, which famously\nlives its entire life as a juvenile. The simplest\nexplanation for this is that the axolotl lineage\nalone lost the ability to metamorphose, while\nothers retained it. From a detailed analysis\nof the salamanders' family tree, however,\nit is clear that the other lineages evolved\nfrom an ancestor that itself had lost the\nability to metamorphose. In other words,\nmetamorphosis in mole salamanders is an\natavism. The salamander example fits with\nRaff's 10-million-year time frame.\n\nMore recently, however, examples have\nbeen reported that break the time limit,\nsuggesting that silent genes may not be the\nwhole story. In a paper published last year,\nbiologist Gunter Wagner of Yale University\nreported some work on the evolutionary\n\nhistory of a group of South American lizards\ncalled Bachia. Many of these have minuscule\nlimbs; some look more like snakes than\nlizards and a few have completely lost the\ntoes on their hind limbs. Other species,\nhowever, sport up to four toes on their\nhind legs. The simplest explanation is that\nthe toed lineages never lost their toes,\nbut Wagner begs to differ. According to\nhis analysis of the Bachia family tree, the\ntoed species re-evolved toes from toeless\nancestors and, what is more, digit loss\nand gain has occurred on more than one\noccasion over tens of millions of years.\n\nSo what's going on? One possibility is\nthat these traits are lost and then simply\nreappear, in much the same way that\nsimilar structures can independently arise\nin unrelated species, such as the dorsal\nfins of sharks and killer whales. Another\nmore intriguing possibility is that the genetic\ninformation needed to make toes somehow\nsurvived for tens or perhaps hundreds of\nmillions of years in the lizards and was\nreactivated. These atavistic traits provided\nan advantage and spread through the\npopulation, effectively reversing evolution.\n\nBut if silent genes degrade within 6 to\n10 million years, how can long-lost traits\nbe reactivated over longer timescales? The\nanswer may lie in the womb. Early embryos\nof many species develop ancestral features.\nSnake embryos, for example, sprout hind\nlimb buds. Later in development these\nfeatures disappear thanks to developmental\nprograms that say 'lose the leg'. If for any\nreason this does not happen, the ancestral\nfeature may not disappear, leading to an\natavism.",
+      "groups": [
+        {
+          "group_id": "P3-G1",
+          "type": "MULTIPLE_CHOICE",
+          "instructions": "Questions 27-31\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 27-31 on your answer sheet.",
+          "items": [
+            {
+              "item_id": "P3-G1-Q27",
+              "number": 27,
+              "prompt": "When discussing the theory developed by Louis Dollo, the writer says that",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 1163,
+                "stop_index": 1338
+              }
+            },
+            {
+              "item_id": "P3-G1-Q28",
+              "number": 28,
+              "prompt": "The humpback whale caught off Vancouver Island is mentioned because of",
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 1786,
+                "stop_index": 1961
+              }
+            },
+            {
+              "item_id": "P3-G1-Q29",
+              "number": 29,
+              "prompt": "What is said about 'silent genes'?",
+              "answer": {
+                "type": "OPTION",
+                "value": "C",
+                "start_index": 2857,
+                "stop_index": 2948
+              }
+            },
+            {
+              "item_id": "P3-G1-Q30",
+              "number": 30,
+              "prompt": "The writer mentions the mole salamander because",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 3911,
+                "stop_index": 3975
+              }
+            },
+            {
+              "item_id": "P3-G1-Q31",
+              "number": 31,
+              "prompt": "Which of the following does Wagner claim?",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 4660,
+                "stop_index": 4878
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G2",
+          "type": "MATCHING_FEATURES",
+          "instructions": "Questions 32-36\n\nComplete each sentence with the correct ending, A-G, below.\n\nWrite the correct letter, A-G, in boxes 32-36 on your answer sheet.",
+          "options": [
+            {
+              "key": "A",
+              "text": "the question of how certain long-lost traits could reappear."
+            },
+            {
+              "key": "B",
+              "text": "the occurrence of a particular feature in different species."
+            },
+            {
+              "key": "C",
+              "text": "parallels drawn between behaviour and appearance."
+            },
+            {
+              "key": "D",
+              "text": "the continued existence of certain genetic information."
+            },
+            {
+              "key": "E",
+              "text": "the doubts felt about evolutionary throwbacks."
+            },
+            {
+              "key": "F",
+              "text": "the possibility of evolution being reversible."
+            },
+            {
+              "key": "G",
+              "text": "Dollo's findings and the convictions held by Lombroso."
+            }
+          ],
+          "items": [
+            {
+              "item_id": "P3-G2-Q32",
+              "number": 32,
+              "prompt": "For a long time biologists rejected",
+              "answer": {
+                "type": "OPTION",
+                "value": "F",
+                "start_index": 239,
+                "stop_index": 408
+              }
+            },
+            {
+              "item_id": "P3-G2-Q33",
+              "number": 33,
+              "prompt": "Opposing views on evolutionary throwbacks are represented by",
+              "answer": {
+                "type": "OPTION",
+                "value": "G",
+                "start_index": 763,
+                "stop_index": 902
+              }
+            },
+            {
+              "item_id": "P3-G2-Q34",
+              "number": 34,
+              "prompt": "Examples of evolutionary throwbacks have led to",
+              "answer": {
+                "type": "OPTION",
+                "value": "A",
+                "start_index": 2261,
+                "stop_index": 2367
+              }
+            },
+            {
+              "item_id": "P3-G2-Q35",
+              "number": 35,
+              "prompt": "The shark and killer whale are mentioned to exemplify",
+              "answer": {
+                "type": "OPTION",
+                "value": "B",
+                "start_index": 5116,
+                "stop_index": 5306
+              }
+            },
+            {
+              "item_id": "P3-G2-Q36",
+              "number": 36,
+              "prompt": "One explanation for the findings of Wagner's research is",
+              "answer": {
+                "type": "OPTION",
+                "value": "D",
+                "start_index": 5116,
+                "stop_index": 5306
+              }
+            }
+          ]
+        },
+        {
+          "group_id": "P3-G3",
+          "type": "YES_NO_NOT_GIVEN",
+          "instructions": "Questions 37-40\n\nDo the following statements agree with the claims of the writer in Reading Passage 3?\n\nIn boxes 37-40 on your answer sheet, write\n\nYES if the statement agrees with the claims of the writer\nNO if the statement contradicts the claims of the writer\nNOT GIVEN if it is impossible to say what the writer thinks about this",
+          "items": [
+            {
+              "item_id": "P3-G3-Q37",
+              "number": 37,
+              "prompt": "Wagner was the first person to do research on South American lizards.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NOT GIVEN",
+                "start_index": 4951,
+                "stop_index": 5074
+              }
+            },
+            {
+              "item_id": "P3-G3-Q38",
+              "number": 38,
+              "prompt": "Wagner believes that Bachia lizards with toes had toeless ancestors.",
+              "answer": {
+                "type": "ENUM",
+                "value": "YES",
+                "start_index": 4660,
+                "stop_index": 4768
+              }
+            },
+            {
+              "item_id": "P3-G3-Q39",
+              "number": 39,
+              "prompt": "The temporary occurrence of long-lost traits in embryos is rare.",
+              "answer": {
+                "type": "ENUM",
+                "value": "NO",
+                "start_index": 5633,
+                "stop_index": 5683
+              }
+            },
+            {
+              "item_id": "P3-G3-Q40",
+              "number": 40,
+              "prompt": "Evolutionary throwbacks might be caused by developmental problems in the womb.",
+              "answer": {
+                "type": "ENUM",
+                "value": "YES",
+                "start_index": 5788,
+                "stop_index": 5891
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
