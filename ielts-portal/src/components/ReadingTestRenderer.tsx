@@ -165,11 +165,20 @@ export default function ReadingTestRenderer({
         if (!container?.rich) return null;
 
         return (
-            <div className="text-slate-800 text-xs leading-relaxed font-medium">
+            <div className="text-slate-800 text-[15px] leading-relaxed font-medium">
                 {container.rich.map((element, idx) => {
                     if (element.t === 'text') {
-                        const text = element.v?.replace(/\n+/g, ' ') || '';
-                        return <span key={idx}>{text}</span>;
+                        const text = element.v || '';
+                        return (
+                            <span key={idx} className="whitespace-pre-line">
+                                {text.split('\n').map((line, lineIdx) => (
+                                    <span key={lineIdx}>
+                                        {line}
+                                        {lineIdx < text.split('\n').length - 1 && <br />}
+                                    </span>
+                                ))}
+                            </span>
+                        );
                     } else if (element.t === 'slot' && element.slot_id) {
                         const question = getQuestionBySlotId(element.slot_id!, questions);
                         if (!question) return null;
@@ -222,11 +231,6 @@ export default function ReadingTestRenderer({
         if ((group.group_type === 'summary_completion' || group.group_type === 'sentence_completion') && group.container?.rich) {
             return (
                 <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                    {group.container.rich[0]?.v?.includes('EARLY') && (
-                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-6 text-sm text-slate-600">
-                            <span className="font-bold text-slate-800">Example:</span> Primitive societies saw fire as a ... <span className="italic text-slate-400 mx-1">(Example)</span> ... gift. <span className="font-bold text-slate-800 ml-2">Answer:</span> <span className="font-mono text-emerald-600">heavenly</span>
-                        </div>
-                    )}
                     {renderRichTextContainer(group.container, group.questions)}
                     {renderWordBank(group.options)}
                 </div>
@@ -244,7 +248,7 @@ export default function ReadingTestRenderer({
                                     {question.order}
                                 </span>
                                 <div className="flex-1">
-                                    <p className="mb-3 text-lg font-medium text-slate-800 leading-relaxed">
+                                    <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '18px'}}>
                                         {question.question_text}
                                     </p>
                                     <div className="flex gap-3">
@@ -298,7 +302,7 @@ export default function ReadingTestRenderer({
                                 <div key={question.id} className="flex gap-4 items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-300 transition-colors">
                                     <span className="font-bold text-slate-500 w-8 text-right">{question.order}</span>
                                     <div className="flex-1">
-                                        <p className="text-slate-800 font-medium mb-2">{question.question_text}</p>
+                                        <p className="text-slate-800 font-medium mb-2" style={{fontSize: '18px'}}>{question.question_text}</p>
                                         <div className="relative w-32">
                                             <select
                                                 value={answers[question.id] || ''}
@@ -326,7 +330,7 @@ export default function ReadingTestRenderer({
                         {group.questions.map((question) => (
                             <div key={question.id} className="pl-2">
                                 <span className="inline-block px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded mb-2">Q{question.order}</span>
-                                <p className="mb-4 text-sm font-medium text-slate-800">{question.question_text}</p>
+                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '18px'}}>{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => (
                                         <label key={optIdx} className="flex items-start gap-3 p-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 cursor-pointer transition-all group">
@@ -389,7 +393,7 @@ export default function ReadingTestRenderer({
                     <div key={question.id} className="flex gap-4 items-baseline bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <span className="font-bold text-slate-500 w-6 text-right">{question.order}</span>
                         <div className="flex-1">
-                            <p className="text-slate-800 font-medium mb-3">{question.question_text}</p>
+                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '18px'}}>{question.question_text}</p>
                             <input
                                 type="text"
                                 value={answers[question.id] || ''}
@@ -431,7 +435,7 @@ export default function ReadingTestRenderer({
                             <h2 className="font-bold text-slate-900 text-xl mb-5 leading-tight tracking-tight border-b-2 border-emerald-500 inline-block pb-2">
                                 {currentPart.title}
                             </h2>
-                            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px] whitespace-pre-wrap">
+                            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[15px] whitespace-pre-wrap">
                                 {currentPart.content.split('\n').map((para, idx) => {
                                     const trimmed = para.trim();
                                     if (!trimmed) return <div key={idx} className="h-4" />;
@@ -458,16 +462,18 @@ export default function ReadingTestRenderer({
                                 <div key={group.id} className="mb-12">
                                     <div className="mb-8">
                                         <div className="flex items-baseline justify-between border-b border-slate-200 pb-2 mb-4">
-                                            <h3 className="text-base font-bold text-slate-900">
+                                            <h3 className="text-xs font-bold text-slate-900">
                                                 Questions {group.questions[0]?.order}–{group.questions[group.questions.length - 1]?.order}
                                             </h3>
                                         </div>
 
                                         {group.instructions && (
                                             <div className="mb-6 p-5 bg-blue-50/50 rounded-xl border border-blue-100/50 text-blue-900">
-                                                <p className="text-sm font-semibold whitespace-pre-wrap leading-relaxed">
-                                                    {group.instructions}
-                                                </p>
+                                                {group.instructions.split('\n').map((line, idx) => (
+                                                    <p key={idx} className="text-[10px] font-semibold leading-relaxed mb-1">
+                                                        {line}
+                                                    </p>
+                                                ))}
                                             </div>
                                         )}
 

@@ -82,7 +82,7 @@ function renderHighlightedText(text: string, withHighlights: Array<{ start: numb
     if (!withHighlights || !withHighlights.length) {
         // Just return paragraphs if no highlights
         return (
-            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px]">
+            <div className="text-slate-700 leading-relaxed text-justify font-serif text-[15px]">
                 {text.split('\n').map((para, idx) => {
                     const trimmed = para.trim();
                     if (!trimmed) return <div key={idx} className="h-4" />;
@@ -122,7 +122,7 @@ function renderHighlightedText(text: string, withHighlights: Array<{ start: numb
         // Add text before highlight, respecting newlines
         if (lastIndex < start) {
             const segment = text.slice(lastIndex, start);
-            parts.push(<span key={`text-${i}`}>{segment}</span>);
+            parts.push(<span key={`text-${i}`} className="whitespace-pre-line">{segment}</span>);
         }
 
         // Add highlighted text
@@ -142,14 +142,14 @@ function renderHighlightedText(text: string, withHighlights: Array<{ start: numb
         lastIndex = end;
     });
 
-    // Add remaining text
+    // Add remaining text with newline support
     if (lastIndex < text.length) {
-        parts.push(<span key="text-end">{text.slice(lastIndex)}</span>);
+        parts.push(<span key="text-end" className="whitespace-pre-line">{text.slice(lastIndex)}</span>);
     }
 
-    // Wrap in typographical container
+    // Wrap in typographical container with proper line handling
     return (
-        <div className="text-slate-700 leading-relaxed text-justify font-serif text-[13px] whitespace-pre-wrap">
+        <div className="text-slate-700 leading-relaxed text-justify font-serif text-[15px] whitespace-pre-line">
             {parts}
         </div>
     );
@@ -316,10 +316,10 @@ export default function AnswerKeyPage({ params }: PageProps) {
 
         return (
             <div className="mt-6 border border-slate-200 rounded-lg p-4 bg-slate-50">
-                <h4 className="font-bold text-slate-900 text-center mb-3">List of Words</h4>
+                <h4 className="font-bold text-slate-900 text-center mb-3 text-[15px]">List of Words</h4>
                 <div className="grid grid-cols-3 gap-2 text-center">
                     {options.map((opt, idx) => (
-                        <span key={idx} className="text-slate-700 py-1">
+                        <span key={idx} className="text-slate-700 py-1 text-[15px]">
                             {safeRender(opt.text) || safeRender(opt.key)}
                         </span>
                     ))}
@@ -333,11 +333,20 @@ export default function AnswerKeyPage({ params }: PageProps) {
         if (!container?.rich) return null;
 
         return (
-            <div className="text-slate-800 text-lg leading-loose font-medium">
+            <div className="text-slate-800 text-[15px] leading-relaxed font-medium">
                 {container.rich.map((element, idx) => {
                     if (element.t === 'text') {
-                        const text = element.v?.replace(/\n+/g, ' ') || '';
-                        return <span key={idx}>{text}</span>;
+                        const text = element.v || '';
+                        return (
+                            <span key={idx} className="whitespace-pre-line">
+                                {text.split('\n').map((line, lineIdx) => (
+                                    <span key={lineIdx}>
+                                        {line}
+                                        {lineIdx < text.split('\n').length - 1 && <br />}
+                                    </span>
+                                ))}
+                            </span>
+                        );
                     } else if (element.t === 'slot' && element.slot_id) {
                         const question = getQuestionBySlotId(element.slot_id, questions);
                         if (!question) return null;
@@ -387,8 +396,8 @@ export default function AnswerKeyPage({ params }: PageProps) {
                 if (!question) return <span key={idx}>...</span>;
                 return (
                     <span key={idx} className="inline-flex items-center mx-1">
-                        <span className="text-xs text-gray-500 mr-1">({question.order})</span>
-                        <span className="px-2 py-1 bg-emerald-100 border border-emerald-300 rounded text-emerald-800 font-bold text-sm min-w-[60px] text-center">
+                        <span className="text-[10px] text-gray-500 mr-1">({question.order})</span>
+                        <span className="px-2 py-1 bg-emerald-100 border border-emerald-300 rounded text-emerald-800 font-bold text-[10px] min-w-[60px] text-center">
                             {question.correct_answer}
                         </span>
                     </span>
@@ -403,12 +412,6 @@ export default function AnswerKeyPage({ params }: PageProps) {
         if ((group.group_type === 'summary_completion' || group.group_type === 'sentence_completion') && group.container?.rich) {
             return (
                 <div className="bg-white border border-emerald-100 rounded-2xl p-6 shadow-sm">
-                    {/* Example box if likely present */}
-                    {group.container.rich[0]?.v?.includes('EARLY') && (
-                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-6 text-sm text-slate-600">
-                            <span className="font-bold text-slate-800">Example:</span> ... <span className="font-mono text-emerald-600">heavenly</span> ...
-                        </div>
-                    )}
 
                     {renderRichTextContainer(group.container, group.questions)}
                     {renderWordBank(group.options)}
@@ -436,7 +439,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                         {question.order}
                                     </span>
                                     <div className="flex-1">
-                                        <p className="mb-3 text-lg font-medium text-slate-800 leading-relaxed">{question.question_text}</p>
+                                        <p className="mb-3 font-medium text-slate-800 leading-relaxed" style={{fontSize: '18px'}}>{question.question_text}</p>
                                         <div className="flex gap-3 flex-wrap">
                                             {question.options.map((option, optIdx) => {
                                                 let optKey = option.key;
@@ -471,14 +474,14 @@ export default function AnswerKeyPage({ params }: PageProps) {
 
                                                 return (
                                                     <div key={optIdx} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${bgClass}`}>
-                                                        <span className="text-sm font-bold">{optText}</span>
+                                                        <span className="text-[15px] font-bold">{optText}</span>
                                                         {isCorrectOption && <CheckCircle className="w-3 h-3 text-white" />}
                                                         {isWrongChoice && <XCircle className="w-3 h-3 text-white" />}
                                                     </div>
                                                 );
                                             })}
                                         </div>
-                                        <div className="mt-2 flex gap-4 text-xs font-bold">
+                                        <div className="mt-2 flex gap-4 text-[15px] font-bold">
                                             <span className="text-emerald-600">Correct: {question.correct_answer}</span>
                                             {userAnswer && !isUserCorrect && (
                                                 <span className="text-red-600">Your Answer: {userAnswers[question.id]}</span>
@@ -503,9 +506,9 @@ export default function AnswerKeyPage({ params }: PageProps) {
                 return (
                     <div className="space-y-6">
                         <div className="border border-slate-200 rounded-xl p-5 bg-slate-50">
-                            <h4 className="font-bold text-slate-700 text-center mb-4 text-xs uppercase tracking-wider">Options</h4>
+                            <h4 className="font-bold text-slate-700 text-center mb-4 text-[15px] uppercase tracking-wider">Options</h4>
                             {group.options.map((opt, idx) => (
-                                <div key={idx} className="flex gap-3 text-sm mb-2">
+                                <div key={idx} className="flex gap-3 text-[15px] mb-2">
                                     <span className="font-bold text-slate-900 w-5">{safeRender(opt.key)}</span>
                                     <span className="text-slate-600">{safeRender(opt.text)}</span>
                                 </div>
@@ -519,13 +522,13 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                         {group.options.map((opt) => {
                                             const isCorrect = question.correct_answer === opt.key;
                                             return (
-                                                <div key={opt.key} className={`flex items-center justify-center w-10 h-10 rounded-lg border-2 font-bold ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-100 text-slate-300'}`}>
+                                                <div key={opt.key} className={`flex items-center justify-center w-10 h-10 rounded-lg border-2 font-bold text-[8px] ${isCorrect ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-100 text-slate-300'}`}>
                                                     {opt.key}
                                                 </div>
                                             );
                                         })}
                                     </div>
-                                    <div className="ml-auto text-sm font-bold text-emerald-600">Ans: {question.correct_answer}</div>
+                                    <div className="ml-auto text-[15px] font-bold text-emerald-600">Ans: {question.correct_answer}</div>
                                 </div>
                             ))}
                         </div>
@@ -537,7 +540,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                         {group.questions.map((question) => (
                             <div key={question.id} className="pl-2">
                                 <span className="inline-block px-2 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded mb-2">Q{question.order}</span>
-                                <p className="mb-4 text-lg font-medium text-slate-800">{question.question_text}</p>
+                                <p className="mb-4 font-medium text-slate-800" style={{fontSize: '18px'}}>{question.question_text}</p>
                                 <div className="space-y-2">
                                     {question.options?.map((option, optIdx) => {
                                         const optKey = option.key;
@@ -547,7 +550,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                         return (
                                             <div key={optIdx} className={`flex items-start gap-3 p-3 rounded-xl border ${isCorrect ? 'bg-emerald-50 border-emerald-500 shadow-sm' : 'bg-white border-slate-100 opacity-50'}`}>
                                                 <div className={`w-4 h-4 rounded-full border mt-1 flex-shrink-0 ${isCorrect ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`} />
-                                                <div className={`text-base ${isCorrect ? 'text-slate-900 font-bold' : 'text-slate-500'}`}>
+                                                <div className={`text-[15px] ${isCorrect ? 'text-slate-900 font-bold' : 'text-slate-500'}`}>
                                                     {optKey !== optText ? (
                                                         <span><span className="font-bold mr-2 text-slate-700">{optKey}</span>{optText}</span>
                                                     ) : (
@@ -570,7 +573,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
             return (
                 <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm overflow-hidden">
                     <div className="overflow-x-auto">
-                        <table className="w-full border-collapse border border-gray-400 text-sm">
+                        <table className="w-full border-collapse border border-gray-400 text-[10px]">
                             <thead>
                                 <tr className="bg-gray-100">
                                     {group.container.cols?.map((col, idx) => <th key={idx} className="border border-gray-400 px-3 py-2 font-bold">{col}</th>)}
@@ -600,7 +603,7 @@ export default function AnswerKeyPage({ params }: PageProps) {
                     <div key={question.id} className="flex gap-4 items-baseline bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <span className="font-bold text-slate-500 w-6 text-right">{question.order}</span>
                         <div className="flex-1">
-                            <p className="text-slate-800 font-medium mb-3">{question.question_text}</p>
+                            <p className="text-slate-800 font-medium mb-3" style={{fontSize: '18px'}}>{question.question_text}</p>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -710,8 +713,12 @@ export default function AnswerKeyPage({ params }: PageProps) {
                                             </h3>
                                         </div>
                                         {group.instructions && (
-                                            <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100 text-blue-900 text-sm font-medium">
-                                                {group.instructions}
+                                            <div className="mb-6 p-5 bg-blue-50/50 rounded-xl border border-blue-100/50 text-blue-900">
+                                                {group.instructions.split('\n').map((line, idx) => (
+                                                    <p key={idx} className="text-[15px] font-semibold leading-relaxed mb-1 whitespace-pre-line">
+                                                        {line}
+                                                    </p>
+                                                ))}
                                             </div>
                                         )}
                                         {group.image && (
