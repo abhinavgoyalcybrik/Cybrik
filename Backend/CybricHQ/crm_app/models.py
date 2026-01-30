@@ -1062,6 +1062,12 @@ class CounselorTarget(models.Model):
         help_text="Number of enrollments achieved so far"
     )
     
+    # Extended Target Metrics (Added for Reports)
+    target_leads = models.IntegerField(default=0, help_text="Target number of new leads assigned")
+    target_calls = models.IntegerField(default=0, help_text="Target number of calls to make")
+    target_applications = models.IntegerField(default=0, help_text="Target number of applications to generate")
+
+    
     # Time period
     period_type = models.CharField(
         max_length=20,
@@ -1133,3 +1139,6 @@ class CounselorTarget(models.Model):
             self.status = 'overdue'
         
         self.save()
+
+
+

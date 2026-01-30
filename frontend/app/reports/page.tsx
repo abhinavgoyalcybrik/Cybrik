@@ -11,7 +11,15 @@ interface ReportData {
     call_outcomes: { label: string; value: number; color?: string }[];
     lead_sources: { label: string; value: number; color?: string }[];
     conversion_funnel: { label: string; value: number; color?: string }[];
-    counselor_stats: { name: string; leads_assigned: number; calls_made: number; applications: number; conversion_rate: number }[];
+    counselor_stats: { 
+        id?: number; 
+        name: string; 
+        leads_assigned: number; 
+        calls_made: number; 
+        applications: number; 
+        conversion_rate: number;
+        targets?: { leads: number; calls: number; applications: number; id: number };
+    }[];
     ai_usage: { total_cost: number; total_duration_mins: number; avg_duration_secs: number; total_analyzed_calls: number };
     demographics: { label: string; value: number }[];
     document_status: { label: string; value: number }[];
@@ -70,6 +78,66 @@ export default function ReportsPage() {
     // Country selection state
     const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
     const [expandedCountries, setExpandedCountries] = useState<{ [key: string]: boolean }>({});
+
+    // Target Setting State
+    const [targetModalOpen, setTargetModalOpen] = useState(false);
+    const [selectedCounselor, setSelectedCounselor] = useState<any>(null);
+    const [targetForm, setTargetForm] = useState({
+        leads: 0,
+        calls: 0,
+        applications: 0
+    });
+
+    const openTargetModal = (counselor: any) => {
+        setSelectedCounselor(counselor);
+        setTargetForm({
+            leads: counselor.targets?.leads || 0,
+            calls: counselor.targets?.calls || 0,
+            applications: counselor.targets?.applications || 0
+        });
+        setTargetModalOpen(true);
+    };
+
+    const handleSaveTarget = async () => {
+        if (!selectedCounselor || !selectedCounselor.id) return;
+        try {
+            const payload: any = {
+                counselor: selectedCounselor.id,
+                target_leads: parseInt(targetForm.leads as any) || 0,
+                target_calls: parseInt(targetForm.calls as any) || 0,
+                target_applications: parseInt(targetForm.applications as any) || 0,
+                target_enrollments: 0, // Required by model
+                period_type: 'monthly',
+                status: 'active',
+                start_date: new Date().toISOString().split('T')[0],
+                end_date: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0]
+            };
+
+            let url = '/api/counselor-targets/';
+            let method = 'POST';
+
+            if (selectedCounselor.targets?.id) {
+                url += `${selectedCounselor.targets.id}/`;
+                method = 'PATCH'; 
+                delete payload.counselor;
+                delete payload.start_date;
+                delete payload.end_date;
+            }
+
+            const res = await apiFetch(url, {
+                method,
+                body: JSON.stringify(payload)
+            });
+
+            if (res) {
+                 setTargetModalOpen(false);
+                 window.location.reload(); 
+            }
+        } catch (error) {
+            console.error("Failed to set target", error);
+            alert("Failed to save target. Only admins can do this.");
+        }
+    };
     const [countrySelectValue, setCountrySelectValue] = useState<string>("");
 
     useEffect(() => {
@@ -785,19 +853,35 @@ export default function ReportsPage() {
                             <thead className="bg-[var(--cy-bg-page)] text-[var(--cy-text-secondary)] font-medium">
                                 <tr>
                                     <th className="px-6 py-3">Counselor</th>
-                                    <th className="px-6 py-3 text-center">Leads Assigned</th>
-                                    <th className="px-6 py-3 text-center">Calls Made</th>
-                                    <th className="px-6 py-3 text-center">Applications</th>
+                                    <th className="px-6 py-3 text-center">Leads <span className="text-xs font-normal">(Act/Tgt)</span></th>
+                                    <th className="px-6 py-3 text-center">Calls <span className="text-xs font-normal">(Act/Tgt)</span></th>
+                                    <th className="px-6 py-3 text-center">Apps <span className="text-xs font-normal">(Act/Tgt)</span></th>
                                     <th className="px-6 py-3 text-center">Conversion Rate</th>
+                                    <th className="px-6 py-3 text-center">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-[var(--cy-border)]">
                                 {data.counselor_stats && data.counselor_stats.map((c, i) => (
                                     <tr key={i} className="hover:bg-[var(--cy-bg-page)] transition-colors">
                                         <td className="px-6 py-4 font-medium text-[var(--cy-navy)]">{c.name}</td>
-                                        <td className="px-6 py-4 text-center">{c.leads_assigned}</td>
-                                        <td className="px-6 py-4 text-center">{c.calls_made}</td>
-                                        <td className="px-6 py-4 text-center">{c.applications}</td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex flex-col items-center">
+                                                <span className="font-bold">{c.leads_assigned}</span>
+                                                <span className="text-xs text-gray-500">/ {c.targets?.leads || '-'}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex flex-col items-center">
+                                                <span className="font-bold">{c.calls_made}</span>
+                                                <span className="text-xs text-gray-500">/ {c.targets?.calls || '-'}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="flex flex-col items-center">
+                                                <span className="font-bold">{c.applications}</span>
+                                                <span className="text-xs text-gray-500">/ {c.targets?.applications || '-'}</span>
+                                            </div>
+                                        </td>
                                         <td className="px-6 py-4 text-center">
                                             <span className={`px-2 py-1 rounded-full text-xs font-bold ${c.conversion_rate > 20 ? 'bg-green-100 text-green-700' :
                                                 c.conversion_rate > 10 ? 'bg-blue-100 text-blue-700' :
@@ -805,6 +889,15 @@ export default function ReportsPage() {
                                                 }`}>
                                                 {c.conversion_rate}%
                                             </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <button 
+                                                onClick={() => openTargetModal(c)}
+                                                className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-colors"
+                                                title="Set Monthly Target"
+                                            >
+                                                <TrendingUp className="w-4 h-4" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
@@ -1004,6 +1097,77 @@ export default function ReportsPage() {
                                     Close
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Target Setting Modal */}
+            {targetModalOpen && selectedCounselor && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="bg-[var(--cy-bg-surface)] p-6 rounded-xl shadow-2xl w-full max-w-md border border-[var(--cy-border)] animate-in fade-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-lg font-bold text-[var(--cy-navy)]">Set Monthly Targets for {selectedCounselor.name}</h3>
+                            <button onClick={() => setTargetModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Leads Target</label>
+                                <div className="relative">
+                                    <input 
+                                        type="number"
+                                        className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-primary)] focus:border-transparent outline-none transition-all"
+                                        value={targetForm.leads}
+                                        onChange={e => setTargetForm({...targetForm, leads: parseInt(e.target.value) || 0})}
+                                    />
+                                    <span className="absolute right-3 top-2.5 text-xs text-gray-400 font-medium">Leads</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Calls Target</label>
+                                <div className="relative">
+                                    <input 
+                                        type="number"
+                                        className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-primary)] focus:border-transparent outline-none transition-all"
+                                        value={targetForm.calls}
+                                        onChange={e => setTargetForm({...targetForm, calls: parseInt(e.target.value) || 0})}
+                                    />
+                                    <span className="absolute right-3 top-2.5 text-xs text-gray-400 font-medium">Calls</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Applications Target</label>
+                                <div className="relative">
+                                    <input 
+                                        type="number"
+                                        className="w-full pl-3 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--cy-primary)] focus:border-transparent outline-none transition-all"
+                                        value={targetForm.applications}
+                                        onChange={e => setTargetForm({...targetForm, applications: parseInt(e.target.value) || 0})}
+                                    />
+                                    <span className="absolute right-3 top-2.5 text-xs text-gray-400 font-medium">Apps</span>
+                                </div>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-700">
+                                <p>Targets are set for the current month and will reset automatically next month.</p>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button 
+                                onClick={() => setTargetModalOpen(false)}
+                                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors text-sm font-medium"
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={handleSaveTarget}
+                                className="px-4 py-2 bg-[var(--cy-lime)] text-[var(--cy-navy)] font-bold rounded-lg hover:brightness-110 transition-all shadow-md text-sm"
+                            >
+                                Save Targets
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -2611,13 +2611,33 @@ class ReportsSummary(APIView):
                     counselor_app_filters &= Q(applicant__preferred_country__iexact=country_filter)
                 apps_managed = Application.objects.filter(counselor_app_filters).count()
                 
-                if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
+                # Fetch targets
+                from .models import CounselorTarget
+                from django.utils import timezone
+                target_obj = CounselorTarget.objects.filter(
+                    counselor=user,
+                    status='active',
+                    start_date__lte=timezone.now().date(),
+                    end_date__gte=timezone.now().date()
+                ).order_by('-created_at').first()
+
+                targets = {
+                   "leads": target_obj.target_leads if target_obj else 0,
+                   "calls": target_obj.target_calls if target_obj else 0,
+                   "applications": target_obj.target_applications if target_obj else 0,
+                   "enrollments": target_obj.target_enrollments if target_obj else 0,
+                   "id": target_obj.id if target_obj else None
+                }
+
+                if assigned_leads > 0 or calls_made > 0 or apps_managed > 0 or (target_obj):
                     counselor_stats.append({
+                        "id": user.id,
                         "name": f"{user.first_name} {user.last_name}".strip() or user.username,
                         "leads_assigned": assigned_leads,
                         "calls_made": calls_made,
                         "applications": apps_managed,
-                        "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0
+                        "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0,
+                        "targets": targets
                     })
             
             counselor_stats.sort(key=lambda x: x['calls_made'], reverse=True)
@@ -3218,6 +3238,7 @@ class CounselorTargetViewSet(viewsets.ModelViewSet):
                 model = CounselorTarget
                 fields = [
                     'id', 'counselor', 'counselor_name', 'target_enrollments',
+                    'target_leads', 'target_calls', 'target_applications',
                     'completed_enrollments', 'period_type', 'start_date', 'end_date',
                     'status', 'assigned_by', 'assigned_by_name', 'notes',
                     'progress_percentage', 'remaining_enrollments', 'is_completed',

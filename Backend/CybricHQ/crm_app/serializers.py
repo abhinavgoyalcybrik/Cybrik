@@ -908,3 +908,13 @@ class WhatsAppMessageSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ("id", "created_at", "updated_at")
+
+
+from .models import CounselorTarget
+
+class CounselorTargetSerializer(serializers.ModelSerializer):
+    counselor_name = serializers.ReadOnlyField(source='counselor.get_full_name')
+
+    class Meta:
+        model = CounselorTarget
+        fields = '__all__'
