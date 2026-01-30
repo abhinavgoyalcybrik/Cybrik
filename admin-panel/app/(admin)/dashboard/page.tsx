@@ -211,7 +211,6 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                         <a href="/tenants" className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors group">
                             <span className="font-medium text-slate-700">Add New Tenant</span>
                             <ArrowUpRight className="h-4 w-4 text-slate-400 group-hover:text-brand-green transition-colors" />
