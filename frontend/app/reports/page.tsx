@@ -872,16 +872,15 @@ export default function ReportsPage() {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[85vh] overflow-hidden animate-in fade-in duration-200">
                         {/* Header */}
-                        <div className="bg-gradient-to-r from-[var(--cy-primary)] to-[var(--cy-secondary)] p-4 sm:p-6 text-white">
+                        <div className="bg-gradient-to-r from-[var(--cy-navy)] to-[var(--cy-primary)] p-4 sm:p-6 text-white">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
-                                        <Globe className="w-6 h-6" />
+                                <div className="flex items-center gap-4">
+                                    <div className="bg-white/10 p-2 rounded-lg backdrop-blur-sm border border-white/10">
+                                        <img src="/logo.png" alt="Cybrik Logo" className="h-8 w-auto brightness-0 invert" />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold">{selectedMetric.title}</h3>
-                                        {selectedMetric.label && <p className="text-xl font-semibold mt-1">{selectedMetric.label}</p>}
-                                        <p className="text-white/80 text-sm mt-1">Country-wise Distribution</p>
+                                        <h3 className="text-xl font-bold tracking-tight">Global Performance Report</h3>
+                                        <p className="text-white/70 text-sm">Real-time country breakdown</p>
                                     </div>
                                 </div>
                                 <button
@@ -891,25 +890,18 @@ export default function ReportsPage() {
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
-                            
-                            {/* Total Count Badge - for specific metrics */}
-                            {selectedMetric.value && (
-                                <div className="mt-4 inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                                    <span className="text-white/80 text-sm">Total:</span>
-                                    <span className="text-2xl font-bold">{selectedMetric.value}</span>
-                                </div>
-                            )}
                         </div>
 
                         {/* Content */}
-                        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-170px)]">
+                        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(85vh-170px)] bg-gray-50/50">
                             {data?.country_breakdown && Object.keys(data.country_breakdown).length > 0 ? (
                                 <div className="space-y-4">
                                     {Object.entries(data.country_breakdown).map(([country, countryData]) => {
                                         // Calculate conversion stats
                                         const totalLeads = countryData.total_leads ?? 0;
+                                        const convertedLeads = countryData.total_converted_leads ?? 0;
                                         const totalApps = countryData.total_applications ?? 0;
-                                        const conversionRate = totalLeads > 0 ? ((totalApps / totalLeads) * 100).toFixed(2) : "0.00";
+                                        const conversionRate = totalLeads > 0 ? ((convertedLeads / totalLeads) * 100).toFixed(2) : "0.00";
                                         
                                         // Get conversion funnel data
                                         const funnel = countryData.conversion_funnel || [];
@@ -920,26 +912,26 @@ export default function ReportsPage() {
                                                 className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all"
                                             >
                                                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                                                    <div className="flex items-center gap-3 min-w-[180px]">
-                                                        <div className="w-9 h-9 rounded-full bg-blue-50 text-xl flex items-center justify-center">🌍</div>
+                                                    <div className="flex items-center gap-3 min-w-[200px]">
+                                                        <div className="w-10 h-10 rounded-full bg-blue-50 text-xl flex items-center justify-center shadow-sm border border-blue-100">🌍</div>
                                                         <div>
-                                                            <div className="font-semibold text-[var(--cy-navy)]">{country}</div>
-                                                            <div className="text-xs text-[var(--cy-text-muted)]">{totalLeads} leads • {totalApps} applications</div>
+                                                            <div className="font-bold text-[var(--cy-navy)] text-lg">{country}</div>
+                                                            <div className="text-xs text-[var(--cy-text-muted)] mt-0.5">{totalLeads} leads • {convertedLeads} converted</div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="grid grid-cols-3 gap-3 flex-1">
-                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Converted</p>
-                                                            <p className="text-base font-bold text-green-700">{totalApps}</p>
+                                                    <div className="grid grid-cols-3 gap-3 flex-1 lg:max-w-xl">
+                                                        <div className="rounded-lg bg-emerald-50/50 border border-emerald-100 px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-emerald-600 font-semibold mb-1">Converted</p>
+                                                            <p className="text-xl font-bold text-emerald-700">{convertedLeads}</p>
                                                         </div>
-                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Total Leads</p>
-                                                            <p className="text-base font-bold text-[var(--cy-navy)]">{totalLeads}</p>
+                                                        <div className="rounded-lg bg-blue-50/50 border border-blue-100 px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-blue-600 font-semibold mb-1">Total Leads</p>
+                                                            <p className="text-xl font-bold text-blue-700">{totalLeads}</p>
                                                         </div>
-                                                        <div className="rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
-                                                            <p className="text-[10px] uppercase tracking-wider text-[var(--cy-text-muted)]">Conv. Rate</p>
-                                                            <p className="text-base font-bold text-[var(--cy-navy)]">{conversionRate}%</p>
+                                                        <div className="rounded-lg bg-indigo-50/50 border border-indigo-100 px-3 py-2">
+                                                            <p className="text-[10px] uppercase tracking-wider text-indigo-600 font-semibold mb-1">Conv. Rate</p>
+                                                            <p className="text-xl font-bold text-indigo-700">{conversionRate}%</p>
                                                         </div>
                                                     </div>
                                                 </div>
