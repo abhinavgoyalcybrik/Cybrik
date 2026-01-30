@@ -105,24 +105,34 @@ export default function ReadingTestPage({ params }: PageProps) {
         if (questionsPanelRef.current) questionsPanelRef.current.scrollTop = 0;
     }, [currentPartIndex]);
 
-    // Check completion status and redirect to result view if done
+    // Check completion status and redirect to result view if done (unless retaking)
     useEffect(() => {
         const view = searchParams.get('view');
+        const retake = searchParams.get('retake');
+        
         if (view === 'result') return; // Already viewing result
+        
+        // Disable automatic completion check to allow retakes
+        // Users can access previous results via proper result URLs
+        console.log('Allowing fresh test attempt (auto-completion check disabled)');
+        return;
 
-        const checkCompletion = async () => {
-            try {
-                const res = await fetch(`/api/ielts/check-completion/reading/${testId}/`, { credentials: 'include' });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.is_completed && data.session_id) {
-                        // Redirect to result view
-                        window.location.href = `/tests/reading/${testId}?view=result&sessionId=${data.session_id}`;
-                    }
-                }
-            } catch (e) {
-                console.error('Error checking completion:', e);
-            }
+        // const checkCompletion = async () => {
+        //     try {
+        //         const res = await fetch(`/api/ielts/check-completion/reading/${testId}/`, { credentials: 'include' });
+        //         if (res.ok) {
+        //             const data = await res.json();
+        //             if (data.is_completed && data.session_id) {
+        //                 // Only redirect if not explicitly taking a fresh attempt
+        //                 console.log('Test previously completed, redirecting to results');
+        //                 window.location.href = `/tests/reading/${testId}?view=result&sessionId=${data.session_id}`;
+        //             }
+        //         }
+        //     } catch (e) {
+        //         console.error('Error checking completion:', e);
+        //     }
+        // };
+        // checkCompletion();
         };
         checkCompletion();
     }, [testId, searchParams]);
@@ -133,8 +143,21 @@ export default function ReadingTestPage({ params }: PageProps) {
         const attemptId = searchParams.get('attemptId');
         const retake = searchParams.get('retake');
 
+        console.log('URL params:', { view, sessionId, attemptId, retake });
+
+        // If no specific view parameter, ensure clean state for fresh test attempt
+        if (!view && !sessionId && !attemptId) {
+            console.log('Fresh test attempt - ensuring clean state');
+            setTestCompleted(false);
+            setEvaluationResult(null);
+            setScore(0);
+            setAnswers({});
+            return;
+        }
+
         // If retake=true parameter is present, reset test state and don't load results
         if (retake === 'true') {
+            console.log('Retaking test - resetting state');
             setTestCompleted(false);
             setEvaluationResult(null);
             setScore(0);
@@ -143,7 +166,9 @@ export default function ReadingTestPage({ params }: PageProps) {
         }
 
         // Only load results if explicitly requested with view=result AND sessionId parameters
+        // Do NOT auto-load results for fresh test attempts
         if (view === 'result' && sessionId) {
+            console.log('Loading previous result');
             const loadResult = async () => {
                 try {
                     const res = await fetch(`/api/ielts/sessions/${sessionId}/`, { credentials: 'include' });
