@@ -7,7 +7,6 @@ export default function ApplicantsRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to leads page - Applicant model deprecated
     router.push("/crm/leads");
   }, [router]);
 
