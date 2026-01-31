@@ -54,11 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (savedUser && savedToken) {
                 try {
-                    setUser(JSON.parse(savedUser));
+                    const parsedUser = JSON.parse(savedUser);
+                    setUser(parsedUser);
                     setToken(savedToken);
 
-                    // Proactively verify the session with the backend
-                    const meResponse = await fetch(`/api/auth/me/`, {
+                    // Proactively verify the session with the backend and refresh user data
+                    const meResponse = await fetch(`/api/ielts/auth/me/`, {
                         credentials: 'include',
                     });
 
@@ -67,9 +68,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         console.warn('Backend session expired on mount, logging out.');
                         logout();
                     } else {
-                        // Refresh user data to be sure
-                        const userData = await meResponse.json();
-                        // (Optional: update user state with fresh data here)
+                        // Refresh user data to ensure name is properly formatted
+                        const data = await meResponse.json();
+                        if (data.user) {
+                            const userName = data.user.first_name
+                                ? `${data.user.first_name} ${data.user.last_name || ''}`.trim()
+                                : data.user.username;
+                            
+                            const updatedUser: User = {
+                                ...parsedUser,
+                                id: data.user.id,
+                                username: data.user.username,
+                                name: userName,
+                                email: data.user.email,
+                                account_type: data.user.account_type,
+                                subscription_status: data.user.subscription_status,
+                                has_full_access: data.user.has_full_access,
+                                evaluations_remaining: data.user.evaluations_remaining,
+                                is_superuser: data.user.is_superuser,
+                                onboarding_completed: data.user.onboarding_completed,
+                                purpose: data.user.purpose,
+                                test_type: data.user.test_type,
+                                attempt_type: data.user.attempt_type,
+                                target_score: data.user.target_score,
+                                exam_date: data.user.exam_date,
+                                referral_source: data.user.referral_source,
+                            };
+                            setUser(updatedUser);
+                            localStorage.setItem('ielts_user', JSON.stringify(updatedUser));
+                        }
                     }
                 } catch (e) {
                     console.error('Auth initialization error:', e);
@@ -249,14 +276,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     // Check localStorage for onboarding completion
                     const localOnboardingCompleted = localStorage.getItem('ielts_onboarding_completed') === 'true';
                     
+                    // Format the name from first_name and last_name
+                    const userName = data.user.first_name
+                        ? `${data.user.first_name} ${data.user.last_name || ''}`.trim()
+                        : data.user.username;
+                    
                     // Merge fresh data with existing user, preserving role info
                     const updatedUser: User = {
                         ...user,
-                        ...data.user,
+                        id: data.user.id,
+                        username: data.user.username,
+                        name: userName,
+                        email: data.user.email,
+                        account_type: data.user.account_type,
+                        subscription_status: data.user.subscription_status,
+                        has_full_access: data.user.has_full_access,
+                        evaluations_remaining: data.user.evaluations_remaining,
+                        is_superuser: data.user.is_superuser,
                         // Ensure onboarding status is properly set
                         onboarding_completed: data.user.onboarding_completed || localOnboardingCompleted,
+                        // Preserve existing fields
                         role: user?.role || 'student',
                         is_staff: user?.is_staff || false,
+                        // Onboarding data
+                        purpose: data.user.purpose,
+                        test_type: data.user.test_type,
+                        attempt_type: data.user.attempt_type,
+                        target_score: data.user.target_score,
+                        exam_date: data.user.exam_date,
+                        referral_source: data.user.referral_source,
                     };
                     setUser(updatedUser);
                     localStorage.setItem('ielts_user', JSON.stringify(updatedUser));
