@@ -860,6 +860,20 @@ def save_speaking_results(request):
             logger.info(f"Speaking results received (unauthenticated): test={test_id}, band={overall_band}")
             return Response({"success": True, "message": "Results logged (user not authenticated)"})
         
+        # Process parts to include audio URLs
+        processed_parts = []
+        for p in parts:
+            part_data = p.copy()
+            label = part_data.get('recording_label')
+            if label and session_id:
+                # Construct URL consistent with upload_speaking_recording
+                # The upload view replaces spaces with underscores
+                # Frontend sends label like "Part 1.webm"
+                filename = label.replace(" ", "_")
+                part_data['audio_url'] = f"/media/speaking_recordings/{session_id}/{filename}"
+                part_data['recording_url'] = f"/media/speaking_recordings/{session_id}/{filename}"
+            processed_parts.append(part_data)
+
         # Create session and attempt
         session = UserTestSession.objects.create(
             user=user,
@@ -879,7 +893,7 @@ def save_speaking_results(request):
             band_score=overall_band,
             data={
                 'feedback': data.get('feedback', {}),
-                'parts': data.get('parts', []),
+                'parts': processed_parts,
                 'is_evaluated': True
             }
         )

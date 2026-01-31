@@ -302,7 +302,7 @@ export default function SpeakingReportPage({ params }: PageProps) {
                                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                         }`}
                                 >
-                                    {item.label.replace('Part ', 'Q ')}
+                                    {item.label}
                                 </button>
                             ))}
                         </div>
