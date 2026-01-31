@@ -113,7 +113,7 @@ export default function AdminDashboard({ data, onFilterChange }: any) {
                   </div>
                   <div>
                     <div className="text-sm font-medium text-[var(--cy-navy)]">{c.username || c.name || "Unknown"}</div>
-                    <div className="text-xs text-[var(--cy-text-muted)]">{c.count} applicants</div>
+                    <div className="text-xs text-[var(--cy-text-muted)]">{c.count} leads</div>
                   </div>
                 </div>
                 <div className="text-[var(--cy-lime)] font-bold text-sm">#{i + 1}</div>

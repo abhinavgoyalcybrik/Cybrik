@@ -444,8 +444,8 @@ export default function TasksPage() {
                                                     Application #{task.application}
                                                 </Link>
                                             ) : task.lead ? (
-                                                <Link href={`/applicants/${task.lead}`} className="text-[var(--cy-lime-hover)] hover:underline">
-                                                    {task.applicant_name || `Applicant #${task.lead}`}
+                                                <Link href={`/crm/leads/${task.lead}`} className="text-[var(--cy-lime-hover)] hover:underline">
+                                                    {task.applicant_name || `Lead #${task.lead}`}
                                                 </Link>
                                             ) : task.crm_lead ? (
                                                 <Link href={`/leads/${task.crm_lead}`} className="text-[var(--cy-lime-hover)] hover:underline">

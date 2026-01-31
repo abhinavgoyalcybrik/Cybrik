@@ -1,52 +1,26 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import apiFetch from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
-import Link from "next/link";
 
-type Applicant = {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    dob?: string;
-    passport_number?: string;
-    created_at: string;
-    stage?: string;
-    address?: string;
-    preferred_country?: string;
-    academic_records: any[];
-    documents?: any[];
-    metadata?: any;
-};
-
-export default function ApplicantDetailPage() {
+export default function ApplicantRedirectPage() {
     const params = useParams();
     const router = useRouter();
     const id = params?.id;
-    const [applicant, setApplicant] = useState<Applicant | null>(null);
-    const [applications, setApplications] = useState<any[]>([]);
-    const [calls, setCalls] = useState<any[]>([]);
-    const [activities, setActivities] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [uploading, setUploading] = useState(false);
-    const [activeTab, setActiveTab] = useState("personal");
 
-    // Follow Ups State
-    const [tasks, setTasks] = useState<any[]>([]);
-    const [tasksLoading, setTasksLoading] = useState(false);
-    const [showTaskModal, setShowTaskModal] = useState(false);
-    const [taskForm, setTaskForm] = useState({
-        notes: "",
-        due_at: "",
-        priority: "medium",
-        channel: "other"
-    });
-    const [taskCreating, setTaskCreating] = useState(false);
+    useEffect(() => {
+        // Redirect to leads page - Applicant model deprecated
+        if (id) {
+            router.push(`/crm/leads/${id}`);
+        }
+    }, [id, router]);
+
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <p className="text-gray-600">Redirecting...</p>
+        </div>
+    );
+}
 
     // Education Modal State
     const [showEducationModal, setShowEducationModal] = useState(false);

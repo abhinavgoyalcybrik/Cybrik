@@ -11,7 +11,7 @@ interface FunnelChartProps {
 const COLORS = ['#94a3b8', '#6366f1', '#8b5cf6', '#ec4899', '#10b981'];
 
 export default function FunnelChart({ data, title }: FunnelChartProps) {
-    const filteredData = data.filter(item => item.stage !== 'Applicants' && item.stage !== 'Active Leads');
+    const filteredData = data.filter(item => item.stage !== 'Active Leads');
 
     return (
         <div className="w-full h-full p-4 sm:p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 flex flex-col overflow-hidden">

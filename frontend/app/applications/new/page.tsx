@@ -18,12 +18,12 @@ function NewApplicationForm() {
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        // Fetch applicants for the dropdown
-        apiFetch("/api/applicants/")
+        // Fetch leads for the dropdown
+        apiFetch("/api/leads/")
             .then((data) => {
                 setApplicants(Array.isArray(data) ? data : data.results || []);
             })
-            .catch((err) => console.error("Failed to load applicants", err));
+            .catch((err) => console.error("Failed to load leads", err));
     }, []);
 
     async function handleSubmit(e: React.FormEvent) {

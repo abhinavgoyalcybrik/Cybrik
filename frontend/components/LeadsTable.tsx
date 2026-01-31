@@ -8,7 +8,7 @@ export default function LeadsTable({ initialFilters = {} }) {
   async function load(filters = {}) {
     setLoading(true);
     const qs = new URLSearchParams(filters as any).toString();
-    const data = await apiFetch(`/api/applicants/?${qs}`);
+    const data = await apiFetch(`/api/leads/?${qs}`);
     setLeads(data.results || data); // depends on pagination
     setLoading(false);
   }

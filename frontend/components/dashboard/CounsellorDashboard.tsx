@@ -7,7 +7,7 @@ import { HorizontalBarChart } from "./Charts";
 export default function CounsellorDashboard({ data }: any) {
   const kpis = [
     {
-      title: "My Applicants",
+      title: "My Leads",
       value: data.my_total_applicants,
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@ export default function CounsellorDashboard({ data }: any) {
 
   const applicantColumns = [
     {
-      header: 'Applicant',
+      header: 'Lead',
       cell: (row: any) => (
         <Link href={`/leads/${row.id}`} className="block hover:bg-gray-50 rounded-lg transition-colors">
           <div className="flex items-center gap-3">
@@ -86,10 +86,10 @@ export default function CounsellorDashboard({ data }: any) {
           )}
         </div>
 
-        {/* Recent Applicants Table */}
+        {/* Recent Leads Table */}
         <div className="lg:col-span-2">
           <DataGrid
-            title="Recent Applicants"
+            title="Recent Leads"
             data={data.recent_applicants || []}
             columns={applicantColumns}
             action={<button className="btn btn-ghost text-xs">View All</button>}

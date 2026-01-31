@@ -1,53 +1,26 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import apiFetch from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
 
-function EditApplicantForm() {
+export default function EditApplicantRedirectPage() {
     const params = useParams();
     const router = useRouter();
     const id = params?.id;
 
-    const [first_name, setFirstName] = useState("");
-    const [last_name, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [dob, setDob] = useState("");
-    const [passport_number, setPassportNumber] = useState("");
-    const [address, setAddress] = useState("");
-    const [country_of_interest, setCountryOfInterest] = useState("");
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [message, setMessage] = useState("");
-
     useEffect(() => {
+        // Redirect to edit lead page - Applicant model deprecated
         if (id) {
-            apiFetch(`/api/applicants/${id}/`)
-                .then((data) => {
-                    if (data) {
-                        setFirstName(data.first_name || "");
-                        setLastName(data.last_name || "");
-                        setEmail(data.email || "");
-                        setPhone(data.phone || "");
-                        setDob(data.dob || "");
-                        setPassportNumber(data.passport_number || "");
-                        setAddress(data.address || "");
-                        setCountryOfInterest(data.preferred_country || "");
-                    }
-                })
-                .catch((err) => setMessage("Failed to load applicant: " + err.message))
-                .finally(() => setLoading(false));
+            router.push(`/crm/leads/${id}/edit`);
         }
-    }, [id]);
+    }, [id, router]);
 
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setSaving(true);
-        setMessage("");
-        try {
-            const payload = {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <p className="text-gray-600">Redirecting...</p>
+        </div>
+    );
+}
                 first_name,
                 last_name,
                 email,

@@ -1,33 +1,22 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import apiFetch from "@/lib/api";
-import DashboardLayout from "@/components/DashboardLayout";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-function NewApplicantForm() {
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [dob, setDob] = useState("");
-  const [passport_number, setPassportNumber] = useState("");
-
-  // Qualification fields (optional - for ElevenLabs dynamic variables)
-  const [highest_qualification, setHighestQualification] = useState("");
-  const [qualification_marks, setQualificationMarks] = useState("");
-  const [english_test_scores, setEnglishTestScores] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const searchParams = useSearchParams();
-  const leadId = searchParams ? searchParams.get("leadId") : null;
+export default function NewApplicantRedirectPage() {
+  const router = useRouter();
 
   useEffect(() => {
-    if (leadId) {
-      // Fetch lead details to pre-fill all fields including qualification details
-      apiFetch(`/api/leads/${leadId}/`)
+    // Redirect to new lead page - Applicant model deprecated
+    router.push("/crm/leads/new");
+  }, [router]);
+
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <p className="text-gray-600">Redirecting...</p>
+    </div>
+  );
+}
         .then((lead) => {
           if (lead) {
             // Basic info
