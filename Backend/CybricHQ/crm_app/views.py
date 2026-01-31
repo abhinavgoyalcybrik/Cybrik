@@ -2472,7 +2472,7 @@ class ReportsSummary(APIView):
         from django.db.models.functions import TruncMonth
         from django.utils import timezone
         from datetime import timedelta
-        from .models import Lead, Applicant, Application, CallRecord, Document, FollowUp, Transcript, Tenant
+        from .models import Lead, Application, CallRecord, Document, FollowUp, Tenant
 
         # Get filter parameters
         tenant_id = request.GET.get('tenant_id', None)
@@ -2490,7 +2490,7 @@ class ReportsSummary(APIView):
             from django.db.models import Sum, Avg, Count, Q
             from django.db.models.functions import TruncMonth
             
-            # Build base filters
+            # Build base filters - all based on Lead model
             lead_filters = Q()
             app_filters = Q()
             
@@ -2500,29 +2500,29 @@ class ReportsSummary(APIView):
             
             if country_filter:
                 lead_filters &= Q(country__iexact=country_filter)
-                app_filters &= Q(applicant__preferred_country__iexact=country_filter)
+                app_filters &= Q(lead__country__iexact=country_filter)
 
-            # 1. Application Growth (Last 6 Months)
+            # 1. Lead Growth (Last 6 Months) - Changed from Application to Lead
             six_months_ago = timezone.now() - timedelta(days=180)
-            monthly_apps = (
-                Application.objects.filter(app_filters, created_at__gte=six_months_ago)
+            monthly_leads = (
+                Lead.objects.filter(lead_filters, created_at__gte=six_months_ago)
                 .annotate(month=TruncMonth('created_at'))
                 .values('month')
                 .annotate(count=Count('id'))
                 .order_by('month')
             )
             
-            application_growth = []
-            for entry in monthly_apps:
-                application_growth.append({
+            lead_growth = []
+            for entry in monthly_leads:
+                lead_growth.append({
                     "label": entry['month'].strftime("%b"),
                     "value": entry['count']
                 })
                 
-            if not application_growth:
+            if not lead_growth:
                 for i in range(5, -1, -1):
                     d = timezone.now() - timedelta(days=i*30)
-                    application_growth.append({"label": d.strftime("%b"), "value": 0})
+                    lead_growth.append({"label": d.strftime("%b"), "value": 0})
 
             # 2. Call Outcomes (This Month)
             this_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -2577,24 +2577,18 @@ class ReportsSummary(APIView):
             if not lead_sources:
                 lead_sources = [{"label": "No Data", "value": 0, "color": "#E5E7EB"}]
 
-            # 4. Conversion Funnel
+            # 4. Conversion Funnel - Based on Lead stages only
             total_leads = Lead.objects.filter(lead_filters).count()
-            total_converted_leads = Lead.objects.filter(lead_filters, status='converted').count()
-            # Build applicant_filters separately since Applicant uses preferred_country, not country
-            applicant_filters = Q()
-            if tenant_id:
-                applicant_filters &= Q(tenant_id=tenant_id)
-            if country_filter:
-                applicant_filters &= Q(preferred_country__iexact=country_filter)
-            total_applicants = Applicant.objects.filter(applicant_filters).count()
-            total_applications = Application.objects.filter(app_filters).count()
-            total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
+            new_leads = Lead.objects.filter(lead_filters, status='new').count()
+            contacted_leads = Lead.objects.filter(lead_filters, status='contacted').count()
+            qualified_leads = Lead.objects.filter(lead_filters, status='qualified').count()
+            converted_leads = Lead.objects.filter(lead_filters, status='converted').count()
             
             conversion_funnel = [
                 {"label": "Total Leads", "value": total_leads, "color": "#3B82F6"},
-                {"label": "Applicants", "value": total_applicants, "color": "#8B5CF6"},
-                {"label": "Applications", "value": total_applications, "color": "#F59E0B"},
-                {"label": "Enrolled", "value": total_enrolled, "color": "#6FB63A"},
+                {"label": "Contacted", "value": contacted_leads, "color": "#8B5CF6"},
+                {"label": "Qualified", "value": qualified_leads, "color": "#F59E0B"},
+                {"label": "Converted", "value": converted_leads, "color": "#6FB63A"},
             ]
 
             # 5. Counselor Performance
@@ -2613,12 +2607,8 @@ class ReportsSummary(APIView):
                     counselor_call_filters &= Q(lead__country__iexact=country_filter)
                 calls_made = CallRecord.objects.filter(counselor_call_filters).count()
                 
-                counselor_app_filters = Q(assigned_to=user)
-                if tenant_id:
-                    counselor_app_filters &= Q(tenant_id=tenant_id)
-                if country_filter:
-                    counselor_app_filters &= Q(applicant__preferred_country__iexact=country_filter)
-                apps_managed = Application.objects.filter(counselor_app_filters).count()
+                # Count converted leads for this user
+                converted_count = Lead.objects.filter(lead_filters, assigned_to=user, status='converted').count()
                 
                 # Fetch targets
                 from .models import CounselorTarget
@@ -2637,14 +2627,14 @@ class ReportsSummary(APIView):
                    "id": target_obj.id if target_obj else None
                 }
 
-                if assigned_leads > 0 or calls_made > 0 or apps_managed > 0 or (target_obj):
+                if assigned_leads > 0 or calls_made > 0 or converted_count > 0 or (target_obj):
                     counselor_stats.append({
                         "id": user.id,
                         "name": f"{user.first_name} {user.last_name}".strip() or user.username,
                         "leads_assigned": assigned_leads,
                         "calls_made": calls_made,
-                        "applications": apps_managed,
-                        "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0,
+                        "converted": converted_count,
+                        "conversion_rate": round((converted_count / assigned_leads * 100), 1) if assigned_leads > 0 else 0,
                         "targets": targets
                     })
             
@@ -2676,26 +2666,24 @@ class ReportsSummary(APIView):
                 if stat['city']:
                     demographics.append({"label": stat['city'], "value": stat['count']})
             
-            # 8. Document Status
+            # 8. Document Status - Now using Lead relation
             doc_filters = Q()
             if tenant_id:
-                doc_filters &= Q(applicant__tenant_id=tenant_id)
+                doc_filters &= Q(lead__tenant_id=tenant_id)
             if country_filter:
-                doc_filters &= Q(applicant__preferred_country__iexact=country_filter)
+                doc_filters &= Q(lead__country__iexact=country_filter)
             
             doc_stats = Document.objects.filter(doc_filters).values('status').annotate(count=Count('id'))
             document_status = []
             for stat in doc_stats:
                 document_status.append({"label": stat['status'].title(), "value": stat['count']})
 
-            # 9. Task Completion
+            # 9. Task Completion - Using crm_lead relation
             task_filters = Q()
             if tenant_id:
-                task_filters &= Q(lead__tenant_id=tenant_id)
+                task_filters &= Q(crm_lead__tenant_id=tenant_id)
             if country_filter:
-                # FollowUp.lead is ForeignKey to Applicant, not Lead model
-                # Applicant has preferred_country, not country
-                task_filters &= Q(lead__preferred_country__iexact=country_filter)
+                task_filters &= Q(crm_lead__country__iexact=country_filter)
             
             task_stats = FollowUp.objects.filter(task_filters).values('completed').annotate(count=Count('id'))
             task_completion = []
@@ -2704,7 +2692,7 @@ class ReportsSummary(APIView):
                 task_completion.append({"label": label, "value": stat['count']})
 
             return {
-                "application_growth": application_growth,
+                "lead_growth": lead_growth,
                 "call_outcomes": call_outcomes,
                 "lead_sources": lead_sources,
                 "conversion_funnel": conversion_funnel,
@@ -2713,9 +2701,8 @@ class ReportsSummary(APIView):
                 "demographics": demographics,
                 "document_status": document_status,
                 "task_completion": task_completion,
-                "total_applications": Application.objects.filter(app_filters).count(),
                 "total_leads": total_leads,
-                "total_converted_leads": total_converted_leads,
+                "total_converted_leads": converted_leads,
             }
         
         # Generate overall metrics (filtered by tenant and single country if specified)
@@ -2729,54 +2716,22 @@ class ReportsSummary(APIView):
                 if country_name:  # Skip empty strings
                     country_breakdown[country_name] = get_country_metrics(country_name)
         else:
-            # If no countries specified, show breakdown for ALL available countries
-            # Get unique countries from BOTH leads and applicants (limited to top countries)
-            from django.db.models import Value
-            from django.db.models.functions import Coalesce
-            
-            # Get countries from Leads
+            # If no countries specified, show breakdown for ALL available countries from Leads
             lead_countries = Lead.objects.filter(
                 Q(tenant_id=tenant_id) if tenant_id else Q(),
                 country__isnull=False
             ).exclude(country='').values('country').annotate(
                 count=Count('id')
-            )
+            ).order_by('-count')[:10]
             
-            # Get countries from Applicants (using preferred_country field)
-            applicant_countries = Applicant.objects.filter(
-                Q(tenant_id=tenant_id) if tenant_id else Q(),
-                preferred_country__isnull=False
-            ).exclude(preferred_country='').values(
-                country=F('preferred_country')
-            ).annotate(
-                count=Count('id')
-            )
-            
-            # Combine and get top countries
-            all_countries_dict = {}
             for item in lead_countries:
-                country = item['country']
-                all_countries_dict[country] = all_countries_dict.get(country, 0) + item['count']
-            
-            for item in applicant_countries:
-                country = item['country']
-                all_countries_dict[country] = all_countries_dict.get(country, 0) + item['count']
-            
-            # Sort by count and get top 10
-            top_countries = sorted(all_countries_dict.items(), key=lambda x: x[1], reverse=True)[:10]
-            
-            print(f"[DEBUG] Found {len(top_countries)} countries for breakdown: {[c[0] for c in top_countries]}")
-            
-            for country_name, count in top_countries:
+                country_name = item['country']
                 if country_name:
-                    print(f"[DEBUG] Processing country: {country_name} with {count} records")
                     country_breakdown[country_name] = get_country_metrics(country_name)
-            
-            print(f"[DEBUG] Final country_breakdown has {len(country_breakdown)} entries")
 
         # 10. Available Reports (Mocked)
         available_reports = [
-            {"name": "Weekly Admissions Summary", "date": timezone.now().strftime("%b %d, %Y"), "size": "2.4 MB", "type": "PDF"},
+            {"name": "Weekly Lead Summary", "date": timezone.now().strftime("%b %d, %Y"), "size": "2.4 MB", "type": "PDF"},
             {"name": "Counselor Performance Review", "date": (timezone.now() - timedelta(days=1)).strftime("%b %d, %Y"), "size": "1.1 MB", "type": "XLSX"},
             {"name": "Lead Source Analysis", "date": (timezone.now() - timedelta(days=2)).strftime("%b %d, %Y"), "size": "856 KB", "type": "PDF"},
             {"name": "Monthly Call Logs", "date": (timezone.now() - timedelta(days=5)).strftime("%b %d, %Y"), "size": "5.2 MB", "type": "CSV"},
@@ -2800,7 +2755,7 @@ class ReportsSummary(APIView):
             "available_reports": available_reports,
             "companies": companies,
             "countries": all_countries,
-            "country_breakdown": country_breakdown,  # ADD THIS LINE
+            "country_breakdown": country_breakdown,
         }
         
         return Response(response_data)    
@@ -2822,7 +2777,7 @@ class ReportsSummary(APIView):
             )
         
         from django.db.models import Sum, Avg, Count, Q
-        from .models import Lead, Applicant, Application, CallRecord, Tenant
+        from .models import Lead, CallRecord, Tenant
         
         # Get filters from request body
         tenant_id = request.data.get('tenant_id', None)
@@ -2835,17 +2790,14 @@ class ReportsSummary(APIView):
         
         # Single country report (original logic)
         
-        # Build filters (same as GET method)
+        # Build filters (same as GET method) - all based on Lead model
         lead_filters = Q()
-        app_filters = Q()
         
         if tenant_id:
             lead_filters &= Q(tenant_id=tenant_id)
-            app_filters &= Q(tenant_id=tenant_id)
         
         if country:
             lead_filters &= Q(country__iexact=country)
-            app_filters &= Q(applicant__preferred_country__iexact=country)
         
         # Get tenant name for report header
         tenant_name = "All Companies"
@@ -2856,10 +2808,10 @@ class ReportsSummary(APIView):
             except Tenant.DoesNotExist:
                 pass
         
-        # Gather data (simplified for PDF)
+        # Gather data (simplified for PDF) - all based on Lead model
         total_leads = Lead.objects.filter(lead_filters).count()
-        total_applications = Application.objects.filter(app_filters).count()
-        total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
+        total_converted = Lead.objects.filter(lead_filters, status='converted').count()
+        total_qualified = Lead.objects.filter(lead_filters, status='qualified').count()
         
         lead_source_stats = Lead.objects.filter(lead_filters).values('source').annotate(count=Count('id')).order_by('-count')
         
@@ -2876,20 +2828,15 @@ class ReportsSummary(APIView):
                 counselor_call_filters &= Q(lead__country__iexact=country)
             calls_made = CallRecord.objects.filter(counselor_call_filters).count()
             
-            counselor_app_filters = Q(assigned_to=user)
-            if tenant_id:
-                counselor_app_filters &= Q(tenant_id=tenant_id)
-            if country:
-                counselor_app_filters &= Q(applicant__preferred_country__iexact=country)
-            apps_managed = Application.objects.filter(counselor_app_filters).count()
+            converted_count = Lead.objects.filter(lead_filters, assigned_to=user, status='converted').count()
             
-            if assigned_leads > 0 or calls_made > 0 or apps_managed > 0:
+            if assigned_leads > 0 or calls_made > 0 or converted_count > 0:
                 counselor_stats.append({
                     "name": f"{user.first_name} {user.last_name}".strip() or user.username,
                     "leads_assigned": assigned_leads,
                     "calls_made": calls_made,
-                    "applications": apps_managed,
-                    "conversion_rate": round((apps_managed / assigned_leads * 100), 1) if assigned_leads > 0 else 0
+                    "converted": converted_count,
+                    "conversion_rate": round((converted_count / assigned_leads * 100), 1) if assigned_leads > 0 else 0
                 })
         
         # Build HTML content
@@ -2989,12 +2936,12 @@ class ReportsSummary(APIView):
                     <div class="stat-label">Total Leads</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">{total_applications}</div>
-                    <div class="stat-label">Total Applications</div>
+                    <div class="stat-value">{total_qualified}</div>
+                    <div class="stat-label">Qualified</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">{total_enrolled}</div>
-                    <div class="stat-label">Enrolled</div>
+                    <div class="stat-value">{total_converted}</div>
+                    <div class="stat-label">Converted</div>
                 </div>
             </div>
             
@@ -3018,12 +2965,12 @@ class ReportsSummary(APIView):
                         <th>Counselor</th>
                         <th>Leads Assigned</th>
                         <th>Calls Made</th>
-                        <th>Applications</th>
+                        <th>Converted</th>
                         <th>Conversion Rate</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {''.join([f'<tr><td>{c["name"]}</td><td>{c["leads_assigned"]}</td><td>{c["calls_made"]}</td><td>{c["applications"]}</td><td>{c["conversion_rate"]}%</td></tr>' for c in counselor_stats])}
+                    {''.join([f'<tr><td>{c["name"]}</td><td>{c["leads_assigned"]}</td><td>{c["calls_made"]}</td><td>{c["converted"]}</td><td>{c["conversion_rate"]}%</td></tr>' for c in counselor_stats])}
                 </tbody>
             </table>
             
@@ -3052,7 +2999,7 @@ class ReportsSummary(APIView):
         from io import BytesIO
         from weasyprint import HTML
         from django.db.models import Sum, Avg, Count, Q
-        from .models import Lead, Application, Tenant
+        from .models import Lead, Tenant
         
         # Get tenant name
         tenant_name = "All Companies"
@@ -3069,19 +3016,17 @@ class ReportsSummary(APIView):
             if not country:
                 continue
                 
-            # Filters for this country
+            # Filters for this country - all based on Lead model
             lead_filters = Q(country__iexact=country)
-            app_filters = Q(applicant__preferred_country__iexact=country)
             
             if tenant_id:
                 lead_filters &= Q(tenant_id=tenant_id)
-                app_filters &= Q(tenant_id=tenant_id)
             
-            # Gather stats
+            # Gather stats - all based on Lead model
             total_leads = Lead.objects.filter(lead_filters).count()
-            total_applications = Application.objects.filter(app_filters).count()
-            total_enrolled = Application.objects.filter(app_filters, status='accepted').count()
-            conversion_rate = round((total_applications / total_leads * 100), 1) if total_leads > 0 else 0
+            total_qualified = Lead.objects.filter(lead_filters, status='qualified').count()
+            total_converted = Lead.objects.filter(lead_filters, status='converted').count()
+            conversion_rate = round((total_converted / total_leads * 100), 1) if total_leads > 0 else 0
             
             lead_source_stats = Lead.objects.filter(lead_filters).values('source').annotate(count=Count('id')).order_by('-count')[:5]
             
@@ -3098,12 +3043,12 @@ class ReportsSummary(APIView):
                             <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_leads}</div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666;">Applications</div>
-                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_applications}</div>
+                            <div style="font-size: 12px; color: #666;">Qualified</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_qualified}</div>
                         </div>
                         <div>
-                            <div style="font-size: 12px; color: #666;">Enrolled</div>
-                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_enrolled}</div>
+                            <div style="font-size: 12px; color: #666;">Converted</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #0B1F3A;">{total_converted}</div>
                         </div>
                         <div>
                             <div style="font-size: 12px; color: #666;">Conversion Rate</div>
