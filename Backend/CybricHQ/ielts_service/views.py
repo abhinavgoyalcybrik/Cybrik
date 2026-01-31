@@ -32,25 +32,29 @@ class IELTSTestViewSet(viewsets.ReadOnlyModelViewSet):
         user = self.request.user
         has_premium = False
         if user.is_authenticated:
-            try:
-                from billing.models import Subscription
-                # Check for active Premium Plan subscription (Tenant level or User level)
-                # Supporting both legacy user-linked and new tenant-linked subs
-                has_premium = Subscription.objects.filter(
-                    user=user, 
-                    status='active', 
-                    plan__name='Premium Plan'
-                ).exists()
-                
-                # Also check tenant level if applicable
-                if not has_premium and hasattr(user, 'profile') and user.profile.tenant:
-                     has_premium = Subscription.objects.filter(
-                        tenant=user.profile.tenant,
-                        status='active',
+            # Superusers have full access
+            if user.is_superuser:
+                has_premium = True
+            else:
+                try:
+                    from billing.models import Subscription
+                    # Check for active Premium Plan subscription (Tenant level or User level)
+                    # Supporting both legacy user-linked and new tenant-linked subs
+                    has_premium = Subscription.objects.filter(
+                        user=user, 
+                        status='active', 
                         plan__name='Premium Plan'
                     ).exists()
-            except ImportError:
-                pass
+                    
+                    # Also check tenant level if applicable
+                    if not has_premium and hasattr(user, 'profile') and user.profile.tenant:
+                         has_premium = Subscription.objects.filter(
+                            tenant=user.profile.tenant,
+                            status='active',
+                            plan__name='Premium Plan'
+                        ).exists()
+                except ImportError:
+                    pass
         
 
             

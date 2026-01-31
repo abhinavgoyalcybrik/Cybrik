@@ -96,7 +96,7 @@ def get_user_data(user):
         "last_name": user.last_name,
         "account_type": getattr(user, "account_type", "self_signup"),
         "subscription_status": getattr(user, "subscription_status", "free"),
-        "has_full_access": getattr(user, "has_full_access", False),
+        "has_full_access": getattr(user, "has_full_access", False) or user.is_superuser,
         "evaluations_remaining": getattr(user, "evaluations_remaining", 0),
         "is_staff": user.is_staff,
         "is_superuser": user.is_superuser,
