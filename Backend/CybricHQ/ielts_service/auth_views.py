@@ -379,3 +379,34 @@ def ielts_onboarding(request):
         logger.exception(f"Onboarding error: {e}")
         return Response({"error": "Failed to save onboarding data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request):
+    """
+    Update user's name (first_name and last_name).
+    """
+    try:
+        user = request.user
+        
+        first_name = request.data.get("first_name", "").strip()
+        last_name = request.data.get("last_name", "").strip()
+        
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+            
+        user.save()
+        
+        logger.info(f"Updated profile for user {user.email}")
+        
+        return Response({
+            "success": True,
+            "user": get_user_data(user),
+        })
+        
+    except Exception as e:
+        logger.exception(f"Profile update error: {e}")
+        return Response({"error": "Failed to update profile"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

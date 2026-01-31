@@ -20,6 +20,7 @@ export default function ProfilePage() {
 
     // Form State
     const [formData, setFormData] = useState({
+        full_name: '',
         target_score: '',
         exam_date: '',
         test_type: 'academic',
@@ -49,7 +50,11 @@ export default function ProfilePage() {
                     // Profile fields are directly in user object (flat structure)
                     if (data.user) {
                         // Merge backend data with localStorage data (localStorage takes priority if backend is empty)
+                        const userName = data.user.first_name 
+                            ? `${data.user.first_name} ${data.user.last_name || ''}`.trim()
+                            : data.user.username || '';
                         setFormData({
+                            full_name: userName || localUser?.name || '',
                             target_score: data.user.target_score?.toString() || localOnboardingData?.targetScore?.toString() || localUser?.target_score?.toString() || '',
                             exam_date: data.user.exam_date || localOnboardingData?.examDate || localUser?.exam_date || '',
                             test_type: data.user.test_type || localOnboardingData?.testType || localUser?.test_type || 'academic',
@@ -65,6 +70,7 @@ export default function ProfilePage() {
             // Fallback to localStorage only
             if (localOnboardingData || localUser) {
                 setFormData({
+                    full_name: localUser?.name || '',
                     target_score: localOnboardingData?.targetScore?.toString() || localUser?.target_score?.toString() || '',
                     exam_date: localOnboardingData?.examDate || localUser?.exam_date || '',
                     test_type: localOnboardingData?.testType || localUser?.test_type || 'academic',
@@ -82,6 +88,27 @@ export default function ProfilePage() {
         setSuccess('');
 
         try {
+            // Update name separately if changed
+            if (formData.full_name && formData.full_name !== user?.name) {
+                const nameParts = formData.full_name.trim().split(' ');
+                const firstName = nameParts[0] || '';
+                const lastName = nameParts.slice(1).join(' ') || '';
+
+                const nameRes = await fetch('/api/ielts/auth/update-profile/', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                    }),
+                    credentials: 'include',
+                });
+
+                if (!nameRes.ok) {
+                    console.error('Failed to update name');
+                }
+            }
+
             // Send with camelCase field names (backend expects camelCase)
             const res = await fetch('/api/ielts/auth/onboarding/', {
                 method: 'POST',
@@ -140,11 +167,13 @@ export default function ProfilePage() {
                                 }`}>
                                 {user?.account_type === 'crm' ? 'CRM Student' : 'Standard Account'}
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${user?.subscription_status === 'premium' || user?.subscription_status === 'crm_full'
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${user?.subscription_status === 'premium' || user?.subscription_status === 'crm_full' || user?.has_full_access
                                 ? 'bg-amber-100 text-amber-700'
                                 : 'bg-slate-100 text-slate-700'
                                 }`}>
-                                {user?.subscription_status?.replace('_', ' ').toUpperCase()} Plan
+                                {user?.has_full_access || user?.is_superuser 
+                                    ? 'FULL ACCESS Plan' 
+                                    : (user?.subscription_status?.replace('_', ' ').toUpperCase() || 'FREE') + ' Plan'}
                             </span>
                         </div>
                     </div>
@@ -166,9 +195,10 @@ export default function ProfilePage() {
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                 <input
                                     type="text"
-                                    value={user?.name || ''}
-                                    readOnly
-                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed"
+                                    value={formData.full_name}
+                                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                    placeholder="Enter your full name"
                                 />
                             </div>
                         </div>

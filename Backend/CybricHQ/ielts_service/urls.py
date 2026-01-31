@@ -32,6 +32,7 @@ urlpatterns = [
     path('auth/google/', auth_views.ielts_google_auth, name='ielts-google-auth'),
     path('auth/register/', auth_views.ielts_register, name='ielts-register'),
     path('auth/onboarding/', auth_views.ielts_onboarding, name='ielts-onboarding'),
+    path('auth/update-profile/', auth_views.update_user_profile, name='update-user-profile'),
     
     # Speaking evaluation endpoints
     path('speaking/evaluate-part/', views.evaluate_speaking_part, name='evaluate-speaking-part'),
