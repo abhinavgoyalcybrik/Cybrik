@@ -206,33 +206,38 @@ export default function WritingReportPage({ params }: PageProps) {
                                                     {(() => {
                                                         const errorsByType: Record<string, typeof taskData.mistakes> = {
                                                             task_response: [],
-                                                            coherence: [],
-                                                            vocabulary: [],
-                                                            grammar: [],
-                                                            sentence_structure: []
+                                                            coherence_cohesion: [],
+                                                            lexical_resource: [],
+                                                            grammar_accuracy: []
                                                         };
 
                                                         taskData.mistakes.forEach(mistake => {
-                                                            const type = mistake.error_type?.toLowerCase() || 'grammar';
-                                                            if (errorsByType[type]) {
-                                                                errorsByType[type].push(mistake);
+                                                            const type = mistake.error_type?.toLowerCase().replace(/\s+/g, '_') || 'grammar_accuracy';
+                                                            
+                                                            // Map various error types to the four main IELTS criteria
+                                                            if (type.includes('task') || type.includes('response')) {
+                                                                errorsByType.task_response.push(mistake);
+                                                            } else if (type.includes('coherence') || type.includes('cohesion') || type.includes('organization') || type.includes('structure')) {
+                                                                errorsByType.coherence_cohesion.push(mistake);
+                                                            } else if (type.includes('lexical') || type.includes('vocabulary') || type.includes('word')) {
+                                                                errorsByType.lexical_resource.push(mistake);
                                                             } else {
-                                                                errorsByType.grammar.push(mistake);
+                                                                // Default to grammar for grammar, punctuation, spelling, sentence errors
+                                                                errorsByType.grammar_accuracy.push(mistake);
                                                             }
                                                         });
 
                                                         const categoryLabels: Record<string, { label: string; color: string }> = {
-                                                            task_response: { label: 'TASK RESPONSE', color: 'bg-red-100 text-red-600 border-red-200' },
-                                                            coherence: { label: 'COHERENCE & COHESION', color: 'bg-orange-100 text-orange-600 border-orange-200' },
-                                                            vocabulary: { label: 'LEXICAL RESOURCE', color: 'bg-blue-100 text-blue-600 border-blue-200' },
-                                                            grammar: { label: 'GRAMMAR ACCURACY', color: 'bg-purple-100 text-purple-600 border-purple-200' },
-                                                            sentence_structure: { label: 'SENTENCE STRUCTURE', color: 'bg-indigo-100 text-indigo-600 border-indigo-200' }
+                                                            task_response: { label: 'TASK RESPONSE', color: 'bg-blue-100 text-blue-600 border-blue-200' },
+                                                            coherence_cohesion: { label: 'COHERENCE & COHESION', color: 'bg-orange-100 text-orange-600 border-orange-200' },
+                                                            lexical_resource: { label: 'LEXICAL RESOURCE', color: 'bg-purple-100 text-purple-600 border-purple-200' },
+                                                            grammar_accuracy: { label: 'GRAMMATICAL RANGE & ACCURACY', color: 'bg-red-100 text-red-600 border-red-200' }
                                                         };
 
                                                         return Object.entries(errorsByType).map(([type, errors]) => {
                                                             if (errors.length === 0) return null;
 
-                                                            const category = categoryLabels[type] || categoryLabels.grammar;
+                                                            const category = categoryLabels[type] || categoryLabels.grammar_accuracy;
 
                                                             return (
                                                                 <div key={type} className="space-y-3">
