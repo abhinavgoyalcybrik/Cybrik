@@ -33,8 +33,8 @@ export default function WritingReportPage({ params }: PageProps) {
 
     // Derived state for the active task
     const taskData = result?.tasks?.[activeTab];
-    // Try both formats: task_1 and task1
-    const userResponse = userAnswers[activeTab] || userAnswers[activeTab.replace('_', '')];
+    // Try multiple formats: task_1, task1, task_2, task2
+    const userResponse = userAnswers[activeTab] || userAnswers[activeTab.replace('_', '')] || userAnswers[activeTab.replace('task_', 'task')];
 
     useEffect(() => {
         const fetchSession = async () => {
@@ -48,7 +48,11 @@ export default function WritingReportPage({ params }: PageProps) {
                 if (attempt && (attempt.feedback || attempt.data?.feedback)) {
                     const feedback = attempt.feedback || attempt.data?.feedback;
                     setResult(feedback as WritingEvaluationResult);
-                    setUserAnswers(attempt.answers || attempt.data?.answers || {});
+                    
+                    // Extract user answers - try multiple sources
+                    const answers = attempt.user_answers || attempt.data?.answers || attempt.answers || {};
+                    console.log('User answers extracted:', answers);
+                    setUserAnswers(answers);
                     setStatus('ready');
 
                     // Default to Task 2 if Task 1 is missing
