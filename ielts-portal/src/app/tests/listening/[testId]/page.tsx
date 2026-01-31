@@ -704,7 +704,12 @@ export default function ListeningTestPage({ params }: PageProps) {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 flex flex-col">
             {/* Hidden Audio Element */}
             {audioUrl && (
-                <audio ref={audioRef} src={audioUrl} preload="metadata" />
+                <audio ref={audioRef} preload="metadata" crossOrigin="anonymous">
+                    <source src={audioUrl} type={audioUrl.endsWith('.mp3') || audioUrl.endsWith('.mp3.mpeg') ? 'audio/mpeg' : 'audio/wav'} />
+                    <source src={audioUrl} type="audio/mpeg" />
+                    <source src={audioUrl} type="audio/wav" />
+                    Your browser does not support the audio element.
+                </audio>
             )}
 
             {/* Audio Modal Overlay */}

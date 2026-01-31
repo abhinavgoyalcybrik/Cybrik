@@ -48,6 +48,16 @@ htmlcov/
 .pytest_cache/
 
 # Compressed files
+
+# Audio files (large media assets)
+*.mp3
+*.mp3.mpeg
+*.wav
+ielts-portal/listening audios/
+ielts-portal/public/audio/
+
+# Temporary scripts
+update_listening_audio.py
 *.zip
 *.gz
 *.tar

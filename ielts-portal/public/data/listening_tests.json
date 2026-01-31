@@ -88,7 +88,7 @@
             {
               "q": 10,
               "type": "text",
-              "question": "Estimated value of the briefcase (\u00a3)"
+              "question": "Estimated value of the briefcase (£)"
             }
           ]
         },
@@ -119,7 +119,7 @@
             {
               "q": 15,
               "type": "text",
-              "question": "Money was to be spent on Sydney\u2019s ____"
+              "question": "Money was to be spent on Sydney’s ____"
             },
             {
               "q": 16,
@@ -193,7 +193,7 @@
             {
               "q": 25,
               "type": "mcq",
-              "question": "The lecturer\u2019s name is",
+              "question": "The lecturer’s name is",
               "options": [
                 "A",
                 "B",
@@ -321,7 +321,7 @@
             {
               "q": 41,
               "type": "mcq",
-              "question": "Speaker\u2019s aims are to",
+              "question": "Speaker’s aims are to",
               "options": [
                 "A",
                 "B",
@@ -484,12 +484,12 @@
             {
               "q": 2,
               "type": "text",
-              "question": "Kate\u2019s feelings about the accommodation"
+              "question": "Kate’s feelings about the accommodation"
             },
             {
               "q": 3,
               "type": "text",
-              "question": "Kate\u2019s feelings about the other students"
+              "question": "Kate’s feelings about the other students"
             },
             {
               "q": 4,
@@ -591,7 +591,7 @@
             {
               "q": 21,
               "type": "mcq",
-              "question": "At first Fiona thinks Martin\u2019s topic is",
+              "question": "At first Fiona thinks Martin’s topic is",
               "options": [
                 "A",
                 "B",
@@ -705,7 +705,7 @@
             {
               "q": 35,
               "type": "mcq",
-              "question": "This week\u2019s lecture is on",
+              "question": "This week’s lecture is on",
               "options": [
                 "A",
                 "B",
@@ -984,7 +984,7 @@
             {
               "q": 11,
               "type": "mcq",
-              "question": "Cashier\u2019s office opens at",
+              "question": "Cashier’s office opens at",
               "options": [
                 "A 12.15",
                 "B 2.00",
@@ -1036,7 +1036,7 @@
             {
               "q": 19,
               "type": "text",
-              "question": "Person featured in today\u2019s video"
+              "question": "Person featured in today’s video"
             },
             {
               "q": 20,
@@ -1056,7 +1056,7 @@
             {
               "q": 23,
               "type": "text",
-              "question": "\u2018Passengers and the Sea\u2019 includes a collection of ____"
+              "question": "‘Passengers and the Sea’ includes a collection of ____"
             }
           ]
         },
@@ -1789,7 +1789,7 @@
             {
               "q": 2,
               "type": "text",
-              "question": "Price range per month (\u00a3)"
+              "question": "Price range per month (£)"
             },
             {
               "q": 3,
@@ -1799,7 +1799,7 @@
             {
               "q": 4,
               "type": "text",
-              "question": "Rent for house on West Park Road (\u00a3)"
+              "question": "Rent for house on West Park Road (£)"
             },
             {
               "q": 5,
@@ -1875,7 +1875,7 @@
             {
               "q": 18,
               "type": "text",
-              "question": "Doctors start seeing patients from ____ o\u2019clock"
+              "question": "Doctors start seeing patients from ____ o’clock"
             },
             {
               "q": 19,
@@ -1892,7 +1892,7 @@
             {
               "q": 20,
               "type": "text",
-              "question": "Charge for one item of medication (\u00a3)"
+              "question": "Charge for one item of medication (£)"
             }
           ]
         },
@@ -1928,7 +1928,7 @@
             {
               "q": 26,
               "type": "text",
-              "question": "Main subject taught to Forms 1\u20133"
+              "question": "Main subject taught to Forms 1–3"
             },
             {
               "q": 27,
@@ -1943,12 +1943,12 @@
             {
               "q": 29,
               "type": "text",
-              "question": "Why Jonathan chose Geography \u2013 reason 1"
+              "question": "Why Jonathan chose Geography – reason 1"
             },
             {
               "q": 30,
               "type": "text",
-              "question": "Why Jonathan chose Geography \u2013 reason 2"
+              "question": "Why Jonathan chose Geography – reason 2"
             }
           ]
         },
@@ -2066,7 +2066,7 @@
         ],
         "2": [
           "250 to 500",
-          "\u00a3250 to \u00a3500"
+          "£250 to £500"
         ],
         "3": [
           "garden"
@@ -2343,7 +2343,7 @@
             {
               "q": 22,
               "type": "mcq",
-              "question": "A person who doesn\u2019t \u2018fit in\u2019 is someone who",
+              "question": "A person who doesn’t ‘fit in’ is someone who",
               "options": [
                 "A is over-qualified",
                 "B lacks experience",
@@ -2355,8 +2355,8 @@
               "type": "mcq",
               "question": "An important part of teamwork is trust in",
               "options": [
-                "A colleagues\u2019 ability",
-                "B employer\u2019s directions",
+                "A colleagues’ ability",
+                "B employer’s directions",
                 "C company training"
               ]
             },
@@ -2668,7 +2668,7 @@
             {
               "q": 7,
               "type": "text",
-              "question": "Amount of deposit required (\u00a3)"
+              "question": "Amount of deposit required (£)"
             },
             {
               "q": 8,
@@ -2695,7 +2695,7 @@
             {
               "q": 11,
               "type": "text",
-              "question": "Cost of membership (\u00a3)"
+              "question": "Cost of membership (£)"
             },
             {
               "q": 12,
@@ -2720,7 +2720,7 @@
             {
               "q": 16,
               "type": "text",
-              "question": "Days when centre opens 9 am \u2013 10 pm"
+              "question": "Days when centre opens 9 am – 10 pm"
             },
             {
               "q": 17,
@@ -2902,7 +2902,7 @@
         ],
         "7": [
           "50",
-          "\u00a350",
+          "£50",
           "fifty pounds"
         ],
         "8": [
@@ -2919,7 +2919,7 @@
         ],
         "11": [
           "9.50",
-          "\u00a39.50"
+          "£9.50"
         ],
         "12": [
           "year",
@@ -3027,7 +3027,7 @@
         {
           "section": 1,
           "question_type": "Map Labelling + Note Completion",
-          "instructions": "Label the map. Choose your answers from the box. Write the appropriate letters A\u2013E. Questions 6\u201310: Write NO MORE THAN THREE WORDS OR A NUMBER.",
+          "instructions": "Label the map. Choose your answers from the box. Write the appropriate letters A–E. Questions 6–10: Write NO MORE THAN THREE WORDS OR A NUMBER.",
           "questions": [
             {
               "q": 1,
@@ -3044,7 +3044,7 @@
             {
               "q": 2,
               "type": "map",
-              "question": "Location of St George\u2019s Hospital",
+              "question": "Location of St George’s Hospital",
               "options": [
                 "A",
                 "B",
@@ -3102,17 +3102,17 @@
             {
               "q": 8,
               "type": "text",
-              "question": "Where will they buy Susan\u2019s gift?"
+              "question": "Where will they buy Susan’s gift?"
             },
             {
               "q": 9,
               "type": "text",
-              "question": "Where will they buy the baby\u2019s gift?"
+              "question": "Where will they buy the baby’s gift?"
             },
             {
               "q": 10,
               "type": "text",
-              "question": "Approximate price of the baby\u2019s gift ($)"
+              "question": "Approximate price of the baby’s gift ($)"
             }
           ]
         },
@@ -3144,7 +3144,7 @@
             {
               "q": 15,
               "type": "text",
-              "question": "Whistle key holder doesn\u2019t work through ____"
+              "question": "Whistle key holder doesn’t work through ____"
             },
             {
               "q": 16,
@@ -3185,7 +3185,7 @@
             {
               "q": 21,
               "type": "mcq",
-              "question": "Amina\u2019s project is about a local",
+              "question": "Amina’s project is about a local",
               "options": [
                 "A school",
                 "B hospital",
@@ -3484,7 +3484,7 @@
           "section": 1,
           "question_type": "Note Completion + Multiple Choice",
           "instructions": "Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
-          "title": "Dreamtime Travel Agency \u2013 Tour Information",
+          "title": "Dreamtime Travel Agency – Tour Information",
           "questions": [
             {
               "q": 1,
@@ -3548,47 +3548,47 @@
             {
               "q": 11,
               "type": "text",
-              "question": "Baby Safe cot \u2013 good point"
+              "question": "Baby Safe cot – good point"
             },
             {
               "q": 12,
               "type": "text",
-              "question": "Baby Safe cot \u2013 problem"
+              "question": "Baby Safe cot – problem"
             },
             {
               "q": 13,
               "type": "text",
-              "question": "Baby Safe cot \u2013 problem detail"
+              "question": "Baby Safe cot – problem detail"
             },
             {
               "q": 14,
               "type": "text",
-              "question": "Baby Safe cot \u2013 verdict"
+              "question": "Baby Safe cot – verdict"
             },
             {
               "q": 15,
               "type": "text",
-              "question": "Choice Cots \u2013 good point"
+              "question": "Choice Cots – good point"
             },
             {
               "q": 16,
               "type": "text",
-              "question": "Choice Cots \u2013 problem"
+              "question": "Choice Cots – problem"
             },
             {
               "q": 17,
               "type": "text",
-              "question": "Choice Cots \u2013 verdict"
+              "question": "Choice Cots – verdict"
             },
             {
               "q": 18,
               "type": "text",
-              "question": "Mother\u2019s Choice cot \u2013 problem"
+              "question": "Mother’s Choice cot – problem"
             },
             {
               "q": 19,
               "type": "text",
-              "question": "Mother\u2019s Choice cot \u2013 verdict"
+              "question": "Mother’s Choice cot – verdict"
             },
             {
               "q": 20,
@@ -3614,7 +3614,7 @@
             {
               "q": 22,
               "type": "mcq",
-              "question": "During the course Andrew\u2019s employers will pay",
+              "question": "During the course Andrew’s employers will pay",
               "options": [
                 "A his fees",
                 "B his living costs",
@@ -3885,7 +3885,7 @@
             {
               "q": 3,
               "type": "text",
-              "question": "Cost to join per year (\u00a3)"
+              "question": "Cost to join per year (£)"
             },
             {
               "q": 4,
@@ -3895,7 +3895,7 @@
             {
               "q": 5,
               "type": "text",
-              "question": "Fines start at (\u00a3)"
+              "question": "Fines start at (£)"
             },
             {
               "q": 6,
@@ -4008,7 +4008,7 @@
         {
           "section": 3,
           "question_type": "Table Completion",
-          "title": "Student Life \u2013 Video Project",
+          "title": "Student Life – Video Project",
           "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
           "questions": [
             {
@@ -4059,7 +4059,7 @@
             {
               "q": 30,
               "type": "text",
-              "question": "Don\u2019t make the film too ____"
+              "question": "Don’t make the film too ____"
             }
           ]
         },
@@ -4173,7 +4173,7 @@
         ],
         "16": [
           "75000",
-          "\u00a375,000"
+          "£75,000"
         ],
         "17": [
           "computers"
@@ -4266,7 +4266,7 @@
           "section": 1,
           "question_type": "Form Completion",
           "instructions": "Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
-          "title": "Mintons Car Mart \u2013 Customer Enquiry",
+          "title": "Mintons Car Mart – Customer Enquiry",
           "questions": [
             {
               "q": 1,
@@ -4705,7 +4705,7 @@
             {
               "q": 9,
               "type": "text",
-              "question": "Maximum price (\u00a3 per week)"
+              "question": "Maximum price (£ per week)"
             },
             {
               "q": 10,
@@ -4757,17 +4757,17 @@
             {
               "q": 18,
               "type": "text",
-              "question": "Treasurer\u2019s responsibility"
+              "question": "Treasurer’s responsibility"
             },
             {
               "q": 19,
               "type": "text",
-              "question": "Secretary\u2019s responsibility"
+              "question": "Secretary’s responsibility"
             },
             {
               "q": 20,
               "type": "text",
-              "question": "Head coach\u2019s responsibility"
+              "question": "Head coach’s responsibility"
             }
           ]
         },
@@ -4822,7 +4822,7 @@
               "type": "mcq",
               "question": "The tutor wants the report to",
               "options": [
-                "A offer solutions to Box Telecom\u2019s problems",
+                "A offer solutions to Box Telecom’s problems",
                 "B analyse the UK market",
                 "C compare different companies"
               ]
@@ -4830,7 +4830,7 @@
             {
               "q": 28,
               "type": "match",
-              "question": "Karin\u2019s opinion",
+              "question": "Karin’s opinion",
               "options": [
                 "A",
                 "B",
@@ -4843,7 +4843,7 @@
             {
               "q": 29,
               "type": "match",
-              "question": "Jason\u2019s opinion",
+              "question": "Jason’s opinion",
               "options": [
                 "A",
                 "B",
@@ -4856,7 +4856,7 @@
             {
               "q": 30,
               "type": "match",
-              "question": "Tutor\u2019s opinion",
+              "question": "Tutor’s opinion",
               "options": [
                 "A",
                 "B",
@@ -4981,7 +4981,7 @@
         ],
         "2": [
           "between 9 and 9.30",
-          "9\u20139.30"
+          "9–9.30"
         ],
         "3": [
           "1 year"
@@ -5115,8 +5115,8 @@
         {
           "section": 1,
           "question_type": "MCQ + Form Completion",
-          "instructions": "Questions 1\u20132: Choose the correct letter A, B or C. Questions 3\u201310: Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
-          "title": "Summer Music Festival \u2013 Booking Form",
+          "instructions": "Questions 1–2: Choose the correct letter A, B or C. Questions 3–10: Write NO MORE THAN TWO WORDS AND/OR A NUMBER.",
+          "title": "Summer Music Festival – Booking Form",
           "questions": [
             {
               "q": 1,
@@ -5166,7 +5166,7 @@
             {
               "q": 8,
               "type": "text",
-              "question": "Cost of ticket (\u00a3)"
+              "question": "Cost of ticket (£)"
             },
             {
               "q": 9,
@@ -5183,7 +5183,7 @@
         {
           "section": 2,
           "question_type": "Sentence Completion + MCQ (Multiple)",
-          "instructions": "Questions 11\u201318: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 19\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–18: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 19–20: Choose TWO letters A–E.",
           "title": "The Dinosaur Museum",
           "questions": [
             {
@@ -5199,7 +5199,7 @@
             {
               "q": 13,
               "type": "text",
-              "question": "Price of adult ticket (\u00a3)"
+              "question": "Price of adult ticket (£)"
             },
             {
               "q": 14,
@@ -5243,13 +5243,13 @@
         {
           "section": 3,
           "question_type": "MCQ + MCQ (Multiple)",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201327: Choose THREE letters A\u2013G.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–27: Choose THREE letters A–G.",
           "title": "Field Trip Proposal",
           "questions": [
             {
               "q": 21,
               "type": "mcq",
-              "question": "The tutor thinks that Sandra\u2019s proposal",
+              "question": "The tutor thinks that Sandra’s proposal",
               "options": [
                 "A should be re-ordered in some parts",
                 "B needs a contents page",
@@ -5369,7 +5369,7 @@
           "A"
         ],
         "3": [
-          "George O\u2019Neill",
+          "George O’Neill",
           "George O'Neill"
         ],
         "4": [
@@ -5477,7 +5477,8 @@
         "40": [
           "receiving"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/08LT01.mp3"
     },
     {
       "id": 14,
@@ -5488,7 +5489,7 @@
         {
           "section": 1,
           "question_type": "Form + Table Completion",
-          "instructions": "Questions 1\u20133: Complete the form. Questions 4\u201310: Complete the table. Write ONE WORD AND/OR A NUMBER.",
+          "instructions": "Questions 1–3: Complete the form. Questions 4–10: Complete the table. Write ONE WORD AND/OR A NUMBER.",
           "questions": [
             {
               "q": 1,
@@ -5652,7 +5653,7 @@
         {
           "section": 3,
           "question_type": "Multiple Choice + Summary Completion",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Write ONE WORD ONLY.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write ONE WORD ONLY.",
           "title": "Honey Bees in Australia",
           "questions": [
             {
@@ -5730,7 +5731,7 @@
         {
           "section": 4,
           "question_type": "Multiple Choice + Matching",
-          "instructions": "Questions 31\u201336: Choose the correct letter A, B or C. Questions 37\u201340: Choose the correct letter A\u2013F.",
+          "instructions": "Questions 31–36: Choose the correct letter A, B or C. Questions 37–40: Choose the correct letter A–F.",
           "title": "Research on Questions about Doctors",
           "questions": [
             {
@@ -5969,7 +5970,8 @@
         "40": [
           "F"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/08LT02.mp3"
     },
     {
       "id": 15,
@@ -5980,7 +5982,7 @@
         {
           "section": 1,
           "question_type": "Form + Table Completion + MCQ (Multiple)",
-          "instructions": "Questions 1\u20138: Write ONE WORD AND/OR A NUMBER. Questions 9\u201310: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 1–8: Write ONE WORD AND/OR A NUMBER. Questions 9–10: Choose TWO letters A–E.",
           "questions": [
             {
               "q": 1,
@@ -5990,7 +5992,7 @@
             {
               "q": 2,
               "type": "text",
-              "question": "Maximum rent (\u00a3)"
+              "question": "Maximum rent (£)"
             },
             {
               "q": 3,
@@ -6039,7 +6041,7 @@
         {
           "section": 2,
           "question_type": "Note + Table Completion",
-          "instructions": "Questions 11\u201316: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 17\u201320: Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
+          "instructions": "Questions 11–16: Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Questions 17–20: Write NO MORE THAN THREE WORDS AND/OR A NUMBER.",
           "title": "The National Arts Centre",
           "questions": [
             {
@@ -6080,7 +6082,7 @@
             {
               "q": 18,
               "type": "text",
-              "question": "Ticket price from (\u00a3)"
+              "question": "Ticket price from (£)"
             },
             {
               "q": 19,
@@ -6112,7 +6114,7 @@
             {
               "q": 22,
               "type": "mcq",
-              "question": "Paul\u2019s work placement supervisor",
+              "question": "Paul’s work placement supervisor",
               "options": [
                 "A was mainly interested in research",
                 "B focused on practical reports",
@@ -6204,7 +6206,7 @@
         {
           "section": 4,
           "question_type": "Multiple Choice + Note Completion",
-          "instructions": "Questions 31\u201334: Choose the correct letter A, B or C. Questions 35\u201340: Write ONE WORD ONLY.",
+          "instructions": "Questions 31–34: Choose the correct letter A, B or C. Questions 35–40: Write ONE WORD ONLY.",
           "title": "Trying to Repeat Success",
           "questions": [
             {
@@ -6270,7 +6272,7 @@
             {
               "q": 39,
               "type": "text",
-              "question": "Employees\u2019 ____ duplicated"
+              "question": "Employees’ ____ duplicated"
             },
             {
               "q": 40,
@@ -6409,7 +6411,8 @@
         "40": [
           "skills"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/08LT03.mp3"
     },
     {
       "id": 16,
@@ -6881,7 +6884,8 @@
         "40": [
           "Ribboned Pipefish"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/08LT04.mp3"
     },
     {
       "id": 17,
@@ -6892,7 +6896,7 @@
         {
           "section": 1,
           "question_type": "Note Completion + Table Completion",
-          "instructions": "Questions 1\u20136: Write ONE WORD for each answer. Questions 7\u201310: Write ONE WORD AND/OR A NUMBER.",
+          "instructions": "Questions 1–6: Write ONE WORD for each answer. Questions 7–10: Write ONE WORD AND/OR A NUMBER.",
           "title": "SELF-DRIVE TOURS IN THE USA",
           "questions": [
             {
@@ -6938,7 +6942,7 @@
             {
               "q": 9,
               "type": "text",
-              "question": "Trip Two: Price per person (\u00a3)"
+              "question": "Trip Two: Price per person (£)"
             },
             {
               "q": 10,
@@ -6950,7 +6954,7 @@
         {
           "section": 2,
           "question_type": "MCQ (Multiple) + Note Completion",
-          "instructions": "Questions 11\u201312: Choose TWO letters A\u2013E. Questions 13\u201320: Write NO MORE THAN TWO WORDS.",
+          "instructions": "Questions 11–12: Choose TWO letters A–E. Questions 13–20: Write NO MORE THAN TWO WORDS.",
           "title": "Joining the leisure club",
           "questions": [
             {
@@ -6983,7 +6987,7 @@
             {
               "q": 16,
               "type": "text",
-              "question": "There is a compulsory \u00a390 ____ fee for members"
+              "question": "There is a compulsory £90 ____ fee for members"
             },
             {
               "q": 17,
@@ -7010,7 +7014,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Note Completion",
-          "instructions": "Questions 21\u201325: Choose the correct letter A, B or C. Questions 26\u201330: Write ONE WORD ONLY.",
+          "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Write ONE WORD ONLY.",
           "title": "Global Design Competition",
           "questions": [
             {
@@ -7036,7 +7040,7 @@
             {
               "q": 23,
               "type": "mcq",
-              "question": "The stone in John\u2019s \u2018Rockpool\u2019 design is used",
+              "question": "The stone in John’s ‘Rockpool’ design is used",
               "options": [
                 "A for decoration",
                 "B to switch it on",
@@ -7076,7 +7080,7 @@
             {
               "q": 28,
               "type": "text",
-              "question": "John\u2019s main problem is getting good quality ____"
+              "question": "John’s main problem is getting good quality ____"
             },
             {
               "q": 29,
@@ -7086,7 +7090,7 @@
             {
               "q": 30,
               "type": "text",
-              "question": "The professor will check the ____ information in John\u2019s written report"
+              "question": "The professor will check the ____ information in John’s written report"
             }
           ]
         },
@@ -7144,7 +7148,7 @@
             {
               "q": 40,
               "type": "text",
-              "question": "Maintenance and ____ of the spirit bears\u2019 territory is needed"
+              "question": "Maintenance and ____ of the spirit bears’ territory is needed"
             }
           ]
         }
@@ -7521,7 +7525,7 @@
             {
               "q": 26,
               "type": "mcq",
-              "question": "The main reason for Heyerdahl\u2019s raft journey was",
+              "question": "The main reason for Heyerdahl’s raft journey was",
               "options": [
                 "A to overcome a research setback",
                 "B to demonstrate a personal quality",
@@ -7551,7 +7555,7 @@
             {
               "q": 29,
               "type": "mcq",
-              "question": "Heyerdahl\u2019s greatest influence was on",
+              "question": "Heyerdahl’s greatest influence was on",
               "options": [
                 "A theories about Polynesian origins",
                 "B the development of archaeological methodology",
@@ -7561,7 +7565,7 @@
             {
               "q": 30,
               "type": "mcq",
-              "question": "Which criticism is made of William Oliver\u2019s textbook?",
+              "question": "Which criticism is made of William Oliver’s textbook?",
               "options": [
                 "A its style is out of date",
                 "B its content is over-simplified",
@@ -7767,7 +7771,7 @@
           "section": 1,
           "question_type": "Form Completion",
           "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
-          "title": "Early Learning Childcare Centre \u2013 Enrolment Form",
+          "title": "Early Learning Childcare Centre – Enrolment Form",
           "questions": [
             {
               "q": 1,
@@ -8359,12 +8363,12 @@
             {
               "q": 16,
               "type": "text",
-              "question": "Copper mine: specially adapted miners\u2019 ____ take visitors into the mountain"
+              "question": "Copper mine: specially adapted miners’ ____ take visitors into the mountain"
             },
             {
               "q": 17,
               "type": "text",
-              "question": "The mine is ____ and enclosed \u2013 unsuitable for children and animals"
+              "question": "The mine is ____ and enclosed – unsuitable for children and animals"
             },
             {
               "q": 18,
@@ -8374,7 +8378,7 @@
             {
               "q": 19,
               "type": "text",
-              "question": "\u2018The George\u2019: a ____ is recommended"
+              "question": "‘The George’: a ____ is recommended"
             },
             {
               "q": 20,
@@ -8500,7 +8504,7 @@
         {
           "section": 4,
           "question_type": "MCQ + Note Completion",
-          "instructions": "Questions 31\u201333: Choose the correct letter A, B or C. Questions 34\u201340: Write ONE WORD ONLY.",
+          "instructions": "Questions 31–33: Choose the correct letter A, B or C. Questions 34–40: Write ONE WORD ONLY.",
           "title": "Nanotechnology: technology on a small scale",
           "questions": [
             {
@@ -8716,17 +8720,17 @@
             {
               "q": 1,
               "type": "text",
-              "question": "the Main Hall \u2013 seats ____"
+              "question": "the Main Hall – seats ____"
             },
             {
               "q": 2,
               "type": "text",
-              "question": "the ____ Room \u2013 seats 100"
+              "question": "the ____ Room – seats 100"
             },
             {
               "q": 3,
               "type": "text",
-              "question": "\u00a3250 deposit (____ payment is required)"
+              "question": "£250 deposit (____ payment is required)"
             },
             {
               "q": 4,
@@ -8768,7 +8772,7 @@
         {
           "section": 2,
           "question_type": "Note Completion + Map Labelling",
-          "instructions": "Questions 11\u201314: Write ONE WORD for each answer. Questions 15\u201320: Write the correct letter A\u2013I.",
+          "instructions": "Questions 11–14: Write ONE WORD for each answer. Questions 15–20: Write the correct letter A–I.",
           "title": "FIDDY WORKING HERITAGE FARM",
           "questions": [
             {
@@ -8826,7 +8830,7 @@
             {
               "q": 17,
               "type": "map",
-              "question": "Caf\u00e9",
+              "question": "Café",
               "options": [
                 "A",
                 "B",
@@ -8898,7 +8902,7 @@
             {
               "q": 21,
               "type": "mcq",
-              "question": "The students in Akira Miyake\u2019s study were all majoring in",
+              "question": "The students in Akira Miyake’s study were all majoring in",
               "options": [
                 "A physics",
                 "B psychology or physics",
@@ -8908,10 +8912,10 @@
             {
               "q": 22,
               "type": "mcq",
-              "question": "The aim of Miyake\u2019s study was to investigate",
+              "question": "The aim of Miyake’s study was to investigate",
               "options": [
                 "A what kind of women choose to study physics",
-                "B a way of improving women\u2019s performance in physics",
+                "B a way of improving women’s performance in physics",
                 "C whether fewer women than men study physics at college"
               ]
             },
@@ -8922,13 +8926,13 @@
               "options": [
                 "A the teachers marked them unfairly",
                 "B the male students expected them to do badly",
-                "C their test results were lower than male students\u2019"
+                "C their test results were lower than male students’"
               ]
             },
             {
               "q": 24,
               "type": "mcq",
-              "question": "Miyake\u2019s team asked the students to write about",
+              "question": "Miyake’s team asked the students to write about",
               "options": [
                 "A what they enjoyed about studying physics",
                 "B the successful experiences of other people",
@@ -8958,7 +8962,7 @@
             {
               "q": 27,
               "type": "mcq",
-              "question": "Greg and Lisa think Miyake\u2019s results could have been affected by",
+              "question": "Greg and Lisa think Miyake’s results could have been affected by",
               "options": [
                 "A the length of the writing task",
                 "B the number of students who took part",
@@ -8978,7 +8982,7 @@
             {
               "q": 29,
               "type": "mcq",
-              "question": "The main finding of Smolinsky\u2019s research was that class teamwork activities",
+              "question": "The main finding of Smolinsky’s research was that class teamwork activities",
               "options": [
                 "A were most effective when done by all-women groups",
                 "B had no effect on the performance of men or women",
@@ -9177,7 +9181,8 @@
         "40": [
           "research"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/11LT01.mp3"
     },
     {
       "id": 22,
@@ -9300,7 +9305,7 @@
             {
               "q": 18,
               "type": "map",
-              "question": "Theatre manager\u2019s office",
+              "question": "Theatre manager’s office",
               "options": [
                 "A",
                 "B",
@@ -9328,7 +9333,7 @@
             {
               "q": 20,
               "type": "map",
-              "question": "Artistic director\u2019s office",
+              "question": "Artistic director’s office",
               "options": [
                 "A",
                 "B",
@@ -9368,7 +9373,7 @@
             {
               "q": 23,
               "type": "mcq",
-              "question": "In Helen\u2019s procedure section, Colin suggests a change in",
+              "question": "In Helen’s procedure section, Colin suggests a change in",
               "options": [
                 "A the order in which information is given",
                 "B the way the information is divided up",
@@ -9455,7 +9460,7 @@
             {
               "q": 34,
               "type": "text",
-              "question": "It\u2019s approached by a ____ for pedestrians"
+              "question": "It’s approached by a ____ for pedestrians"
             },
             {
               "q": 35,
@@ -9621,7 +9626,8 @@
         "40": [
           "modernist"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/11LT02.mp3"
     },
     {
       "id": 23,
@@ -9632,13 +9638,13 @@
         {
           "section": 1,
           "question_type": "MCQ + Sentence Completion",
-          "instructions": "Questions 1\u20136: Choose the correct letter A, B or C. Questions 7\u201310: Write ONE WORD ONLY.",
+          "instructions": "Questions 1–6: Choose the correct letter A, B or C. Questions 7–10: Write ONE WORD ONLY.",
           "title": "Free activities in the Burnham area / Paxton Nature Reserve",
           "questions": [
             {
               "q": 1,
               "type": "mcq",
-              "question": "The \u2018Family Welcome\u2019 event in the art gallery begins at",
+              "question": "The ‘Family Welcome’ event in the art gallery begins at",
               "options": [
                 "A 10 am",
                 "B 10.30 am",
@@ -9648,7 +9654,7 @@
             {
               "q": 2,
               "type": "mcq",
-              "question": "The film that is now shown in the \u2018Family Welcome\u2019 event is about",
+              "question": "The film that is now shown in the ‘Family Welcome’ event is about",
               "options": [
                 "A sculpture",
                 "B painting",
@@ -9720,13 +9726,13 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201315: Choose the correct letter A, B or C. Questions 16\u201320: Choose FIVE answers from the box.",
+          "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Choose FIVE answers from the box.",
           "title": "Changes in Barford over the last 50 years",
           "questions": [
             {
               "q": 11,
               "type": "mcq",
-              "question": "In Shona\u2019s opinion, why do fewer people use buses in Barford these days?",
+              "question": "In Shona’s opinion, why do fewer people use buses in Barford these days?",
               "options": [
                 "A The buses are old and uncomfortable.",
                 "B Fares have gone up too much.",
@@ -9848,7 +9854,7 @@
         {
           "section": 3,
           "question_type": "Table Completion + Matching",
-          "instructions": "Questions 21\u201326: Write ONE WORD ONLY. Questions 27\u201330: Choose the correct letter A\u2013D.",
+          "instructions": "Questions 21–26: Write ONE WORD ONLY. Questions 27–30: Choose the correct letter A–D.",
           "title": "Drawing project / Report writing",
           "questions": [
             {
@@ -10107,7 +10113,8 @@
         "40": [
           "analysis"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/11LT03.mp3"
     },
     {
       "id": 24,
@@ -10118,7 +10125,7 @@
         {
           "section": 1,
           "question_type": "Table Completion + MCQ",
-          "instructions": "Questions 1\u20137: Write ONE WORD AND/OR A NUMBER. Questions 8\u201310: Choose A, B or C.",
+          "instructions": "Questions 1–7: Write ONE WORD AND/OR A NUMBER. Questions 8–10: Choose A, B or C.",
           "title": "Stretton Festival",
           "questions": [
             {
@@ -10191,7 +10198,7 @@
         {
           "section": 2,
           "question_type": "Matching + Plan Labelling",
-          "instructions": "Questions 11\u201316: Choose the correct letter A\u2013G. Questions 17\u201320: Choose the correct letter A\u2013H.",
+          "instructions": "Questions 11–16: Choose the correct letter A–G. Questions 17–20: Choose the correct letter A–H.",
           "title": "Museum Collections / Basement of Museum",
           "questions": [
             {
@@ -10239,7 +10246,7 @@
             {
               "q": 14,
               "type": "match",
-              "question": "\u2018Around the world\u2019 exhibition",
+              "question": "‘Around the world’ exhibition",
               "options": [
                 "A",
                 "B",
@@ -10343,13 +10350,13 @@
         {
           "section": 3,
           "question_type": "MCQ",
-          "instructions": "Questions 21\u201326: Choose TWO letters A\u2013E. Questions 27\u201330: Choose A, B or C.",
-          "title": "Joanna\u2019s Psychology Study",
+          "instructions": "Questions 21–26: Choose TWO letters A–E. Questions 27–30: Choose A, B or C.",
+          "title": "Joanna’s Psychology Study",
           "questions": [
             {
               "q": "21-22",
               "type": "mcq_multi",
-              "question": "Which TWO characteristics were shared by the subjects of Joanna\u2019s psychology study?",
+              "question": "Which TWO characteristics were shared by the subjects of Joanna’s psychology study?",
               "options": [
                 "A they had all won prizes for their music",
                 "B they had all made music recordings",
@@ -10388,14 +10395,14 @@
               "question": "Joanna concentrated on women performers because",
               "options": [
                 "A women are more influenced by fashion",
-                "B women\u2019s dress has led to more controversy",
-                "C women\u2019s code of dress is less strict than men\u2019s"
+                "B women’s dress has led to more controversy",
+                "C women’s code of dress is less strict than men’s"
               ]
             },
             {
               "q": 28,
               "type": "mcq",
-              "question": "Mike Frost\u2019s article suggests that in popular music, women\u2019s dress is affected by",
+              "question": "Mike Frost’s article suggests that in popular music, women’s dress is affected by",
               "options": [
                 "A their wish to be taken seriously",
                 "B their tendency to copy each other",
@@ -10405,9 +10412,9 @@
             {
               "q": 29,
               "type": "mcq",
-              "question": "What did Joanna\u2019s subjects say about the incidence at a performance?",
+              "question": "What did Joanna’s subjects say about the incidence at a performance?",
               "options": [
-                "A The musicians\u2019 choice of clothing is linked to respect for the audience",
+                "A The musicians’ choice of clothing is linked to respect for the audience",
                 "B The clothing should not distract the audience from the music",
                 "C The audience should make an effort to dress appropriately"
               ]
@@ -10428,7 +10435,7 @@
           "section": 4,
           "question_type": "Note Completion",
           "instructions": "Write ONE WORD ONLY for each answer.",
-          "title": "The use of soil to reduce carbon dioxide (CO\u2082) in the atmosphere",
+          "title": "The use of soil to reduce carbon dioxide (CO₂) in the atmosphere",
           "questions": [
             {
               "q": 31,
@@ -10443,12 +10450,12 @@
             {
               "q": 33,
               "type": "text",
-              "question": "Plants turn CO\u2082 from the air into carbon-based substances such as ____"
+              "question": "Plants turn CO₂ from the air into carbon-based substances such as ____"
             },
             {
               "q": 34,
               "type": "text",
-              "question": "Some CO\u2082 moves from the ____ of plants to microbes in the soil"
+              "question": "Some CO₂ moves from the ____ of plants to microbes in the soil"
             },
             {
               "q": 35,
@@ -10610,7 +10617,8 @@
         "40": [
           "payments"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/11LT04.mp3"
     },
     {
       "id": 25,
@@ -10679,7 +10687,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Choose FOUR answers.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Choose FOUR answers.",
           "title": "Talk to new kitchen assistants",
           "questions": [
             {
@@ -10803,7 +10811,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Note Completion",
-          "instructions": "Questions 21\u201323: Choose A, B or C. Questions 24\u201330: Write ONE WORD ONLY.",
+          "instructions": "Questions 21–23: Choose A, B or C. Questions 24–30: Write ONE WORD ONLY.",
           "title": "Paper on Public Libraries",
           "questions": [
             {
@@ -11124,7 +11132,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201315: Choose the correct letter A, B or C. Questions 16\u201320: Choose FIVE answers from the box.",
+          "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Choose FIVE answers from the box.",
           "title": "Theatre trip to Munich",
           "questions": [
             {
@@ -11252,7 +11260,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Flow-chart Completion",
-          "instructions": "Questions 21\u201325: Choose A, B or C. Questions 26\u201330: Choose FIVE answers from the box.",
+          "instructions": "Questions 21–25: Choose A, B or C. Questions 26–30: Choose FIVE answers from the box.",
           "title": "Scandinavian Studies / Writing a paper",
           "questions": [
             {
@@ -11288,7 +11296,7 @@
             {
               "q": 24,
               "type": "mcq",
-              "question": "James\u2019s literature paper will be on",
+              "question": "James’s literature paper will be on",
               "options": [
                 "A 19th century playwrights",
                 "B the Icelandic sagas",
@@ -11298,7 +11306,7 @@
             {
               "q": 25,
               "type": "mcq",
-              "question": "Beth recommends that James\u2019s paper should be",
+              "question": "Beth recommends that James’s paper should be",
               "options": [
                 "A a historical overview",
                 "B an in-depth study of one writer",
@@ -11559,7 +11567,7 @@
             {
               "q": 7,
               "type": "text",
-              "question": "IT support is available on Tuesdays \u2013 no ____ is necessary"
+              "question": "IT support is available on Tuesdays – no ____ is necessary"
             },
             {
               "q": 8,
@@ -11581,7 +11589,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Table Completion",
-          "instructions": "Questions 11\u201314: Choose TWO letters A\u2013E. Questions 15\u201317: Choose A, B or C. Questions 18\u201320: Write ONE WORD ONLY.",
+          "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–17: Choose A, B or C. Questions 18–20: Write ONE WORD ONLY.",
           "title": "BC Travel",
           "questions": [
             {
@@ -11589,10 +11597,10 @@
               "type": "mcq_multi",
               "question": "Which TWO age groups are taking increasing numbers of holidays with BC Travel?",
               "options": [
-                "A 16\u201330 years",
-                "B 31\u201342 years",
-                "C 43\u201354 years",
-                "D 55\u201364 years",
+                "A 16–30 years",
+                "B 31–42 years",
+                "C 43–54 years",
+                "D 55–64 years",
                 "E over 65 years"
               ]
             },
@@ -11621,7 +11629,7 @@
             {
               "q": 16,
               "type": "mcq",
-              "question": "Why are BC Travel\u2019s cooking holidays unusual?",
+              "question": "Why are BC Travel’s cooking holidays unusual?",
               "options": [
                 "A They only use organic foods",
                 "B They have an international focus",
@@ -11658,7 +11666,7 @@
         {
           "section": 3,
           "question_type": "Flow-chart Completion + MCQ",
-          "instructions": "Questions 21\u201326: Choose SIX letters A\u2013H. Questions 27\u201330: Choose A, B or C.",
+          "instructions": "Questions 21–26: Choose SIX letters A–H. Questions 27–30: Choose A, B or C.",
           "title": "STAGES IN DOING A TOURISM CASE STUDY",
           "questions": [
             {
@@ -11669,7 +11677,7 @@
             {
               "q": 22,
               "type": "flow",
-              "question": "Select interviewees \u2013 these may be site ____"
+              "question": "Select interviewees – these may be site ____"
             },
             {
               "q": 23,
@@ -11747,12 +11755,12 @@
             {
               "q": 32,
               "type": "text",
-              "question": "effects on birds\u2019 ____ or mental processes"
+              "question": "effects on birds’ ____ or mental processes"
             },
             {
               "q": 33,
               "type": "text",
-              "question": "song usually learned from a bird\u2019s ____"
+              "question": "song usually learned from a bird’s ____"
             },
             {
               "q": 34,
@@ -11762,7 +11770,7 @@
             {
               "q": 35,
               "type": "text",
-              "question": "negative effect on birds\u2019 ____"
+              "question": "negative effect on birds’ ____"
             },
             {
               "q": 36,
@@ -11782,7 +11790,7 @@
             {
               "q": 39,
               "type": "text",
-              "question": "mercury in a mother\u2019s body from ____"
+              "question": "mercury in a mother’s body from ____"
             },
             {
               "q": 40,
@@ -11986,7 +11994,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write the correct letter A\u2013I.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–I.",
           "title": "Visiting the Sheepmarket area / Art and History in the Sheepmarket",
           "questions": [
             {
@@ -12130,13 +12138,13 @@
         {
           "section": 3,
           "question_type": "Table Completion + Matching",
-          "instructions": "Questions 21\u201324: Write ONE WORD ONLY. Questions 25\u201330: Choose the correct letter A\u2013G.",
-          "title": "Presentation on film adaptations of Shakespeare\u2019s plays",
+          "instructions": "Questions 21–24: Write ONE WORD ONLY. Questions 25–30: Choose the correct letter A–G.",
+          "title": "Presentation on film adaptations of Shakespeare’s plays",
           "questions": [
             {
               "q": 21,
               "type": "text",
-              "question": "Introduce Giannetti\u2019s book containing a ____ of adaptations"
+              "question": "Introduce Giannetti’s book containing a ____ of adaptations"
             },
             {
               "q": 22,
@@ -12212,7 +12220,7 @@
             {
               "q": 29,
               "type": "match",
-              "question": "Prospero\u2019s Books",
+              "question": "Prospero’s Books",
               "options": [
                 "A",
                 "B",
@@ -12488,7 +12496,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201313: Choose the correct letter A, B or C. Questions 14\u201320: Write the correct letter A\u2013I.",
+          "instructions": "Questions 11–13: Choose the correct letter A, B or C. Questions 14–20: Write the correct letter A–I.",
           "title": "Traffic Changes in Granford",
           "questions": [
             {
@@ -12638,7 +12646,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Flow-chart Completion",
-          "instructions": "Questions 21\u201325: Choose the correct letter A, B or C. Questions 26\u201330: Choose FIVE answers from the box.",
+          "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE answers from the box.",
           "title": "Investigating seed germination",
           "questions": [
             {
@@ -12674,7 +12682,7 @@
             {
               "q": 24,
               "type": "mcq",
-              "question": "They agree that Graves\u2019 book on seed germination is disappointing because",
+              "question": "They agree that Graves’ book on seed germination is disappointing because",
               "options": [
                 "A it fails to cover recent advances in seed science.",
                 "B the content is irrelevant for them.",
@@ -12714,7 +12722,7 @@
             {
               "q": 30,
               "type": "flow",
-              "question": "After about 3 weeks, record the plant\u2019s ____."
+              "question": "After about 3 weeks, record the plant’s ____."
             }
           ]
         },
@@ -12727,7 +12735,7 @@
             {
               "q": 31,
               "type": "text",
-              "question": "the ____ \u2013 because of its general adaptability"
+              "question": "the ____ – because of its general adaptability"
             },
             {
               "q": 32,
@@ -12967,7 +12975,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Multiple Answer",
-          "instructions": "Questions 11\u201316: Choose the correct letter A, B or C. Questions 17\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose TWO letters A–E.",
           "title": "Information on company volunteering projects",
           "questions": [
             {
@@ -13015,7 +13023,7 @@
               "type": "mcq",
               "question": "Where will the Digital Inclusion Day be held?",
               "options": [
-                "A at the company\u2019s training facility",
+                "A at the company’s training facility",
                 "B at a college",
                 "C in a community centre"
               ]
@@ -13059,7 +13067,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201325: Choose the correct letter A, B or C. Questions 26\u201330: Choose FIVE letters A\u2013G.",
+          "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
           "title": "Planning a presentation on nanotechnology",
           "questions": [
             {
@@ -13383,7 +13391,7 @@
             {
               "q": 1,
               "type": "text",
-              "question": "Average rent: \u00a3 ____ a month"
+              "question": "Average rent: £ ____ a month"
             },
             {
               "q": 2,
@@ -13435,7 +13443,7 @@
         {
           "section": 2,
           "question_type": "Matching + Multiple Choice",
-          "instructions": "Questions 11\u201316: Choose SIX answers from the box. Questions 17\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–16: Choose SIX answers from the box. Questions 17–20: Choose TWO letters A–E.",
           "title": "Keeping fit",
           "questions": [
             {
@@ -13551,7 +13559,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Choose SIX letters A–H.",
           "title": "Project on using natural dyes to colour fabrics",
           "questions": [
             {
@@ -13776,7 +13784,7 @@
           "Thursday"
         ],
         "10": [
-          "caf\u00e9",
+          "café",
           "cafe"
         ],
         "11": [
@@ -13885,7 +13893,7 @@
           "section": 1,
           "question_type": "Note Completion",
           "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
-          "title": "Alex\u2019s Training",
+          "title": "Alex’s Training",
           "questions": [
             {
               "q": 1,
@@ -13895,7 +13903,7 @@
             {
               "q": 2,
               "type": "text",
-              "question": "Alex didn\u2019t have a qualification from school in ____."
+              "question": "Alex didn’t have a qualification from school in ____."
             },
             {
               "q": 3,
@@ -13925,12 +13933,12 @@
             {
               "q": 8,
               "type": "text",
-              "question": "Don\u2019t wear ____."
+              "question": "Don’t wear ____."
             },
             {
               "q": 9,
               "type": "text",
-              "question": "Don\u2019t be ____."
+              "question": "Don’t be ____."
             },
             {
               "q": 10,
@@ -13942,7 +13950,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201316: Choose the correct letter A, B or C. Questions 17\u201320: Choose FOUR letters A\u2013F.",
+          "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose FOUR letters A–F.",
           "title": "The Snow Centre",
           "questions": [
             {
@@ -13958,7 +13966,7 @@
             {
               "q": 12,
               "type": "mcq",
-              "question": "What does Annie tell the group about this afternoon\u2019s dog-sled trip?",
+              "question": "What does Annie tell the group about this afternoon’s dog-sled trip?",
               "options": [
                 "A Those who want to can take part in a race",
                 "B Anyone has the chance to drive a team of dogs",
@@ -13991,7 +13999,7 @@
               "question": "The cost of accommodation in the mountain hut includes",
               "options": [
                 "A a supply of drinking water",
-                "B transport of visitors\u2019 luggage",
+                "B transport of visitors’ luggage",
                 "C cooked meals"
               ]
             },
@@ -14047,7 +14055,7 @@
             {
               "q": 20,
               "type": "match",
-              "question": "Loser\u2019s Trail",
+              "question": "Loser’s Trail",
               "options": [
                 "A",
                 "B",
@@ -14062,16 +14070,16 @@
         {
           "section": 3,
           "question_type": "MCQ + Multiple Answer",
-          "instructions": "Questions 21\u201326: Choose the correct letter A, B or C. Questions 27\u201330: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 21–26: Choose the correct letter A, B or C. Questions 27–30: Choose TWO letters A–E.",
           "title": "Labels giving nutritional information on food packaging",
           "questions": [
             {
               "q": 21,
               "type": "mcq",
-              "question": "What was Jack\u2019s attitude to nutritional food labels before this project?",
+              "question": "What was Jack’s attitude to nutritional food labels before this project?",
               "options": [
-                "A He didn\u2019t read everything on them",
-                "B He didn\u2019t think they were important",
+                "A He didn’t read everything on them",
+                "B He didn’t think they were important",
                 "C He thought they were too complicated"
               ]
             },
@@ -14338,7 +14346,8 @@
         "40": [
           "night"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/13LT04.mp3"
     },
     {
       "id": 33,
@@ -14370,7 +14379,7 @@
             {
               "q": 4,
               "type": "text",
-              "question": "Items stolen: a wallet containing approximately ____ \u00a3"
+              "question": "Items stolen: a wallet containing approximately ____ £"
             },
             {
               "q": 5,
@@ -14407,7 +14416,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201314: Choose TWO letters A\u2013E. Questions 15\u201320: Choose the correct letter A, B or C.",
+          "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–20: Choose the correct letter A, B or C.",
           "title": "Induction talk for new apprentices",
           "questions": [
             {
@@ -14499,7 +14508,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201325: Choose the correct letter A, B or C. Questions 26\u201330: Choose FIVE letters A\u2013G.",
+          "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
           "title": "Cities built by the sea",
           "questions": [
             {
@@ -14507,8 +14516,8 @@
               "type": "mcq",
               "question": "Carla and Rob were surprised to learn that coastal cities",
               "options": [
-                "A contain nearly half the world\u2019s population",
-                "B include most of the world\u2019s largest cities",
+                "A contain nearly half the world’s population",
+                "B include most of the world’s largest cities",
                 "C are growing twice as fast as other cities"
               ]
             },
@@ -14808,7 +14817,8 @@
         "40": [
           "migration"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/14LT01.mp3"
     },
     {
       "id": 34,
@@ -14820,7 +14830,7 @@
           "section": 1,
           "question_type": "Note Completion",
           "instructions": "Write ONE WORD AND/OR A NUMBER for each answer.",
-          "title": "TOTAL HEALTH CLINIC \u2013 PATIENT DETAILS",
+          "title": "TOTAL HEALTH CLINIC – PATIENT DETAILS",
           "questions": [
             {
               "q": 1,
@@ -14877,7 +14887,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201315: Choose the correct letter A, B or C. Questions 16\u201320: Write the correct letter A\u2013H.",
+          "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–20: Write the correct letter A–H.",
           "title": "Visit to Branley Castle",
           "questions": [
             {
@@ -14926,7 +14936,7 @@
               "question": "At the end of the visit, the group will have",
               "options": [
                 "A afternoon tea in the conservatory",
-                "B the chance to meet the castle\u2019s owners",
+                "B the chance to meet the castle’s owners",
                 "C a photograph together on the Great Staircase"
               ]
             },
@@ -15010,8 +15020,8 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Choose SIX letters A\u2013H.",
-          "title": "Woolly mammoths on St Paul\u2019s Island",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Choose SIX letters A–H.",
+          "title": "Woolly mammoths on St Paul’s Island",
           "questions": [
             {
               "q": 21,
@@ -15028,7 +15038,7 @@
               "type": "mcq",
               "question": "What was surprising about the mammoth tooth found by Russell Graham?",
               "options": [
-                "A It was still embedded in the mammoth\u2019s jawbone",
+                "A It was still embedded in the mammoth’s jawbone",
                 "B It was from an unknown species of mammoth",
                 "C It was not as old as mammoth remains from elsewhere"
               ]
@@ -15046,7 +15056,7 @@
             {
               "q": 24,
               "type": "mcq",
-              "question": "According to Martin, what is unusual about the date of the mammoths\u2019 extinction on the island?",
+              "question": "According to Martin, what is unusual about the date of the mammoths’ extinction on the island?",
               "options": [
                 "A how exact it is",
                 "B how early it is",
@@ -15325,7 +15335,8 @@
         "40": [
           "telegraph"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/14LT02.mp3"
     },
     {
       "id": 35,
@@ -15394,7 +15405,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201314: Choose TWO letters A\u2013E. Questions 15\u201320: Choose the correct letter A\u2013G.",
+          "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–20: Choose the correct letter A–G.",
           "title": "Volunteering",
           "questions": [
             {
@@ -15510,7 +15521,7 @@
         {
           "section": 3,
           "question_type": "Note Completion + Matching",
-          "instructions": "Questions 21\u201326: Write ONE WORD AND/OR A NUMBER. Questions 27\u201330: Choose FOUR letters A\u2013F.",
+          "instructions": "Questions 21–26: Write ONE WORD AND/OR A NUMBER. Questions 27–30: Choose FOUR letters A–F.",
           "title": "Background on school marching band",
           "questions": [
             {
@@ -15526,7 +15537,7 @@
             {
               "q": 23,
               "type": "text",
-              "question": "It has been invited to play in the town\u2019s ____"
+              "question": "It has been invited to play in the town’s ____"
             },
             {
               "q": 24,
@@ -15636,7 +15647,7 @@
             {
               "q": 37,
               "type": "text",
-              "question": "celebrates Australia\u2019s cultural ____"
+              "question": "celebrates Australia’s cultural ____"
             },
             {
               "q": 38,
@@ -15781,7 +15792,8 @@
         "40": [
           "Olympics"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/14LT03.mp3"
     },
     {
       "id": 36,
@@ -15865,7 +15877,7 @@
         {
           "section": 2,
           "question_type": "Matching + Multiple Answer",
-          "instructions": "Questions 11\u201316: Choose SIX answers A\u2013H. Questions 17\u201320: Choose TWO answers A\u2013E.",
+          "instructions": "Questions 11–16: Choose SIX answers A–H. Questions 17–20: Choose TWO answers A–E.",
           "title": "Excursions and attractions",
           "questions": [
             {
@@ -15987,15 +15999,15 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201325: Choose the correct letter A, B or C. Questions 26\u201330: Choose FIVE letters A\u2013G.",
-          "title": "Children\u2019s literature",
+          "instructions": "Questions 21–25: Choose the correct letter A, B or C. Questions 26–30: Choose FIVE letters A–G.",
+          "title": "Children’s literature",
           "questions": [
             {
               "q": 21,
               "type": "mcq",
-              "question": "What does Trevor find interesting about the purpose of children\u2019s literature?",
+              "question": "What does Trevor find interesting about the purpose of children’s literature?",
               "options": [
-                "A the fact that authors may not realise what values they\u2019re teaching",
+                "A the fact that authors may not realise what values they’re teaching",
                 "B the fact that literature can be entertaining and educational at the same time",
                 "C the fact that adults were once children too"
               ]
@@ -16003,11 +16015,11 @@
             {
               "q": 22,
               "type": "mcq",
-              "question": "Trevor says the module about the purpose of children\u2019s literature made him",
+              "question": "Trevor says the module about the purpose of children’s literature made him",
               "options": [
                 "A analyse some of the stories that his niece reads",
                 "B consider how far popularity reflects good quality",
-                "C decide to start writing some children\u2019s stories"
+                "C decide to start writing some children’s stories"
               ]
             },
             {
@@ -16043,7 +16055,7 @@
             {
               "q": 26,
               "type": "match",
-              "question": "Perrault\u2019s fairy tales",
+              "question": "Perrault’s fairy tales",
               "options": [
                 "A",
                 "B",
@@ -16121,7 +16133,7 @@
             {
               "q": 31,
               "type": "text",
-              "question": "cause of destruction unknown \u2013 now under the ____"
+              "question": "cause of destruction unknown – now under the ____"
             },
             {
               "q": 32,
@@ -16296,7 +16308,8 @@
         "40": [
           "ages"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/14LT04.mp3"
     },
     {
       "id": 37,
@@ -16333,7 +16346,7 @@
             {
               "q": 5,
               "type": "text",
-              "question": "Pay is usually \u00a3 ____ per hour"
+              "question": "Pay is usually £ ____ per hour"
             },
             {
               "q": 6,
@@ -16348,7 +16361,7 @@
             {
               "q": 8,
               "type": "text",
-              "question": "They will ask questions about each applicant\u2019s ____"
+              "question": "They will ask questions about each applicant’s ____"
             },
             {
               "q": 9,
@@ -16365,8 +16378,8 @@
         {
           "section": 2,
           "question_type": "MCQ + Table Completion",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write ONE WORD AND/OR A NUMBER.",
-          "title": "Matthews Island Holidays \u2013 Isle of Man",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write ONE WORD AND/OR A NUMBER.",
+          "title": "Matthews Island Holidays – Isle of Man",
           "questions": [
             {
               "q": 11,
@@ -16443,7 +16456,7 @@
         {
           "section": 3,
           "question_type": "Matching + MCQ",
-          "instructions": "Questions 21\u201326: Choose SIX letters A\u2013H. Questions 27\u201328: Choose the correct letter A, B or C. Questions 29\u201330: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 21–26: Choose SIX letters A–H. Questions 27–28: Choose the correct letter A, B or C. Questions 29–30: Choose TWO letters A–E.",
           "title": "Birth order and personality",
           "questions": [
             {
@@ -16549,7 +16562,7 @@
             {
               "q": 28,
               "type": "mcq",
-              "question": "What does Ruth think is surprising about the difference in oldest children\u2019s academic performance?",
+              "question": "What does Ruth think is surprising about the difference in oldest children’s academic performance?",
               "options": [
                 "A",
                 "B",
@@ -16594,7 +16607,7 @@
             {
               "q": 34,
               "type": "text",
-              "question": "Cause \u2013 ____ feed on eucalyptus leaves"
+              "question": "Cause – ____ feed on eucalyptus leaves"
             },
             {
               "q": 35,
@@ -16753,7 +16766,8 @@
           "nest",
           "nests"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/15LT01.mp3"
     },
     {
       "id": 38,
@@ -16815,14 +16829,14 @@
             {
               "q": 10,
               "type": "text",
-              "question": "See the festival organiser\u2019s ____"
+              "question": "See the festival organiser’s ____"
             }
           ]
         },
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write the correct letter A\u2013I.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–I.",
           "title": "Minster Park",
           "questions": [
             {
@@ -16966,7 +16980,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + Matching",
-          "instructions": "Questions 21\u201324: Choose TWO letters A\u2013E. Questions 25\u201330: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–H.",
           "title": "University open day display",
           "questions": [
             {
@@ -16976,7 +16990,7 @@
               "options": [
                 "A students from the English department",
                 "B residents of the local area",
-                "C the university\u2019s teaching staff",
+                "C the university’s teaching staff",
                 "D potential new students",
                 "E students from other departments"
               ]
@@ -16984,7 +16998,7 @@
             {
               "q": "23-24",
               "type": "mcq_multi",
-              "question": "What are Cathy and Graham\u2019s TWO reasons for choosing the novelist Charles Dickens?",
+              "question": "What are Cathy and Graham’s TWO reasons for choosing the novelist Charles Dickens?",
               "options": [
                 "A His speeches inspired others to try to improve society",
                 "B He used his publications to draw attention to social problems",
@@ -17099,7 +17113,7 @@
             {
               "q": 32,
               "type": "text",
-              "question": "Most of the work organised by farmers\u2019 associations was done by ____"
+              "question": "Most of the work organised by farmers’ associations was done by ____"
             },
             {
               "q": 33,
@@ -17269,7 +17283,8 @@
         "40": [
           "design"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/15LT02.mp3"
     },
     {
       "id": 39,
@@ -17338,7 +17353,7 @@
         {
           "section": 2,
           "question_type": "MCQ + MCQ (Multiple)",
-          "instructions": "Questions 11\u201316: Choose the correct letter A, B or C. Questions 17\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–16: Choose the correct letter A, B or C. Questions 17–20: Choose TWO letters A–E.",
           "title": "Street Play Scheme",
           "questions": [
             {
@@ -17430,7 +17445,7 @@
         {
           "section": 3,
           "question_type": "Note Completion + Matching",
-          "instructions": "Questions 21\u201326: Write ONE WORD ONLY. Questions 27\u201330: Choose the correct letter A, B or C.",
+          "instructions": "Questions 21–26: Write ONE WORD ONLY. Questions 27–30: Choose the correct letter A, B or C.",
           "title": "Media studies assignment",
           "questions": [
             {
@@ -17524,7 +17539,7 @@
             {
               "q": 33,
               "type": "text",
-              "question": "used a strigil \u2013 scraper made of ____"
+              "question": "used a strigil – scraper made of ____"
             },
             {
               "q": 34,
@@ -17689,7 +17704,8 @@
         "40": [
           "tax"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/15LT03.mp3"
     },
     {
       "id": 40,
@@ -17726,7 +17742,7 @@
             {
               "q": 5,
               "type": "text",
-              "question": "Cost of ticket: ____ \u00a3"
+              "question": "Cost of ticket: ____ £"
             },
             {
               "q": 6,
@@ -17758,13 +17774,13 @@
         {
           "section": 2,
           "question_type": "Map Labelling + MCQ (Multiple)",
-          "instructions": "Questions 11\u201316: Write the correct letter, A\u2013H. Questions 17\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–16: Write the correct letter, A–H. Questions 17–20: Choose TWO letters A–E.",
           "title": "Croft Valley Park",
           "questions": [
             {
               "q": 11,
               "type": "map",
-              "question": "caf\u00e9",
+              "question": "café",
               "options": [
                 "A",
                 "B",
@@ -17880,7 +17896,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Write the correct letter A, B or C.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write the correct letter A, B or C.",
           "title": "Presentation about refrigeration",
           "questions": [
             {
@@ -18169,7 +18185,8 @@
         "40": [
           "Advertising"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/15LT04.mp3"
     },
     {
       "id": 41,
@@ -18238,7 +18255,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write the correct letter A\u2013J.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–J.",
           "title": "Stevenson's",
           "questions": [
             {
@@ -18388,7 +18405,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + Matching",
-          "instructions": "Questions 21\u201324: Choose TWO letters A\u2013E. Questions 25\u201330: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–H.",
           "title": "Art projects",
           "questions": [
             {
@@ -18715,7 +18732,7 @@
             {
               "q": 2,
               "type": "text",
-              "question": "The cost for 360 photos is ____ \u00a3 (including one disk)."
+              "question": "The cost for 360 photos is ____ £ (including one disk)."
             },
             {
               "q": 3,
@@ -18762,7 +18779,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching + MCQ (Multiple)",
-          "instructions": "Questions 11\u201315: Choose the correct letter A, B or C. Questions 16\u201318: Choose THREE letters A\u2013D. Questions 19\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–15: Choose the correct letter A, B or C. Questions 16–18: Choose THREE letters A–D. Questions 19–20: Choose TWO letters A–E.",
           "title": "School changes",
           "questions": [
             {
@@ -18865,7 +18882,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Flow-chart Completion",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Write ONE WORD ONLY.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Write ONE WORD ONLY.",
           "title": "Assignment on sleep and dreams",
           "questions": [
             {
@@ -19194,7 +19211,7 @@
         {
           "section": 2,
           "question_type": "MCQ (Multiple) + Matching",
-          "instructions": "Questions 11\u201314: Choose TWO letters A\u2013E. Questions 15\u201320: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 11–14: Choose TWO letters A–E. Questions 15–20: Choose SIX letters A–H.",
           "title": "Working in agriculture and horticulture",
           "questions": [
             {
@@ -19316,7 +19333,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + MCQ",
-          "instructions": "Questions 21\u201324: Choose TWO letters A\u2013E. Questions 25\u201330: Choose the correct letter A, B or C.",
+          "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose the correct letter A, B or C.",
           "title": "Presentation on diet and obesity",
           "questions": [
             {
@@ -19615,7 +19632,7 @@
             {
               "q": 2,
               "type": "text",
-              "question": "cost for the week: \u00a3 ____"
+              "question": "cost for the week: £ ____"
             },
             {
               "q": 3,
@@ -19662,7 +19679,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Map Labelling",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write the correct letter A\u2013I.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A–I.",
           "title": "Local council report on traffic and highways / Recreation ground after proposed changes",
           "questions": [
             {
@@ -19806,7 +19823,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + Matching",
-          "instructions": "Questions 21\u201324: Choose TWO letters A\u2013E. Questions 25\u201330: Choose SIX letters A\u2013G.",
+          "instructions": "Questions 21–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–G.",
           "title": "City bike-sharing schemes",
           "questions": [
             {
@@ -20168,14 +20185,14 @@
             {
               "q": 10,
               "type": "text",
-              "question": "cost of session (no camping): \u00a3 ____"
+              "question": "cost of session (no camping): £ ____"
             }
           ]
         },
         {
           "section": 2,
           "question_type": "MCQ + MCQ (Multiple)",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Choose TWO letters A\u2013E.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Choose TWO letters A–E.",
           "title": "Boat trip round Tasmania",
           "questions": [
             {
@@ -20259,7 +20276,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201326: Choose the correct letter A, B or C. Questions 27\u201330: Choose FOUR letters A\u2013F.",
+          "instructions": "Questions 21–26: Choose the correct letter A, B or C. Questions 27–30: Choose FOUR letters A–F.",
           "title": "Work experience for veterinary science students",
           "questions": [
             {
@@ -20563,7 +20580,8 @@
         "40": [
           "anxiety"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/17LT01.mp3"
     },
     {
       "id": 46,
@@ -20632,7 +20650,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Choose SIX letters A–H.",
           "title": "Oniton Hall",
           "questions": [
             {
@@ -20770,7 +20788,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + Matching + MCQ",
-          "instructions": "Questions 21\u201322: Choose TWO letters A\u2013E. Questions 23\u201327: Choose FIVE letters A\u2013G. Questions 28\u201330: Choose the correct letter A, B or C.",
+          "instructions": "Questions 21–22: Choose TWO letters A–E. Questions 23–27: Choose FIVE letters A–G. Questions 28–30: Choose the correct letter A, B or C.",
           "title": "Reviews of Romeo and Juliet",
           "questions": [
             {
@@ -21069,7 +21087,8 @@
         "40": [
           "fluent"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/17LT02.mp3"
     },
     {
       "id": 47,
@@ -21138,7 +21157,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201312: Choose TWO letters A\u2013E. Questions 13\u201315: Choose the correct letter A, B or C. Questions 16\u201320: Choose FIVE letters A\u2013G.",
+          "instructions": "Questions 11–12: Choose TWO letters A–E. Questions 13–15: Choose the correct letter A, B or C. Questions 16–20: Choose FIVE letters A–G.",
           "title": "School's extended hours childcare service / Activities on offer",
           "questions": [
             {
@@ -21158,9 +21177,9 @@
               "type": "mcq",
               "question": "How much does childcare cost for a complete afternoon session per child?",
               "options": [
-                "A \u00a33.50",
-                "B \u00a35.70",
-                "C \u00a37.20"
+                "A £3.50",
+                "B £5.70",
+                "C £7.20"
               ]
             },
             {
@@ -21258,7 +21277,7 @@
         {
           "section": 3,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 21\u201324: Choose the correct letter A, B or C. Questions 25\u201330: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 21–24: Choose the correct letter A, B or C. Questions 25–30: Choose SIX letters A–H.",
           "title": "Holly's Work Placement Tutorial",
           "questions": [
             {
@@ -21577,7 +21596,8 @@
         "40": [
           "atlas"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/17LT03.mp3"
     },
     {
       "id": 48,
@@ -21604,7 +21624,7 @@
             {
               "q": 3,
               "type": "text",
-              "question": "Ironing clothes \u2013 ____ only"
+              "question": "Ironing clothes – ____ only"
             },
             {
               "q": 4,
@@ -21646,7 +21666,7 @@
         {
           "section": 2,
           "question_type": "MCQ + Matching",
-          "instructions": "Questions 11\u201314: Choose the correct letter A, B or C. Questions 15\u201320: Write the correct letter A, B or C.",
+          "instructions": "Questions 11–14: Choose the correct letter A, B or C. Questions 15–20: Write the correct letter A, B or C.",
           "title": "Reducing staff turnover in hotels",
           "questions": [
             {
@@ -21754,7 +21774,7 @@
         {
           "section": 3,
           "question_type": "MCQ (Multiple) + Matching",
-          "instructions": "Questions 21\u201322: Choose TWO letters A\u2013E. Questions 23\u201324: Choose TWO letters A\u2013E. Questions 25\u201330: Choose SIX letters A\u2013H.",
+          "instructions": "Questions 21–22: Choose TWO letters A–E. Questions 23–24: Choose TWO letters A–E. Questions 25–30: Choose SIX letters A–H.",
           "title": "Sporting activities and equipment",
           "questions": [
             {
@@ -22060,7 +22080,8 @@
           "litre",
           "liter"
         ]
-      }
+      },
+      "audio_file": "/audio/listening/17LT04.mp3"
     }
   ]
 }
