@@ -48,10 +48,11 @@ class UserModuleAttemptSerializer(serializers.ModelSerializer):
     answers = UserAnswerSerializer(many=True, read_only=True)
     module_type = serializers.CharField(source='module.module_type', read_only=True)
     feedback = serializers.SerializerMethodField()
+    user_answers = serializers.SerializerMethodField()
     
     class Meta:
         model = UserModuleAttempt
-        fields = ['id', 'module', 'module_type', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers', 'data', 'feedback']
+        fields = ['id', 'module', 'module_type', 'start_time', 'end_time', 'is_completed', 'band_score', 'answers', 'data', 'feedback', 'user_answers']
         read_only_fields = ['band_score', 'raw_score', 'start_time', 'end_time']
     
     def get_feedback(self, obj):
@@ -66,6 +67,12 @@ class UserModuleAttemptSerializer(serializers.ModelSerializer):
                     result['parts'] = parts
                 return result
         return None
+    
+    def get_user_answers(self, obj):
+        """Extract user answers from data field for frontend convenience."""
+        if obj.data and isinstance(obj.data, dict):
+            return obj.data.get('answers', {})
+        return {}
 
 class UserTestSessionSerializer(serializers.ModelSerializer):
     module_attempts = UserModuleAttemptSerializer(many=True, read_only=True)
