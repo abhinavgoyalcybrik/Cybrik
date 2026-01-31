@@ -326,9 +326,8 @@ def elevenlabs_postcall(request):
     # If we still lack a CallRecord, create minimal one
     if not call_record:
         try:
-            # Extract phone number and applicant from metadata
+            # Extract phone number and lead from metadata
             phone_number = None
-            applicant_obj = None
             lead_obj = None
             
             if isinstance(payload, dict):

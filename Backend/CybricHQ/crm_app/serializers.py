@@ -5,7 +5,6 @@ from rest_framework import serializers
 import logging
 
 from .models import (
-    Applicant,
     CallRecord,
     AcademicRecord,
     Application,
@@ -20,7 +19,6 @@ from .models import (
     Role,
     UserProfile,
     Notification,
-    AdIntegration,
     AdIntegration,
     AdCampaign,
     WhatsAppMessage,
@@ -103,103 +101,6 @@ class KPIOverviewSerializer(serializers.Serializer):
     country_distribution = serializers.ListField(child=serializers.DictField())
 
 
-class ApplicantSerializer(serializers.ModelSerializer):
-    academic_records = serializers.SerializerMethodField(read_only=True)
-    documents = serializers.SerializerMethodField(read_only=True)
-    whatsapp_messages = serializers.SerializerMethodField(read_only=True)
-    highest_qualification = serializers.CharField(required=False, allow_blank=True, write_only=True)
-    qualification_marks = serializers.CharField(required=False, allow_blank=True, write_only=True)
-    english_test_scores = serializers.CharField(required=False, allow_blank=True, write_only=True)
-    leadId = serializers.IntegerField(required=False, write_only=True)
-
-    class Meta:
-        model = Applicant
-        fields = [
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "phone",
-            "dob",
-            "passport_number",
-            "lead",
-            "stage",
-            "address",
-            "preferred_country",
-            "created_at",
-            "updated_at",
-            "academic_records",
-            "documents",
-            "highest_qualification",
-            "qualification_marks",
-            "english_test_scores",
-            "leadId",
-            "metadata",
-            "tenant",  # Added to ensure tenant assignment works
-            "whatsapp_messages",
-        ]
-        read_only_fields = ("created_at", "updated_at")
-        extra_kwargs = {
-            "tenant": {"required": False, "allow_null": True},  # Allow setting tenant via save()
-        }
-
-
-    def create(self, validated_data):
-        highest_qualification = validated_data.pop('highest_qualification', None)
-        qualification_marks = validated_data.pop('qualification_marks', None)
-        english_test_scores = validated_data.pop('english_test_scores', None)
-        # Pop leadId but DO NOT link lead FK here - this is handled by the view
-        # Reason: Lead.on_delete=CASCADE means if we link lead here and then delete it,
-        # the applicant will be cascade-deleted. View handles conversion safely.
-        validated_data.pop('leadId', None)
-        # Also explicitly remove 'lead' if it was passed, as view handles this
-        validated_data.pop('lead', None)
-        
-        metadata = validated_data.get('metadata') or {}
-        if highest_qualification:
-            metadata['highest_qualification'] = highest_qualification
-        if qualification_marks:
-            metadata['qualification_marks'] = qualification_marks
-        if english_test_scores:
-            metadata['english_test_scores'] = english_test_scores
-        validated_data['metadata'] = metadata
-        
-        return super().create(validated_data)
-
-    def get_documents(self, obj):
-        qs = getattr(obj, "documents", None)
-        if not qs:
-            return []
-        return DocumentSerializer(qs.all(), many=True, context=self.context).data
-
-    def get_academic_records(self, obj):
-        """
-        Safely return related academic records. Handles both explicit related_name
-        and default '<model>_set' patterns.
-        """
-        qs = getattr(obj, "academic_records", None)
-        if qs is None:
-            qs = getattr(obj, "academicrecord_set", None)
-        if not qs:
-            return []
-        # Local import to avoid circular import at module import time
-        from .serializers import AcademicRecordSerializer  # type: ignore
-
-        try:
-            return AcademicRecordSerializer(qs.all(), many=True, context=self.context).data
-        except Exception:
-            # Defensive fallback: return empty list on schema mismatch
-            logger.exception("Error serializing academic records for Applicant %s", getattr(obj, "id", None))
-            return []
-
-    def get_whatsapp_messages(self, obj):
-        qs = getattr(obj, "whatsapp_messages", None)
-        if not qs:
-            return []
-        return WhatsAppMessageSerializer(qs.all(), many=True, context=self.context).data
-
-
-
 class AcademicRecordSerializer(serializers.ModelSerializer):
     lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
 
@@ -238,13 +139,12 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    applicant = ApplicantSerializer(read_only=True)
-    applicant_id = serializers.PrimaryKeyRelatedField(
-        source="applicant", queryset=Applicant.objects.all(), write_only=True, required=False
+    lead_id = serializers.PrimaryKeyRelatedField(
+        source="lead", queryset=Lead.objects.all(), write_only=True, required=False
     )
     # Display fields for frontend
-    applicant_name = serializers.SerializerMethodField()
-    applicant_email = serializers.SerializerMethodField()
+    lead_name = serializers.SerializerMethodField()
+    lead_email = serializers.SerializerMethodField()
     stage_display = serializers.SerializerMethodField()
     priority_display = serializers.SerializerMethodField()
     assigned_to_name = serializers.SerializerMethodField()
@@ -254,11 +154,10 @@ class ApplicationSerializer(serializers.ModelSerializer):
         model = Application
         fields = [
             "id",
-            "applicant",
-            "applicant_id",
-            "applicant_name",
-            "applicant_email",
             "lead",
+            "lead_id",
+            "lead_name",
+            "lead_email",
             "program",
             "status",
             "stage",
@@ -277,17 +176,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ("created_at", "updated_at")
 
-    def get_applicant_name(self, obj):
-        if obj.applicant:
-            return f"{obj.applicant.first_name} {obj.applicant.last_name or ''}".strip()
-        elif obj.lead:
+    def get_lead_name(self, obj):
+        if obj.lead:
             return obj.lead.name or "Unknown"
         return "Unknown"
 
-    def get_applicant_email(self, obj):
-        if obj.applicant:
-            return obj.applicant.email
-        elif obj.lead:
+    def get_lead_email(self, obj):
+        if obj.lead:
             return obj.lead.email
         return None
 
@@ -303,9 +198,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         return None
 
     def get_documents_count(self, obj):
-        if obj.applicant:
-            return obj.applicant.documents.count()
-        elif obj.lead:
+        if obj.lead:
             return obj.lead.documents.count()
         return 0
 
@@ -378,7 +271,7 @@ class ConsentRecordSerializer(serializers.ModelSerializer):
         model = ConsentRecord
         fields = [
             "id",
-            "applicant",
+            "lead",
             "consent_text",
             "consent_given",
             "consented_at",
@@ -392,7 +285,7 @@ class AuditLogSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AuditLog
-        fields = ["id", "actor", "action", "target_type", "target_id", "applicant", "data", "ip", "notes", "created_at"]
+        fields = ["id", "actor", "action", "target_type", "target_id", "lead", "data", "ip", "notes", "created_at"]
         read_only_fields = ("id", "created_at")
 
 
@@ -502,7 +395,6 @@ class LeadReceiveSerializer(serializers.Serializer):
 
 class CallRecordSerializer(serializers.ModelSerializer):
     transcripts = TranscriptSerializer(many=True, read_only=True)
-    applicant = ApplicantSerializer(read_only=True)
     application = serializers.SerializerMethodField()
     conversation_id = serializers.SerializerMethodField()
     phone_number = serializers.SerializerMethodField()
@@ -510,7 +402,7 @@ class CallRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CallRecord
-        fields = ['id', 'applicant', 'lead', 'application', 'provider', 'external_call_id', 'recording_url', 'conversation_id', 'phone_number', 'metadata', 'qualified_data', 'cost', 'currency', 'created_at', 'status', 'direction', 'duration_seconds', 'transcripts', 'elevenlabs_summary']
+        fields = ['id', 'lead', 'application', 'provider', 'external_call_id', 'recording_url', 'conversation_id', 'phone_number', 'metadata', 'qualified_data', 'cost', 'currency', 'created_at', 'status', 'direction', 'duration_seconds', 'transcripts', 'elevenlabs_summary']
 
     def get_conversation_id(self, obj):
         # Try to get conversation_id from metadata first (ElevenLabs)
@@ -558,9 +450,9 @@ class CallRecordSerializer(serializers.ModelSerializer):
                 if phone:
                     return phone
         
-        # Fallback to applicant phone
-        if obj.applicant and obj.applicant.phone:
-            return obj.applicant.phone
+        # Fallback to lead phone
+        if obj.lead and obj.lead.phone:
+            return obj.lead.phone
         return None
 
     def get_elevenlabs_summary(self, obj):
@@ -571,11 +463,9 @@ class CallRecordSerializer(serializers.ModelSerializer):
 
 class FollowUpSerializer(serializers.ModelSerializer):
     application = serializers.PrimaryKeyRelatedField(queryset=Application.objects.all(), required=False, allow_null=True)
-    lead = serializers.PrimaryKeyRelatedField(queryset=Applicant.objects.all(), required=False, allow_null=True)
+    lead = serializers.PrimaryKeyRelatedField(queryset=Lead.objects.all(), required=False, allow_null=True)
     assigned_to = serializers.PrimaryKeyRelatedField(read_only=True)
-    applicant_name = serializers.SerializerMethodField()
-    crm_lead = serializers.PrimaryKeyRelatedField(read_only=True)
-    crm_lead_name = serializers.SerializerMethodField()
+    lead_name = serializers.SerializerMethodField()
     call_record = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -584,9 +474,7 @@ class FollowUpSerializer(serializers.ModelSerializer):
             "id",
             "application",
             "lead",
-            "applicant_name",
-            "crm_lead",
-            "crm_lead_name",
+            "lead_name",
             "assigned_to",
             "due_at",
             "channel",
@@ -599,35 +487,24 @@ class FollowUpSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ("id", "created_at", "call_record")
 
-    def get_applicant_name(self, obj):
+    def get_lead_name(self, obj):
         if obj.lead:
-            return obj.lead.name or None
-        return None
-        
-    def get_crm_lead_name(self, obj):
-        if obj.crm_lead:
-            # Lead model only has 'name' field (not first_name/last_name)
-            return obj.crm_lead.name or f"Lead #{obj.crm_lead.id}"
+            return obj.lead.name or f"Lead #{obj.lead.id}"
         return None
 
 
 class ScheduleAICallSerializer(serializers.Serializer):
     """Serializer for scheduling AI calls."""
-    # lead_id is the primary identifier, but we also support applicant_id for backwards compatibility
-    lead_id = serializers.IntegerField(required=False, help_text="ID of the CRM lead to call (primary)")
-    crm_lead_id = serializers.IntegerField(required=False, help_text="Alias for lead_id")
-    applicant_id = serializers.IntegerField(required=False, help_text="Deprecated: Use lead_id instead")
+    lead_id = serializers.IntegerField(required=True, help_text="ID of the CRM lead to call")
     scheduled_time = serializers.DateTimeField(required=True, help_text="When to make the call (ISO format)")
     notes = serializers.CharField(required=False, allow_blank=True, help_text="Notes/context for the AI")
     call_context = serializers.DictField(required=False, help_text="Additional context to pass to AI agent")
 
     def validate(self, attrs):
-        """Ensure at least one of lead_id, crm_lead_id, or applicant_id is provided."""
-        lead_id = attrs.get('lead_id') or attrs.get('crm_lead_id') or attrs.get('applicant_id')
+        """Ensure lead_id is provided."""
+        lead_id = attrs.get('lead_id')
         if not lead_id:
-            raise serializers.ValidationError({"lead_id": "lead_id (or crm_lead_id/applicant_id) is required"})
-        # Normalize to lead_id for downstream use
-        attrs['lead_id'] = lead_id
+            raise serializers.ValidationError({"lead_id": "lead_id is required"})
         return attrs
 
 
@@ -892,7 +769,6 @@ class WhatsAppMessageSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "lead",
-            "applicant",
             "tenant",
             "direction",
             "message_type",

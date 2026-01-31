@@ -126,41 +126,29 @@ def handle_status_update(parsed: dict):
 @permission_classes([IsAuthenticated])
 def send_whatsapp_message(request):
     """
-    Send WhatsApp message to a lead/applicant.
+    Send WhatsApp message to a lead.
     
     Body:
-    - lead_id or applicant_id (required)
+    - lead_id (required)
     - template_name (required for outbound)
     - message (optional, for text within 24hr window)
     - variables (optional, list of template variables)
     """
     lead_id = request.data.get("lead_id")
-    applicant_id = request.data.get("applicant_id")
     template_name = request.data.get("template_name")
     message = request.data.get("message")
     variables = request.data.get("variables", [])
     
-    # Get target
-    target = None
-    phone = None
-    name = "there"
+    if not lead_id:
+        return Response({"error": "lead_id is required"}, status=400)
     
-    if lead_id:
-        try:
-            target = Lead.objects.get(id=lead_id)
-            phone = target.phone
-            name = target.name
-        except Lead.DoesNotExist:
-            return Response({"error": "Lead not found"}, status=404)
-    elif applicant_id:
-        try:
-            target = Applicant.objects.get(id=applicant_id)
-            phone = target.phone
-            name = target.first_name
-        except Applicant.DoesNotExist:
-            return Response({"error": "Applicant not found"}, status=404)
-    else:
-        return Response({"error": "lead_id or applicant_id required"}, status=400)
+    # Get target lead
+    try:
+        target = Lead.objects.get(id=lead_id)
+        phone = target.phone
+        name = target.name
+    except Lead.DoesNotExist:
+        return Response({"error": "Lead not found"}, status=404)
     
     if not phone:
         return Response({"error": "No phone number available"}, status=400)
@@ -183,8 +171,7 @@ def send_whatsapp_message(request):
     
     # Log the message
     msg_record = WhatsAppMessage.objects.create(
-        lead=target if isinstance(target, Lead) else None,
-        applicant=target if isinstance(target, Applicant) else None,
+        lead=target,
         tenant=getattr(target, 'tenant', None),
         direction="outbound",
         message_type="template" if template_name else "text",
@@ -218,27 +205,20 @@ def send_document_upload_request(request):
     Send document upload request via WhatsApp.
     
     Body:
-    - lead_id or applicant_id (required)
+    - lead_id (required)
     """
     lead_id = request.data.get("lead_id")
-    applicant_id = request.data.get("applicant_id")
     
-    target = None
-    if lead_id:
-        try:
-            target = Lead.objects.get(id=lead_id)
-        except Lead.DoesNotExist:
-            return Response({"error": "Lead not found"}, status=404)
-    elif applicant_id:
-        try:
-            target = Applicant.objects.get(id=applicant_id)
-        except Applicant.DoesNotExist:
-            return Response({"error": "Applicant not found"}, status=404)
-    else:
-        return Response({"error": "lead_id or applicant_id required"}, status=400)
+    if not lead_id:
+        return Response({"error": "lead_id is required"}, status=400)
+    
+    try:
+        target = Lead.objects.get(id=lead_id)
+    except Lead.DoesNotExist:
+        return Response({"error": "Lead not found"}, status=404)
     
     phone = target.phone
-    name = target.name if hasattr(target, 'name') else target.first_name
+    name = target.name
     
     if not phone:
         return Response({"error": "No phone number"}, status=400)

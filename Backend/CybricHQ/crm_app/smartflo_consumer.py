@@ -545,7 +545,6 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
             # Create CallRecord
             call = CallRecord.objects.create(
                 lead=lead,
-                applicant=None,
                 provider='smartflo',
                 status='in_progress',
                 direction='inbound',
@@ -788,12 +787,11 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                  
                  due_time = timezone.now() + timedelta(hours=2)
                  
-                 target_lead = call.applicant or call.lead
+                 target_lead = call.lead
                  
                  if target_lead:
                      FollowUp.objects.create(
-                         lead=call.applicant, 
-                         crm_lead=call.lead,
+                         lead=call.lead,
                          channel='ai_call',
                          status='pending',
                          due_at=due_time,
@@ -804,9 +802,9 @@ class SmartfloAudioConsumer(AsyncWebsocketConsumer):
                              "auto_generated": True
                          }
                      )
-                     logger.info(f"Scheduled retry for call {call.id} in 2 hours for {'Applicant' if call.applicant else 'Lead'} {target_lead.id}")
+                     logger.info(f"Scheduled retry for call {call.id} in 2 hours for Lead {target_lead.id}")
                  else:
-                     logger.warning(f"Could not schedule retry for call {call.id}: No linked Lead/Applicant")
+                     logger.warning(f"Could not schedule retry for call {call.id}: No linked Lead")
 
         except Exception as e:
             logger.error(f"Error in process_call_completion: {e}")

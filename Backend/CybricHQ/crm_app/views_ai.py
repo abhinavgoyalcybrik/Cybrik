@@ -69,7 +69,7 @@ class DocumentVerificationViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['post'], url_path='scan-match')
     def scan_match(self, request, pk=None):
         """
-        Scan a document and match it against applicant data.
+        Scan a document and match it against lead data.
         """
         from .models import Document
         from .services.ai_analyzer import DocumentVerifier
@@ -83,19 +83,19 @@ class DocumentVerificationViewSet(viewsets.ViewSet):
         if not document.file:
             return Response({"error": "No file associated with this document"}, status=status.HTTP_400_BAD_REQUEST)
             
-        # Prepare Applicant Data
-        applicant = document.applicant
-        if not applicant:
-            return Response({"error": "No applicant associated with this document"}, status=status.HTTP_400_BAD_REQUEST)
+        # Prepare Lead Data
+        lead = document.lead
+        if not lead:
+            return Response({"error": "No lead associated with this document"}, status=status.HTTP_400_BAD_REQUEST)
             
-        applicant_data = {
-            "first_name": applicant.first_name or "",
-            "last_name": applicant.last_name or "",
-            "dob": str(applicant.dob) if applicant.dob else None,
-            "passport_number": applicant.passport_number or "",
-            "email": applicant.email or "",
-            "phone": applicant.phone or "",
-            "address": applicant.address or ""
+        lead_data = {
+            "first_name": lead.first_name or "",
+            "last_name": lead.last_name or "",
+            "dob": str(lead.dob) if lead.dob else None,
+            "passport_number": lead.passport_number or "",
+            "email": lead.email or "",
+            "phone": lead.phone or "",
+            "address": lead.address or ""
         }
         
         # Get absolute file path
@@ -105,7 +105,7 @@ class DocumentVerificationViewSet(viewsets.ViewSet):
 
         try:
             verifier = DocumentVerifier()
-            result = verifier.verify_and_match(file_path, applicant_data)
+            result = verifier.verify_and_match(file_path, lead_data)
             
             # Save results
             if "error" not in result:

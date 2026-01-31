@@ -1,7 +1,6 @@
 # crm_app/admin.py
 from django.contrib import admin
 from .models import (
-    Applicant,
     AcademicRecord,
     Application,
     CallRecord,
@@ -11,16 +10,16 @@ from .models import (
     ConsentRecord,
     OutboundMessage,
     AuditLog,
+    Lead,
 )
 
-@admin.register(Applicant)
-class ApplicantAdmin(admin.ModelAdmin):
-    list_display = ("id", "first_name", "last_name", "email", "created_at")
+# NOTE: ApplicantAdmin removed - Applicant model is deprecated
+# Use LeadAdmin for managing leads instead
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ("id", "applicant", "status", "created_at")
-    search_fields = ("applicant__first_name", "applicant__last_name", "status")
+    list_display = ("id", "lead", "status", "created_at")
+    search_fields = ("lead__name", "status")
 
 @admin.register(CallRecord)
 class CallRecordAdmin(admin.ModelAdmin):
@@ -40,10 +39,9 @@ class AIResultAdmin(admin.ModelAdmin):
 
 @admin.register(AcademicRecord)
 class AcademicRecordAdmin(admin.ModelAdmin):
-    # changed 'year' -> 'year_of_completion'
-    list_display = ("id", "applicant", "degree", "year_of_completion", "created_at")
-    search_fields = ("applicant__first_name", "applicant__email", "degree")
-    raw_id_fields = ("applicant",)
+    list_display = ("id", "lead", "degree", "year_of_completion", "created_at")
+    search_fields = ("lead__name", "degree")
+    raw_id_fields = ("lead",)
 
 @admin.register(FollowUp)
 class FollowUpAdmin(admin.ModelAdmin):
@@ -53,9 +51,8 @@ class FollowUpAdmin(admin.ModelAdmin):
 
 @admin.register(ConsentRecord)
 class ConsentRecordAdmin(admin.ModelAdmin):
-    # changed 'given' -> 'consent_given', 'recorded_at' -> 'consented_at'
-    list_display = ("id", "applicant", "consent_type", "consent_given", "consented_at")
-    raw_id_fields = ("applicant",)
+    list_display = ("id", "lead", "consent_type", "consent_given", "consented_at")
+    raw_id_fields = ("lead",)
 
 # keep admin for OutboundMessage/AuditLog if you added those models
 @admin.register(OutboundMessage)

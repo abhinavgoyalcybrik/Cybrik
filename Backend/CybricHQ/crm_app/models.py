@@ -218,16 +218,16 @@ class TenantUsage(models.Model):
 def transcript_upload_path(instance, filename):
     """
     Upload path for transcript files (used by migrations and FileField).
-    Structure: transcripts/<applicant-or-application-identifier>/<timestamp>_<uuid4>_<original-filename>
+    Structure: transcripts/<lead-or-application-identifier>/<timestamp>_<uuid4>_<original-filename>
     This is intentionally permissive and safe for local dev + S3 later.
     """
     ts = timezone.now().strftime("%Y%m%d_%H%M%S")
     uid = uuid.uuid4().hex[:8]
-    # prefer applicant id if present, else application id, else "unlinked"
+    # prefer lead id if present, else application id, else "unlinked"
     owner = "unlinked"
     try:
-        if hasattr(instance, "applicant") and instance.applicant_id:
-            owner = f"applicant_{instance.applicant_id}"
+        if hasattr(instance, "lead") and instance.lead_id:
+            owner = f"lead_{instance.lead_id}"
         elif hasattr(instance, "application") and instance.application_id:
             owner = f"application_{instance.application_id}"
     except Exception:
@@ -236,7 +236,15 @@ def transcript_upload_path(instance, filename):
     return f"transcripts/{owner}/{ts}_{uid}_{safe_filename}"
 
 
+# DEPRECATED: This model is being phased out. Use Lead model instead.
+# Kept temporarily for data migration purposes only.
 class Applicant(models.Model):
+    """
+    DEPRECATED: This model is being phased out. 
+    All functionality has been moved to the Lead model.
+    This model is kept only for backwards compatibility during data migration.
+    DO NOT use this model for new code - use Lead instead.
+    """
     # Tenant for data isolation
     tenant = models.ForeignKey(
         Tenant, on_delete=models.CASCADE,
@@ -265,6 +273,8 @@ class Applicant(models.Model):
     
     class Meta:
         ordering = ("-created_at",)
+        verbose_name = "[DEPRECATED] Applicant"
+        verbose_name_plural = "[DEPRECATED] Applicants"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name or ''}".strip()
@@ -285,7 +295,6 @@ class Document(models.Model):
         ("rejected", "Rejected"),
     ]
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="documents", null=True, blank=True)
     lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="documents", null=True, blank=True)
     document_type = models.CharField(max_length=64, choices=DOCUMENT_TYPES, default="other")
     file = models.FileField(upload_to="documents/%Y/%m/%d/")
@@ -300,12 +309,10 @@ class Document(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        owner = self.applicant or self.lead
-        return f"{self.get_document_type_display()} for {owner}"
+        return f"{self.get_document_type_display()} for {self.lead}"
 
 
 class AcademicRecord(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="academic_records", null=True, blank=True)
     lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="academic_records", null=True, blank=True)
     institution = models.CharField(max_length=255, blank=True, null=True)
     degree = models.CharField(max_length=255, blank=True, null=True)
@@ -355,7 +362,6 @@ class Application(models.Model):
         ("urgent", "Urgent"),
     ]
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
     lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="applications", null=True, blank=True)
     
     # Tenant for data isolation (denormalized for query efficiency)
@@ -388,7 +394,7 @@ class Application(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        return f"Application {self.id} ({self.applicant})"
+        return f"Application {self.id} ({self.lead})"
 
 
 class CallRecord(models.Model):
@@ -400,7 +406,6 @@ class CallRecord(models.Model):
         help_text="Tenant this call record belongs to"
     )
     
-    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL, blank=True, null=True, related_name="call_records")
     lead = models.ForeignKey('Lead', on_delete=models.SET_NULL, blank=True, null=True, related_name="call_records")
     application = models.ForeignKey(Application, on_delete=models.SET_NULL, blank=True, null=True, related_name="call_records")
     external_call_id = models.CharField(max_length=255, blank=True, null=True)  # provider id (Twilio, etc.)
@@ -480,8 +485,7 @@ class FollowUp(models.Model):
     ]
 
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="followups", blank=True, null=True)
-    lead = models.ForeignKey(Applicant, on_delete=models.CASCADE, blank=True, null=True, related_name="lead_followups")
-    crm_lead = models.ForeignKey('Lead', on_delete=models.CASCADE, blank=True, null=True, related_name="followups")
+    lead = models.ForeignKey('Lead', on_delete=models.CASCADE, blank=True, null=True, related_name="followups")
     
     # Tenant for data isolation
     tenant = models.ForeignKey(
@@ -520,7 +524,7 @@ class FollowUp(models.Model):
 
 
 class ConsentRecord(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name="consents")
+    lead = models.ForeignKey('Lead', on_delete=models.CASCADE, related_name="consents")
     consent_type = models.CharField(max_length=128, blank=True, null=True)
     consent_text = models.TextField(blank=True, null=True)
     consent_given = models.BooleanField(default=False)
@@ -533,7 +537,7 @@ class ConsentRecord(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        return f"ConsentRecord {self.id} (applicant={self.applicant_id})"
+        return f"ConsentRecord {self.id} (lead={self.lead_id})"
 
 
 # ---- Models added to satisfy existing serializers/admin references ----
@@ -571,7 +575,7 @@ class AuditLog(models.Model):
     action = models.CharField(max_length=255, blank=True, null=True)  # e.g. "create", "update"
     target_type = models.CharField(max_length=255, blank=True, null=True)  # e.g. "Application"
     target_id = models.CharField(max_length=255, blank=True, null=True)
-    applicant = models.ForeignKey('Applicant', on_delete=models.SET_NULL, blank=True, null=True, related_name="audit_logs")
+    lead = models.ForeignKey('Lead', on_delete=models.SET_NULL, blank=True, null=True, related_name="audit_logs")
     data = JSONField(blank=True, null=True)  # what changed or extra details
     ip = models.GenericIPAddressField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
@@ -622,10 +626,19 @@ class Lead(models.Model):
     
     external_id = models.CharField(max_length=128, unique=True)
     
-    # Basic contact info (original Lead fields)
+    # Basic contact info
     name = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=32, blank=True, null=True)
+    
+    # Personal details (moved from Applicant)
+    dob = models.DateField(blank=True, null=True, help_text="Date of birth")
+    passport_number = models.CharField(max_length=128, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    preferred_country = models.CharField(max_length=128, blank=True, null=True, help_text="Preferred destination country")
+    
     source = models.CharField(
         max_length=128, 
         choices=LEAD_SOURCE_CHOICES,
@@ -964,15 +977,10 @@ class WhatsAppMessage(models.Model):
         ("interactive", "Interactive"),
     ]
     
-    # Links to lead/applicant
+    # Links to lead
     lead = models.ForeignKey(
         'Lead', on_delete=models.CASCADE, 
         related_name="whatsapp_messages",
-        null=True, blank=True
-    )
-    applicant = models.ForeignKey(
-        Applicant, on_delete=models.CASCADE,
-        related_name="whatsapp_messages", 
         null=True, blank=True
     )
     tenant = models.ForeignKey(

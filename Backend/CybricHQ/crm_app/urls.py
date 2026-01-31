@@ -25,7 +25,8 @@ app_name = "crm_app"
 
 
 router = DefaultRouter()
-router.register(r"applicants", views.ApplicantViewSet, basename="applicant")
+# NOTE: applicants endpoint removed - use leads endpoint instead
+# router.register(r"applicants", views.ApplicantViewSet, basename="applicant")  # DEPRECATED
 router.register(r"academic-records", views.AcademicRecordViewSet, basename="academicrecord")
 router.register(r"applications", views.ApplicationViewSet, basename="application")
 router.register(r"transcripts", views.TranscriptViewSet, basename="transcript")
