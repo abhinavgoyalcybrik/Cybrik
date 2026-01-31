@@ -2469,6 +2469,9 @@ class ReportsSummary(APIView):
 
     def get(self, request):
         from django.db.models import Sum, Avg, Count, Q, F
+        from django.db.models.functions import TruncMonth
+        from django.utils import timezone
+        from datetime import timedelta
         from .models import Lead, Applicant, Application, CallRecord, Document, FollowUp, Transcript, Tenant
 
         # Get filter parameters
@@ -2613,7 +2616,6 @@ class ReportsSummary(APIView):
                 
                 # Fetch targets
                 from .models import CounselorTarget
-                from django.utils import timezone
                 target_obj = CounselorTarget.objects.filter(
                     counselor=user,
                     status='active',
