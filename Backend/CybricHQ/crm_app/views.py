@@ -2484,6 +2484,12 @@ class ReportsSummary(APIView):
         # Helper function to compute metrics for a specific country filter
         def get_country_metrics(country_filter=None):
             """Generate all metrics for a specific country or all countries"""
+            # Import inside nested function for Python 3.12 compatibility
+            from django.utils import timezone
+            from datetime import timedelta
+            from django.db.models import Sum, Avg, Count, Q
+            from django.db.models.functions import TruncMonth
+            
             # Build base filters
             lead_filters = Q()
             app_filters = Q()
