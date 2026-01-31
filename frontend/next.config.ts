@@ -95,13 +95,8 @@ const nextConfig = {
           destination: `${BACKEND_URL}/api/leads/:id/`,
         },
         {
-        {
           source: '/api/leads/',
           destination: `${BACKEND_URL}/api/leads/`,
-        },
-        {
-          source: '/api/leads/:id/',
-          destination: `${BACKEND_URL}/api/leads/:id/`,
         },
         {
           source: '/api/leads/:id/:action/',
