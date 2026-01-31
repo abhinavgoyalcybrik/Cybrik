@@ -106,8 +106,8 @@ export default function WritingReportPage({ params }: PageProps) {
             <div className="max-w-6xl mx-auto space-y-6">
 
                 {/* Brand Logo */}
-                <div className="mb-2">
-                    <img src="/logo.png" alt="Cybrik Logo" className="h-10 w-auto object-contain" />
+                <div className="mb-4">
+                    <img src="/logo.png" alt="IELTS Prep Logo" className="h-12 w-auto object-contain" />
                 </div>
 
                 <div className="space-y-6">
@@ -183,39 +183,81 @@ export default function WritingReportPage({ params }: PageProps) {
                                         </div>
                                     </div>
 
-                                    {/* Errors Found */}
+                                    {/* Errors Found - Grouped by Category */}
                                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
                                         <div className="flex items-center gap-2 mb-4">
                                             <AlertCircle className="w-5 h-5 text-amber-500" />
                                             <h3 className="font-bold text-slate-800">Errors Found ({taskData.mistakes?.length || 0})</h3>
                                         </div>
 
-                                        <div className="flex-1 overflow-y-auto pr-2 space-y-4 max-h-[400px]">
+                                        <div className="flex-1 overflow-y-auto pr-2 space-y-6 max-h-[500px]">
                                             {(!taskData.mistakes || taskData.mistakes.length === 0) ? (
                                                 <div className="text-center py-10 text-slate-400">
                                                     <Check className="w-12 h-12 mx-auto mb-2 text-emerald-300" />
                                                     No major errors detected.
                                                 </div>
                                             ) : (
-                                                taskData.mistakes.map((mistake, idx) => (
-                                                    <div key={idx} className="bg-red-50/50 rounded-xl p-4 border border-red-100">
-                                                        <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-red-100 text-red-600 mb-2">
-                                                            {mistake.error_type}
-                                                        </span>
-                                                        <div className="space-y-2">
-                                                            <p className="text-sm text-red-500/80 line-through decoration-red-400">
-                                                                "{mistake.sentence}"
-                                                            </p>
-                                                            <p className="text-sm font-medium text-emerald-700 flex items-start gap-1.5">
-                                                                <span className="bg-emerald-100 text-emerald-600 p-0.5 rounded shadow-sm"><Check className="w-3 h-3" /></span>
-                                                                "{mistake.correction}"
-                                                            </p>
-                                                        </div>
-                                                        <p className="text-xs text-slate-500 mt-2 pl-2 border-l-2 border-slate-200">
-                                                            💡 {mistake.explanation}
-                                                        </p>
-                                                    </div>
-                                                ))
+                                                <>
+                                                    {/* Group errors by category */}
+                                                    {(() => {
+                                                        const errorsByType: Record<string, typeof taskData.mistakes> = {
+                                                            task_response: [],
+                                                            coherence: [],
+                                                            vocabulary: [],
+                                                            grammar: [],
+                                                            sentence_structure: []
+                                                        };
+
+                                                        taskData.mistakes.forEach(mistake => {
+                                                            const type = mistake.error_type?.toLowerCase() || 'grammar';
+                                                            if (errorsByType[type]) {
+                                                                errorsByType[type].push(mistake);
+                                                            } else {
+                                                                errorsByType.grammar.push(mistake);
+                                                            }
+                                                        });
+
+                                                        const categoryLabels: Record<string, { label: string; color: string }> = {
+                                                            task_response: { label: 'TASK RESPONSE', color: 'bg-red-100 text-red-600 border-red-200' },
+                                                            coherence: { label: 'COHERENCE & COHESION', color: 'bg-orange-100 text-orange-600 border-orange-200' },
+                                                            vocabulary: { label: 'LEXICAL RESOURCE', color: 'bg-blue-100 text-blue-600 border-blue-200' },
+                                                            grammar: { label: 'GRAMMAR ACCURACY', color: 'bg-purple-100 text-purple-600 border-purple-200' },
+                                                            sentence_structure: { label: 'SENTENCE STRUCTURE', color: 'bg-indigo-100 text-indigo-600 border-indigo-200' }
+                                                        };
+
+                                                        return Object.entries(errorsByType).map(([type, errors]) => {
+                                                            if (errors.length === 0) return null;
+
+                                                            const category = categoryLabels[type] || categoryLabels.grammar;
+
+                                                            return (
+                                                                <div key={type} className="space-y-3">
+                                                                    <div className={`px-3 py-1.5 rounded-lg font-bold text-xs uppercase inline-block ${category.color} border`}>
+                                                                        {category.label} ({errors.length})
+                                                                    </div>
+                                                                    <div className="space-y-3 pl-2 border-l-2 border-slate-100">
+                                                                        {errors.map((mistake, idx) => (
+                                                                            <div key={idx} className="bg-red-50/50 rounded-xl p-4 border border-red-100">
+                                                                                <div className="space-y-2">
+                                                                                    <p className="text-sm text-red-500/80 line-through decoration-red-400">
+                                                                                        "{mistake.sentence}"
+                                                                                    </p>
+                                                                                    <p className="text-sm font-medium text-emerald-700 flex items-start gap-1.5">
+                                                                                        <span className="bg-emerald-100 text-emerald-600 p-0.5 rounded shadow-sm"><Check className="w-3 h-3" /></span>
+                                                                                        "{mistake.correction}"
+                                                                                    </p>
+                                                                                </div>
+                                                                                <p className="text-xs text-slate-500 mt-2 pl-2 border-l-2 border-slate-200">
+                                                                                    💡 {mistake.explanation}
+                                                                                </p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        });
+                                                    })()}
+                                                </>
                                             )}
                                         </div>
                                     </div>
