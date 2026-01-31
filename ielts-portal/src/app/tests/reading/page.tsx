@@ -16,7 +16,7 @@ interface ReadingTest {
 
 export default function ReadingTestsPage() {
     const { user } = useAuth();
-    const hasFullAccess = user?.has_full_access ?? false;
+    const hasFullAccess = user?.is_superuser || user?.has_full_access ?? false;
 
     const [tests, setTests] = useState<ReadingTest[]>([]);
     const [loading, setLoading] = useState(true);

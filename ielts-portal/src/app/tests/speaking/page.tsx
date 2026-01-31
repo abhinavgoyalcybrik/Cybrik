@@ -17,7 +17,7 @@ const difficultyColors = {
 
 export default function SpeakingTestsPage() {
     const { user } = useAuth();
-    const hasFullAccess = user?.has_full_access ?? false;
+    const hasFullAccess = user?.is_superuser || user?.has_full_access ?? false;
 
     const [tests, setTests] = useState<SpeakingTest[]>([]);
     const [loading, setLoading] = useState(true);

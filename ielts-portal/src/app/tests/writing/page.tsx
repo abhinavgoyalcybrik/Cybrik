@@ -23,7 +23,7 @@ const taskTypeIcons: Record<string, any> = {
 
 export default function WritingTestsPage() {
     const { user } = useAuth();
-    const hasFullAccess = user?.has_full_access ?? false;
+    const hasFullAccess = user?.is_superuser || user?.has_full_access ?? false;
 
     const [tests, setTests] = useState<WritingTest[]>([]);
     const [loading, setLoading] = useState(true);

@@ -224,7 +224,7 @@ export default function Dashboard() {
   }
 
   const evaluationsRemaining = user?.evaluations_remaining ?? 3;
-  const hasFullAccess = user?.has_full_access ?? false;
+  const hasFullAccess = user?.is_superuser || user?.has_full_access ?? false;
   const firstName = user?.name?.split(' ')[0] || 'there';
 
   return (
